@@ -1,6 +1,6 @@
 /**
  * DZ-Facture: Local Database & Storage Engine (Offline-First)
- * Handles Products, Clients, Invoices, Sales, and USB Flash Backup/Restore.
+ * Handles Products, Clients, Invoices, Sales, Held Carts, Debt Payments, and USB Flash Backup/Restore.
  */
 
 const STORAGE_KEYS = {
@@ -8,7 +8,9 @@ const STORAGE_KEYS = {
   CLIENTS: 'dz_facture_clients',
   INVOICES: 'dz_facture_invoices',
   COMPANY: 'dz_facture_company_profile',
-  SETTINGS: 'dz_facture_settings'
+  SETTINGS: 'dz_facture_settings',
+  HELD_CARTS: 'dz_facture_held_carts',
+  PAYMENTS: 'dz_facture_payments'
 };
 
 const DEFAULT_COMPANY = {
@@ -21,7 +23,8 @@ const DEFAULT_COMPANY = {
   ai: '16120456789',
   rib: '002 00012 1234567890 45',
   phone: '021 74 12 34 / 0550 12 34 56',
-  email: 'contact@el-awras-dz.com'
+  email: 'contact@el-awras-dz.com',
+  stampImage: ''
 };
 
 const DEFAULT_PRODUCTS = [
@@ -39,6 +42,47 @@ const DEFAULT_CLIENTS = [
   { id: 'c3', name: 'مكتب الهضاب للاستشارات', phone: '0661 11 22 33', address: 'شارع فلسطين، قسنطينة', nif: '002516033333333', rc: '25/00-3333333A18', balance: 0 }
 ];
 
+const DEFAULT_INVOICES = [
+  {
+    id: 'inv_101',
+    docType: 'FACTURE',
+    docNumber: 'FAC-2026-0001',
+    docDate: new Date(Date.now() - 86400000 * 2).toISOString().split('T')[0],
+    clientName: 'مؤسسة السلام للخدمات والترقية',
+    clientNif: '003116098765432',
+    clientRc: '31/00-9876543B20',
+    clientAddress: 'وهران',
+    paymentMethod: 'VIREMENT',
+    totalHT: 170000,
+    totalTVA: 32300,
+    timbreFiscal: 0,
+    totalTTC: 202300,
+    grossProfit: 26000,
+    items: [
+      { description: 'حاسوب محمول مكتبي HP ProBook G9', quantity: 2, unitPriceHT: 85000, tvaRate: 19, totalHT: 170000, totalTTC: 202300, buyPrice: 72000 }
+    ],
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString()
+  },
+  {
+    id: 'inv_102',
+    docType: 'POS',
+    docNumber: 'TKT-2026-0012',
+    docDate: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+    clientName: 'عميل نقدي (Comptoir)',
+    paymentMethod: 'ESPECES',
+    totalHT: 27400,
+    totalTVA: 4236,
+    timbreFiscal: 317,
+    totalTTC: 31953,
+    grossProfit: 6400,
+    items: [
+      { description: 'طابعة تذاكر حرارية 80mm USB/Ethernet', quantity: 1, unitPriceHT: 18500, tvaRate: 19, totalHT: 18500, totalTTC: 22015, buyPrice: 14500 },
+      { description: 'قارئ باركود ليزري لاسلكي 2D/QR', quantity: 1, unitPriceHT: 8900, tvaRate: 19, totalHT: 8900, totalTTC: 10591, buyPrice: 6500 }
+    ],
+    createdAt: new Date(Date.now() - 86400000).toISOString()
+  }
+];
+
 export class LocalDB {
   static init() {
     if (!localStorage.getItem(STORAGE_KEYS.COMPANY)) {
@@ -51,10 +95,16 @@ export class LocalDB {
       localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(DEFAULT_CLIENTS));
     }
     if (!localStorage.getItem(STORAGE_KEYS.INVOICES)) {
-      localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify(DEFAULT_INVOICES));
     }
     if (!localStorage.getItem(STORAGE_KEYS.SETTINGS)) {
-      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify({ lang: 'ar', theme: 'light', currencySymbol: 'دج' }));
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify({ lang: 'ar', theme: 'light', soundMuted: false, currencySymbol: 'دج' }));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.HELD_CARTS)) {
+      localStorage.setItem(STORAGE_KEYS.HELD_CARTS, JSON.stringify([]));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.PAYMENTS)) {
+      localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify([]));
     }
   }
 
@@ -102,7 +152,7 @@ export class LocalDB {
 
   static deductStock(productId, qty) {
     const products = this.getProducts();
-    const item = products.find(p => p.id === productId);
+    const item = products.find(p => p.id === productId || p.barcode === productId);
     if (item) {
       item.stock = Math.max(0, item.stock - Number(qty));
       this.saveProducts(products);
@@ -124,6 +174,47 @@ export class LocalDB {
     clients.unshift(newClient);
     this.saveClients(clients);
     return newClient;
+  }
+
+  static updateClient(id, updatedData) {
+    const clients = this.getClients();
+    const index = clients.findIndex(c => c.id === id);
+    if (index !== -1) {
+      clients[index] = { ...clients[index], ...updatedData };
+      this.saveClients(clients);
+      return clients[index];
+    }
+    return null;
+  }
+
+  // Debt Payments
+  static getPayments() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.PAYMENTS) || '[]');
+  }
+
+  static addClientPayment(clientId, amount, paymentMethod = 'ESPECES', note = '') {
+    const clients = this.getClients();
+    const client = clients.find(c => c.id === clientId);
+    if (!client) return null;
+
+    const amt = Number(amount) || 0;
+    client.balance = Math.max(0, (client.balance || 0) - amt);
+    this.saveClients(clients);
+
+    const payments = this.getPayments();
+    const paymentRecord = {
+      id: 'pay_' + Date.now(),
+      clientId,
+      clientName: client.name,
+      amount: amt,
+      paymentMethod,
+      note,
+      date: new Date().toISOString()
+    };
+    payments.unshift(paymentRecord);
+    localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify(payments));
+
+    return { paymentRecord, updatedClient: client };
   }
 
   // Invoices & Sales
@@ -154,7 +245,43 @@ export class LocalDB {
       });
     }
 
+    // If sold on credit to an existing client, increase debt balance
+    if (invoice.paymentMethod === 'A_TERME' && invoice.clientId) {
+      const clients = this.getClients();
+      const client = clients.find(c => c.id === invoice.clientId);
+      if (client) {
+        client.balance = (client.balance || 0) + Number(invoice.totalTTC || 0);
+        this.saveClients(clients);
+      }
+    }
+
     return newInv;
+  }
+
+  // Held Carts (Paniers en attente)
+  static getHeldCarts() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.HELD_CARTS) || '[]');
+  }
+
+  static saveHeldCart(cart, label = '') {
+    if (!cart || cart.length === 0) return false;
+    const held = this.getHeldCarts();
+    const newHeld = {
+      id: 'held_' + Date.now(),
+      label: label || `سلة رقم ${held.length + 1}`,
+      items: cart,
+      savedAt: new Date().toLocaleTimeString('ar-DZ', { hour: '2-digit', minute: '2-digit' })
+    };
+    held.unshift(newHeld);
+    localStorage.setItem(STORAGE_KEYS.HELD_CARTS, JSON.stringify(held));
+    return held;
+  }
+
+  static removeHeldCart(id) {
+    let held = this.getHeldCarts();
+    held = held.filter(h => h.id !== id);
+    localStorage.setItem(STORAGE_KEYS.HELD_CARTS, JSON.stringify(held));
+    return held;
   }
 
   // Settings
@@ -169,12 +296,14 @@ export class LocalDB {
   // USB Backup & Restore
   static exportBackupJSON() {
     const backup = {
-      version: '1.0.0',
+      version: '1.2.0',
+      system: 'DZ-Facture & POS (Algerie Open Source)',
       exportedAt: new Date().toISOString(),
       company: this.getCompany(),
       products: this.getProducts(),
       clients: this.getClients(),
       invoices: this.getInvoices(),
+      payments: this.getPayments(),
       settings: this.getSettings()
     };
     return JSON.stringify(backup, null, 2);
@@ -187,6 +316,7 @@ export class LocalDB {
       if (data.products) localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(data.products));
       if (data.clients) localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(data.clients));
       if (data.invoices) localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify(data.invoices));
+      if (data.payments) localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify(data.payments));
       if (data.settings) localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(data.settings));
       return { success: true };
     } catch (err) {
