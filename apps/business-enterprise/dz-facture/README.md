@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.jpg" alt="DZ-Facture & POS Logo" width="500" style="border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.3);">
+</p>
+
 # 🇩🇿 DZ-Facture & POS (نظام الفوترة ونقاط البيع الجزائري)
 
 [![Status](https://img.shields.io/badge/Status-100%25%20Completed-success.svg)](#)
