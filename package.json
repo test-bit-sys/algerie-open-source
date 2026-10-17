@@ -3,13 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "DZ Open Suite - Modern, free & trilingual open-source business and administrative software ecosystem for Algeria",
-  "workspaces": [
-    "packages/*"
-  ],
   "type": "module",
-  "scripts": {
-    "test": "node --test packages/*/test/*.test.js"
-  },
   "keywords": [
     "algeria",
     "open-source",
@@ -23,6 +17,9 @@
     "fiscal",
     "tva",
     "accounting",
+    "multimedia",
+    "video-editor",
+    "office",
     "wilayas",
     "offline-first",
     "trilingual"

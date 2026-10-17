@@ -13,7 +13,7 @@
 
 <p align="center">
   <a href="https://github.com/test-bit-sys/algerie-open-source/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="License: MIT"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Unit_Tests-15%2F15_Passing-brightgreen.svg?style=for-the-badge&logo=node.js&logoColor=white" alt="Tests"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Status-Architectural_Framework-blue.svg?style=for-the-badge" alt="Status"></a>
   <a href="#"><img src="https://img.shields.io/badge/Languages-Arabic_%7C_French_%7C_English-d21034.svg?style=for-the-badge" alt="Trilingual"></a>
   <a href="#"><img src="https://img.shields.io/badge/Architecture-Offline--First-0ea5e9.svg?style=for-the-badge&logo=sqlite&logoColor=white" alt="Offline-First"></a>
   <a href="https://github.com/test-bit-sys/algerie-open-source/pulls"><img src="https://img.shields.io/badge/PRs-Welcome-purple.svg?style=for-the-badge&logo=github" alt="PRs Welcome"></a>
@@ -25,13 +25,13 @@
 
 **DZ Open Suite** is a unified national open-source initiative engineered to provide high-performance, privacy-respecting, and 100% free software alternatives to the legacy proprietary and pirated tools commonly used across Algerian enterprises, schools, media studios, and public administrations.
 
-By designing from scratch with the **Algerian economic, legal, and linguistic ecosystem** in mind, this project aims to foster local tech sovereignty, eliminate dependence on expensive recurring subscriptions, and empower Algerian developers and creators.
+By designing the blueprints and specifications from scratch with the **Algerian economic, legal, and linguistic ecosystem** in mind, this project aims to foster local tech sovereignty, eliminate dependence on expensive recurring subscriptions, and empower Algerian developers and creators.
 
 ---
 
-## 🗺️ Software Categories & Track Roadmap
+## 🗺️ Software Categories & Track Taxonomy
 
-The ecosystem is structured into **5 specialized tracks**, systematically replacing commercial and cracked software:
+The ecosystem is organized into **5 specialized tracks**, establishing the functional standards and blueprints for each software domain:
 
 ```
 algerie-open-source/
@@ -43,20 +43,18 @@ algerie-open-source/
 │   ├── 🎓 04-education-academia/       # School Grading, Timetable Generation, University Thesis
 │   └── 🛠️ 05-system-utilities/         # Postal (CCP) Slips, Administrative Forms, Postal Directory
 │
-├── 📁 packages/                        # Reusable Core Calculation Engines
-│   ├── dz-tafqit/                      # Trilingual number-to-words currency engine (DZD)
-│   ├── dz-fiscal/                      # NIF / NIS / RC / CCP validators & tax computation
-│   ├── dz-geo/                         # Official 58 Wilayas & postal code lookup
-│   └── dz-ui/                          # Bidirectional RTL/LTR UI component design system
-│
-└── 📁 docs/                            # Algerian legal, tax, and architectural specifications
+├── 📁 assets/                          # High-resolution banners and visual identity
+└── 📁 docs/                            # Algerian legal, fiscal, and technical specifications
+    ├── standards/                      # VAT laws, timbre fiscal, tafqit rules, 58 wilayas
+    ├── architecture/                   # Local-first system blueprints
+    └── CONTRIBUTING.md                 # Multi-language developer contribution guide
 ```
 
 ---
 
-## 📊 Comprehensive Software Matrix
+## 📊 Comprehensive Software Track Matrix
 
-| Track | Planned Tool | Target Proprietary Tool | Key Algerian Specifics |
+| Track | Target Application | Proprietary Alternative Replaced | Key Algerian Specifics |
 | :--- | :--- | :--- | :--- |
 | **🏢 Business** | `dz-facture` | Sage, Delphi POS, pirated cash registers | Executive Decree 05-468 A4 invoices, 1% cash stamp duty, 80mm receipt printers. |
 | **🏢 Business** | `dz-compta` | PC Compta, DLG | Financial Accounting System (SCF), Bilan, TCR, G50 tax preparation. |
@@ -73,56 +71,43 @@ algerie-open-source/
 
 ---
 
-## 🏛️ System Architecture
+## 🏛️ System Architecture & Core Standards
 
 ```mermaid
 graph TD
     subgraph "Algerian Open Source Ecosystem (DZ Open Suite)"
-        subgraph "UI & Desktop Runtimes"
-            A1[🏢 Business Apps]
-            A2[🎬 Creative Tools]
-            A3[📝 Office Suite]
-            A4[🎓 Education Tools]
+        subgraph "Software Tracks (apps/)"
+            A1[🏢 Business Management]
+            A2[🎬 Creative & Multimedia]
+            A3[📝 Office Productivity]
+            A4[🎓 Education & Academia]
+            A5[🛠️ System Utilities]
         end
 
-        subgraph "Shared Core Libraries (@dz-suite)"
-            P1[dz-tafqit: Trilingual Number-to-Words]
-            P2[dz-fiscal: Tax Engine & NIF/NIS/RC]
-            P3[dz-geo: 58 Wilayas & Communes]
-            P4[dz-ui: Native RTL/LTR Design System]
+        subgraph "Algerian Core Standards (docs/standards/)"
+            S1[Legal & Fiscal: VAT 19%/9% & Timbre 1%]
+            S2[Currency Tafqit: Trilingual Number-to-Words]
+            S3[Administrative Geography: 58 Wilayas]
+            S4[Bi-Directional RTL/LTR Typography]
         end
 
-        subgraph "Local-First Storage"
+        subgraph "Local-First Architecture"
             DB[(Embedded SQLite / Zero-Cloud)]
             USB[One-Click Flash Drive Backup]
         end
     end
 
-    A1 --> P1
-    A1 --> P2
-    A1 --> P3
-    A2 --> P4
-    A3 --> P1
-    A3 --> P4
-    A4 --> P3
+    A1 --> S1
+    A1 --> S2
+    A1 --> S3
+    A2 --> S4
+    A3 --> S2
+    A3 --> S4
+    A4 --> S3
+    A5 --> S2
     A1 --> DB
     DB --> USB
 ```
-
----
-
-## 📦 Verified Core Packages
-
-All shared calculation engines are standalone, dependency-free, and tested with **100% test coverage**:
-
-```bash
-# Run the entire test suite across all packages
-npm test
-```
-
-* **`@dz-suite/tafqit`**: Converts financial numbers to words in **Arabic**, **French**, and **English** with legal anti-fraud suffixes.
-* **`@dz-suite/fiscal`**: Validates **NIF (15 digits)**, **NIS (20 digits)**, **RC**, and **CCP check digit**, and computes VAT (19% & 9%) and cash stamp duty (1%).
-* **`@dz-suite/geo`**: Full dataset of all **58 Algerian Wilayas** with multi-lingual search.
 
 ---
 
