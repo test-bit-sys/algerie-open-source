@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/logo.jpg" alt="DZ Open Suite Logo" width="130" height="130">
+  <img src="assets/logo.jpg" alt="DZ Open Suite Logo" width="460">
 </p>
 
 <h1 align="center">Algerian Open Source Software Ecosystem</h1>

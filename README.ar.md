@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/logo.jpg" alt="شعار DZ Open Suite" width="130" height="130">
+  <img src="assets/logo.jpg" alt="شعار DZ Open Suite" width="460">
 </p>
 
 <h1 align="center">المنظومة الجزائرية للبرمجيات المفتوحة المصدر</h1>
