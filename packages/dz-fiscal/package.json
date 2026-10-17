@@ -1,0 +1,21 @@
+{
+  "name": "@dz-suite/fiscal",
+  "version": "1.0.0",
+  "description": "Algerian tax calculation engine and fiscal identification validators (NIF, NIS, RC, CCP, TVA, Timbre)",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/fiscal.test.js"
+  },
+  "keywords": [
+    "fiscal",
+    "taxes",
+    "tva",
+    "timbre",
+    "nif",
+    "nis",
+    "algeria",
+    "facturation"
+  ],
+  "license": "MIT"
+}

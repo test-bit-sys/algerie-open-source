@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Facture | استوديو الفوترة الجزائري المفتوح المصدر</title>
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-badge">DZ 🇩🇿</span>
+      <div>
+        <div class="brand-title">DZ-Facture Studio</div>
+        <div class="brand-subtitle">استوديو الفوترة الجزائري المفتوح المصدر</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="ar">العربية</button>
+        <button class="lang-btn" data-lang="fr">Français</button>
+        <button class="lang-btn" data-lang="en">English</button>
+      </div>
+      <button id="themeToggleBtn" class="btn btn-outline" title="الوضع المظلم">
+        🌙
+      </button>
+      <button id="printBtn" class="btn btn-primary">
+        🖨️ <span id="txtPrint">طباعة الفاتورة A4</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-container">
+    
+    <!-- Left Column: Invoice Editor -->
+    <section class="panel panel-editor no-print">
+      <div class="panel-header">
+        <h2 class="panel-title">⚙️ <span id="txtEditorTitle">محرر بيانات الفاتورة</span></h2>
+        <span class="badge" style="font-size:0.8rem; background:var(--primary-light); color:var(--primary); padding:3px 8px; border-radius:6px; font-weight:700;">
+          نظام جبائي جزائري 100%
+        </span>
+      </div>
+
+      <div class="panel-body">
+        
+        <!-- Document Meta -->
+        <div class="form-section">
+          <div class="form-section-title">📄 <span id="txtDocMeta">بيانات الفاتورة</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" id="lblDocType">نوع الوثيقة</label>
+              <select id="docType" class="form-select">
+                <option value="FACTURE">فاتورة نهائية (Facture)</option>
+                <option value="PROFORMA">فاتورة أولية (Proforma / Devis)</option>
+                <option value="BL">سند تسليم (Bon de livraison)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lblDocNumber">رقم الفاتورة</label>
+              <input type="text" id="docNumber" class="form-input" value="FAC-2026-0042">
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lblDocDate">تاريخ الإصدار</label>
+              <input type="date" id="docDate" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lblPaymentMethod">طريقة الدفع</label>
+              <select id="paymentMethod" class="form-select">
+                <option value="VIREMENT">تحويل بنكي / بريدي (معفى من الطابع)</option>
+                <option value="CHEQUE">شيك بنكي (معفى من الطابع)</option>
+                <option value="ESPECES">نقداً (خاضع لرسم الطابع 1%)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emetteur (Seller) -->
+        <div class="form-section">
+          <div class="form-section-title">🏢 <span id="txtSellerTitle">بيانات البائع والمؤسسة</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" id="lblSellerName">اسم الشركة أو التاجر</label>
+              <input type="text" id="sellerName" class="form-input" value="شركة الأوراس للإلكترونيات والأثاث">
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lblSellerWilaya">الولاية</label>
+              <select id="sellerWilaya" class="form-select"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lblSellerAddress">العنوان الكامل</label>
+              <input type="text" id="sellerAddress" class="form-input" value="14 شارع ديدوش مراد، الجزائر الوسطى">
+            </div>
+            <div class="form-group">
+              <label class="form-label">NIF (15 رقم)</label>
+              <input type="text" id="sellerNif" class="form-input" value="001616012345678" maxlength="15">
+            </div>
+            <div class="form-group">
+              <label class="form-label">NIS (20 رقم)</label>
+              <input type="text" id="sellerNis" class="form-input" value="00161601234567890123" maxlength="20">
+            </div>
+            <div class="form-group">
+              <label class="form-label">RC (السجل التجاري)</label>
+              <input type="text" id="sellerRc" class="form-input" value="16/00-1234567B22">
+            </div>
+            <div class="form-group">
+              <label class="form-label">AI (المادة الضريبية)</label>
+              <input type="text" id="sellerAi" class="form-input" value="16120456789">
+            </div>
+            <div class="form-group">
+              <label class="form-label">RIB / الحساب البنكي</label>
+              <input type="text" id="sellerRib" class="form-input" value="002 00012 1234567890 45">
+            </div>
+          </div>
+        </div>
+
+        <!-- Client -->
+        <div class="form-section">
+          <div class="form-section-title">👤 <span id="txtClientTitle">بيانات العميل / الزبون</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" id="lblClientName">اسم الزبون أو الشركة</label>
+              <input type="text" id="clientName" class="form-input" value="مؤسسة السلام للخدمات والترقية">
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lblClientAddress">العنوان</label>
+              <input type="text" id="clientAddress" class="form-input" value="حي الياسمين، وهران">
+            </div>
+            <div class="form-group">
+              <label class="form-label">NIF (إن وجد)</label>
+              <input type="text" id="clientNif" class="form-input" value="003116098765432" maxlength="15">
+            </div>
+            <div class="form-group">
+              <label class="form-label">RC (إن وجد)</label>
+              <input type="text" id="clientRc" class="form-input" value="31/00-9876543B20">
+            </div>
+          </div>
+        </div>
+
+        <!-- Articles / Items -->
+        <div class="form-section">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="form-section-title" style="margin:0;">📦 <span id="txtItemsTitle">السلع والخدمات</span></div>
+            <button id="addItemBtn" class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8rem;">
+              + <span id="txtAddItem">إضافة بند</span>
+            </button>
+          </div>
+
+          <table class="items-table" id="itemsTable">
+            <thead>
+              <tr>
+                <th style="width:40%;" id="thDesignation">التعيين (Désignation)</th>
+                <th style="width:12%;" id="thQty">الكمية</th>
+                <th style="width:18%;" id="thPrice">السعر HT</th>
+                <th style="width:12%;" id="thTVA">TVA %</th>
+                <th style="width:18%;" id="thTotal">المجموع HT</th>
+                <th style="width:4%;"></th>
+              </tr>
+            </thead>
+            <tbody id="itemsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Live Tafqit Box -->
+        <div class="tafqit-box" id="editorTafqitBox">
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;" id="lblTafqitBox">التفقيط المالي القانوني بالدينار الجزائري:</div>
+          <div id="editorTafqitText">جاري الحساب...</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Right Column: Official A4 Printable Preview -->
+    <section class="panel panel-preview">
+      <div class="panel-header no-print">
+        <h2 class="panel-title">👁️ <span id="txtPreviewTitle">المعاينة المباشرة لطباعة A4</span></h2>
+        <span style="font-size:0.8rem; color:var(--text-muted);" id="txtPrintHint">مطابق للمرسوم التنفيذي 05-468</span>
+      </div>
+
+      <div class="invoice-preview-container">
+        
+        <!-- The Actual Sheet that gets printed -->
+        <article class="a4-page" id="invoiceSheet">
+          
+          <div>
+            <!-- Doc Header -->
+            <div class="doc-header">
+              <div class="seller-info">
+                <h2 id="viewSellerName">شركة الأوراس للإلكترونيات والأثاث</h2>
+                <div id="viewSellerAddress" style="font-size:9.5pt; color:#475569;">14 شارع ديدوش مراد، الجزائر الوسطى</div>
+                <div style="font-size:8.5pt; margin-top:4px;">
+                  <b>RC:</b> <span id="viewSellerRc">16/00-1234567B22</span> | 
+                  <b>NIF:</b> <span id="viewSellerNif">001616012345678</span>
+                </div>
+                <div style="font-size:8.5pt;">
+                  <b>NIS:</b> <span id="viewSellerNis">00161601234567890123</span> | 
+                  <b>AI:</b> <span id="viewSellerAi">16120456789</span>
+                </div>
+                <div style="font-size:8.5pt;">
+                  <b>RIB:</b> <span id="viewSellerRib">002 00012 1234567890 45</span>
+                </div>
+              </div>
+
+              <div class="doc-title-block">
+                <div class="doc-type" id="viewDocType">FACTURE</div>
+                <div style="font-size:11pt; font-weight:700; color:#008744;" id="viewDocNumber">N°: FAC-2026-0042</div>
+                <div style="font-size:9pt; margin-top:4px;"><b>Date:</b> <span id="viewDocDate">2026-10-17</span></div>
+                <div style="font-size:9pt;"><b>Règlement:</b> <span id="viewPaymentMethod">Virement Bancaire</span></div>
+              </div>
+            </div>
+
+            <!-- Client Box -->
+            <div class="parties-grid">
+              <div class="party-box">
+                <div class="party-box-title" id="txtViewClientTitle">العميل / Client</div>
+                <div style="font-weight:700; font-size:10pt;" id="viewClientName">مؤسسة السلام للخدمات والترقية</div>
+                <div id="viewClientAddress">حي الياسمين، وهران</div>
+                <div style="margin-top:4px; font-size:8.5pt;">
+                  <b>NIF:</b> <span id="viewClientNif">003116098765432</span> | 
+                  <b>RC:</b> <span id="viewClientRc">31/00-9876543B20</span>
+                </div>
+              </div>
+
+              <div class="party-box" style="display:flex; flex-direction:column; justify-content:center;">
+                <div style="font-size:8.5pt; color:#64748b;" id="txtViewTaxNotice">خاضعة للشروط القانونية للجمهورية الجزائرية الديمقراطية الشعبية</div>
+                <div style="font-weight:700; color:#008744; margin-top:4px;" id="viewCurrencyNotice">العملة: الدينار الجزائري (DZD)</div>
+              </div>
+            </div>
+
+            <!-- Items Table -->
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th style="width:45%;" id="viewThDesignation">التعيين (Désignation)</th>
+                  <th style="width:10%; text-align:center;" id="viewThQty">الكمية</th>
+                  <th style="width:15%; text-align:right;" id="viewThPrice">السعر HT</th>
+                  <th style="width:12%; text-align:center;" id="viewThTVA">TVA %</th>
+                  <th style="width:18%; text-align:right;" id="viewThTotal">المجموع HT</th>
+                </tr>
+              </thead>
+              <tbody id="viewItemsBody">
+                <!-- Rows rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bottom Summary & Signature -->
+          <div>
+            <div class="doc-footer-section">
+              <!-- Left: Tafqit and Stamp -->
+              <div>
+                <div style="font-size:9pt; font-weight:700; margin-bottom:4px;" id="txtViewTafqitNotice">
+                  أوقفت هذه الفاتورة عند المبلغ الإجمالي وقدره:
+                </div>
+                <div style="font-size:9.5pt; font-style:italic; padding:6px; background:#f1f5f9; border-radius:4px; border:1px solid #e2e8f0; font-weight:700; color:#0f172a;" id="viewTafqitText">
+                  ...
+                </div>
+                <div class="stamp-box" id="txtViewStamp">
+                  ختم وإمضاء المؤسسة (Cachet & Signature)
+                </div>
+              </div>
+
+              <!-- Right: Totals -->
+              <div class="totals-summary">
+                <div class="totals-row">
+                  <span id="txtViewTotalHT">المجموع بدون رسوم (Total HT):</span>
+                  <span style="font-weight:700;" id="viewTotalHT">0.00 دج</span>
+                </div>
+                <div class="totals-row">
+                  <span>TVA (19%):</span>
+                  <span id="viewTVA19">0.00 دج</span>
+                </div>
+                <div class="totals-row">
+                  <span>TVA (9%):</span>
+                  <span id="viewTVA9">0.00 دج</span>
+                </div>
+                <div class="totals-row">
+                  <span id="txtViewTimbre">رسم الطابع (Timbre 1%):</span>
+                  <span id="viewTimbre">0.00 دج</span>
+                </div>
+                <div class="totals-row grand-total">
+                  <span id="txtViewGrandTotal">المجموع الكلي (Total TTC):</span>
+                  <span id="viewGrandTotal">0.00 دج</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "@dz-suite/tafqit",
+  "version": "1.0.0",
+  "description": "Algerian Dinar number-to-words converter in Arabic and French",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/tafqit.test.js"
+  },
+  "keywords": [
+    "tafqit",
+    "dinar",
+    "dzd",
+    "algeria",
+    "arabic",
+    "french",
+    "facture"
+  ],
+  "license": "MIT"
+}

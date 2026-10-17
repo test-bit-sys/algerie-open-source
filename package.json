@@ -1,0 +1,26 @@
+{
+  "name": "algerie-open-source",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Algerian Open Source Ecosystem - Monorepo",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node --test packages/*/test/*.test.js"
+  },
+  "keywords": [
+    "algeria",
+    "open-source",
+    "tafqit",
+    "fiscal",
+    "facturation",
+    "dz"
+  ],
+  "author": "Algeria Open Source Community",
+  "license": "MIT"
+}
