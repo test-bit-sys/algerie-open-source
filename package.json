@@ -2,7 +2,7 @@
   "name": "algerie-open-source",
   "version": "1.0.0",
   "private": true,
-  "description": "Algerian Open Source Ecosystem - Monorepo",
+  "description": "DZ Open Suite - Modern, free & trilingual open-source business and administrative software ecosystem for Algeria",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -16,10 +16,19 @@
   "keywords": [
     "algeria",
     "open-source",
-    "tafqit",
-    "fiscal",
+    "dz",
     "facturation",
-    "dz"
+    "invoicing",
+    "pos",
+    "tafqit",
+    "dinar",
+    "dzd",
+    "fiscal",
+    "tva",
+    "accounting",
+    "wilayas",
+    "offline-first",
+    "trilingual"
   ],
   "author": "Algeria Open Source Community",
   "license": "MIT"
