@@ -1,9 +1,5 @@
 <p align="center">
-  <img src="assets/banner.jpg" alt="المنظومة الجزائرية للبرمجيات المفتوحة المصدر" width="100%">
-</p>
-
-<p align="center">
-  <img src="assets/logo.jpg" alt="شعار DZ Open Suite" width="460">
+  <img src="assets/logo.jpg" alt="شعار DZ Open Suite" width="520">
 </p>
 
 <h1 align="center">المنظومة الجزائرية للبرمجيات المفتوحة المصدر</h1>

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.jpg" alt="DZ-Facture & POS Logo" width="450" style="border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.3);">
+  <img src="assets/logo.jpg" alt="DZ-Facture & POS Logo" width="480">
 </p>
 
 # DZ-Facture & POS (منظومة الفوترة والكاشير وإدارة المخزون الجزائرية)

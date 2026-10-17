@@ -30,9 +30,9 @@ const server = http.createServer((req, res) => {
     reqPath = '/index.html';
   }
 
-  // Route favicon.ico to custom 4K SVG logo
+  // Route favicon.ico to official DZ logo
   if (reqPath === '/favicon.ico') {
-    reqPath = '/assets/logo.svg';
+    reqPath = '/assets/logo.jpg';
   }
 
   // Check if requesting an app asset or root asset (like /assets/...)

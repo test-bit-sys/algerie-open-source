@@ -1,9 +1,5 @@
 <p align="center">
-  <img src="assets/banner.jpg" alt="Écosystème Logiciel Open Source Algérien" width="100%">
-</p>
-
-<p align="center">
-  <img src="assets/logo.jpg" alt="Logo DZ Open Suite" width="460">
+  <img src="assets/logo.jpg" alt="Logo DZ Open Suite" width="520">
 </p>
 
 <h1 align="center">Écosystème Logiciel Open Source Algérien</h1>
