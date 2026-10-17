@@ -1,0 +1,24 @@
+{
+  "name": "dz-facture",
+  "version": "1.0.0",
+  "description": "Algerian Invoicing, POS Cashier & Inventory Management System (100% Offline-First, Algerian Fiscal Law Compliant)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "algeria",
+    "facturation",
+    "pos",
+    "caisse",
+    "tafqit",
+    "timbre-fiscal",
+    "tva",
+    "nif",
+    "nis",
+    "offline-first"
+  ],
+  "author": "Algeria Open Source Community",
+  "license": "MIT"
+}

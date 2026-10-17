@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Facture & POS | منظومة الفوترة والكاشير وإدارة المخزون الجزائرية</title>
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+  <div class="app-shell">
+    
+    <!-- Left/Right Responsive Sidebar -->
+    <aside class="sidebar no-print">
+      <div>
+        <div class="sidebar-header">
+          <span class="brand-badge">DZ 🇩🇿</span>
+          <div class="brand-title">DZ-Facture & POS</div>
+          <div class="brand-subtitle">المنظومة التجارية الجزائرية المفتوحة المصدر</div>
+        </div>
+
+        <ul class="nav-links">
+          <li>
+            <button class="nav-btn active" data-tab="tab-dashboard">
+              📊 <span data-i18n="navDashboard">لوحة القيادة</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="tab-pos">
+              🛒 <span data-i18n="navPOS">نقطة البيع والكاشير (POS)</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="tab-invoices">
+              📄 <span data-i18n="navInvoices">الفواتير وسندات التسليم (A4)</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="tab-products">
+              📦 <span data-i18n="navProducts">المنتجات والمخزون</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="tab-clients">
+              👥 <span data-i18n="navClients">العملاء والديون</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="tab-settings">
+              ⚙️ <span data-i18n="navSettings">بيانات المؤسسة والنسخ الاحتياطي</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <div style="font-size:0.75rem; color:#94a3b8; text-align:center;">
+          <div><b>Offline-First Architecture</b></div>
+          <div style="margin-top:2px;">البيانات محفوظة 100% محلياً</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+      
+      <!-- Topbar -->
+      <header class="topbar no-print">
+        <div class="topbar-title-area">
+          <h1 class="page-title" id="pageTitleText">لوحة القيادة</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="lang-selector">
+            <button class="lang-btn active" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="fr">Français</button>
+            <button class="lang-btn" data-lang="en">English</button>
+          </div>
+          <button id="themeToggleBtn" class="btn btn-outline btn-sm" title="تبديل الوضع الليلي">
+            🌙
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Content Area -->
+      <main class="content-area">
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-pane active">
+          <div class="grid-cols-4">
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#e0f2fe; color:#0284c7;">💰</div>
+              <div>
+                <div class="stat-label" data-i18n="statRevenue">مبيعات اليوم الإجمالية</div>
+                <div class="stat-val" id="statTodaySales">0.00 دج</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#dcfce7; color:#16a34a;">🧾</div>
+              <div>
+                <div class="stat-label" data-i18n="statInvoicesCount">عدد الفواتير والتذاكر</div>
+                <div class="stat-val" id="statInvoiceCount">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#fef3c7; color:#d97706;">📦</div>
+              <div>
+                <div class="stat-label" data-i18n="statProducts">إجمالي أصناف المخزون</div>
+                <div class="stat-val" id="statProductCount">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#fee2e2; color:#dc2626;">⚠️</div>
+              <div>
+                <div class="stat-label" data-i18n="statLowStock">تنبيهات نفاد المخزون</div>
+                <div class="stat-val" id="statLowStockCount">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Banner -->
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+            <div>
+              <h3 style="font-size:1.1rem; font-weight:800;" data-i18n="quickSaleTitle">بدء بيع جديد أو تحرير فاتورة</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:3px;" data-i18n="quickSaleDesc">استخدم نقطة البيع السريع لطباعة تذاكر الكاشير، أو محرر الفواتير الرسمي لطباعة وثائق A4.</p>
+            </div>
+            <div style="display:flex; gap:0.5rem;">
+              <button class="btn btn-primary" id="btnLaunchPos">🛒 <span data-i18n="btnOpenPOS">فتح الكاشير (POS)</span></button>
+              <button class="btn btn-outline" id="btnNewA4Invoice">📄 <span data-i18n="btnNewInvoice">فاتورة رسمية A4</span></button>
+            </div>
+          </div>
+
+          <!-- Recent Invoices Table -->
+          <div class="data-table-container">
+            <div class="table-header-tools">
+              <h3 style="font-size:1rem; font-weight:800;" data-i18n="recentTransactions">آخر المعاملات والفواتير</h3>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-i18n="thDocNum">رقم الوثيقة</th>
+                  <th data-i18n="thDate">التاريخ</th>
+                  <th data-i18n="thClient">العميل</th>
+                  <th data-i18n="thType">النوع</th>
+                  <th data-i18n="thPayment">طريقة الدفع</th>
+                  <th style="text-align:right;" data-i18n="thTotalTTC">المجموع TTC</th>
+                  <th style="text-align:center;"></th>
+                </tr>
+              </thead>
+              <tbody id="recentInvoicesTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 2: POS / CAISSE RAPIDE -->
+        <section id="tab-pos" class="tab-pane">
+          <div class="pos-container">
+            <!-- Left: Product Grid & Search -->
+            <div class="pos-products-panel">
+              <div style="display:flex; gap:0.5rem;">
+                <input type="text" id="posBarcodeInput" class="search-input" placeholder="🔍 امسح الباركود أو ابحث عن السلعة..." style="max-width:none;" autofocus>
+              </div>
+
+              <!-- Category filter -->
+              <div class="pos-categories" id="posCategoryFilters">
+                <button class="cat-btn active" data-cat="ALL">الكل (Tous)</button>
+              </div>
+
+              <!-- Product Grid -->
+              <div class="pos-grid" id="posProductGrid">
+                <!-- Products injected via JS -->
+              </div>
+            </div>
+
+            <!-- Right: Active Cart -->
+            <div class="pos-cart-panel">
+              <div style="padding:0.75rem 1rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:800;" data-i18n="cartTitle">سلة المبيعات (Ticket)</span>
+                <button class="btn btn-danger btn-sm" id="btnClearCart" title="إفراغ السلة">🗑️</button>
+              </div>
+
+              <div class="cart-items" id="posCartItems">
+                <!-- Injected via JS -->
+              </div>
+
+              <div class="cart-totals">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                  <span data-i18n="totalHT">المجموع الصافي HT:</span>
+                  <span id="cartTotalHT" style="font-weight:700;">0.00 دج</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                  <span>TVA (19% / 9%):</span>
+                  <span id="cartTotalTVA" style="font-weight:700;">0.00 دج</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                  <span data-i18n="timbreFiscal">رسم الطابع الجبائي (1%):</span>
+                  <span id="cartTimbre" style="font-weight:700;">0.00 دج</span>
+                </div>
+
+                <div class="cart-grand-total">
+                  <span data-i18n="grandTotal">المجموع الإجمالي:</span>
+                  <span id="cartGrandTotal">0.00 دج</span>
+                </div>
+
+                <button class="btn btn-primary" id="btnPosCheckout" style="width:100%; justify-content:center; padding:0.85rem; font-size:1.05rem; margin-top:0.5rem;">
+                  💵 <span data-i18n="btnPayAndPrint">دفع وطباعة التذكرة</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: FACTURATION A4 -->
+        <section id="tab-invoices" class="tab-pane">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+            
+            <!-- Invoice Form Builder -->
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; gap:1rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
+                <h3 style="font-size:1.05rem; font-weight:800;" data-i18n="invoiceEditorTitle">محرر المستندات والوثائق الرسمية</h3>
+                <button class="btn btn-primary btn-sm" id="btnPrintA4">🖨️ <span data-i18n="btnPrintA4">طباعة A4</span></button>
+              </div>
+
+              <!-- Doc Type & Meta -->
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblDocType">نوع الوثيقة</label>
+                  <select id="a4DocType" class="search-input" style="max-width:none; width:100%;">
+                    <option value="FACTURE">فاتورة نهائية (Facture Définitive)</option>
+                    <option value="PROFORMA">فاتورة أولية (Facture Proforma / Devis)</option>
+                    <option value="BL">سند تسليم (Bon de Livraison)</option>
+                    <option value="AVOIR">فاتورة إلغاء (Facture d'Avoir)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblDocNum">رقم الوثيقة</label>
+                  <input type="text" id="a4DocNumber" class="search-input" style="max-width:none; width:100%;" value="FAC-2026-0001">
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblDate">تاريخ الإصدار</label>
+                  <input type="date" id="a4DocDate" class="search-input" style="max-width:none; width:100%;">
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblPayment">طريقة الدفع</label>
+                  <select id="a4PaymentMethod" class="search-input" style="max-width:none; width:100%;">
+                    <option value="VIREMENT">تحويل بنكي / بريدي (معفى من الطابع)</option>
+                    <option value="CHEQUE">شيك بنكي (معفى من الطابع)</option>
+                    <option value="ESPECES">نقداً (خاضع لرسم الطابع 1%)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Client Select -->
+              <div>
+                <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblSelectClient">اختيار العميل</label>
+                <select id="a4ClientSelect" class="search-input" style="max-width:none; width:100%;"></select>
+              </div>
+
+              <!-- Items in A4 Form -->
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                  <span style="font-weight:700; font-size:0.9rem;" data-i18n="itemsTitle">بنود الفاتورة</span>
+                  <button class="btn btn-outline btn-sm" id="btnA4AddItem">+ <span data-i18n="btnAddItem">إضافة سطر</span></button>
+                </div>
+                <div id="a4ItemsContainer" style="display:flex; flex-direction:column; gap:0.5rem; max-height:260px; overflow-y:auto;">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- Tafqit preview box -->
+              <div style="background:var(--primary-light); border:1px solid rgba(0,135,68,0.2); border-radius:8px; padding:0.75rem; font-size:0.85rem; color:var(--primary); font-weight:700;">
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:2px;" data-i18n="tafqitHeader">التفقيط المالي بالدينار الجزائري:</div>
+                <div id="a4TafqitText">...</div>
+              </div>
+            </div>
+
+            <!-- Right: A4 Document Sheet Preview -->
+            <div style="background:#525659; border-radius:var(--radius); padding:1rem; overflow-y:auto; display:flex; justify-content:center;">
+              <article class="a4-page-preview" id="a4PrintSheet" style="background:#fff; color:#0f172a; width:100%; max-width:540px; padding:20px; font-size:8.5pt; box-shadow:0 4px 15px rgba(0,0,0,0.3); border-radius:4px; display:flex; flex-direction:column; justify-content:space-between; min-height:760px;">
+                <div>
+                  <div style="display:flex; justify-content:space-between; border-bottom:2px solid #008744; padding-bottom:10px; margin-bottom:10px;">
+                    <div>
+                      <h2 style="font-size:12pt; color:#008744; font-weight:900;" id="sheetCompanyName">مؤسسة الأوراس</h2>
+                      <div id="sheetCompanyAddress" style="color:#64748b;">14 شارع ديدوش مراد، الجزائر الوسطى</div>
+                      <div style="font-size:7.5pt; margin-top:3px;">
+                        <b>RC:</b> <span id="sheetCompanyRc">16/00-1234567B22</span> | <b>NIF:</b> <span id="sheetCompanyNif">001616012345678</span>
+                      </div>
+                      <div style="font-size:7.5pt;">
+                        <b>NIS:</b> <span id="sheetCompanyNis">00161601234567890123</span> | <b>AI:</b> <span id="sheetCompanyAi">16120456789</span>
+                      </div>
+                    </div>
+                    <div style="text-align:inherit;">
+                      <div style="font-size:14pt; font-weight:900; color:#0f172a;" id="sheetDocType">FACTURE</div>
+                      <div style="color:#008744; font-weight:700;" id="sheetDocNum">N°: FAC-2026-0001</div>
+                      <div style="font-size:7.5pt;"><b>Date:</b> <span id="sheetDocDate">2026-10-17</span></div>
+                    </div>
+                  </div>
+
+                  <!-- Client Card -->
+                  <div style="border:1px solid #e2e8f0; border-radius:6px; padding:8px; background:#f8fafc; margin-bottom:10px; font-size:8pt;">
+                    <div style="font-weight:700; color:#008744; border-bottom:1px solid #cbd5e1; padding-bottom:2px; margin-bottom:4px;">العميل / Client</div>
+                    <div style="font-weight:800; font-size:9pt;" id="sheetClientName">مؤسسة السلام للخدمات</div>
+                    <div id="sheetClientAddress" style="color:#475569;">وهران</div>
+                    <div style="font-size:7pt; margin-top:2px;">
+                      <b>NIF:</b> <span id="sheetClientNif">003116098765432</span> | <b>RC:</b> <span id="sheetClientRc">31/00-9876543B20</span>
+                    </div>
+                  </div>
+
+                  <!-- Table of Items -->
+                  <table style="width:100%; border-collapse:collapse; font-size:7.5pt; margin-bottom:10px;">
+                    <thead>
+                      <tr style="background:#f1f5f9;">
+                        <th style="border:1px solid #cbd5e1; padding:4px;">التعيين (Désignation)</th>
+                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:center;">الكمية</th>
+                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:right;">السعر HT</th>
+                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:center;">TVA</th>
+                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:right;">المجموع HT</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sheetTableBody">
+                      <!-- Injected via JS -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Footer Summary & Stamp -->
+                <div>
+                  <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:10px; border-top:1px solid #e2e8f0; padding-top:8px;">
+                    <div>
+                      <div style="font-size:7pt; font-weight:700;">أوقفت الفاتورة عند المبلغ الإجمالي وقدره:</div>
+                      <div id="sheetTafqitWords" style="font-size:7.5pt; font-style:italic; font-weight:700; color:#008744; margin-top:2px;">...</div>
+                      <div style="border:1px dashed #94a3b8; height:60px; border-radius:4px; margin-top:8px; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:7.5pt;">
+                        ختم وإمضاء المؤسسة (Cachet & Signature)
+                      </div>
+                    </div>
+                    <div style="font-size:8pt; display:flex; flex-direction:column; gap:2px;">
+                      <div style="display:flex; justify-content:space-between;"><span>Total HT:</span><span id="sheetTotalHT">0.00 دج</span></div>
+                      <div style="display:flex; justify-content:space-between;"><span>Total TVA:</span><span id="sheetTotalTVA">0.00 دج</span></div>
+                      <div style="display:flex; justify-content:space-between;"><span>Timbre (1%):</span><span id="sheetTimbre">0.00 دج</span></div>
+                      <div style="display:flex; justify-content:space-between; font-weight:900; color:#008744; font-size:9.5pt; border-top:1px solid #008744; padding-top:4px; margin-top:2px;">
+                        <span>Total TTC:</span><span id="sheetGrandTotal">0.00 دج</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </article>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- TAB 4: PRODUCTS & STOCK -->
+        <section id="tab-products" class="tab-pane">
+          <div class="data-table-container">
+            <div class="table-header-tools">
+              <input type="text" id="productSearchInput" class="search-input" placeholder="🔍 بحث عن منتج بالاسم أو الباركود...">
+              <button class="btn btn-primary" id="btnOpenNewProductModal">+ <span data-i18n="btnNewProduct">إضافة منتج جديد</span></button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-i18n="thBarcode">الباركود</th>
+                  <th data-i18n="thProductName">اسم المنتج</th>
+                  <th data-i18n="thCategory">الفئة</th>
+                  <th style="text-align:right;" data-i18n="thBuyPrice">سعر الشراء</th>
+                  <th style="text-align:right;" data-i18n="thSellPrice">سعر البيع</th>
+                  <th style="text-align:center;" data-i18n="thStock">الكمية بالمخزن</th>
+                  <th style="text-align:center;"></th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 5: CLIENTS & DEBTS -->
+        <section id="tab-clients" class="tab-pane">
+          <div class="data-table-container">
+            <div class="table-header-tools">
+              <input type="text" id="clientSearchInput" class="search-input" placeholder="🔍 بحث عن عميل بالاسم أو الهاتف...">
+              <button class="btn btn-primary" id="btnOpenNewClientModal">+ <span data-i18n="btnNewClient">إضافة عميل جديد</span></button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-i18n="thClientName">اسم العميل أو المؤسسة</th>
+                  <th data-i18n="thPhone">رقم الهاتف</th>
+                  <th data-i18n="thAddress">العنوان</th>
+                  <th data-i18n="thNIF">NIF</th>
+                  <th style="text-align:right;" data-i18n="thBalance">الرصيد / الديون المستحقة</th>
+                </tr>
+              </thead>
+              <tbody id="clientsTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 6: SETTINGS & BACKUP -->
+        <section id="tab-settings" class="tab-pane">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+            
+            <!-- Company Profile -->
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem;">
+              <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1rem;" data-i18n="companyProfileTitle">🏢 بيانات المؤسسة والتاجر</h3>
+              <form id="companyProfileForm" style="display:flex; flex-direction:column; gap:0.75rem;">
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblCompanyName">الاسم التجاري أو تسمية المؤسسة</label>
+                  <input type="text" id="cfgCompanyName" class="search-input" style="max-width:none; width:100%;">
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblAddress">العنوان الكامل</label>
+                  <input type="text" id="cfgCompanyAddress" class="search-input" style="max-width:none; width:100%;">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+                  <div>
+                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">NIF (15 رقم)</label>
+                    <input type="text" id="cfgCompanyNif" class="search-input" style="max-width:none; width:100%;" maxlength="15">
+                  </div>
+                  <div>
+                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">NIS (20 رقم)</label>
+                    <input type="text" id="cfgCompanyNis" class="search-input" style="max-width:none; width:100%;" maxlength="20">
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+                  <div>
+                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">RC (السجل التجاري)</label>
+                    <input type="text" id="cfgCompanyRc" class="search-input" style="max-width:none; width:100%;">
+                  </div>
+                  <div>
+                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">AI (المادة الضريبية)</label>
+                    <input type="text" id="cfgCompanyAi" class="search-input" style="max-width:none; width:100%;">
+                  </div>
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">الحساب المصرفي أو البريدي (RIB / RIP)</label>
+                  <input type="text" id="cfgCompanyRib" class="search-input" style="max-width:none; width:100%;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">💾 <span data-i18n="btnSaveProfile">حفظ البيانات</span></button>
+              </form>
+            </div>
+
+            <!-- Backup & Flash Disk Support -->
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:0.75rem;" data-i18n="backupTitle">💾 النسخ الاحتياطي وحماية البيانات</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;" data-i18n="backupDesc">
+                  نظراً لأهمية بيانات تجارتك، يمكنك تصدير قاعدة البيانات كاملة بضغطة زر وحفظها على قرص فلاش خارجي (Flash Disk USB) لحمايتها من أي عطل، أو استرجاعها في أي جهاز آخر دون إنترنت.
+                </p>
+
+                <div style="margin-top:1.5rem; display:flex; flex-direction:column; gap:0.75rem;">
+                  <button class="btn btn-primary" id="btnExportBackup">
+                    📥 <span data-i18n="btnDownloadBackup">تحميل نسخة احتياطية (.json)</span>
+                  </button>
+                  
+                  <div style="border-top:1px dashed var(--border); padding-top:1rem; margin-top:0.5rem;">
+                    <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:0.4rem;" data-i18n="lblRestoreBackup">استرجاع نسخة سابقة من الفلاش ديسك</label>
+                    <input type="file" id="importBackupFileInput" accept=".json" style="font-size:0.8rem;">
+                  </div>
+                </div>
+              </div>
+
+              <div style="background:var(--bg-main); border:1px solid var(--border); border-radius:8px; padding:0.75rem; font-size:0.75rem; color:var(--text-muted); margin-top:1rem;">
+                ℹ️ <b>ملاحظة:</b> المنظومة تعمل 100% بدون خوادم خارجية ولا تقوم بمشاركة أي أرقام أو بيانات مالية لضمان أقصى درجات السرية والخصوصية.
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+  </div>
+
+  <!-- MODAL: ADD PRODUCT -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-dialog">
+      <h3 style="font-weight:800; margin-bottom:1rem;" id="productModalTitle" data-i18n="modalNewProduct">إضافة منتج جديد للمخزون</h3>
+      <form id="productForm" style="display:flex; flex-direction:column; gap:0.75rem;">
+        <div>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thBarcode">الباركود</label>
+          <input type="text" id="prodBarcode" class="search-input" style="max-width:none; width:100%;" required>
+        </div>
+        <div>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thProductName">اسم المنتج</label>
+          <input type="text" id="prodName" class="search-input" style="max-width:none; width:100%;" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thCategory">الفئة</label>
+            <input type="text" id="prodCategory" class="search-input" style="max-width:none; width:100%;" value="عام">
+          </div>
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">TVA %</label>
+            <select id="prodTvaRate" class="search-input" style="max-width:none; width:100%;">
+              <option value="19">19% (عادي)</option>
+              <option value="9">9% (مخفض)</option>
+              <option value="0">0% (معفى)</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thBuyPrice">سعر الشراء (دج)</label>
+            <input type="number" id="prodBuyPrice" class="search-input" style="max-width:none; width:100%;" required>
+          </div>
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thSellPrice">سعر البيع (دج)</label>
+            <input type="number" id="prodSellPrice" class="search-input" style="max-width:none; width:100%;" required>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thStock">الكمية الابتدائية بالمخزن</label>
+          <input type="number" id="prodStock" class="search-input" style="max-width:none; width:100%;" value="10">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
+          <button type="button" class="btn btn-outline" id="btnCloseProductModal" data-i18n="btnCancel">إلغاء</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnSave">حفظ المنتج</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD CLIENT -->
+  <div class="modal-overlay" id="clientModal">
+    <div class="modal-dialog">
+      <h3 style="font-weight:800; margin-bottom:1rem;" data-i18n="modalNewClient">إضافة عميل أو شركة جديدة</h3>
+      <form id="clientForm" style="display:flex; flex-direction:column; gap:0.75rem;">
+        <div>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thClientName">الاسم أو التسمية التجارية</label>
+          <input type="text" id="cliName" class="search-input" style="max-width:none; width:100%;" required>
+        </div>
+        <div>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thPhone">رقم الهاتف</label>
+          <input type="text" id="cliPhone" class="search-input" style="max-width:none; width:100%;">
+        </div>
+        <div>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thAddress">العنوان</label>
+          <input type="text" id="cliAddress" class="search-input" style="max-width:none; width:100%;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">NIF</label>
+            <input type="text" id="cliNif" class="search-input" style="max-width:none; width:100%;" maxlength="15">
+          </div>
+          <div>
+            <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">RC</label>
+            <input type="text" id="cliRc" class="search-input" style="max-width:none; width:100%;">
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
+          <button type="button" class="btn btn-outline" id="btnCloseClientModal" data-i18n="btnCancel">إلغاء</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnSave">حفظ العميل</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: POS TICKET PRINT PREVIEW (80mm) -->
+  <div class="modal-overlay" id="ticketPrintModal">
+    <div class="modal-dialog" style="max-width:400px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;" class="no-print">
+        <h4 style="font-weight:800;" data-i18n="thermalTicketTitle">معاينة تذكرة الكاشير (80mm)</h4>
+        <button class="btn btn-outline btn-sm" id="btnCloseTicketModal">✕</button>
+      </div>
+
+      <div class="thermal-ticket" id="thermalTicketView">
+        <div class="ticket-header">
+          <div style="font-size:12pt; font-weight:900;" id="tktCompanyName">مؤسسة الأوراس</div>
+          <div style="font-size:8pt;" id="tktCompanyAddress">الجزائر الوسطى</div>
+          <div style="font-size:8pt;">NIF: <span id="tktCompanyNif">001616012345678</span></div>
+          <div style="font-size:8pt; margin-top:3mm;">تذكرة بيع رقم: <span id="tktDocNum">POS-001</span></div>
+          <div style="font-size:8pt;">التاريخ: <span id="tktDate">2026-10-17 19:30</span></div>
+        </div>
+
+        <table class="ticket-table">
+          <thead>
+            <tr>
+              <th style="text-align:inherit;">البند</th>
+              <th style="text-align:center;">الكمية</th>
+              <th style="text-align:right;">المبلغ</th>
+            </tr>
+          </thead>
+          <tbody id="tktItemsBody"></tbody>
+        </table>
+
+        <div class="ticket-totals">
+          <div style="display:flex; justify-content:space-between; font-weight:900; font-size:11pt;">
+            <span>المجموع:</span>
+            <span id="tktGrandTotal">0.00 دج</span>
+          </div>
+          <div style="text-align:center; margin-top:4mm; font-size:8pt;">
+            شكراً لزيارتكم! مرحباً بكم دائماً 🇩🇿
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;" class="no-print">
+        <button class="btn btn-primary" id="btnConfirmPrintTicket">🖨️ طباعة التذكرة</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

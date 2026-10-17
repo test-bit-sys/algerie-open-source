@@ -4,6 +4,10 @@
   "private": true,
   "description": "DZ Open Suite - Modern, free & trilingual open-source business and administrative software ecosystem for Algeria",
   "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "start:dz-facture": "node apps/business-enterprise/dz-facture/server.js"
+  },
   "keywords": [
     "algeria",
     "open-source",
