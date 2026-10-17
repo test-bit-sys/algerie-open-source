@@ -15,10 +15,10 @@
     <aside class="sidebar no-print">
       <div>
         <div class="sidebar-header" style="display:flex; align-items:center; gap:0.75rem;">
-          <img src="assets/logo.jpg" alt="DZ-Facture POS Logo" style="width:48px; height:48px; border-radius:10px; object-fit:cover; box-shadow:0 2px 10px rgba(0,135,68,0.3); border:1px solid rgba(255,255,255,0.1);" />
+          <img src="assets/logo.jpg" alt="DZ-Facture POS Logo" style="width:48px; height:48px; border-radius:10px; object-fit:cover; box-shadow:0 3px 12px rgba(0,135,68,0.35); border:1px solid rgba(255,255,255,0.12);" />
           <div>
-            <div class="brand-title" style="font-size:1.05rem;">DZ-Facture & POS</div>
-            <div class="brand-subtitle" style="font-size:0.7rem;">المنظومة التجارية الجزائرية</div>
+            <div class="brand-title">DZ-Facture & POS</div>
+            <div class="brand-subtitle" data-i18n="brandSubtitle">المنظومة التجارية الجزائرية</div>
           </div>
         </div>
 
@@ -49,6 +49,17 @@
             </button>
           </li>
           <li>
+            <button class="nav-btn" data-tab="tab-expenses">
+              💸 <span data-i18n="navExpenses">المصاريف اليومية (Dépenses)</span>
+              <span class="nav-badge" id="expensesNavBadge">0</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-btn" data-tab="tab-closings">
+              🧾 <span data-i18n="navClosings">إغلاق الصندوق (Rapport Z)</span>
+            </button>
+          </li>
+          <li>
             <button class="nav-btn" data-tab="tab-settings">
               ⚙️ <span data-i18n="navSettings">بيانات المؤسسة والنسخ الاحتياطي</span>
             </button>
@@ -58,8 +69,8 @@
 
       <div class="sidebar-footer">
         <div style="font-size:0.75rem; color:#94a3b8; text-align:center;">
-          <div><b>🔒 Offline-First Architecture</b></div>
-          <div style="margin-top:2px;">بياناتك محفوظة 100% محلياً بأمان</div>
+          <div><b data-i18n="footerSecurityTitle">🔒 100% Offline-First Architecture</b></div>
+          <div style="margin-top:2px;" data-i18n="footerSecurityDesc">بياناتك محفوظة محلياً بأمان وسرية تامة</div>
         </div>
       </div>
     </aside>
@@ -70,15 +81,18 @@
       <!-- Topbar -->
       <header class="topbar no-print">
         <div class="topbar-title-area" style="display:flex; align-items:center; gap:1rem;">
-          <h1 class="page-title" id="pageTitleText">لوحة القيادة</h1>
+          <h1 class="page-title" id="pageTitleText" data-i18n="navDashboard">لوحة القيادة والمؤشرات</h1>
           <div class="shortcuts-bar">
-            <span class="shortcut-chip"><span class="kbd">F2</span> بحث</span>
-            <span class="shortcut-chip"><span class="kbd">F4</span> تعليق</span>
-            <span class="shortcut-chip"><span class="kbd">F9</span> كاشير</span>
+            <span class="shortcut-chip"><span class="kbd">F2</span> <span data-i18n="shortcutSearch">بحث</span></span>
+            <span class="shortcut-chip"><span class="kbd">F4</span> <span data-i18n="shortcutHold">تعليق</span></span>
+            <span class="shortcut-chip"><span class="kbd">F9</span> <span data-i18n="shortcutCheckout">كاشير</span></span>
           </div>
         </div>
 
         <div class="topbar-actions">
+          <button id="quickZReportBtn" class="btn btn-outline btn-sm" title="إغلاق الصندوق اليومي وطباعة Rapport Z">
+            🧾 <span data-i18n="btnQuickZReport">تقرير Z</span>
+          </button>
           <button id="soundToggleBtn" class="btn btn-outline btn-sm" title="كتم/تفعيل صوت الكاشير والماسح">
             🔊
           </button>
@@ -99,7 +113,7 @@
         <!-- TAB 1: DASHBOARD -->
         <section id="tab-dashboard" class="tab-pane active">
           <!-- Stat Cards -->
-          <div class="grid-cols-4">
+          <div class="grid-cols-5">
             <div class="stat-card">
               <div class="stat-icon" style="background:#e0f2fe; color:#0284c7;">💰</div>
               <div>
@@ -110,15 +124,22 @@
             <div class="stat-card">
               <div class="stat-icon" style="background:#dcfce7; color:#16a34a;">📈</div>
               <div>
-                <div class="stat-label" data-i18n="statProfit">هامش الربح الإجمالي التقديري</div>
+                <div class="stat-label" data-i18n="statGrossProfit">هامش الربح التجاري</div>
                 <div class="stat-val" id="statGrossProfit" style="color:#008744;">0.00 دج</div>
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon" style="background:#fef3c7; color:#d97706;">📦</div>
+              <div class="stat-icon" style="background:#fee2e2; color:#dc2626;">💸</div>
               <div>
-                <div class="stat-label" data-i18n="statProducts">إجمالي أصناف المخزون</div>
-                <div class="stat-val" id="statProductCount">0</div>
+                <div class="stat-label" data-i18n="statExpenses">المصاريف التشغيلية</div>
+                <div class="stat-val" id="statTotalExpenses" style="color:#dc2626;">0.00 دج</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#ede9fe; color:#7c3aed;">🏆</div>
+              <div>
+                <div class="stat-label" data-i18n="statNetProfit">صافي الربح الحقيقي</div>
+                <div class="stat-val" id="statNetProfit" style="color:#7c3aed;">0.00 دج</div>
               </div>
             </div>
             <div class="stat-card">
@@ -179,7 +200,7 @@
                   <th data-i18n="thType">النوع</th>
                   <th data-i18n="thPayment">طريقة الدفع</th>
                   <th style="text-align:right;" data-i18n="thTotalTTC">المجموع TTC</th>
-                  <th style="text-align:center;" data-i18n="thActions">إجراء</th>
+                  <th style="text-align:center;" data-i18n="thActions">إجراءات</th>
                 </tr>
               </thead>
               <tbody id="recentInvoicesTableBody">
@@ -195,8 +216,13 @@
             <!-- Left: Product Grid & Search -->
             <div class="pos-products-panel">
               <div style="display:flex; gap:0.5rem; align-items:center;">
-                <input type="text" id="posBarcodeInput" class="search-input" placeholder="🔍 امسح الباركود بالماسح أو ابحث عن السلعة... [F2]" style="flex:1;" autofocus>
+                <input type="text" id="posBarcodeInput" class="search-input" data-i18n-placeholder="searchPOSPlaceholder" placeholder="🔍 امسح الباركود بالماسح أو ابحث عن السلعة... [F2]" style="flex:1;" autofocus>
                 
+                <!-- Camera Barcode Scanner Button -->
+                <button class="btn btn-outline btn-sm" id="btnOpenScannerModal" title="تشغيل ماسح الباركود بالكاميرا">
+                  📷 <span data-i18n="btnScanCamera">كاميرا</span>
+                </button>
+
                 <!-- Held carts button -->
                 <button class="btn btn-outline btn-sm" id="btnHeldCartsList" title="السلات المعلقة مؤقتاً">
                   ⏸️ <span data-i18n="btnHeldCarts">المعلقة</span> (<span id="heldCartsCount">0</span>)
@@ -205,7 +231,7 @@
 
               <!-- Category filter -->
               <div class="pos-categories" id="posCategoryFilters">
-                <button class="cat-btn active" data-cat="ALL">الكل (Tous)</button>
+                <button class="cat-btn active" data-cat="ALL" data-i18n="catAll">الكل (Tous)</button>
               </div>
 
               <!-- Product Grid -->
@@ -219,7 +245,7 @@
               <div style="padding:0.75rem 1rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:0.5rem;">
                   <span style="font-weight:800;" data-i18n="cartTitle">سلة المبيعات (Ticket)</span>
-                  <span id="cartItemsBadge" style="background:var(--primary); color:#fff; font-size:0.7rem; font-weight:800; padding:1px 6px; border-radius:10px;">0</span>
+                  <span id="cartItemsBadge" style="background:var(--primary); color:#fff; font-size:0.7rem; font-weight:800; padding:1px 7px; border-radius:10px;">0</span>
                 </div>
                 <div style="display:flex; gap:0.3rem;">
                   <button class="btn btn-outline btn-sm" id="btnHoldCurrentCart" title="تعليق السلة لخدمة زبون آخر مؤقتاً [F4]">⏸️ <span data-i18n="btnHold">تعليق</span></button>
@@ -245,12 +271,21 @@
                   <span id="cartTimbre" style="font-weight:700;">0.00 دج</span>
                 </div>
 
+                <!-- Cart Discount Input -->
+                <div class="cart-discount-row">
+                  <div style="display:flex; align-items:center; gap:0.4rem;">
+                    <span style="font-weight:700;" data-i18n="lblDiscount">التخفيض (Remise):</span>
+                    <button id="btnDiscountToggle" class="btn btn-outline btn-sm" style="padding:1px 6px; font-size:0.7rem;">DZD</button>
+                  </div>
+                  <input type="number" id="cartDiscountInput" style="width:85px; text-align:right; font-weight:800; padding:2px 6px; border:1px solid var(--border); border-radius:4px; font-size:0.85rem;" value="0" min="0">
+                </div>
+
                 <div class="cart-grand-total">
                   <span data-i18n="grandTotal">المجموع الإجمالي:</span>
                   <span id="cartGrandTotal">0.00 دج</span>
                 </div>
 
-                <button class="btn btn-primary" id="btnPosCheckout" style="width:100%; justify-content:center; padding:0.85rem; font-size:1.05rem; margin-top:0.5rem;">
+                <button class="btn btn-primary btn-lg" id="btnPosCheckout" style="width:100%; justify-content:center; margin-top:0.5rem;">
                   💵 <span data-i18n="btnPayAndPrint">دفع وطباعة التذكرة [F9]</span>
                 </button>
               </div>
@@ -274,10 +309,10 @@
                 <div>
                   <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblDocType">نوع الوثيقة</label>
                   <select id="a4DocType" class="search-input" style="max-width:none; width:100%;">
-                    <option value="FACTURE">فاتورة نهائية (Facture Définitive)</option>
-                    <option value="PROFORMA">فاتورة أولية (Facture Proforma / Devis)</option>
-                    <option value="BL">سند تسليم (Bon de Livraison)</option>
-                    <option value="AVOIR">فاتورة إلغاء (Facture d'Avoir)</option>
+                    <option value="FACTURE" data-i18n="optFacture">فاتورة نهائية (Facture Définitive)</option>
+                    <option value="PROFORMA" data-i18n="optProforma">فاتورة أولية (Facture Proforma / Devis)</option>
+                    <option value="BL" data-i18n="optBL">سند تسليم (Bon de Livraison)</option>
+                    <option value="AVOIR" data-i18n="optAvoir">فاتورة إلغاء (Facture d'Avoir)</option>
                   </select>
                 </div>
                 <div>
@@ -291,10 +326,10 @@
                 <div>
                   <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblPayment">طريقة الدفع</label>
                   <select id="a4PaymentMethod" class="search-input" style="max-width:none; width:100%;">
-                    <option value="VIREMENT">تحويل بنكي / بريدي (معفى من الطابع)</option>
-                    <option value="CHEQUE">شيك بنكي (معفى من الطابع)</option>
-                    <option value="ESPECES">نقداً (خاضع لرسم الطابع 1%)</option>
-                    <option value="A_TERME">على الحساب / كريدي (À Terme)</option>
+                    <option value="VIREMENT" data-i18n="optVirement">تحويل بنكي / بريدي (معفى من الطابع)</option>
+                    <option value="CHEQUE" data-i18n="optCheque">شيك بنكي (معفى من الطابع)</option>
+                    <option value="ESPECES" data-i18n="optEspeces">نقداً (خاضع لرسم الطابع 1%)</option>
+                    <option value="A_TERME" data-i18n="optATerme">على الحساب / كريدي (À Terme)</option>
                   </select>
                 </div>
               </div>
@@ -352,7 +387,7 @@
 
                   <!-- Client Card -->
                   <div style="border:1px solid #e2e8f0; border-radius:6px; padding:8px; background:#f8fafc; margin-bottom:10px; font-size:8pt;">
-                    <div style="font-weight:700; color:#008744; border-bottom:1px solid #cbd5e1; padding-bottom:2px; margin-bottom:4px;">العميل / Client</div>
+                    <div style="font-weight:700; color:#008744; border-bottom:1px solid #cbd5e1; padding-bottom:2px; margin-bottom:4px;" id="sheetClientHeader">العميل / Client</div>
                     <div style="font-weight:800; font-size:9pt;" id="sheetClientName">مؤسسة السلام للخدمات</div>
                     <div id="sheetClientAddress" style="color:#475569;">وهران</div>
                     <div style="font-size:7pt; margin-top:2px;">
@@ -364,11 +399,11 @@
                   <table style="width:100%; border-collapse:collapse; font-size:7.5pt; margin-bottom:10px;">
                     <thead>
                       <tr style="background:#f1f5f9;">
-                        <th style="border:1px solid #cbd5e1; padding:4px;">التعيين (Désignation)</th>
-                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:center;">الكمية</th>
-                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:right;">السعر HT</th>
+                        <th style="border:1px solid #cbd5e1; padding:4px;" id="sheetColDesc">التعيين (Désignation)</th>
+                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:center;" id="sheetColQty">الكمية</th>
+                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:right;" id="sheetColPrice">السعر HT</th>
                         <th style="border:1px solid #cbd5e1; padding:4px; text-align:center;">TVA</th>
-                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:right;">المجموع HT</th>
+                        <th style="border:1px solid #cbd5e1; padding:4px; text-align:right;" id="sheetColTotal">المجموع HT</th>
                       </tr>
                     </thead>
                     <tbody id="sheetTableBody">
@@ -381,7 +416,7 @@
                 <div>
                   <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:10px; border-top:1px solid #e2e8f0; padding-top:8px;">
                     <div>
-                      <div style="font-size:7pt; font-weight:700;">أوقفت الفاتورة عند المبلغ الإجمالي وقدره:</div>
+                      <div style="font-size:7pt; font-weight:700;" id="sheetLegalNoticeLabel">أوقفت الفاتورة عند المبلغ الإجمالي وقدره:</div>
                       <div id="sheetTafqitWords" style="font-size:7.5pt; font-style:italic; font-weight:700; color:#008744; margin-top:2px;">...</div>
                       <div id="sheetStampContainer" style="border:1px dashed #94a3b8; height:70px; border-radius:4px; margin-top:8px; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:7.5pt; overflow:hidden;">
                         ختم وإمضاء المؤسسة (Cachet & Signature)
@@ -408,7 +443,7 @@
         <section id="tab-products" class="tab-pane">
           <div class="data-table-container">
             <div class="table-header-tools">
-              <input type="text" id="productSearchInput" class="search-input" placeholder="🔍 بحث عن منتج بالاسم أو الباركود...">
+              <input type="text" id="productSearchInput" class="search-input" data-i18n-placeholder="searchProductPlaceholder" placeholder="🔍 بحث عن منتج بالاسم أو الباركود..." style="flex:1; max-width:320px;">
               <button class="btn btn-primary" id="btnOpenNewProductModal">+ <span data-i18n="btnNewProduct">إضافة منتج جديد</span></button>
             </div>
             <table class="data-table">
@@ -435,7 +470,7 @@
         <section id="tab-clients" class="tab-pane">
           <div class="data-table-container">
             <div class="table-header-tools">
-              <input type="text" id="clientSearchInput" class="search-input" placeholder="🔍 بحث عن عميل بالاسم أو الهاتف...">
+              <input type="text" id="clientSearchInput" class="search-input" data-i18n-placeholder="searchClientPlaceholder" placeholder="🔍 بحث عن عميل بالاسم أو الهاتف..." style="flex:1; max-width:320px;">
               <button class="btn btn-primary" id="btnOpenNewClientModal">+ <span data-i18n="btnNewClient">إضافة عميل جديد</span></button>
             </div>
             <table class="data-table">
@@ -456,7 +491,172 @@
           </div>
         </section>
 
-        <!-- TAB 6: SETTINGS & BACKUP -->
+        <!-- TAB 6: EXPENSES TRACKER (المصاريف والتشغيل) -->
+        <section id="tab-expenses" class="tab-pane">
+          <div style="display:grid; grid-template-columns:360px 1fr; gap:1.25rem;">
+            <!-- Left: Add Expense Form -->
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem;">
+              <h3 style="font-weight:800; font-size:1.05rem; margin-bottom:1rem;" data-i18n="expenseFormTitle">💸 تسجيل مصروف تجاري جديد</h3>
+              <form id="expenseForm" style="display:flex; flex-direction:column; gap:0.75rem;">
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblExpenseDate">تاريخ المصروف:</label>
+                  <input type="date" id="expDate" class="search-input" style="width:100%;" required>
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblExpenseCategory">تصنيف المصروف:</label>
+                  <select id="expCategory" class="search-input" style="width:100%;">
+                    <option value="LOYER" data-i18n="catLoyer">كراء المحل التجاري (Loyer)</option>
+                    <option value="SONELGAZ" data-i18n="catSonelgaz">الكهرباء والغاز والماء (Sonelgaz)</option>
+                    <option value="SALAIRES" data-i18n="catSalaires">رواتب وأجور العمال (Salaires)</option>
+                    <option value="TRANSPORT" data-i18n="catTransport">النقل والشحن والتوصيل (Transport)</option>
+                    <option value="FOURNITURES" data-i18n="catFournitures">أكياس وتغليف ولوازم (Fournitures)</option>
+                    <option value="MAINTENANCE" data-i18n="catMaintenance">صيانة وإصلاحات (Maintenance)</option>
+                    <option value="AUTRE" data-i18n="catAutre">مصاريف عامة أخرى (Autre)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblExpenseTitle">بيان المصروف أو الفاتورة:</label>
+                  <input type="text" id="expTitle" class="search-input" data-i18n-placeholder="expenseTitlePlaceholder" placeholder="مثال: فاتورة كهرباء شهر أكتوبر" style="width:100%;" required>
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblExpenseAmount">المبلغ المدفوع (دج):</label>
+                  <input type="number" id="expAmount" class="search-input" style="width:100%; font-size:1.1rem; font-weight:800;" placeholder="0.00" required>
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblExpensePayment">طريقة الصرف:</label>
+                  <select id="expPaymentMethod" class="search-input" style="width:100%;">
+                    <option value="ESPECES" data-i18n="optExpCash">نقداً من الصندوق (Caisse)</option>
+                    <option value="VIREMENT" data-i18n="optExpBank">حساب بنكي / بريدي (CCP / Banque)</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top:0.5rem; justify-content:center;">
+                  ➕ <span data-i18n="btnSaveExpense">تسجيل المصروف</span>
+                </button>
+              </form>
+            </div>
+
+            <!-- Right: Expenses Table & Summary -->
+            <div class="data-table-container">
+              <div class="table-header-tools">
+                <input type="text" id="expenseSearchInput" class="search-input" data-i18n-placeholder="searchExpensePlaceholder" placeholder="🔍 بحث في المصاريف..." style="flex:1; max-width:280px;">
+                <div style="font-weight:800; color:#dc2626;">
+                  <span data-i18n="lblTotalExpenses">إجمالي المصاريف:</span>
+                  <span id="expenseTotalAmount" style="font-size:1.15rem; margin-inline-start:6px;">0.00 دج</span>
+                </div>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="thDate">التاريخ</th>
+                    <th data-i18n="thCategory">الفئة</th>
+                    <th data-i18n="thExpenseDesc">بيان المصروف</th>
+                    <th data-i18n="thPayment">طريقة الدفع</th>
+                    <th style="text-align:right;" data-i18n="thExpenseAmount">المبلغ (دج)</th>
+                    <th style="text-align:center;" data-i18n="thActions">إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="expensesTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 7: DAILY Z-REPORT & DRAWER CLOSING (إغلاق الصندوق - Rapport Z) -->
+        <section id="tab-closings" class="tab-pane">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+            
+            <!-- Left: Current Drawer Closing Calculation -->
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; gap:1rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
+                <h3 style="font-weight:800; font-size:1.1rem;" data-i18n="zReportTitle">🧾 جرد وإغلاق الصندوق اليومي (Rapport Z)</h3>
+                <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:800; padding:3px 8px; border-radius:6px;" id="zReportShiftDate">2026-10-17</span>
+              </div>
+
+              <!-- Opening Float -->
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblOpeningFloat">رصيد بداية اليوم (Fond de caisse):</label>
+                  <input type="number" id="zOpeningFloat" class="search-input" style="width:100%; font-weight:800;" value="5000">
+                </div>
+                <div>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblCashierName">اسم الكاشير / المسؤول:</label>
+                  <input type="text" id="zCashierName" class="search-input" style="width:100%;" value="المسؤول التجاري">
+                </div>
+              </div>
+
+              <!-- Automated Register Breakdown -->
+              <div style="background:var(--bg-main); border:1px solid var(--border); border-radius:8px; padding:0.85rem; display:flex; flex-direction:column; gap:0.4rem; font-size:0.85rem;">
+                <div style="display:flex; justify-content:space-between;">
+                  <span data-i18n="lblZCashSales">مبيعات نقدية (Espèces):</span>
+                  <span id="zCashSales" style="font-weight:700; color:#16a34a;">0.00 دج</span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span data-i18n="lblZCardSales">تحويلات وبطاقات (CIB / Dahabia):</span>
+                  <span id="zCardSales" style="font-weight:700; color:#0284c7;">0.00 دج</span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span data-i18n="lblZChequeSales">شيكات بنكية (Chèques):</span>
+                  <span id="zChequeSales" style="font-weight:700;">0.00 دج</span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span data-i18n="lblZCreditSales">مبيعات على الحساب (Crédit):</span>
+                  <span id="zCreditSales" style="font-weight:700; color:#f59e0b;">0.00 دج</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-top:1px dashed var(--border); padding-top:4px;">
+                  <span data-i18n="lblZCashExpenses">مصاريف نقدية مسحوبة من الصندوق:</span>
+                  <span id="zCashExpenses" style="font-weight:700; color:#dc2626;">0.00 دج</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:6px; font-weight:900; font-size:0.95rem;">
+                  <span data-i18n="lblZExpectedCash">المبلغ المفترض تواجده بالدرج (Théorique):</span>
+                  <span id="zExpectedCash" style="color:var(--primary);">0.00 دج</span>
+                </div>
+              </div>
+
+              <!-- Physical Count Input -->
+              <div>
+                <label style="font-size:0.85rem; font-weight:800; color:var(--text-main);" data-i18n="lblZActualCash">المبلغ الفعلي المحسوب في الدرج (دج):</label>
+                <input type="number" id="zActualCash" class="search-input" style="width:100%; font-size:1.35rem; font-weight:900; margin-top:4px;" placeholder="0.00">
+              </div>
+
+              <!-- Discrepancy Status Card -->
+              <div id="zVarianceCard" class="variance-card variance-exact">
+                <span id="zVarianceLabel" data-i18n="varianceExact">الصندوق متطابق تماماً</span>
+                <span id="zVarianceAmount" style="font-size:1.15rem;">0.00 دج</span>
+              </div>
+
+              <button class="btn btn-primary btn-lg" id="btnConfirmZReportClosing" style="justify-content:center; width:100%;">
+                🖨️ <span data-i18n="btnConfirmZReport">تأكيد الإغلاق وطباعة تقرير Z (80mm)</span>
+              </button>
+            </div>
+
+            <!-- Right: Historical Z-Closings Table -->
+            <div class="data-table-container">
+              <div class="table-header-tools">
+                <h3 style="font-size:1rem; font-weight:800;" data-i18n="historicalClosingsTitle">سجل إغلاقات الصندوق السابقة</h3>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="thDate">التاريخ والوقت</th>
+                    <th data-i18n="thCashier">الكاشير</th>
+                    <th style="text-align:right;" data-i18n="thSales">المبيعات</th>
+                    <th style="text-align:right;" data-i18n="thActualCash">المقبوض</th>
+                    <th style="text-align:center;" data-i18n="thVariance">الفارق (Écart)</th>
+                    <th style="text-align:center;" data-i18n="thActions">إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="closingsTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- TAB 8: SETTINGS & BACKUP -->
         <section id="tab-settings" class="tab-pane">
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
             
@@ -524,7 +724,7 @@
                 </div>
               </div>
 
-              <div style="background:var(--bg-main); border:1px solid var(--border); border-radius:8px; padding:0.75rem; font-size:0.75rem; color:var(--text-muted); margin-top:1rem;">
+              <div style="background:var(--bg-main); border:1px solid var(--border); border-radius:8px; padding:0.75rem; font-size:0.75rem; color:var(--text-muted); margin-top:1rem;" data-i18n="backupPrivacyNote">
                 ℹ️ <b>ملاحظة:</b> المنظومة تعمل 100% بدون خوادم خارجية ولا تقوم بمشاركة أي أرقام أو بيانات مالية لضمان أقصى درجات السرية والخصوصية.
               </div>
             </div>
@@ -535,6 +735,37 @@
       </main>
     </div>
 
+  </div>
+
+  <!-- MODAL: CAMERA BARCODE SCANNER -->
+  <div class="modal-overlay" id="scannerModal">
+    <div class="modal-dialog" style="max-width:440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3 style="font-weight:800;" data-i18n="scannerModalTitle">📷 ماسح الباركود بالكاميرا</h3>
+        <button class="btn btn-outline btn-sm" id="btnCloseScannerModal">✕</button>
+      </div>
+
+      <div class="scanner-viewport">
+        <video id="scannerVideo" class="scanner-video" playsinline></video>
+        <div class="scanner-crosshair">
+          <div class="scan-laser"></div>
+        </div>
+      </div>
+
+      <div style="font-size:0.78rem; color:var(--text-muted); text-align:center; margin-top:8px;" data-i18n="scannerInstructions">
+        وجّه كاميرا الهاتف أو اللابتوب نحو الباركود ليتم التعرف عليه وإضافته فوراً للسلة
+      </div>
+
+      <!-- Quick Simulated Barcodes for testing without physical camera -->
+      <div style="margin-top:1rem; border-top:1px dashed var(--border); padding-top:0.75rem;">
+        <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;" data-i18n="scannerSimTitle">
+          أو انقر للمسح السريع المباشر (Simulated Scan):
+        </div>
+        <div id="scannerQuickSimGrid" style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- MODAL: POS CASHIER PAYMENT & CHANGE CALCULATOR -->
@@ -573,10 +804,10 @@
         <div>
           <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblPayment">طريقة الدفع:</label>
           <select id="checkoutPaymentMethod" class="search-input" style="max-width:none; width:100%;">
-            <option value="ESPECES">نقداً (Espèces - خاضع للطابع 1%)</option>
-            <option value="VIREMENT">تحويل بنكي / بريدي (معفى)</option>
-            <option value="CHEQUE">شيك بنكي (معفى)</option>
-            <option value="A_TERME">على الحساب / دين (Crédit)</option>
+            <option value="ESPECES" data-i18n="optEspeces">نقداً (Espèces - خاضع للطابع 1%)</option>
+            <option value="VIREMENT" data-i18n="optVirement">تحويل بنكي / بريدي (معفى)</option>
+            <option value="CHEQUE" data-i18n="optCheque">شيك بنكي (معفى)</option>
+            <option value="A_TERME" data-i18n="optATerme">على الحساب / دين (Crédit)</option>
           </select>
         </div>
 
@@ -639,7 +870,7 @@
         </div>
         <div>
           <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblDebtNote">ملاحظات أو رقم الإيصال:</label>
-          <input type="text" id="debtPaymentNote" class="search-input" style="max-width:none; width:100%;" placeholder="مثال: دفعة نقدية على الحساب">
+          <input type="text" id="debtPaymentNote" class="search-input" data-i18n-placeholder="debtPaymentNotePlaceholder" style="max-width:none; width:100%;" placeholder="مثال: دفعة نقدية على الحساب">
         </div>
         <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.75rem;">
           <button type="button" class="btn btn-outline" id="btnCancelDebtPayment" data-i18n="btnCancel">إلغاء</button>
@@ -658,7 +889,7 @@
           <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thBarcode">الباركود</label>
           <div style="display:flex; gap:0.5rem;">
             <input type="text" id="prodBarcode" class="search-input" style="max-width:none; flex:1;" required>
-            <button type="button" class="btn btn-outline btn-sm" id="btnGenerateBarcode" title="توليد باركود تلقائي">🎲 توليد</button>
+            <button type="button" class="btn btn-outline btn-sm" id="btnGenerateBarcode" title="توليد باركود تلقائي">🎲 <span data-i18n="btnGenerateCode">توليد</span></button>
           </div>
         </div>
         <div>
@@ -673,9 +904,9 @@
           <div>
             <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">TVA %</label>
             <select id="prodTvaRate" class="search-input" style="max-width:none; width:100%;">
-              <option value="19">19% (عادي)</option>
-              <option value="9">9% (مخفض)</option>
-              <option value="0">0% (معفى)</option>
+              <option value="19" data-i18n="optTva19">19% (عادي)</option>
+              <option value="9" data-i18n="optTva9">9% (مخفض)</option>
+              <option value="0" data-i18n="optTva0">0% (معفى)</option>
             </select>
           </div>
         </div>
@@ -729,7 +960,7 @@
           </div>
         </div>
         <div>
-          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">الرصيد الابتدائي أو الديون السابقة (دج)</label>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblInitialBalance">الرصيد الابتدائي أو الديون السابقة (دج)</label>
           <input type="number" id="cliBalance" class="search-input" style="max-width:none; width:100%;" value="0">
         </div>
         <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
@@ -753,35 +984,98 @@
           <div style="font-size:12pt; font-weight:900;" id="tktCompanyName">مؤسسة الأوراس</div>
           <div style="font-size:8pt;" id="tktCompanyAddress">الجزائر الوسطى</div>
           <div style="font-size:8pt;">NIF: <span id="tktCompanyNif">001616012345678</span></div>
-          <div style="font-size:8pt; margin-top:3mm;">تذكرة بيع رقم: <span id="tktDocNum">POS-001</span></div>
-          <div style="font-size:8pt;">التاريخ: <span id="tktDate">2026-10-17 19:30</span></div>
+          <div style="font-size:8pt; margin-top:3mm;" id="tktDocNumContainer">تذكرة بيع رقم: <span id="tktDocNum">POS-001</span></div>
+          <div style="font-size:8pt;" id="tktDateContainer">التاريخ: <span id="tktDate">2026-10-17 19:30</span></div>
         </div>
 
         <table class="ticket-table">
           <thead>
             <tr>
-              <th style="text-align:inherit;">البند</th>
-              <th style="text-align:center;">الكمية</th>
-              <th style="text-align:right;">المبلغ</th>
+              <th style="text-align:inherit;" id="tktColItem">البند</th>
+              <th style="text-align:center;" id="tktColQty">الكمية</th>
+              <th style="text-align:right;" id="tktColPrice">المبلغ</th>
             </tr>
           </thead>
           <tbody id="tktItemsBody"></tbody>
         </table>
 
         <div class="ticket-totals">
+          <div id="tktDiscountRow" style="display:none; justify-content:space-between; font-size:8pt;">
+            <span id="tktDiscountLabel">التخفيض (Remise):</span>
+            <span id="tktDiscountVal">0.00 دج</span>
+          </div>
           <div style="display:flex; justify-content:space-between; font-weight:900; font-size:11pt;">
-            <span>المجموع:</span>
+            <span id="tktTotalLabel">المجموع:</span>
             <span id="tktGrandTotal">0.00 دج</span>
           </div>
           <div id="tktQRCodeContainer" style="display:flex; justify-content:center; margin:3mm 0;"></div>
-          <div style="text-align:center; font-size:8pt;">
+          <div style="text-align:center; font-size:8pt;" id="tktWelcomeMessage">
             شكراً لزيارتكم! مرحباً بكم دائماً 🇩🇿
           </div>
         </div>
       </div>
 
       <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;" class="no-print">
-        <button class="btn btn-primary" id="btnConfirmPrintTicket">🖨️ طباعة التذكرة</button>
+        <button class="btn btn-primary" id="btnConfirmPrintTicket">🖨️ <span data-i18n="btnPrintTicket">طباعة التذكرة</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Z-REPORT TICKET PRINT PREVIEW (80mm) -->
+  <div class="modal-overlay" id="zTicketPrintModal">
+    <div class="modal-dialog" style="max-width:400px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;" class="no-print">
+        <h4 style="font-weight:800;" data-i18n="zTicketModalTitle">🧾 تذكرة إغلاق الصندوق - Rapport Z</h4>
+        <button class="btn btn-outline btn-sm" id="btnCloseZTicketModal">✕</button>
+      </div>
+
+      <div class="thermal-ticket" id="zThermalTicketView">
+        <div class="ticket-header">
+          <div style="font-size:13pt; font-weight:900;">RAPPORT Z - CLÔTURE</div>
+          <div style="font-size:10pt; font-weight:800; color:#008744;" id="zTktCompanyName">مؤسسة الأوراس</div>
+          <div style="font-size:8pt;">NIF: <span id="zTktCompanyNif">001616012345678</span></div>
+          <div style="font-size:8pt; margin-top:2mm;"><b>Date:</b> <span id="zTktDateTime">2026-10-17 21:00</span></div>
+          <div style="font-size:8pt;"><b>Caissier:</b> <span id="zTktCashier">المسؤول التجاري</span> | Caisse #01</div>
+        </div>
+
+        <div style="border-top:1px dashed #000; border-bottom:1px dashed #000; padding:2mm 0; margin:2mm 0; font-size:8pt;">
+          <div style="display:flex; justify-content:space-between;"><span>Fond de Caisse:</span><b id="zTktOpening">5,000.00 DZD</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Ventes Espèces:</span><b id="zTktCashSales">0.00 DZD</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Ventes CIB/Virement:</span><b id="zTktCardSales">0.00 DZD</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Ventes Chèque:</span><b id="zTktChequeSales">0.00 DZD</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Ventes Crédit:</span><b id="zTktCreditSales">0.00 DZD</b></div>
+          <div style="display:flex; justify-content:space-between; color:#b91c1c;"><span>Dépenses Sorties:</span><b id="zTktExpenses">0.00 DZD</b></div>
+        </div>
+
+        <div style="font-size:8.5pt; font-weight:900; margin-bottom:2mm;">
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid #000; padding-bottom:1mm;">
+            <span>TOTAL RECETTES TTC:</span>
+            <span id="zTktTotalRevenue">0.00 DZD</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:1.5mm;">
+            <span>ESPÈCES THÉORIQUES:</span>
+            <span id="zTktExpected">0.00 DZD</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>ESPÈCES COMPTÉES:</span>
+            <span id="zTktCounted">0.00 DZD</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:10pt; margin-top:1mm; padding-top:1mm; border-top:1px dashed #000;">
+            <span>ÉCART DE CAISSE:</span>
+            <span id="zTktVariance">0.00 DZD</span>
+          </div>
+        </div>
+
+        <div id="zTktQRCode" style="display:flex; justify-content:center; margin:3mm 0;"></div>
+
+        <div style="text-align:center; font-size:7.5pt; margin-top:2mm; border-top:1px dotted #000; padding-top:2mm;">
+          Visa & Signature du Caissier:<br><br>
+          ___________________________
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;" class="no-print">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ <span data-i18n="btnPrintZTicket">طباعة تقرير Z</span></button>
       </div>
     </div>
   </div>

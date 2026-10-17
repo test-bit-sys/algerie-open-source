@@ -1,6 +1,7 @@
 /**
- * DZ-Facture: Local Database & Storage Engine (Offline-First)
- * Handles Products, Clients, Invoices, Sales, Held Carts, Debt Payments, and USB Flash Backup/Restore.
+ * DZ-Facture: Local Database & Storage Engine (Enterprise Offline-First)
+ * Handles Products, Clients, Invoices, Sales, Held Carts, Debt Payments,
+ * Daily Expenses, and End-of-Day Z-Report Closings.
  */
 
 const STORAGE_KEYS = {
@@ -10,7 +11,9 @@ const STORAGE_KEYS = {
   COMPANY: 'dz_facture_company_profile',
   SETTINGS: 'dz_facture_settings',
   HELD_CARTS: 'dz_facture_held_carts',
-  PAYMENTS: 'dz_facture_payments'
+  PAYMENTS: 'dz_facture_payments',
+  EXPENSES: 'dz_facture_expenses',
+  CLOSINGS: 'dz_facture_closings'
 };
 
 const DEFAULT_COMPANY = {
@@ -83,6 +86,11 @@ const DEFAULT_INVOICES = [
   }
 ];
 
+const DEFAULT_EXPENSES = [
+  { id: 'exp_1', date: new Date().toISOString().split('T')[0], title: 'فاتورة الكهرباء والغاز (سونلغاز)', category: 'فواتير ومرافق', amount: 8500, paymentMethod: 'ESPECES' },
+  { id: 'exp_2', date: new Date().toISOString().split('T')[0], title: 'شراء لوازم تغليف وتعبئة وأكياس', category: 'مستلزمات', amount: 3200, paymentMethod: 'ESPECES' }
+];
+
 export class LocalDB {
   static init() {
     if (!localStorage.getItem(STORAGE_KEYS.COMPANY)) {
@@ -105,6 +113,12 @@ export class LocalDB {
     }
     if (!localStorage.getItem(STORAGE_KEYS.PAYMENTS)) {
       localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify([]));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.EXPENSES)) {
+      localStorage.setItem(STORAGE_KEYS.EXPENSES, JSON.stringify(DEFAULT_EXPENSES));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.CLOSINGS)) {
+      localStorage.setItem(STORAGE_KEYS.CLOSINGS, JSON.stringify([]));
     }
   }
 
@@ -155,6 +169,15 @@ export class LocalDB {
     const item = products.find(p => p.id === productId || p.barcode === productId);
     if (item) {
       item.stock = Math.max(0, item.stock - Number(qty));
+      this.saveProducts(products);
+    }
+  }
+
+  static restoreStock(productId, qty) {
+    const products = this.getProducts();
+    const item = products.find(p => p.id === productId || p.barcode === productId);
+    if (item) {
+      item.stock = (Number(item.stock) || 0) + Number(qty);
       this.saveProducts(products);
     }
   }
@@ -258,6 +281,56 @@ export class LocalDB {
     return newInv;
   }
 
+  // Expenses Tracker
+  static getExpenses() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.EXPENSES) || '[]');
+  }
+
+  static saveExpenses(expenses) {
+    localStorage.setItem(STORAGE_KEYS.EXPENSES, JSON.stringify(expenses));
+  }
+
+  static addExpense(expense) {
+    const expenses = this.getExpenses();
+    const newExp = {
+      ...expense,
+      id: 'exp_' + Date.now(),
+      date: expense.date || new Date().toISOString().split('T')[0],
+      amount: Number(expense.amount) || 0
+    };
+    expenses.unshift(newExp);
+    this.saveExpenses(expenses);
+    return newExp;
+  }
+
+  static deleteExpense(id) {
+    let expenses = this.getExpenses();
+    expenses = expenses.filter(e => e.id !== id);
+    this.saveExpenses(expenses);
+    return expenses;
+  }
+
+  // Daily Z-Report Drawer Closings
+  static getClosings() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.CLOSINGS) || '[]');
+  }
+
+  static saveClosings(closings) {
+    localStorage.setItem(STORAGE_KEYS.CLOSINGS, JSON.stringify(closings));
+  }
+
+  static addClosing(closing) {
+    const closings = this.getClosings();
+    const newClosing = {
+      ...closing,
+      id: 'cls_' + Date.now(),
+      closedAt: new Date().toISOString()
+    };
+    closings.unshift(newClosing);
+    this.saveClosings(closings);
+    return newClosing;
+  }
+
   // Held Carts (Paniers en attente)
   static getHeldCarts() {
     return JSON.parse(localStorage.getItem(STORAGE_KEYS.HELD_CARTS) || '[]');
@@ -270,7 +343,7 @@ export class LocalDB {
       id: 'held_' + Date.now(),
       label: label || `سلة رقم ${held.length + 1}`,
       items: cart,
-      savedAt: new Date().toLocaleTimeString('ar-DZ', { hour: '2-digit', minute: '2-digit' })
+      savedAt: new Date().toLocaleTimeString('fr-DZ', { hour: '2-digit', minute: '2-digit' })
     };
     held.unshift(newHeld);
     localStorage.setItem(STORAGE_KEYS.HELD_CARTS, JSON.stringify(held));
@@ -296,7 +369,7 @@ export class LocalDB {
   // USB Backup & Restore
   static exportBackupJSON() {
     const backup = {
-      version: '1.2.0',
+      version: '1.5.0',
       system: 'DZ-Facture & POS (Algerie Open Source)',
       exportedAt: new Date().toISOString(),
       company: this.getCompany(),
@@ -304,6 +377,8 @@ export class LocalDB {
       clients: this.getClients(),
       invoices: this.getInvoices(),
       payments: this.getPayments(),
+      expenses: this.getExpenses(),
+      closings: this.getClosings(),
       settings: this.getSettings()
     };
     return JSON.stringify(backup, null, 2);
@@ -317,6 +392,8 @@ export class LocalDB {
       if (data.clients) localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(data.clients));
       if (data.invoices) localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify(data.invoices));
       if (data.payments) localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify(data.payments));
+      if (data.expenses) localStorage.setItem(STORAGE_KEYS.EXPENSES, JSON.stringify(data.expenses));
+      if (data.closings) localStorage.setItem(STORAGE_KEYS.CLOSINGS, JSON.stringify(data.closings));
       if (data.settings) localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(data.settings));
       return { success: true };
     } catch (err) {
