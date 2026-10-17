@@ -4,13 +4,10 @@
   "private": true,
   "description": "DZ Open Suite - Modern, free & trilingual open-source business and administrative software ecosystem for Algeria",
   "workspaces": [
-    "packages/*",
-    "apps/*"
+    "packages/*"
   ],
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
     "test": "node --test packages/*/test/*.test.js"
   },
   "keywords": [
