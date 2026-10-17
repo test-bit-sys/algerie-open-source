@@ -1,16 +1,16 @@
-# 💬 Collaboration & Teamwork (برامج التواصل والعمل الجماعي)
+# Collaboration & Teamwork (برامج التواصل والعمل الجماعي)
 ## DZ Collab — Team Messaging, Task Boards & Communication Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Enable Algerian universities, tech communities, startup teams, and companies to collaborate effectively with self-hostable, low-bandwidth-friendly communication and project management tools.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Proprietary Equivalent | Algerian Specifics & Key Features |
 | :--- | :--- | :--- | :--- |

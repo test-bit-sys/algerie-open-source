@@ -1,16 +1,16 @@
-# 📐 Engineering & Technical Design (برامج الهندسة والتصميم الفني)
+# Engineering & Technical Design (برامج الهندسة والتصميم الفني)
 ## DZ Engineering — CAD, Structural & Technical Computing Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Provide Algerian civil engineers, architects, technicians, and engineering students (École Polytechnique, USTHB, USTO, etc.) with open-source tools tailored for Algerian construction norms (CGS, DTR, RPA - Règles Parasismiques Algériennes).
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Proprietary Equivalent | Algerian Norms & Key Features |
 | :--- | :--- | :--- | :--- |

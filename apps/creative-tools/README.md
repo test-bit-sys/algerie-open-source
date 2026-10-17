@@ -1,16 +1,16 @@
-# 🎨 Creative Tools (برامج التصميم والوسائط الإبداعية)
+# Creative Tools (برامج التصميم والوسائط الإبداعية)
 ## DZ Creative — Graphic Design, Vector & Audio Production Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Provide Algerian digital artists, UI/UX designers, print shop operators, and graphic designers with full-featured creative suites tailored for commercial print standards and digital media.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Proprietary Equivalent | Algerian Specifics & Key Features |
 | :--- | :--- | :--- | :--- |
@@ -21,6 +21,6 @@ Provide Algerian digital artists, UI/UX designers, print shop operators, and gra
 
 ---
 
-### 🛠️ Recommended Tech Stack for Contributors
+### ️ Recommended Tech Stack for Contributors
 * **Rendering:** Skia / WebGL / Canvas / WASM
 * **Color Profiles:** Native CMYK & RGB space management

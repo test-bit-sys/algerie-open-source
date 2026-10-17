@@ -1,16 +1,16 @@
-# 🎮 Games & Interactive Media (الألعاب والترفيه التفاعلي)
+# Games & Interactive Media (الألعاب والترفيه التفاعلي)
 ## DZ Games — Interactive Culture, Educational & Indie Games Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Provide open-source game engines, assets, and games celebrating Algerian history, folklore, geography, and language, while offering Algerian indie game developers an open community to collaborate.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Key Features |
 | :--- | :--- | :--- |

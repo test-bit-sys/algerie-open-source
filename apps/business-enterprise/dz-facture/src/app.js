@@ -37,7 +37,7 @@ const I18N = {
     navExpenses: 'المصاريف اليومية (Dépenses)',
     navClosings: 'إغلاق الصندوق (Rapport Z)',
     navSettings: 'بيانات المؤسسة والنسخ الاحتياطي',
-    footerSecurityTitle: '🔒 هندسة أوفلاين 100% بدون إنترنت',
+    footerSecurityTitle: 'هندسة أوفلاين 100% بدون إنترنت',
     footerSecurityDesc: 'بياناتك محفوظة محلياً بأمان وسرية تامة',
     shortcutSearch: 'بحث',
     shortcutHold: 'تعليق',
@@ -88,49 +88,49 @@ const I18N = {
     thAddress: 'العنوان',
     thBalance: 'الرصيد / الديون المستحقة',
     btnNewClient: 'إضافة عميل جديد',
-    companyProfileTitle: '🏢 بيانات المؤسسة والتاجر',
+    companyProfileTitle: 'بيانات المؤسسة والتاجر',
     lblCompanyName: 'الاسم التجاري أو تسمية المؤسسة',
     lblAddress: 'العنوان الكامل',
     btnSaveProfile: 'حفظ البيانات',
-    backupTitle: '💾 النسخ الاحتياطي وحماية البيانات',
+    backupTitle: 'النسخ الاحتياطي وحماية البيانات',
     backupDesc: 'نظراً لأهمية بيانات تجارتك، يمكنك تصدير قاعدة البيانات كاملة بضغطة زر وحفظها على قرص فلاش خارجي (Flash Disk USB) لحمايتها من أي عطل، أو استرجاعها في أي جهاز آخر دون إنترنت.',
     btnDownloadBackup: 'تحميل نسخة احتياطية (.json)',
     lblRestoreBackup: 'استرجاع نسخة سابقة من الفلاش ديسك',
-    backupPrivacyNote: 'ℹ️ ملاحظة: المنظومة تعمل 100% بدون خوادم خارجية لضمان أقصى درجات الخصوصية المالية.',
+    backupPrivacyNote: 'ملاحظة: المنظومة تعمل 100% بدون خوادم خارجية لضمان أقصى درجات الخصوصية المالية.',
     modalNewProduct: 'إضافة منتج جديد للمخزون',
     btnCancel: 'إلغاء',
     btnSave: 'حفظ',
     modalNewClient: 'إضافة عميل أو شركة جديدة',
     thermalTicketTitle: 'معاينة تذكرة الكاشير (80mm)',
-    chartSalesTitle: '📊 مؤشر المبيعات اليومية (آخر 7 أيام)',
+    chartSalesTitle: 'مؤشر المبيعات اليومية (آخر 7 أيام)',
     chartSalesSubtitle: 'تطور إجمالي الإيرادات بالدينار الجزائري (DZD)',
-    chartPayTitle: '💳 توزيع طرق الدفع',
+    chartPayTitle: 'توزيع طرق الدفع',
     chartPaySubtitle: 'نقداً / تحويل / شيك / كريدي',
     btnHeldCarts: 'المعلقة',
     btnHold: 'تعليق',
     thMargin: 'الهامش (Marge)',
     lblStamp: 'ختم وتوقيع المؤسسة (صورة PNG للختم الدائري)',
-    checkoutTitle: '💵 تحصيل المبلغ وإرجاع الباقي',
+    checkoutTitle: 'تحصيل المبلغ وإرجاع الباقي',
     checkoutDueLabel: 'المبلغ الإجمالي المستحق (Total TTC):',
     checkoutBanknotes: 'أوراق النقد الجزائرية السريعة:',
     btnExact: 'المبلغ تماماً',
     checkoutReceivedLabel: 'المبلغ المقبوض من الزبون (دج):',
     checkoutChangeLabel: 'الباقي للزبون (Rendu):',
     btnConfirmPayment: 'تأكيد الدفع وطباعة التذكرة',
-    heldModalTitle: '⏸️ السلات المعلقة مؤقتاً',
-    barcodeModalTitle: '🏷️ ملصق الباركود والسعر',
+    heldModalTitle: 'السلات المعلقة مؤقتاً',
+    barcodeModalTitle: 'ملصق الباركود والسعر',
     btnPrintLabel: 'طباعة الملصق',
-    debtModalTitle: '💰 تسجيل دفعة / تسديد دين',
+    debtModalTitle: 'تسجيل دفعة / تسديد دين',
     lblDebtClient: 'اسم العميل:',
     lblCurrentDebt: 'إجمالي الدين المستحق حالياً:',
     lblDebtAmount: 'مبلغ الدفعة المسددة (دج):',
     lblDebtNote: 'ملاحظات أو رقم الإيصال:',
     btnSaveDebt: 'حفظ وتأكيد الدفعة',
     btnScanCamera: 'كاميرا',
-    scannerModalTitle: '📷 ماسح الباركود بالكاميرا',
+    scannerModalTitle: 'ماسح الباركود بالكاميرا',
     scannerInstructions: 'وجّه كاميرا الهاتف أو اللابتوب نحو الباركود ليتم التعرف عليه وإضافته فوراً للسلة',
     scannerSimTitle: 'أو انقر للمسح السريع المباشر (Simulated Scan):',
-    expenseFormTitle: '💸 تسجيل مصروف تجاري جديد',
+    expenseFormTitle: 'تسجيل مصروف تجاري جديد',
     lblExpenseDate: 'تاريخ المصروف:',
     lblExpenseCategory: 'تصنيف المصروف:',
     lblExpenseTitle: 'بيان المصروف أو الفاتورة:',
@@ -140,7 +140,7 @@ const I18N = {
     lblTotalExpenses: 'إجمالي المصاريف:',
     thExpenseDesc: 'بيان المصروف',
     thExpenseAmount: 'المبلغ (دج)',
-    zReportTitle: '🧾 جرد وإغلاق الصندوق اليومي (Rapport Z)',
+    zReportTitle: 'جرد وإغلاق الصندوق اليومي (Rapport Z)',
     lblOpeningFloat: 'رصيد بداية اليوم (Fond de caisse):',
     lblCashierName: 'اسم الكاشير / المسؤول:',
     lblZCashSales: 'مبيعات نقدية (Espèces):',
@@ -159,7 +159,7 @@ const I18N = {
     thSales: 'المبيعات',
     thActualCash: 'المقبوض',
     thVariance: 'الفارق (Écart)',
-    zTicketModalTitle: '🧾 تذكرة إغلاق الصندوق - Rapport Z',
+    zTicketModalTitle: 'تذكرة إغلاق الصندوق - Rapport Z',
     btnPrintZTicket: 'طباعة تقرير Z',
     btnPrintTicket: 'طباعة التذكرة',
     btnGenerateCode: 'توليد',
@@ -185,16 +185,16 @@ const I18N = {
     optTva19: '19% (عادي)',
     optTva9: '9% (مخفض)',
     optTva0: '0% (معفى)',
-    searchPOSPlaceholder: '🔍 امسح الباركود بالماسح أو ابحث عن السلعة... [F2]',
-    searchProductPlaceholder: '🔍 بحث عن منتج بالاسم أو الباركود...',
-    searchClientPlaceholder: '🔍 بحث عن عميل بالاسم أو الهاتف...',
-    searchExpensePlaceholder: '🔍 بحث في المصاريف...',
+    searchPOSPlaceholder: 'امسح الباركود بالماسح أو ابحث عن السلعة... [F2]',
+    searchProductPlaceholder: 'بحث عن منتج بالاسم أو الباركود...',
+    searchClientPlaceholder: 'بحث عن عميل بالاسم أو الهاتف...',
+    searchExpensePlaceholder: 'بحث في المصاريف...',
     expenseTitlePlaceholder: 'مثال: فاتورة كهرباء شهر أكتوبر',
     debtPaymentNotePlaceholder: 'مثال: دفعة نقدية على الحساب',
     inStock: 'المتوفر',
     outOfStock: 'نفد المخزون',
     walkInCustomer: 'عميل نقدي (Comptoir)',
-    btnRefund: 'إرجاع ↩️',
+    btnRefund: 'إرجاع',
     refundConfirm: 'هل تريد تأكيد إرجاع هذه الفاتورة وإعادة السلع إلى المخزون؟',
     refundSuccess: 'تم تسجيل الإرجاع واستعادة السلع للمخزون بنجاح'
   },
@@ -208,7 +208,7 @@ const I18N = {
     navExpenses: 'Dépenses & Charges',
     navClosings: 'Clôture de Caisse (Rapport Z)',
     navSettings: 'Établissement & Sauvegarde',
-    footerSecurityTitle: '🔒 Architecture 100% Hors-Ligne',
+    footerSecurityTitle: 'Architecture 100% Hors-Ligne',
     footerSecurityDesc: 'Vos données restent 100% locales et confidentielles',
     shortcutSearch: 'Chercher',
     shortcutHold: 'Attente',
@@ -259,49 +259,49 @@ const I18N = {
     thAddress: 'Adresse',
     thBalance: 'Solde / Créances',
     btnNewClient: 'Nouveau client',
-    companyProfileTitle: '🏢 Profil de l\'Établissement',
+    companyProfileTitle: 'Profil de l\'Établissement',
     lblCompanyName: 'Raison sociale / Nom commercial',
     lblAddress: 'Adresse complète',
     btnSaveProfile: 'Enregistrer le profil',
-    backupTitle: '💾 Sauvegarde & Sécurité des données',
+    backupTitle: 'Sauvegarde & Sécurité des données',
     backupDesc: 'Exportez instantanément toutes vos données sur clé USB Flash Disk en un clic pour une sécurité maximale 100% hors-ligne.',
     btnDownloadBackup: 'Télécharger sauvegarde (.json)',
     lblRestoreBackup: 'Restaurer depuis une clé USB',
-    backupPrivacyNote: 'ℹ️ Remarque : Fonctionne 100% sans serveur externe garantissant la totale confidentialité.',
+    backupPrivacyNote: 'Remarque : Fonctionne 100% sans serveur externe garantissant la totale confidentialité.',
     modalNewProduct: 'Nouvel article en stock',
     btnCancel: 'Annuler',
     btnSave: 'Enregistrer',
     modalNewClient: 'Nouveau client / Entreprise',
     thermalTicketTitle: 'Aperçu Ticket de Caisse (80mm)',
-    chartSalesTitle: '📊 Ventes journalières (7 derniers jours)',
+    chartSalesTitle: 'Ventes journalières (7 derniers jours)',
     chartSalesSubtitle: 'Évolution des recettes en Dinars Algériens (DZD)',
-    chartPayTitle: '💳 Modes de règlement',
+    chartPayTitle: 'Modes de règlement',
     chartPaySubtitle: 'Espèces / Virement / Chèque / Crédit',
     btnHeldCarts: 'En attente',
     btnHold: 'Attente',
     thMargin: 'Marge bénéficiaire',
     lblStamp: 'Cachet et signature (Image PNG ronde)',
-    checkoutTitle: '💵 Encaissement & Rendu monnaie',
+    checkoutTitle: 'Encaissement & Rendu monnaie',
     checkoutDueLabel: 'Total TTC à payer :',
     checkoutBanknotes: 'Coupures de billets rapides :',
     btnExact: 'Compte exact',
     checkoutReceivedLabel: 'Montant reçu du client (DA) :',
     checkoutChangeLabel: 'Monnaie à rendre :',
     btnConfirmPayment: 'Confirmer et Imprimer Ticket',
-    heldModalTitle: '⏸️ Paniers en attente',
-    barcodeModalTitle: '🏷️ Étiquette code-barres & Prix',
+    heldModalTitle: 'Paniers en attente',
+    barcodeModalTitle: 'Étiquette code-barres & Prix',
     btnPrintLabel: 'Imprimer étiquette',
-    debtModalTitle: '💰 Versement / Règlement créance',
+    debtModalTitle: 'Versement / Règlement créance',
     lblDebtClient: 'Client :',
     lblCurrentDebt: 'Créance totale due :',
     lblDebtAmount: 'Montant versé (DA) :',
     lblDebtNote: 'Notes ou réf. reçu :',
     btnSaveDebt: 'Valider le versement',
     btnScanCamera: 'Caméra',
-    scannerModalTitle: '📷 Scanner code-barres caméra',
+    scannerModalTitle: 'Scanner code-barres caméra',
     scannerInstructions: 'Orientez la caméra vers le code-barres pour ajout immédiat au panier',
     scannerSimTitle: 'Ou cliquez pour scanner un test instantané :',
-    expenseFormTitle: '💸 Enregistrer une nouvelle dépense',
+    expenseFormTitle: 'Enregistrer une nouvelle dépense',
     lblExpenseDate: 'Date de la dépense :',
     lblExpenseCategory: 'Catégorie :',
     lblExpenseTitle: 'Désignation / Motif :',
@@ -311,7 +311,7 @@ const I18N = {
     lblTotalExpenses: 'Total des dépenses :',
     thExpenseDesc: 'Désignation',
     thExpenseAmount: 'Montant (DA)',
-    zReportTitle: '🧾 Clôture journalière de caisse (Rapport Z)',
+    zReportTitle: 'Clôture journalière de caisse (Rapport Z)',
     lblOpeningFloat: 'Fond de caisse initial :',
     lblCashierName: 'Nom du caissier / Gérant :',
     lblZCashSales: 'Ventes en espèces :',
@@ -330,7 +330,7 @@ const I18N = {
     thSales: 'Ventes',
     thActualCash: 'Encaissé',
     thVariance: 'Écart de caisse',
-    zTicketModalTitle: '🧾 Ticket Clôture de Caisse - Rapport Z',
+    zTicketModalTitle: 'Ticket Clôture de Caisse - Rapport Z',
     btnPrintZTicket: 'Imprimer Rapport Z',
     btnPrintTicket: 'Imprimer Ticket',
     btnGenerateCode: 'Générer',
@@ -356,16 +356,16 @@ const I18N = {
     optTva19: '19% (Normal)',
     optTva9: '9% (Réduit)',
     optTva0: '0% (Exonéré)',
-    searchPOSPlaceholder: '🔍 Scanner code-barres ou rechercher un article... [F2]',
-    searchProductPlaceholder: '🔍 Rechercher par désignation ou code-barres...',
-    searchClientPlaceholder: '🔍 Rechercher un client par nom ou téléphone...',
-    searchExpensePlaceholder: '🔍 Rechercher une dépense...',
+    searchPOSPlaceholder: 'Scanner code-barres ou rechercher un article... [F2]',
+    searchProductPlaceholder: 'Rechercher par désignation ou code-barres...',
+    searchClientPlaceholder: 'Rechercher un client par nom ou téléphone...',
+    searchExpensePlaceholder: 'Rechercher une dépense...',
     expenseTitlePlaceholder: 'Ex: Facture Sonelgaz octobre',
     debtPaymentNotePlaceholder: 'Ex: Versement partiel espèces',
     inStock: 'En stock',
     outOfStock: 'Rupture',
     walkInCustomer: 'Client Comptoir',
-    btnRefund: 'Retour ↩️',
+    btnRefund: 'Retour',
     refundConfirm: 'Confirmer le retour de cette vente et la réintégration des articles en stock ?',
     refundSuccess: 'Vente retournée et stock réapprovisionné avec succès'
   },
@@ -379,7 +379,7 @@ const I18N = {
     navExpenses: 'Expenses & Overhead',
     navClosings: 'Register Closing (Z-Report)',
     navSettings: 'Company & USB Backup',
-    footerSecurityTitle: '🔒 100% Offline-First Architecture',
+    footerSecurityTitle: '100% Offline-First Architecture',
     footerSecurityDesc: 'Your business data stays local and confidential',
     shortcutSearch: 'Search',
     shortcutHold: 'Hold',
@@ -430,49 +430,49 @@ const I18N = {
     thAddress: 'Address',
     thBalance: 'Balance / Due Debts',
     btnNewClient: 'Add New Client',
-    companyProfileTitle: '🏢 Business Profile',
+    companyProfileTitle: 'Business Profile',
     lblCompanyName: 'Company Name / Trade Name',
     lblAddress: 'Full Address',
     btnSaveProfile: 'Save Profile',
-    backupTitle: '💾 Backup & Data Protection',
+    backupTitle: 'Backup & Data Protection',
     backupDesc: 'Export your entire local database to an external USB Flash drive with one click for maximum 100% offline security.',
     btnDownloadBackup: 'Download Backup (.json)',
     lblRestoreBackup: 'Restore from USB Flash drive',
-    backupPrivacyNote: 'ℹ️ Note: Runs 100% locally with zero external telemetry ensuring full commercial privacy.',
+    backupPrivacyNote: 'Note: Runs 100% locally with zero external telemetry ensuring full commercial privacy.',
     modalNewProduct: 'Add New Item to Inventory',
     btnCancel: 'Cancel',
     btnSave: 'Save',
     modalNewClient: 'Add New Client / Company',
     thermalTicketTitle: 'Cashier Thermal Receipt (80mm)',
-    chartSalesTitle: '📊 Daily Sales Trend (Last 7 Days)',
+    chartSalesTitle: 'Daily Sales Trend (Last 7 Days)',
     chartSalesSubtitle: 'Revenue performance in Algerian Dinars (DZD)',
-    chartPayTitle: '💳 Payment Breakdown',
+    chartPayTitle: 'Payment Breakdown',
     chartPaySubtitle: 'Cash / Bank Transfer / Cheque / Credit',
     btnHeldCarts: 'Held',
     btnHold: 'Hold',
     thMargin: 'Profit Margin',
     lblStamp: 'Company Stamp & Signature (Round PNG Image)',
-    checkoutTitle: '💵 Cashier Checkout & Change Calculator',
+    checkoutTitle: 'Cashier Checkout & Change Calculator',
     checkoutDueLabel: 'Total Due (TTC):',
     checkoutBanknotes: 'Quick Banknotes:',
     btnExact: 'Exact Amount',
     checkoutReceivedLabel: 'Cash Received (DZD):',
     checkoutChangeLabel: 'Change to Return:',
     btnConfirmPayment: 'Confirm & Print Receipt',
-    heldModalTitle: '⏸️ Temporarily Held Carts',
-    barcodeModalTitle: '🏷️ Barcode & Price Tag',
+    heldModalTitle: 'Temporarily Held Carts',
+    barcodeModalTitle: 'Barcode & Price Tag',
     btnPrintLabel: 'Print Sticker',
-    debtModalTitle: '💰 Record Debt Payment',
+    debtModalTitle: 'Record Debt Payment',
     lblDebtClient: 'Client Name:',
     lblCurrentDebt: 'Total Debt Due:',
     lblDebtAmount: 'Payment Amount (DZD):',
     lblDebtNote: 'Notes or Receipt Ref:',
     btnSaveDebt: 'Confirm Payment',
     btnScanCamera: 'Camera',
-    scannerModalTitle: '📷 Camera Barcode Scanner',
+    scannerModalTitle: 'Camera Barcode Scanner',
     scannerInstructions: 'Point device camera at product barcode for instant cart addition',
     scannerSimTitle: 'Or click for instant simulated test scan:',
-    expenseFormTitle: '💸 Record Business Expense',
+    expenseFormTitle: 'Record Business Expense',
     lblExpenseDate: 'Expense Date:',
     lblExpenseCategory: 'Category:',
     lblExpenseTitle: 'Description / Invoice Ref:',
@@ -482,7 +482,7 @@ const I18N = {
     lblTotalExpenses: 'Total Operating Expenses:',
     thExpenseDesc: 'Description',
     thExpenseAmount: 'Amount (DZD)',
-    zReportTitle: '🧾 Daily Register Closing (Z-Report)',
+    zReportTitle: 'Daily Register Closing (Z-Report)',
     lblOpeningFloat: 'Opening Drawer Float:',
     lblCashierName: 'Cashier / Manager Name:',
     lblZCashSales: 'Cash Sales (Espèces):',
@@ -501,7 +501,7 @@ const I18N = {
     thSales: 'Sales',
     thActualCash: 'Counted',
     thVariance: 'Variance',
-    zTicketModalTitle: '🧾 Cash Register Closing - Z-Report',
+    zTicketModalTitle: 'Cash Register Closing - Z-Report',
     btnPrintZTicket: 'Print Z-Report',
     btnPrintTicket: 'Print Receipt',
     btnGenerateCode: 'Generate',
@@ -527,16 +527,16 @@ const I18N = {
     optTva19: '19% (Standard)',
     optTva9: '9% (Reduced)',
     optTva0: '0% (Exempt)',
-    searchPOSPlaceholder: '🔍 Scan barcode or search product... [F2]',
-    searchProductPlaceholder: '🔍 Search product by description or barcode...',
-    searchClientPlaceholder: '🔍 Search client by name or phone...',
-    searchExpensePlaceholder: '🔍 Search expenses...',
+    searchPOSPlaceholder: 'Scan barcode or search product... [F2]',
+    searchProductPlaceholder: 'Search product by description or barcode...',
+    searchClientPlaceholder: 'Search client by name or phone...',
+    searchExpensePlaceholder: 'Search expenses...',
     expenseTitlePlaceholder: 'Ex: Monthly electricity bill',
     debtPaymentNotePlaceholder: 'Ex: Cash installment',
     inStock: 'In stock',
     outOfStock: 'Out of stock',
     walkInCustomer: 'Walk-in Customer',
-    btnRefund: 'Refund ↩️',
+    btnRefund: 'Refund',
     refundConfirm: 'Confirm returning this transaction and restoring items to inventory?',
     refundSuccess: 'Transaction refunded and stock replenished successfully'
   }
@@ -549,8 +549,15 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = 'toast';
-  const icon = type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
-  toast.innerHTML = `<span>${icon}</span> <span>${escapeHtml(message)}</span>`;
+  let iconSvg = '';
+  if (type === 'success') {
+    iconSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+  } else if (type === 'warning') {
+    iconSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+  } else {
+    iconSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="8"/></svg>';
+  }
+  toast.innerHTML = `<span style="display:inline-flex; align-items:center;">${iconSvg}</span> <span>${escapeHtml(message)}</span>`;
   container.appendChild(toast);
 
   setTimeout(() => {
@@ -654,13 +661,17 @@ function initLanguageAndTheme() {
 
   const themeBtn = document.getElementById('themeToggleBtn');
   themeBtn.addEventListener('click', () => {
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    const moonSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    const sunSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || document.body.getAttribute('data-theme') === 'dark';
     if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
       document.body.removeAttribute('data-theme');
-      themeBtn.textContent = '🌙';
+      themeBtn.innerHTML = moonSvg;
     } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
       document.body.setAttribute('data-theme', 'dark');
-      themeBtn.textContent = '☀️';
+      themeBtn.innerHTML = sunSvg;
     }
     refreshDashboard();
   });
@@ -672,7 +683,9 @@ function initSoundEngine() {
 
   soundBtn.addEventListener('click', () => {
     const isMuted = sound.toggleMute();
-    soundBtn.textContent = isMuted ? '🔇' : '🔊';
+    const volOnSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+    const volOffSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+    soundBtn.innerHTML = isMuted ? volOffSvg : volOnSvg;
     soundBtn.title = isMuted ? (currentLang === 'ar' ? 'تشغيل الصوت' : 'Activer le son') : (currentLang === 'ar' ? 'كتم الصوت' : 'Couper le son');
     showToast(isMuted ? (currentLang === 'ar' ? 'تم كتم الصوت' : 'Son coupé') : (currentLang === 'ar' ? 'تم تفعيل الصوت' : 'Son activé'));
   });
@@ -822,7 +835,7 @@ function refreshDashboard() {
       <td><span style="font-size:0.75rem; font-weight:700; color:#0284c7;">${paymentLabel}</span></td>
       <td style="text-align:right; font-weight:800; font-size:0.95rem;">${formatCurrency(inv.totalTTC || 0)}</td>
       <td style="text-align:center; display:flex; gap:0.3rem; justify-content:center;">
-        <button class="btn btn-outline btn-sm btn-print-row" data-id="${inv.id}" title="طباعة / معاينة">🖨️</button>
+        <button class="btn btn-outline btn-sm btn-print-row" data-id="${inv.id}" title="طباعة / معاينة"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
         <button class="btn btn-outline btn-sm btn-refund-row" data-id="${inv.id}" title="${t.btnRefund}">${t.btnRefund}</button>
       </td>
     `;
@@ -1026,7 +1039,7 @@ function populateSimulatedBarcodes() {
     const btn = document.createElement('button');
     btn.className = 'btn btn-outline btn-sm';
     btn.style.cssText = 'font-size:0.75rem; padding:3px 8px; font-weight:700;';
-    btn.innerHTML = `📦 ${escapeHtml(p.name.substring(0, 22))}... <span style="color:var(--primary);">(${p.barcode})</span>`;
+    btn.innerHTML = `${escapeHtml(p.name.substring(0, 24))}... <span style="color:var(--primary); font-family:monospace;">(${p.barcode})</span>`;
     btn.addEventListener('click', () => {
       addToCart(p);
       sound.playBeep();
@@ -1284,7 +1297,7 @@ function renderCart() {
   if (cart.length === 0) {
     container.innerHTML = `
       <div style="text-align:center; padding:3rem 1rem; color:var(--text-muted); font-size:0.85rem;">
-        🛒 ${currentLang === 'ar' ? 'سلة المبيعات فارغة.<br>امسح باركود أو انقر على سلعة للإضافة.' : 'Le panier est vide.<br>Scannez ou cliquez sur un article.'}
+        <div style="display:flex; justify-content:center; margin-bottom:0.75rem;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.35;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>${currentLang === 'ar' ? 'سلة المبيعات فارغة.<br>امسح باركود أو انقر على سلعة للإضافة.' : (currentLang === 'fr' ? 'Le panier est vide.<br>Scannez ou cliquez sur un article.' : 'Cart is empty.<br>Scan barcode or select an item to add.')}
       </div>
     `;
   } else {
@@ -1714,7 +1727,7 @@ function refreshProductsTable(query = '') {
         ${p.stock}
       </td>
       <td style="text-align:center; display:flex; gap:0.25rem; justify-content:center;">
-        <button class="btn btn-outline btn-sm btn-barcode-prod" data-id="${p.id}" title="طباعة ملصق الباركود والسعر">🏷️</button>
+        <button class="btn btn-outline btn-sm btn-barcode-prod" data-id="${p.id}" title="طباعة ملصق الباركود والسعر"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
         <button class="btn btn-danger btn-sm btn-delete-prod" data-id="${p.id}" title="حذف">✕</button>
       </td>
     `;
@@ -1845,7 +1858,7 @@ function refreshClientsTable(query = '') {
         ${formatCurrency(c.balance || 0)}
       </td>
       <td style="text-align:center;">
-        ${c.balance > 0 ? `<button class="btn btn-warning btn-sm btn-pay-debt" data-id="${c.id}" data-name="${escapeHtml(c.name)}" data-bal="${c.balance}">💰 ${currentLang === 'ar' ? 'تسديد' : 'Régler'}</button>` : `<span style="color:#16a34a; font-size:0.75rem;">${currentLang === 'ar' ? 'خالص ✅' : 'Soldé ✅'}</span>`}
+        ${c.balance > 0 ? `<button class="btn btn-warning btn-sm btn-pay-debt" data-id="${c.id}" data-name="${escapeHtml(c.name)}" data-bal="${c.balance}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> ${currentLang === 'ar' ? 'تسديد' : 'Régler'}</button>` : `<span style="color:#16a34a; font-size:0.75rem;">● ${currentLang === 'ar' ? 'خالص' : 'Soldé'}</span>`}
       </td>
     `;
     tbody.appendChild(tr);
@@ -2068,7 +2081,7 @@ function refreshClosingsTab() {
       <td style="text-align:right; font-weight:800;">${formatCurrency(c.actualCash)}</td>
       <td style="text-align:center; font-weight:800; color:${varianceColor};">${varianceText}</td>
       <td style="text-align:center;">
-        <button class="btn btn-outline btn-sm btn-print-closing" data-id="${c.id}">🖨️</button>
+        <button class="btn btn-outline btn-sm btn-print-closing" data-id="${c.id}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
       </td>
     `;
     tbody.appendChild(tr);

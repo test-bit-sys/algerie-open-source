@@ -1,16 +1,16 @@
-# 🎬 Video Montage & Production (برامج المونتاج وصناعة الفيديو)
+# Video Montage & Production (برامج المونتاج وصناعة الفيديو)
 ## DZ Montage — Video Editing, Subtitling & Motion Media Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Empower Algerian video editors, content creators, podcasters, and YouTube/TikTok/Reels producers with modern, fast, hardware-accelerated video editing software featuring native right-to-left Arabic subtitling with zero text reversals or font bugs.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Proprietary Equivalent | Algerian Specifics & Key Features |
 | :--- | :--- | :--- | :--- |
@@ -21,6 +21,6 @@ Empower Algerian video editors, content creators, podcasters, and YouTube/TikTok
 
 ---
 
-### 🛠️ Recommended Tech Stack for Contributors
+### ️ Recommended Tech Stack for Contributors
 * **Core Video Processing:** Rust + FFmpeg / WebGPU / WebCodecs
 * **Timeline UI:** High-performance Canvas/WebGL rendering

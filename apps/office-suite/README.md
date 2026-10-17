@@ -1,16 +1,16 @@
-# 📝 Office Suite (برامج الأوفيس والوثائق)
+# Office Suite (برامج الأوفيس والوثائق)
 ## DZ Office — Document & Office Productivity Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Provide lightweight, modern, free, and open-source alternatives to Microsoft 365 and Google Workspace, natively tailored for the Algerian administrative, academic, and business landscape with flawless bi-directional Arabic-French support.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Proprietary Equivalent | Algerian Specifics & Key Features |
 | :--- | :--- | :--- | :--- |
@@ -21,7 +21,7 @@ Provide lightweight, modern, free, and open-source alternatives to Microsoft 365
 
 ---
 
-### 🛠️ Recommended Tech Stack for Contributors
+### ️ Recommended Tech Stack for Contributors
 * **Desktop Runtime:** Tauri (Rust) or Electron
 * **Rendering Engine:** Web Canvas / Slate.js / TipTap for rich text editing
 * **Export Engines:** Rust-based PDF generators / WASM

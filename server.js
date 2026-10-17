@@ -59,8 +59,8 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`\n🇩🇿 DZ Open Source Suite - Flagship Application Server`);
-  console.log(`🚀 Serving DZ-Facture & POS at: http://localhost:${PORT}`);
-  console.log(`📂 Source: apps/business-enterprise/dz-facture/`);
-  console.log(`✨ Open http://localhost:${PORT} in your browser to start testing.\n`);
+  console.log(`\nDZ Open Source Suite - Flagship Application Server`);
+  console.log(`[INFO] Serving DZ-Facture & POS at: http://localhost:${PORT}`);
+  console.log(`[PATH] Source: apps/business-enterprise/dz-facture/`);
+  console.log(`[READY] Open http://localhost:${PORT} in your browser to start testing.\n`);
 });

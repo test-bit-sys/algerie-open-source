@@ -1,16 +1,16 @@
-# ⚡ Productivity & Daily Utilities (برامج الإنتاجية والأدوات اليومية)
+# Productivity & Daily Utilities (برامج الإنتاجية والأدوات اليومية)
 ## DZ Productivity — Daily Workflow & Citizen Utilities Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Provide lightweight utilities that eliminate repetitive manual workflows, streamline daily administrative requirements, and boost productivity for Algerian professionals and citizens.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Key Algerian Features |
 | :--- | :--- | :--- |

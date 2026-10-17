@@ -1,16 +1,16 @@
-# 💰 Finance & Accounting (برامج المالية والمحاسبة)
+# Finance & Accounting (برامج المالية والمحاسبة)
 ## DZ Finance — Fiscal, Accounting & Banking Systems Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Provide Algerian chartered accountants, auditors, and finance officers with audit-ready, legal-compliant financial accounting and payroll tools.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Proprietary Equivalent | Algerian Specifics & Key Features |
 | :--- | :--- | :--- | :--- |
@@ -21,6 +21,6 @@ Provide Algerian chartered accountants, auditors, and finance officers with audi
 
 ---
 
-### 🛠️ Recommended Tech Stack for Contributors
+### ️ Recommended Tech Stack for Contributors
 * **Standards Reference:** [docs/standards/dz_legal_and_fiscal.md](../../docs/standards/dz_legal_and_fiscal.md)
 * **Validation Modules:** NIF (15 digits), NIS (20 digits), RC, and CCP check key algorithms.

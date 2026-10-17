@@ -1,4 +1,4 @@
-# 🤝 Contributing to DZ Open Suite
+# Contributing to DZ Open Suite
 ## Guidelines for Contributors
 
 [English](CONTRIBUTING.md) • [العربية](../README.ar.md) • [Français](../README.fr.md)
@@ -7,7 +7,7 @@ Thank you for your interest in contributing to the **Algerian Open Source Ecosys
 
 ---
 
-### 🌟 Ways to Contribute
+### Ways to Contribute
 You don't need to be a software engineer to contribute. We actively seek contributions in:
 1. **Legal & Fiscal Auditing:** Reviewing tax brackets, VAT rates, and invoice rules against official gazette publications (Journal Officiel de la République Algérienne) and DGI updates.
 2. **Translations & Localization:** Translating and verifying terms across **Arabic**, **French**, and **English**.
@@ -16,7 +16,7 @@ You don't need to be a software engineer to contribute. We actively seek contrib
 
 ---
 
-### 🛠️ Development Standards
+### ️ Development Standards
 
 * **Code Language:** Code identifiers (classes, functions, variables) must be written in standard English (e.g., `calculateLineItem`, `validateNIF`).
 * **Trilingual Requirements:** Any user-facing feature or application MUST support all three languages:
@@ -27,7 +27,7 @@ You don't need to be a software engineer to contribute. We actively seek contrib
 
 ---
 
-### 🌿 Git & Pull Request Workflow
+### Git & Pull Request Workflow
 
 1. Fork and clone the repository.
 2. Create a feature branch:

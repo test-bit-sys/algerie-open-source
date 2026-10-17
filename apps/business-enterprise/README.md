@@ -1,16 +1,16 @@
-# 🏢 Business & Enterprise (برامج الإدارة والأعمال)
+# Business & Enterprise (برامج الإدارة والأعمال)
 ## DZ Business — Commercial & Enterprise Management Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Replace clunky, outdated, and cracked commercial management software with modern, secure, and offline-first solutions designed specifically for Algerian merchants, SMEs (PME/TPE), and distributors.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Proprietary Equivalent | Algerian Specifics & Key Features |
 | :--- | :--- | :--- | :--- |
@@ -21,6 +21,6 @@ Replace clunky, outdated, and cracked commercial management software with modern
 
 ---
 
-### 🛠️ Recommended Tech Stack for Contributors
+### ️ Recommended Tech Stack for Contributors
 * **Architecture:** Offline-First with SQLite (Local DB) + optional LAN synchronization (multi-caisse).
 * **Frontend:** TypeScript + TailwindCSS / Modern Vanilla CSS (Native RTL/LTR).

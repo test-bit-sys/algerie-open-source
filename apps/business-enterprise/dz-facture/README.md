@@ -2,7 +2,7 @@
   <img src="assets/logo.jpg" alt="DZ-Facture & POS Logo" width="450" style="border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.3);">
 </p>
 
-# 🇩🇿 DZ-Facture & POS (منظومة الفوترة والكاشير وإدارة المخزون الجزائرية)
+# DZ-Facture & POS (منظومة الفوترة والكاشير وإدارة المخزون الجزائرية)
 
 [![Status](https://img.shields.io/badge/Status-100%25%20Enterprise%20Production%20Ready-success.svg)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -14,7 +14,7 @@
 
 ---
 
-## 🌟 الميزات الاحترافية المكتملة (Enterprise Features)
+## الميزات الاحترافية المكتملة (Enterprise Features)
 
 ### 1. الامتثال التام للقانون التجاري والجبائي الجزائري (Fiscal Compliance)
 - **المرسوم التنفيذي 05-468**: طباعة فواتير A4 وسندات تسليم (BL) مطابقة تماماً للمواصفات القانونية الرسمية وتتضمن كافة البيانات الإلزامية:
@@ -64,7 +64,7 @@
 
 ---
 
-## 🚀 طريقة التشغيل (Quick Start)
+## طريقة التشغيل (Quick Start)
 
 ### التشغيل عبر سطر الأوامر:
 ```bash
@@ -76,11 +76,11 @@ npm start
 ```
 
 ثم افتح الرابط في المتصفح:
-👉 **`http://localhost:3000`**
+**`http://localhost:3000`**
 
 ---
 
-## 📁 بنية المشروع (Architecture)
+## بنية المشروع (Architecture)
 
 ```text
 dz-facture/
@@ -105,5 +105,5 @@ dz-facture/
 
 ---
 
-## 📜 الترخيص (License)
+## الترخيص (License)
 مرخص تحت رخصة **MIT** - متاح مجاناً لجميع التجار والمطورين ورواد الأعمال في الجزائر.

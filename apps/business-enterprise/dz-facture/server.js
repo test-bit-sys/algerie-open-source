@@ -57,8 +57,8 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`\n======================================================`);
-  console.log(`🇩🇿 DZ-Facture & POS (Algerian Invoicing & POS Suite)`);
-  console.log(`🚀 Server running at: http://localhost:${PORT}`);
-  console.log(`📡 Offline-first | Trilingual (AR/FR/EN) | Fiscal Compliant`);
+  console.log(`DZ-Facture & POS (Algerian Invoicing & POS Suite)`);
+  console.log(`[INFO] Server running at: http://localhost:${PORT}`);
+  console.log(`[SYS] Offline-first | Trilingual (AR/FR/EN) | Fiscal Compliant`);
   console.log(`======================================================\n`);
 });

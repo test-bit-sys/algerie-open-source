@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-  <img src="assets/logo.svg" alt="Logo DZ Open Suite" width="130" height="130">
+  <img src="assets/logo.jpg" alt="Logo DZ Open Suite" width="130" height="130">
 </p>
 
-<h1 align="center">🇩🇿 Écosystème Logiciel Open Source Algérien</h1>
+<h1 align="center">Écosystème Logiciel Open Source Algérien</h1>
 <h3 align="center">DZ Open Suite — Logiciels modernes, libres et souverains pour l'Algérie</h3>
 
 <p align="center">
@@ -29,7 +29,7 @@
 
 ---
 
-### 🌟 Vision et Objectifs
+### Vision et Objectifs
 1. **Éradiquer les logiciels piratés :** Remplacer les logiciels obsolètes ou piratés (Delphi/Access) par des solutions fiables, auditables et pérennes.
 2. **Conformité totale avec les normes algériennes :**
    * Réglementation fiscale (TVA 9% / 19%, Droit de Timbre Fiscal 1%, IRG, IBS).
@@ -39,19 +39,19 @@
 
 ---
 
-### 🏛️ Structure du Monorepo
+### Structure du Monorepo
 
 ```
 algerie-open-source/
 │
-├── 📁 docs/                     # Documentation légale, fiscale et architecturale
-├── 📁 packages/                 # Paquets partagés et moteurs de calcul
+├── docs/                     # Documentation légale, fiscale et architecturale
+├── packages/                 # Paquets partagés et moteurs de calcul
 │   ├── dz-tafqit/               # Conversion des chiffres en lettres (Arabe, Français, Anglais)
 │   ├── dz-geo/                  # Base de données des 58 Wilayas et codes postaux
 │   ├── dz-fiscal/               # Validateurs NIF/NIS/RC/CCP et moteur de calcul fiscal
 │   └── dz-ui/                   # Système de conception graphique trilingue RTL/LTR
 │
-└── 📁 apps/                     # Applications
+└── apps/                     # Applications
     ├── dz-facture/              # Application de facturation et gestion commerciale
     ├── dz-paie/                 # Fiches de paie et conformité CNAS
     └── dz-idara/                # Générateur de documents administratifs
@@ -59,7 +59,7 @@ algerie-open-source/
 
 ---
 
-### 🚀 Démarrage Rapide
+### Démarrage Rapide
 
 ```bash
 # Cloner le dépôt

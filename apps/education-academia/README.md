@@ -1,16 +1,16 @@
-# 🎓 Education & Academia (برامج التعليم والجامعات)
+# Education & Academia (برامج التعليم والجامعات)
 ## DZ Education — Schools, Universities & Academic Tools Track
 
 [English](README.md) • [العربية](../../README.ar.md) • [Français](../../README.fr.md)
 
 ---
 
-### 🌟 Mission
+### Mission
 Digitalize and streamline administrative and pedagogical workflows in Algerian schools (Primaire, C.E.M, Lycée) and universities with free, modern, and locally standardized software.
 
 ---
 
-### 📋 Planned Project Blueprints
+### Planned Project Blueprints
 
 | Project Identifier | Target Application | Key Algerian Features |
 | :--- | :--- | :--- |

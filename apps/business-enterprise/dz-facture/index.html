@@ -15,7 +15,7 @@
     <aside class="sidebar no-print">
       <div>
         <div class="sidebar-header" style="display:flex; align-items:center; gap:0.75rem;">
-          <img src="assets/logo.jpg" alt="DZ-Facture POS Logo" style="width:48px; height:48px; border-radius:10px; object-fit:cover; box-shadow:0 3px 12px rgba(0,135,68,0.35); border:1px solid rgba(255,255,255,0.12);" />
+          <img src="assets/logo.jpg" alt="DZ-Facture POS Logo" style="width:44px; height:44px; border-radius:10px; object-fit:cover; box-shadow:0 3px 12px rgba(0,135,68,0.35); border:1px solid rgba(255,255,255,0.12);" />
           <div>
             <div class="brand-title">DZ-Facture & POS</div>
             <div class="brand-subtitle" data-i18n="brandSubtitle">المنظومة التجارية الجزائرية</div>
@@ -25,43 +25,51 @@
         <ul class="nav-links">
           <li>
             <button class="nav-btn active" data-tab="tab-dashboard">
-              📊 <span data-i18n="navDashboard">لوحة القيادة والمؤشرات</span>
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span data-i18n="navDashboard">لوحة القيادة والمؤشرات</span>
             </button>
           </li>
           <li>
             <button class="nav-btn" data-tab="tab-pos">
-              🛒 <span data-i18n="navPOS">نقطة البيع والكاشير (POS)</span>
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              <span data-i18n="navPOS">نقطة البيع والكاشير</span>
             </button>
           </li>
           <li>
             <button class="nav-btn" data-tab="tab-invoices">
-              📄 <span data-i18n="navInvoices">الفواتير وسندات التسليم (A4)</span>
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <span data-i18n="navInvoices">الفواتير وسندات التسليم (A4)</span>
             </button>
           </li>
           <li>
             <button class="nav-btn" data-tab="tab-products">
-              📦 <span data-i18n="navProducts">المنتجات والمخزون</span>
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              <span data-i18n="navProducts">المنتجات والمخزون</span>
             </button>
           </li>
           <li>
             <button class="nav-btn" data-tab="tab-clients">
-              👥 <span data-i18n="navClients">العملاء والديون (Crédit)</span>
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span data-i18n="navClients">العملاء والديون</span>
             </button>
           </li>
           <li>
             <button class="nav-btn" data-tab="tab-expenses">
-              💸 <span data-i18n="navExpenses">المصاريف اليومية (Dépenses)</span>
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span data-i18n="navExpenses">المصاريف التشغيلية</span>
               <span class="nav-badge" id="expensesNavBadge">0</span>
             </button>
           </li>
           <li>
             <button class="nav-btn" data-tab="tab-closings">
-              🧾 <span data-i18n="navClosings">إغلاق الصندوق (Rapport Z)</span>
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <span data-i18n="navClosings">إغلاق الصندوق (Rapport Z)</span>
             </button>
           </li>
           <li>
             <button class="nav-btn" data-tab="tab-settings">
-              ⚙️ <span data-i18n="navSettings">بيانات المؤسسة والنسخ الاحتياطي</span>
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span data-i18n="navSettings">بيانات المؤسسة والنسخ الاحتياطي</span>
             </button>
           </li>
         </ul>
@@ -69,7 +77,7 @@
 
       <div class="sidebar-footer">
         <div style="font-size:0.75rem; color:#94a3b8; text-align:center;">
-          <div><b data-i18n="footerSecurityTitle">🔒 100% Offline-First Architecture</b></div>
+          <div><b data-i18n="footerSecurityTitle">100% Offline-First Architecture</b></div>
           <div style="margin-top:2px;" data-i18n="footerSecurityDesc">بياناتك محفوظة محلياً بأمان وسرية تامة</div>
         </div>
       </div>
@@ -91,10 +99,11 @@
 
         <div class="topbar-actions">
           <button id="quickZReportBtn" class="btn btn-outline btn-sm" title="إغلاق الصندوق اليومي وطباعة Rapport Z">
-            🧾 <span data-i18n="btnQuickZReport">تقرير Z</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span data-i18n="btnQuickZReport">تقرير Z</span>
           </button>
           <button id="soundToggleBtn" class="btn btn-outline btn-sm" title="كتم/تفعيل صوت الكاشير والماسح">
-            🔊
+            <svg id="soundIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
           </button>
           <div class="lang-selector">
             <button class="lang-btn active" data-lang="ar">العربية</button>
@@ -102,7 +111,7 @@
             <button class="lang-btn" data-lang="en">English</button>
           </div>
           <button id="themeToggleBtn" class="btn btn-outline btn-sm" title="تبديل الوضع الليلي">
-            🌙
+            <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           </button>
         </div>
       </header>
@@ -115,35 +124,45 @@
           <!-- Stat Cards -->
           <div class="grid-cols-5">
             <div class="stat-card">
-              <div class="stat-icon" style="background:#e0f2fe; color:#0284c7;">💰</div>
+              <div class="stat-icon" style="background:#e0f2fe; color:#0284c7;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M2 10h20"/></svg>
+              </div>
               <div>
                 <div class="stat-label" data-i18n="statRevenue">مبيعات اليوم الإجمالية</div>
                 <div class="stat-val" id="statTodaySales">0.00 دج</div>
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon" style="background:#dcfce7; color:#16a34a;">📈</div>
+              <div class="stat-icon" style="background:#dcfce7; color:#16a34a;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              </div>
               <div>
                 <div class="stat-label" data-i18n="statGrossProfit">هامش الربح التجاري</div>
                 <div class="stat-val" id="statGrossProfit" style="color:#008744;">0.00 دج</div>
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon" style="background:#fee2e2; color:#dc2626;">💸</div>
+              <div class="stat-icon" style="background:#fee2e2; color:#dc2626;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+              </div>
               <div>
                 <div class="stat-label" data-i18n="statExpenses">المصاريف التشغيلية</div>
                 <div class="stat-val" id="statTotalExpenses" style="color:#dc2626;">0.00 دج</div>
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon" style="background:#ede9fe; color:#7c3aed;">🏆</div>
+              <div class="stat-icon" style="background:#ede9fe; color:#7c3aed;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
               <div>
                 <div class="stat-label" data-i18n="statNetProfit">صافي الربح الحقيقي</div>
                 <div class="stat-val" id="statNetProfit" style="color:#7c3aed;">0.00 دج</div>
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon" style="background:#fee2e2; color:#dc2626;">⚠️</div>
+              <div class="stat-icon" style="background:#fffbeb; color:#d97706;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
               <div>
                 <div class="stat-label" data-i18n="statLowStock">تنبيهات نفاد المخزون</div>
                 <div class="stat-val" id="statLowStockCount">0</div>
@@ -156,7 +175,7 @@
             <div class="chart-card">
               <div class="chart-header">
                 <div>
-                  <h3 style="font-size:0.95rem; font-weight:800;" data-i18n="chartSalesTitle">📊 مؤشر المبيعات اليومية (آخر 7 أيام)</h3>
+                  <h3 style="font-size:0.95rem; font-weight:800;" data-i18n="chartSalesTitle">مؤشر المبيعات اليومية (آخر 7 أيام)</h3>
                   <div style="font-size:0.75rem; color:var(--text-muted);" data-i18n="chartSalesSubtitle">تطور إجمالي الإيرادات بالدينار الجزائري (DZD)</div>
                 </div>
               </div>
@@ -166,7 +185,7 @@
             <div class="chart-card">
               <div class="chart-header">
                 <div>
-                  <h3 style="font-size:0.95rem; font-weight:800;" data-i18n="chartPayTitle">💳 توزيع طرق الدفع</h3>
+                  <h3 style="font-size:0.95rem; font-weight:800;" data-i18n="chartPayTitle">توزيع طرق الدفع</h3>
                   <div style="font-size:0.75rem; color:var(--text-muted);" data-i18n="chartPaySubtitle">نقداً / تحويل / شيك / كريدي</div>
                 </div>
               </div>
@@ -181,8 +200,14 @@
               <p style="font-size:0.85rem; color:var(--text-muted); margin-top:3px;" data-i18n="quickSaleDesc">استخدم نقطة البيع السريع لطباعة تذاكر الكاشير (80mm)، أو محرر الفواتير الرسمي لطباعة وثائق A4 القانونية.</p>
             </div>
             <div style="display:flex; gap:0.5rem;">
-              <button class="btn btn-primary" id="btnLaunchPos">🛒 <span data-i18n="btnOpenPOS">فتح الكاشير (POS)</span></button>
-              <button class="btn btn-outline" id="btnNewA4Invoice">📄 <span data-i18n="btnNewInvoice">فاتورة رسمية A4</span></button>
+              <button class="btn btn-primary" id="btnLaunchPos">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                <span data-i18n="btnOpenPOS">فتح الكاشير (POS)</span>
+              </button>
+              <button class="btn btn-outline" id="btnNewA4Invoice">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span data-i18n="btnNewInvoice">فاتورة رسمية A4</span>
+              </button>
             </div>
           </div>
 
@@ -216,16 +241,18 @@
             <!-- Left: Product Grid & Search -->
             <div class="pos-products-panel">
               <div style="display:flex; gap:0.5rem; align-items:center;">
-                <input type="text" id="posBarcodeInput" class="search-input" data-i18n-placeholder="searchPOSPlaceholder" placeholder="🔍 امسح الباركود بالماسح أو ابحث عن السلعة... [F2]" style="flex:1;" autofocus>
+                <input type="text" id="posBarcodeInput" class="search-input" data-i18n-placeholder="searchPOSPlaceholder" placeholder="امسح الباركود بالماسح أو ابحث عن السلعة... [F2]" style="flex:1;" autofocus>
                 
                 <!-- Camera Barcode Scanner Button -->
                 <button class="btn btn-outline btn-sm" id="btnOpenScannerModal" title="تشغيل ماسح الباركود بالكاميرا">
-                  📷 <span data-i18n="btnScanCamera">كاميرا</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  <span data-i18n="btnScanCamera">كاميرا</span>
                 </button>
 
                 <!-- Held carts button -->
                 <button class="btn btn-outline btn-sm" id="btnHeldCartsList" title="السلات المعلقة مؤقتاً">
-                  ⏸️ <span data-i18n="btnHeldCarts">المعلقة</span> (<span id="heldCartsCount">0</span>)
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  <span data-i18n="btnHeldCarts">المعلقة</span> (<span id="heldCartsCount">0</span>)
                 </button>
               </div>
 
@@ -248,8 +275,13 @@
                   <span id="cartItemsBadge" style="background:var(--primary); color:#fff; font-size:0.7rem; font-weight:800; padding:1px 7px; border-radius:10px;">0</span>
                 </div>
                 <div style="display:flex; gap:0.3rem;">
-                  <button class="btn btn-outline btn-sm" id="btnHoldCurrentCart" title="تعليق السلة لخدمة زبون آخر مؤقتاً [F4]">⏸️ <span data-i18n="btnHold">تعليق</span></button>
-                  <button class="btn btn-danger btn-sm" id="btnClearCart" title="إفراغ السلة">🗑️</button>
+                  <button class="btn btn-outline btn-sm" id="btnHoldCurrentCart" title="تعليق السلة مؤقتاً [F4]">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                    <span data-i18n="btnHold">تعليق</span>
+                  </button>
+                  <button class="btn btn-danger btn-sm" id="btnClearCart" title="إفراغ السلة">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  </button>
                 </div>
               </div>
 
@@ -286,7 +318,7 @@
                 </div>
 
                 <button class="btn btn-primary btn-lg" id="btnPosCheckout" style="width:100%; justify-content:center; margin-top:0.5rem;">
-                  💵 <span data-i18n="btnPayAndPrint">دفع وطباعة التذكرة [F9]</span>
+                  <span data-i18n="btnPayAndPrint">دفع وطباعة التذكرة [F9]</span>
                 </button>
               </div>
             </div>
@@ -301,7 +333,10 @@
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; gap:1rem;">
               <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
                 <h3 style="font-size:1.05rem; font-weight:800;" data-i18n="invoiceEditorTitle">محرر المستندات والوثائق الرسمية</h3>
-                <button class="btn btn-primary btn-sm" id="btnPrintA4">🖨️ <span data-i18n="btnPrintA4">طباعة A4</span></button>
+                <button class="btn btn-primary btn-sm" id="btnPrintA4">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                  <span data-i18n="btnPrintA4">طباعة A4</span>
+                </button>
               </div>
 
               <!-- Doc Type & Meta -->
@@ -443,8 +478,11 @@
         <section id="tab-products" class="tab-pane">
           <div class="data-table-container">
             <div class="table-header-tools">
-              <input type="text" id="productSearchInput" class="search-input" data-i18n-placeholder="searchProductPlaceholder" placeholder="🔍 بحث عن منتج بالاسم أو الباركود..." style="flex:1; max-width:320px;">
-              <button class="btn btn-primary" id="btnOpenNewProductModal">+ <span data-i18n="btnNewProduct">إضافة منتج جديد</span></button>
+              <input type="text" id="productSearchInput" class="search-input" data-i18n-placeholder="searchProductPlaceholder" placeholder="بحث عن منتج بالاسم أو الباركود..." style="flex:1; max-width:320px;">
+              <button class="btn btn-primary" id="btnOpenNewProductModal">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span data-i18n="btnNewProduct">إضافة منتج جديد</span>
+              </button>
             </div>
             <table class="data-table">
               <thead>
@@ -470,8 +508,11 @@
         <section id="tab-clients" class="tab-pane">
           <div class="data-table-container">
             <div class="table-header-tools">
-              <input type="text" id="clientSearchInput" class="search-input" data-i18n-placeholder="searchClientPlaceholder" placeholder="🔍 بحث عن عميل بالاسم أو الهاتف..." style="flex:1; max-width:320px;">
-              <button class="btn btn-primary" id="btnOpenNewClientModal">+ <span data-i18n="btnNewClient">إضافة عميل جديد</span></button>
+              <input type="text" id="clientSearchInput" class="search-input" data-i18n-placeholder="searchClientPlaceholder" placeholder="بحث عن عميل بالاسم أو الهاتف..." style="flex:1; max-width:320px;">
+              <button class="btn btn-primary" id="btnOpenNewClientModal">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span data-i18n="btnNewClient">إضافة عميل جديد</span>
+              </button>
             </div>
             <table class="data-table">
               <thead>
@@ -491,12 +532,12 @@
           </div>
         </section>
 
-        <!-- TAB 6: EXPENSES TRACKER (المصاريف والتشغيل) -->
+        <!-- TAB 6: EXPENSES TRACKER (المصاريف التشغيلية) -->
         <section id="tab-expenses" class="tab-pane">
           <div style="display:grid; grid-template-columns:360px 1fr; gap:1.25rem;">
             <!-- Left: Add Expense Form -->
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem;">
-              <h3 style="font-weight:800; font-size:1.05rem; margin-bottom:1rem;" data-i18n="expenseFormTitle">💸 تسجيل مصروف تجاري جديد</h3>
+              <h3 style="font-weight:800; font-size:1.05rem; margin-bottom:1rem;" data-i18n="expenseFormTitle">تسجيل مصروف تجاري جديد</h3>
               <form id="expenseForm" style="display:flex; flex-direction:column; gap:0.75rem;">
                 <div>
                   <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblExpenseDate">تاريخ المصروف:</label>
@@ -530,7 +571,8 @@
                   </select>
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-top:0.5rem; justify-content:center;">
-                  ➕ <span data-i18n="btnSaveExpense">تسجيل المصروف</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span data-i18n="btnSaveExpense">تسجيل المصروف</span>
                 </button>
               </form>
             </div>
@@ -538,7 +580,7 @@
             <!-- Right: Expenses Table & Summary -->
             <div class="data-table-container">
               <div class="table-header-tools">
-                <input type="text" id="expenseSearchInput" class="search-input" data-i18n-placeholder="searchExpensePlaceholder" placeholder="🔍 بحث في المصاريف..." style="flex:1; max-width:280px;">
+                <input type="text" id="expenseSearchInput" class="search-input" data-i18n-placeholder="searchExpensePlaceholder" placeholder="بحث في المصاريف..." style="flex:1; max-width:280px;">
                 <div style="font-weight:800; color:#dc2626;">
                   <span data-i18n="lblTotalExpenses">إجمالي المصاريف:</span>
                   <span id="expenseTotalAmount" style="font-size:1.15rem; margin-inline-start:6px;">0.00 دج</span>
@@ -570,7 +612,7 @@
             <!-- Left: Current Drawer Closing Calculation -->
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; gap:1rem;">
               <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
-                <h3 style="font-weight:800; font-size:1.1rem;" data-i18n="zReportTitle">🧾 جرد وإغلاق الصندوق اليومي (Rapport Z)</h3>
+                <h3 style="font-weight:800; font-size:1.1rem;" data-i18n="zReportTitle">جرد وإغلاق الصندوق اليومي (Rapport Z)</h3>
                 <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:800; padding:3px 8px; border-radius:6px;" id="zReportShiftDate">2026-10-17</span>
               </div>
 
@@ -627,7 +669,8 @@
               </div>
 
               <button class="btn btn-primary btn-lg" id="btnConfirmZReportClosing" style="justify-content:center; width:100%;">
-                🖨️ <span data-i18n="btnConfirmZReport">تأكيد الإغلاق وطباعة تقرير Z (80mm)</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span data-i18n="btnConfirmZReport">تأكيد الإغلاق وطباعة تقرير Z (80mm)</span>
               </button>
             </div>
 
@@ -662,7 +705,7 @@
             
             <!-- Company Profile -->
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem;">
-              <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1rem;" data-i18n="companyProfileTitle">🏢 بيانات المؤسسة والتاجر</h3>
+              <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1rem;" data-i18n="companyProfileTitle">بيانات المؤسسة والتاجر</h3>
               <form id="companyProfileForm" style="display:flex; flex-direction:column; gap:0.75rem;">
                 <div>
                   <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblCompanyName">الاسم التجاري أو تسمية المؤسسة</label>
@@ -700,21 +743,24 @@
                   <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblStamp">ختم وتوقيع المؤسسة (صورة PNG للختم الدائري)</label>
                   <input type="file" id="cfgCompanyStampInput" accept="image/*" style="font-size:0.8rem; width:100%;">
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">💾 <span data-i18n="btnSaveProfile">حفظ البيانات</span></button>
+                <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">
+                  <span data-i18n="btnSaveProfile">حفظ البيانات</span>
+                </button>
               </form>
             </div>
 
             <!-- Backup & Flash Disk Support -->
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between;">
               <div>
-                <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:0.75rem;" data-i18n="backupTitle">💾 النسخ الاحتياطي وحماية البيانات</h3>
+                <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:0.75rem;" data-i18n="backupTitle">النسخ الاحتياطي وحماية البيانات</h3>
                 <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;" data-i18n="backupDesc">
                   نظراً لأهمية بيانات تجارتك، يمكنك تصدير قاعدة البيانات كاملة بضغطة زر وحفظها على قرص فلاش خارجي (Flash Disk USB) لحمايتها من أي عطل، أو استرجاعها في أي جهاز آخر دون إنترنت.
                 </p>
 
                 <div style="margin-top:1.5rem; display:flex; flex-direction:column; gap:0.75rem;">
                   <button class="btn btn-primary" id="btnExportBackup">
-                    📥 <span data-i18n="btnDownloadBackup">تحميل نسخة احتياطية (.json)</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span data-i18n="btnDownloadBackup">تحميل نسخة احتياطية (.json)</span>
                   </button>
                   
                   <div style="border-top:1px dashed var(--border); padding-top:1rem; margin-top:0.5rem;">
@@ -725,7 +771,7 @@
               </div>
 
               <div style="background:var(--bg-main); border:1px solid var(--border); border-radius:8px; padding:0.75rem; font-size:0.75rem; color:var(--text-muted); margin-top:1rem;" data-i18n="backupPrivacyNote">
-                ℹ️ <b>ملاحظة:</b> المنظومة تعمل 100% بدون خوادم خارجية ولا تقوم بمشاركة أي أرقام أو بيانات مالية لضمان أقصى درجات السرية والخصوصية.
+                <b>ملاحظة:</b> المنظومة تعمل 100% بدون خوادم خارجية ولا تقوم بمشاركة أي أرقام أو بيانات مالية لضمان أقصى درجات السرية والخصوصية.
               </div>
             </div>
 
@@ -741,7 +787,7 @@
   <div class="modal-overlay" id="scannerModal">
     <div class="modal-dialog" style="max-width:440px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-weight:800;" data-i18n="scannerModalTitle">📷 ماسح الباركود بالكاميرا</h3>
+        <h3 style="font-weight:800;" data-i18n="scannerModalTitle">ماسح الباركود بالكاميرا</h3>
         <button class="btn btn-outline btn-sm" id="btnCloseScannerModal">✕</button>
       </div>
 
@@ -772,7 +818,7 @@
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-dialog" style="max-width:440px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-weight:800;" data-i18n="checkoutTitle">💵 تحصيل المبلغ وإرجاع الباقي</h3>
+        <h3 style="font-weight:800;" data-i18n="checkoutTitle">تحصيل المبلغ وإرجاع الباقي</h3>
         <button class="btn btn-outline btn-sm" id="btnCloseCheckoutModal">✕</button>
       </div>
 
@@ -812,7 +858,8 @@
         </div>
 
         <button class="btn btn-primary" id="btnConfirmPaymentAndTicket" style="justify-content:center; padding:0.85rem; font-size:1rem; margin-top:0.5rem;">
-          🖨️ <span data-i18n="btnConfirmPayment">تأكيد الدفع وطباعة التذكرة</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span data-i18n="btnConfirmPayment">تأكيد الدفع وطباعة التذكرة</span>
         </button>
       </div>
     </div>
@@ -822,7 +869,7 @@
   <div class="modal-overlay" id="heldCartsModal">
     <div class="modal-dialog">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-weight:800;" data-i18n="heldModalTitle">⏸️ السلات المعلقة مؤقتاً</h3>
+        <h3 style="font-weight:800;" data-i18n="heldModalTitle">السلات المعلقة مؤقتاً</h3>
         <button class="btn btn-outline btn-sm" id="btnCloseHeldModal">✕</button>
       </div>
       <div id="heldCartsContainer" style="display:flex; flex-direction:column; gap:0.5rem; max-height:300px; overflow-y:auto;">
@@ -835,23 +882,26 @@
   <div class="modal-overlay" id="barcodeLabelModal">
     <div class="modal-dialog" style="max-width:380px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;" class="no-print">
-        <h4 style="font-weight:800;" data-i18n="barcodeModalTitle">🏷️ ملصق الباركود والسعر</h4>
+        <h4 style="font-weight:800;" data-i18n="barcodeModalTitle">ملصق الباركود والسعر</h4>
         <button class="btn btn-outline btn-sm" id="btnCloseBarcodeModal">✕</button>
       </div>
       <div id="barcodeLabelView" style="text-align:center; padding:10px; border:1px solid #cbd5e1; border-radius:8px; background:#fff; color:#0f172a;">
         <!-- Injected via JS -->
       </div>
       <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;" class="no-print">
-        <button class="btn btn-primary" onclick="window.print()">🖨️ <span data-i18n="btnPrintLabel">طباعة الملصق</span></button>
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span data-i18n="btnPrintLabel">طباعة الملصق</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: CLIENT DEBT PAYMENT (وصل تسديد الديون) -->
+  <!-- MODAL: CLIENT DEBT PAYMENT -->
   <div class="modal-overlay" id="debtPaymentModal">
     <div class="modal-dialog" style="max-width:420px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-weight:800;" data-i18n="debtModalTitle">💰 تسجيل دفعة / تسديد دين</h3>
+        <h3 style="font-weight:800;" data-i18n="debtModalTitle">تسجيل دفعة / تسديد دين</h3>
         <button class="btn btn-outline btn-sm" id="btnCloseDebtModal">✕</button>
       </div>
       <form id="debtPaymentForm" style="display:flex; flex-direction:column; gap:0.75rem;">
@@ -889,7 +939,7 @@
           <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="thBarcode">الباركود</label>
           <div style="display:flex; gap:0.5rem;">
             <input type="text" id="prodBarcode" class="search-input" style="max-width:none; flex:1;" required>
-            <button type="button" class="btn btn-outline btn-sm" id="btnGenerateBarcode" title="توليد باركود تلقائي">🎲 <span data-i18n="btnGenerateCode">توليد</span></button>
+            <button type="button" class="btn btn-outline btn-sm" id="btnGenerateBarcode" title="توليد باركود تلقائي"><span data-i18n="btnGenerateCode">توليد تلقائي</span></button>
           </div>
         </div>
         <div>
@@ -1010,13 +1060,16 @@
           </div>
           <div id="tktQRCodeContainer" style="display:flex; justify-content:center; margin:3mm 0;"></div>
           <div style="text-align:center; font-size:8pt;" id="tktWelcomeMessage">
-            شكراً لزيارتكم! مرحباً بكم دائماً 🇩🇿
+            شكراً لتعاملكم معنا
           </div>
         </div>
       </div>
 
       <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;" class="no-print">
-        <button class="btn btn-primary" id="btnConfirmPrintTicket">🖨️ <span data-i18n="btnPrintTicket">طباعة التذكرة</span></button>
+        <button class="btn btn-primary" id="btnConfirmPrintTicket">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span data-i18n="btnPrintTicket">طباعة التذكرة</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1025,7 +1078,7 @@
   <div class="modal-overlay" id="zTicketPrintModal">
     <div class="modal-dialog" style="max-width:400px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;" class="no-print">
-        <h4 style="font-weight:800;" data-i18n="zTicketModalTitle">🧾 تذكرة إغلاق الصندوق - Rapport Z</h4>
+        <h4 style="font-weight:800;" data-i18n="zTicketModalTitle">تذكرة إغلاق الصندوق - Rapport Z</h4>
         <button class="btn btn-outline btn-sm" id="btnCloseZTicketModal">✕</button>
       </div>
 
@@ -1075,7 +1128,10 @@
       </div>
 
       <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;" class="no-print">
-        <button class="btn btn-primary" onclick="window.print()">🖨️ <span data-i18n="btnPrintZTicket">طباعة تقرير Z</span></button>
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span data-i18n="btnPrintZTicket">طباعة تقرير Z</span>
+        </button>
       </div>
     </div>
   </div>
