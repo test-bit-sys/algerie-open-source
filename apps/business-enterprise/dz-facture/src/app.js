@@ -85,7 +85,32 @@ const I18N = {
     btnCancel: 'إلغاء',
     btnSave: 'حفظ',
     modalNewClient: 'إضافة عميل أو شركة جديدة',
-    thermalTicketTitle: 'معاينة تذكرة الكاشير (80mm)'
+    thermalTicketTitle: 'معاينة تذكرة الكاشير (80mm)',
+    chartSalesTitle: '📊 مؤشر المبيعات اليومية (آخر 7 أيام)',
+    chartSalesSubtitle: 'تطور إجمالي الإيرادات بالدينار الجزائري (DZD)',
+    chartPayTitle: '💳 توزيع طرق الدفع',
+    chartPaySubtitle: 'نقداً / تحويل / شيك / كريدي',
+    btnHeldCarts: 'المعلقة',
+    btnHold: 'تعليق',
+    thMargin: 'الهامش (Marge)',
+    thActions: 'إجراءات',
+    lblStamp: 'ختم وتوقيع المؤسسة (صورة PNG للختم الدائري)',
+    checkoutTitle: '💵 تحصيل المبلغ وإرجاع الباقي',
+    checkoutDueLabel: 'المبلغ الإجمالي المستحق (Total TTC):',
+    checkoutBanknotes: 'أوراق النقد الجزائرية السريعة:',
+    btnExact: 'المبلغ تماماً',
+    checkoutReceivedLabel: 'المبلغ المقبوض من الزبون (دج):',
+    checkoutChangeLabel: 'الباقي للزبون (Rendu):',
+    btnConfirmPayment: 'تأكيد الدفع وطباعة التذكرة',
+    heldModalTitle: '⏸️ السلات المعلقة مؤقتاً',
+    barcodeModalTitle: '🏷️ ملصق الباركود والسعر',
+    btnPrintLabel: 'طباعة الملصق',
+    debtModalTitle: '💰 تسجيل دفعة / تسديد دين',
+    lblDebtClient: 'اسم العميل:',
+    lblCurrentDebt: 'إجمالي الدين المستحق حالياً:',
+    lblDebtAmount: 'مبلغ الدفعة المسددة (دج):',
+    lblDebtNote: 'ملاحظات أو رقم الإيصال:',
+    btnSaveDebt: 'حفظ وتأكيد الدفعة'
   },
   fr: {
     navDashboard: 'Tableau de bord & Analyses',
@@ -149,7 +174,32 @@ const I18N = {
     btnCancel: 'Annuler',
     btnSave: 'Enregistrer',
     modalNewClient: 'Nouveau client / Entreprise',
-    thermalTicketTitle: 'Aperçu Ticket de Caisse (80mm)'
+    thermalTicketTitle: 'Aperçu Ticket de Caisse (80mm)',
+    chartSalesTitle: '📊 Ventes journalières (7 derniers jours)',
+    chartSalesSubtitle: 'Évolution des recettes en Dinars Algériens (DZD)',
+    chartPayTitle: '💳 Modes de règlement',
+    chartPaySubtitle: 'Espèces / Virement / Chèque / Crédit',
+    btnHeldCarts: 'En attente',
+    btnHold: 'Attente',
+    thMargin: 'Marge bénéficiaire',
+    thActions: 'Actions',
+    lblStamp: 'Cachet et signature (Image PNG ronde)',
+    checkoutTitle: '💵 Encaissement & Rendu monnaie',
+    checkoutDueLabel: 'Total TTC à payer :',
+    checkoutBanknotes: 'Coupures de billets rapides :',
+    btnExact: 'Compte exact',
+    checkoutReceivedLabel: 'Montant reçu du client (DZD) :',
+    checkoutChangeLabel: 'Monnaie à rendre :',
+    btnConfirmPayment: 'Confirmer et Imprimer Ticket',
+    heldModalTitle: '⏸️ Paniers en attente',
+    barcodeModalTitle: '🏷️ Étiquette code-barres & Prix',
+    btnPrintLabel: 'Imprimer étiquette',
+    debtModalTitle: '💰 Versement / Règlement créance',
+    lblDebtClient: 'Client :',
+    lblCurrentDebt: 'Créance totale due :',
+    lblDebtAmount: 'Montant versé (DZD) :',
+    lblDebtNote: 'Notes ou réf. reçu :',
+    btnSaveDebt: 'Valider le versement'
   },
   en: {
     navDashboard: 'Dashboard & Metrics',
@@ -213,7 +263,32 @@ const I18N = {
     btnCancel: 'Cancel',
     btnSave: 'Save',
     modalNewClient: 'Add New Client / Company',
-    thermalTicketTitle: 'Cashier Thermal Receipt (80mm)'
+    thermalTicketTitle: 'Cashier Thermal Receipt (80mm)',
+    chartSalesTitle: '📊 Daily Sales Trend (Last 7 Days)',
+    chartSalesSubtitle: 'Revenue performance in Algerian Dinars (DZD)',
+    chartPayTitle: '💳 Payment Breakdown',
+    chartPaySubtitle: 'Cash / Bank Transfer / Cheque / Credit',
+    btnHeldCarts: 'Held',
+    btnHold: 'Hold',
+    thMargin: 'Profit Margin',
+    thActions: 'Actions',
+    lblStamp: 'Company Stamp & Signature (Round PNG Image)',
+    checkoutTitle: '💵 Cashier Checkout & Change Calculator',
+    checkoutDueLabel: 'Total Due (TTC):',
+    checkoutBanknotes: 'Quick Banknotes:',
+    btnExact: 'Exact Amount',
+    checkoutReceivedLabel: 'Cash Received (DZD):',
+    checkoutChangeLabel: 'Change to Return:',
+    btnConfirmPayment: 'Confirm & Print Receipt',
+    heldModalTitle: '⏸️ Temporarily Held Carts',
+    barcodeModalTitle: '🏷️ Barcode & Price Tag',
+    btnPrintLabel: 'Print Sticker',
+    debtModalTitle: '💰 Record Debt Payment',
+    lblDebtClient: 'Client Name:',
+    lblCurrentDebt: 'Total Debt Due:',
+    lblDebtAmount: 'Payment Amount (DZD):',
+    lblDebtNote: 'Notes or Receipt Ref:',
+    btnSaveDebt: 'Confirm Payment'
   }
 };
 
@@ -390,6 +465,7 @@ function applyLanguage(lang) {
   }
 
   updateA4Calculations();
+  refreshDashboard();
 }
 
 // 3. DASHBOARD METRICS & CHARTS
@@ -416,11 +492,11 @@ function refreshDashboard() {
   document.getElementById('statProductCount').textContent = products.length;
   document.getElementById('statLowStockCount').textContent = lowStock;
 
-  // Render SVG Charts
+  // Render SVG Charts with current language
   const weeklyContainer = document.getElementById('weeklySalesChartContainer');
   const donutContainer = document.getElementById('paymentDonutContainer');
-  BusinessCharts.renderWeeklySalesChart(weeklyContainer, invoices);
-  BusinessCharts.renderPaymentDonut(donutContainer, invoices);
+  BusinessCharts.renderWeeklySalesChart(weeklyContainer, invoices, currentLang);
+  BusinessCharts.renderPaymentDonut(donutContainer, invoices, currentLang);
 
   // Render Recent Invoices Table
   const tbody = document.getElementById('recentInvoicesTableBody');

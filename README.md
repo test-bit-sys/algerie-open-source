@@ -2,6 +2,10 @@
   <img src="assets/banner.jpg" alt="DZ Open Suite - Algerian Open Source Ecosystem" width="100%">
 </p>
 
+<p align="center">
+  <img src="assets/logo.svg" alt="DZ Open Suite Logo" width="130" height="130">
+</p>
+
 <h1 align="center">🇩🇿 Algerian Open Source Software Ecosystem</h1>
 <h3 align="center">DZ Open Suite — Modern, Free & Localized Software for Algeria</h3>
 

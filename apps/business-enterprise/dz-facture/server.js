@@ -27,6 +27,10 @@ const server = http.createServer((req, res) => {
     reqPath = '/index.html';
   }
 
+  if (reqPath === '/favicon.ico') {
+    reqPath = '/assets/logo.svg';
+  }
+
   const filePath = path.join(__dirname, reqPath);
 
   // Security check: ensure path stays within app directory

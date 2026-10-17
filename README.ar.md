@@ -2,6 +2,10 @@
   <img src="assets/banner.jpg" alt="المنظومة الجزائرية للبرمجيات المفتوحة المصدر" width="100%">
 </p>
 
+<p align="center">
+  <img src="assets/logo.svg" alt="شعار DZ Open Suite" width="130" height="130">
+</p>
+
 <h1 align="center">🇩🇿 المنظومة الجزائرية للبرمجيات المفتوحة المصدر</h1>
 <h3 align="center">DZ Open Suite — برمجيات وطنية عصرية، مجانية ومخصصة للجزائر</h3>
 

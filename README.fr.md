@@ -1,7 +1,27 @@
-# 🇩🇿 Écosystème Logiciel Open Source Algérien
-## DZ Open Suite — Algerian Open Source Ecosystem
+<p align="center">
+  <img src="assets/banner.jpg" alt="Écosystème Logiciel Open Source Algérien" width="100%">
+</p>
 
-[English](README.md) • [العربية](README.ar.md) • [Français](README.fr.md)
+<p align="center">
+  <img src="assets/logo.svg" alt="Logo DZ Open Suite" width="130" height="130">
+</p>
+
+<h1 align="center">🇩🇿 Écosystème Logiciel Open Source Algérien</h1>
+<h3 align="center">DZ Open Suite — Logiciels modernes, libres et souverains pour l'Algérie</h3>
+
+<p align="center">
+  <a href="README.md"><b>English</b></a> •
+  <a href="README.ar.md"><b>العربية</b></a> •
+  <a href="README.fr.md"><b>Français</b></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/test-bit-sys/algerie-open-source/blob/main/LICENSE"><img src="https://img.shields.io/badge/Licence-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="Licence: MIT"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Domaines-11_Pôles_Spécialisés-blue.svg?style=for-the-badge" alt="Tracks"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Langues-Arabe_%7C_Français_%7C_Anglais-d21034.svg?style=for-the-badge" alt="Trilingue"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Architecture-Offline--First-0ea5e9.svg?style=for-the-badge&logo=sqlite&logoColor=white" alt="Offline-First"></a>
+  <a href="https://github.com/test-bit-sys/algerie-open-source/pulls"><img src="https://img.shields.io/badge/Contributions-Bienvenues-purple.svg?style=for-the-badge&logo=github" alt="PRs Welcome"></a>
+</p>
 
 ---
 

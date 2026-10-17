@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DZ-Facture & POS | منظومة الفوترة والكاشير وإدارة المخزون الجزائرية</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -13,10 +14,12 @@
     <!-- Left/Right Responsive Sidebar -->
     <aside class="sidebar no-print">
       <div>
-        <div class="sidebar-header">
-          <span class="brand-badge">🇩🇿 DZ Open Suite</span>
-          <div class="brand-title">DZ-Facture & POS</div>
-          <div class="brand-subtitle">المنظومة التجارية الجزائرية المتوافقة مع القانون الجبائي</div>
+        <div class="sidebar-header" style="display:flex; align-items:center; gap:0.75rem;">
+          <img src="assets/logo.svg" alt="DZ Logo" style="width:44px; height:44px; border-radius:10px; box-shadow:0 2px 10px rgba(0,135,68,0.4);" />
+          <div>
+            <div class="brand-title" style="font-size:1.05rem;">DZ-Facture & POS</div>
+            <div class="brand-subtitle" style="font-size:0.7rem;">المنظومة التجارية الجزائرية</div>
+          </div>
         </div>
 
         <ul class="nav-links">
@@ -132,8 +135,8 @@
             <div class="chart-card">
               <div class="chart-header">
                 <div>
-                  <h3 style="font-size:0.95rem; font-weight:800;">📊 مؤشر المبيعات اليومية (آخر 7 أيام)</h3>
-                  <div style="font-size:0.75rem; color:var(--text-muted);">تطور إجمالي الإيرادات بالدينار الجزائري (DZD)</div>
+                  <h3 style="font-size:0.95rem; font-weight:800;" data-i18n="chartSalesTitle">📊 مؤشر المبيعات اليومية (آخر 7 أيام)</h3>
+                  <div style="font-size:0.75rem; color:var(--text-muted);" data-i18n="chartSalesSubtitle">تطور إجمالي الإيرادات بالدينار الجزائري (DZD)</div>
                 </div>
               </div>
               <div id="weeklySalesChartContainer" style="min-height:180px;"></div>
@@ -142,8 +145,8 @@
             <div class="chart-card">
               <div class="chart-header">
                 <div>
-                  <h3 style="font-size:0.95rem; font-weight:800;">💳 توزيع طرق الدفع</h3>
-                  <div style="font-size:0.75rem; color:var(--text-muted);">نقداً / تحويل / شيك / كريدي</div>
+                  <h3 style="font-size:0.95rem; font-weight:800;" data-i18n="chartPayTitle">💳 توزيع طرق الدفع</h3>
+                  <div style="font-size:0.75rem; color:var(--text-muted);" data-i18n="chartPaySubtitle">نقداً / تحويل / شيك / كريدي</div>
                 </div>
               </div>
               <div id="paymentDonutContainer" style="min-height:180px; display:flex; align-items:center; justify-content:center;"></div>
@@ -176,7 +179,7 @@
                   <th data-i18n="thType">النوع</th>
                   <th data-i18n="thPayment">طريقة الدفع</th>
                   <th style="text-align:right;" data-i18n="thTotalTTC">المجموع TTC</th>
-                  <th style="text-align:center;">إجراء</th>
+                  <th style="text-align:center;" data-i18n="thActions">إجراء</th>
                 </tr>
               </thead>
               <tbody id="recentInvoicesTableBody">
@@ -196,7 +199,7 @@
                 
                 <!-- Held carts button -->
                 <button class="btn btn-outline btn-sm" id="btnHeldCartsList" title="السلات المعلقة مؤقتاً">
-                  ⏸️ المعلقة (<span id="heldCartsCount">0</span>)
+                  ⏸️ <span data-i18n="btnHeldCarts">المعلقة</span> (<span id="heldCartsCount">0</span>)
                 </button>
               </div>
 
@@ -219,7 +222,7 @@
                   <span id="cartItemsBadge" style="background:var(--primary); color:#fff; font-size:0.7rem; font-weight:800; padding:1px 6px; border-radius:10px;">0</span>
                 </div>
                 <div style="display:flex; gap:0.3rem;">
-                  <button class="btn btn-outline btn-sm" id="btnHoldCurrentCart" title="تعليق السلة لخدمة زبون آخر مؤقتاً [F4]">⏸️ تعليق</button>
+                  <button class="btn btn-outline btn-sm" id="btnHoldCurrentCart" title="تعليق السلة لخدمة زبون آخر مؤقتاً [F4]">⏸️ <span data-i18n="btnHold">تعليق</span></button>
                   <button class="btn btn-danger btn-sm" id="btnClearCart" title="إفراغ السلة">🗑️</button>
                 </div>
               </div>
@@ -416,9 +419,9 @@
                   <th data-i18n="thCategory">الفئة</th>
                   <th style="text-align:right;" data-i18n="thBuyPrice">سعر الشراء</th>
                   <th style="text-align:right;" data-i18n="thSellPrice">سعر البيع</th>
-                  <th style="text-align:center;">الهامش (Marge)</th>
+                  <th style="text-align:center;" data-i18n="thMargin">الهامش (Marge)</th>
                   <th style="text-align:center;" data-i18n="thStock">الكمية بالمخزن</th>
-                  <th style="text-align:center;">إجراءات</th>
+                  <th style="text-align:center;" data-i18n="thActions">إجراءات</th>
                 </tr>
               </thead>
               <tbody id="productsTableBody">
@@ -443,7 +446,7 @@
                   <th data-i18n="thAddress">العنوان</th>
                   <th data-i18n="thNIF">NIF</th>
                   <th style="text-align:right;" data-i18n="thBalance">الرصيد / الديون المستحقة</th>
-                  <th style="text-align:center;">إجراء</th>
+                  <th style="text-align:center;" data-i18n="thActions">إجراء</th>
                 </tr>
               </thead>
               <tbody id="clientsTableBody">
@@ -494,7 +497,7 @@
                   <input type="text" id="cfgCompanyRib" class="search-input" style="max-width:none; width:100%;">
                 </div>
                 <div>
-                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">ختم وتوقيع المؤسسة (صورة PNG للختم الدائري)</label>
+                  <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblStamp">ختم وتوقيع المؤسسة (صورة PNG للختم الدائري)</label>
                   <input type="file" id="cfgCompanyStampInput" accept="image/*" style="font-size:0.8rem; width:100%;">
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-top:0.5rem;">💾 <span data-i18n="btnSaveProfile">حفظ البيانات</span></button>
@@ -538,19 +541,19 @@
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-dialog" style="max-width:440px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-weight:800;">💵 تحصيل المبلغ وإرجاع الباقي</h3>
+        <h3 style="font-weight:800;" data-i18n="checkoutTitle">💵 تحصيل المبلغ وإرجاع الباقي</h3>
         <button class="btn btn-outline btn-sm" id="btnCloseCheckoutModal">✕</button>
       </div>
 
       <div style="background:var(--primary-light); padding:1rem; border-radius:8px; text-align:center; margin-bottom:1rem;">
-        <div style="font-size:0.85rem; color:var(--text-muted);">المبلغ الإجمالي المستحق (Total TTC):</div>
+        <div style="font-size:0.85rem; color:var(--text-muted);" data-i18n="checkoutDueLabel">المبلغ الإجمالي المستحق (Total TTC):</div>
         <div id="checkoutDueAmount" style="font-size:1.75rem; font-weight:900; color:var(--primary); margin-top:4px;">0.00 دج</div>
       </div>
 
       <!-- Quick Banknotes -->
-      <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:4px;">أوراق النقد الجزائرية السريعة:</div>
+      <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:4px;" data-i18n="checkoutBanknotes">أوراق النقد الجزائرية السريعة:</div>
       <div class="banknote-grid">
-        <button class="banknote-btn" data-amt="exact">المبلغ تماماً</button>
+        <button class="banknote-btn" data-amt="exact" data-i18n="btnExact">المبلغ تماماً</button>
         <button class="banknote-btn" data-amt="1000">1000 دج</button>
         <button class="banknote-btn" data-amt="2000">2000 دج</button>
         <button class="banknote-btn" data-amt="5000">5000 دج</button>
@@ -558,17 +561,17 @@
 
       <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.75rem;">
         <div>
-          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">المبلغ المقبوض من الزبون (دج):</label>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="checkoutReceivedLabel">المبلغ المقبوض من الزبون (دج):</label>
           <input type="number" id="checkoutReceivedAmount" class="search-input" style="max-width:none; width:100%; font-size:1.2rem; font-weight:800;" placeholder="0.00">
         </div>
 
         <div style="background:var(--bg-main); border:2px dashed var(--primary); border-radius:8px; padding:0.85rem; display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-weight:700; font-size:0.95rem;">الباقي للزبون (Rendu):</span>
+          <span style="font-weight:700; font-size:0.95rem;" data-i18n="checkoutChangeLabel">الباقي للزبون (Rendu):</span>
           <span id="checkoutChangeDue" style="font-size:1.4rem; font-weight:900; color:#008744;">0.00 دج</span>
         </div>
 
         <div>
-          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">طريقة الدفع:</label>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblPayment">طريقة الدفع:</label>
           <select id="checkoutPaymentMethod" class="search-input" style="max-width:none; width:100%;">
             <option value="ESPECES">نقداً (Espèces - خاضع للطابع 1%)</option>
             <option value="VIREMENT">تحويل بنكي / بريدي (معفى)</option>
@@ -578,7 +581,7 @@
         </div>
 
         <button class="btn btn-primary" id="btnConfirmPaymentAndTicket" style="justify-content:center; padding:0.85rem; font-size:1rem; margin-top:0.5rem;">
-          🖨️ تأكيد الدفع وطباعة التذكرة
+          🖨️ <span data-i18n="btnConfirmPayment">تأكيد الدفع وطباعة التذكرة</span>
         </button>
       </div>
     </div>
@@ -588,7 +591,7 @@
   <div class="modal-overlay" id="heldCartsModal">
     <div class="modal-dialog">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-weight:800;">⏸️ السلات المعلقة مؤقتاً</h3>
+        <h3 style="font-weight:800;" data-i18n="heldModalTitle">⏸️ السلات المعلقة مؤقتاً</h3>
         <button class="btn btn-outline btn-sm" id="btnCloseHeldModal">✕</button>
       </div>
       <div id="heldCartsContainer" style="display:flex; flex-direction:column; gap:0.5rem; max-height:300px; overflow-y:auto;">
@@ -601,14 +604,14 @@
   <div class="modal-overlay" id="barcodeLabelModal">
     <div class="modal-dialog" style="max-width:380px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;" class="no-print">
-        <h4 style="font-weight:800;">🏷️ ملصق الباركود والسعر</h4>
+        <h4 style="font-weight:800;" data-i18n="barcodeModalTitle">🏷️ ملصق الباركود والسعر</h4>
         <button class="btn btn-outline btn-sm" id="btnCloseBarcodeModal">✕</button>
       </div>
       <div id="barcodeLabelView" style="text-align:center; padding:10px; border:1px solid #cbd5e1; border-radius:8px; background:#fff; color:#0f172a;">
         <!-- Injected via JS -->
       </div>
       <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;" class="no-print">
-        <button class="btn btn-primary" onclick="window.print()">🖨️ طباعة الملصق</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ <span data-i18n="btnPrintLabel">طباعة الملصق</span></button>
       </div>
     </div>
   </div>
@@ -617,30 +620,30 @@
   <div class="modal-overlay" id="debtPaymentModal">
     <div class="modal-dialog" style="max-width:420px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-weight:800;">💰 تسجيل دفعة / تسديد دين</h3>
+        <h3 style="font-weight:800;" data-i18n="debtModalTitle">💰 تسجيل دفعة / تسديد دين</h3>
         <button class="btn btn-outline btn-sm" id="btnCloseDebtModal">✕</button>
       </div>
       <form id="debtPaymentForm" style="display:flex; flex-direction:column; gap:0.75rem;">
         <input type="hidden" id="debtClientId">
         <div>
-          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">اسم العميل:</label>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblDebtClient">اسم العميل:</label>
           <div id="debtClientNameDisplay" style="font-weight:800; font-size:1rem; color:var(--primary); margin-top:2px;"></div>
         </div>
         <div style="background:var(--danger-light); padding:0.6rem; border-radius:6px;">
-          <div style="font-size:0.75rem; color:var(--danger); font-weight:700;">إجمالي الدين المستحق حالياً:</div>
+          <div style="font-size:0.75rem; color:var(--danger); font-weight:700;" data-i18n="lblCurrentDebt">إجمالي الدين المستحق حالياً:</div>
           <div id="debtCurrentBalance" style="font-size:1.25rem; font-weight:900; color:var(--danger);">0.00 دج</div>
         </div>
         <div>
-          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">مبلغ الدفعة المسددة (دج):</label>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblDebtAmount">مبلغ الدفعة المسددة (دج):</label>
           <input type="number" id="debtPaymentAmount" class="search-input" style="max-width:none; width:100%; font-size:1.1rem; font-weight:800;" required>
         </div>
         <div>
-          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">ملاحظات أو رقم الإيصال:</label>
+          <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblDebtNote">ملاحظات أو رقم الإيصال:</label>
           <input type="text" id="debtPaymentNote" class="search-input" style="max-width:none; width:100%;" placeholder="مثال: دفعة نقدية على الحساب">
         </div>
         <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.75rem;">
-          <button type="button" class="btn btn-outline" id="btnCancelDebtPayment">إلغاء</button>
-          <button type="submit" class="btn btn-primary">حفظ وتأكيد الدفعة</button>
+          <button type="button" class="btn btn-outline" id="btnCancelDebtPayment" data-i18n="btnCancel">إلغاء</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnSaveDebt">حفظ وتأكيد الدفعة</button>
         </div>
       </form>
     </div>

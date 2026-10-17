@@ -7,19 +7,24 @@ export class BusinessCharts {
   /**
    * Renders a responsive 7-Day Revenue SVG Bar & Area Trend Chart
    */
-  static renderWeeklySalesChart(container, invoices = []) {
+  static renderWeeklySalesChart(container, invoices = [], lang = 'ar') {
     if (!container) return;
 
-    // Build last 7 days buckets
+    // Build last 7 days buckets with trilingual day names
     const days = [];
-    const dayNamesAr = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const dayNamesMap = {
+      ar: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+      fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+      en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    };
+    const dayNames = dayNamesMap[lang] || dayNamesMap.ar;
     const now = new Date();
 
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(now.getDate() - i);
       const dateStr = d.toISOString().split('T')[0];
-      const dayName = dayNamesAr[d.getDay()];
+      const dayName = dayNames[d.getDay()];
       days.push({ date: dateStr, name: dayName, total: 0 });
     }
 
@@ -94,7 +99,7 @@ export class BusinessCharts {
   /**
    * Renders Payment Breakdown Donut Chart
    */
-  static renderPaymentDonut(container, invoices = []) {
+  static renderPaymentDonut(container, invoices = [], lang = 'ar') {
     if (!container) return;
 
     const totals = {
@@ -122,12 +127,12 @@ export class BusinessCharts {
       A_TERME: '#dc2626'
     };
 
-    const labels = {
-      ESPECES: 'نقداً',
-      VIREMENT: 'تحويل',
-      CHEQUE: 'شيك',
-      A_TERME: 'كريدي'
+    const labelsMap = {
+      ar: { ESPECES: 'نقداً', VIREMENT: 'تحويل', CHEQUE: 'شيك', A_TERME: 'كريدي' },
+      fr: { ESPECES: 'Espèces', VIREMENT: 'Virement', CHEQUE: 'Chèque', A_TERME: 'Crédit' },
+      en: { ESPECES: 'Cash', VIREMENT: 'Transfer', CHEQUE: 'Cheque', A_TERME: 'Credit' }
     };
+    const labels = labelsMap[lang] || labelsMap.ar;
 
     const radius = 40;
     const circumference = 2 * Math.PI * radius;

@@ -30,6 +30,11 @@ const server = http.createServer((req, res) => {
     reqPath = '/index.html';
   }
 
+  // Route favicon.ico to custom 4K SVG logo
+  if (reqPath === '/favicon.ico') {
+    reqPath = '/assets/logo.svg';
+  }
+
   // Check if requesting an app asset or root asset (like /assets/...)
   let filePath;
   if (reqPath.startsWith('/assets/')) {
