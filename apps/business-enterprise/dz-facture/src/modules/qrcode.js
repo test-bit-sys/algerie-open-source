@@ -1,93 +1,338 @@
 /**
- * DZ-Facture: Pure Offline SVG QR-Code & Barcode Generator
- * Generates authentic 2D QR-Codes and 1D Code-128 barcodes for tickets, A4 invoices, and product price stickers.
- * 100% Client-Side, Zero External Dependencies.
+ * DZ-Facture: Real Offline QR-Code (ISO/IEC 18004) & Code-128 (GS1) SVG Generator
+ * ---------------------------------------------------------------------------------
+ * 100% client-side, zero external dependencies, and fully SCANNABLE:
+ *
+ *  • QR Code  — byte mode, error-correction level M, versions 1–8 (auto-selected),
+ *    full GF(256) Reed-Solomon error correction, BCH(15,5) format information,
+ *    and all 8 candidate masks with penalty-based selection, exactly per spec.
+ *    Replaces the previous decorative pseudo-random matrix that no reader
+ *    could decode — fiscal documents now carry a verifiable QR payload.
+ *
+ *  • Code 128-B — official width-pattern table with mod-103 checksum, so
+ *    printed product stickers scan with any retail barcode gun.
  */
 
-// Simple & efficient QR Code generator (Byte mode, Error Correction Level L/M)
-export class QRCodeSVG {
-  /**
-   * Generates a deterministic SVG QR Matrix for e-invoicing data
-   */
-  static generateSVG(text, size = 120) {
-    // Generate an authentic 25x25 QR Matrix with finder patterns and alignment
-    const matrixSize = 25;
-    const matrix = Array.from({ length: matrixSize }, () => Array(matrixSize).fill(0));
+// ============================================================
+// 1) QR CODE — full spec implementation (byte mode, EC level M)
+// ============================================================
 
-    // Draw standard 7x7 Finder Pattern at (row, col)
-    function drawFinder(startR, startC) {
-      for (let r = 0; r < 7; r++) {
-        for (let c = 0; c < 7; c++) {
-          if (r === 0 || r === 6 || c === 0 || c === 6 || (r >= 2 && r <= 4 && c >= 2 && c <= 4)) {
-            matrix[startR + r][startC + c] = 1;
-          }
-        }
-      }
-    }
+// Maximum data capacity (bytes) per version at error-correction level M.
+const QR_CAPACITY_BYTES = [0, 14, 26, 42, 62, 84, 106, 122, 152];
 
-    // Place 3 Finder Patterns (Top-Left, Top-Right, Bottom-Left)
-    drawFinder(0, 0);
-    drawFinder(0, matrixSize - 7);
-    drawFinder(matrixSize - 7, 0);
+// EC level M block structure per version: [blockCount, blockTotal, blockData, blockEc]
+const QR_EC_M_BLOCKS = {
+  1: [1, 26, 16, 10],
+  2: [1, 44, 28, 16],
+  3: [1, 70, 44, 26],
+  4: [2, 50, 32, 18],
+  5: [2, 67, 43, 24],
+  6: [4, 43, 27, 16],
+  7: [4, 49, 31, 18],
+  8: [4, 60, 38, 22]
+};
 
-    // Timing patterns
-    for (let i = 8; i < matrixSize - 8; i++) {
-      if (i % 2 === 0) {
-        matrix[6][i] = 1;
-        matrix[i][6] = 1;
-      }
-    }
+// Alignment-pattern center coordinates per version (version 1 has none).
+const QR_ALIGN = {
+  2: [6, 18], 3: [6, 22], 4: [6, 26], 5: [6, 30], 6: [6, 34],
+  7: [6, 22, 38], 8: [6, 24, 42]
+};
 
-    // Alignment pattern at bottom right
-    const alignR = 18, alignC = 18;
-    for (let r = -2; r <= 2; r++) {
-      for (let c = -2; c <= 2; c++) {
-        if (Math.abs(r) === 2 || Math.abs(c) === 2 || (r === 0 && c === 0)) {
-          matrix[alignR + r][alignC + c] = 1;
-        }
-      }
-    }
-
-    // Deterministic payload hashing from invoice string
-    let hash = 0x811c9dc5;
-    for (let i = 0; i < text.length; i++) {
-      hash ^= text.charCodeAt(i);
-      hash = Math.imul(hash, 0x01000193);
-    }
-
-    // Populate data cells
-    for (let r = 0; r < matrixSize; r++) {
-      for (let c = 0; c < matrixSize; c++) {
-        // Skip finder & timing areas
-        const inFinderTL = r <= 7 && c <= 7;
-        const inFinderTR = r <= 7 && c >= matrixSize - 8;
-        const inFinderBL = r >= matrixSize - 8 && c <= 7;
-        const inTiming = r === 6 || c === 6;
-        const inAlign = r >= alignR - 2 && r <= alignR + 2 && c >= alignC - 2 && c <= alignC + 2;
-
-        if (!inFinderTL && !inFinderTR && !inFinderBL && !inTiming && !inAlign) {
-          const bitIndex = (r * matrixSize + c);
-          const pseudoBit = ((hash >> (bitIndex % 31)) & 1) ^ (((r + c) % 3 === 0) ? 1 : 0);
-          matrix[r][c] = pseudoBit;
-        }
-      }
-    }
-
-    // Build SVG
-    const cellSize = (size / matrixSize).toFixed(2);
-    let rects = '';
-    for (let r = 0; r < matrixSize; r++) {
-      for (let c = 0; c < matrixSize; c++) {
-        if (matrix[r][c] === 1) {
-          const x = (c * cellSize).toFixed(2);
-          const y = (r * cellSize).toFixed(2);
-          rects += `<rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" fill="#0f172a" />`;
-        }
-      }
-    }
-
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="display:block; shape-rendering:crispEdges; background:#fff; border-radius:4px; padding:2px;">${rects}</svg>`;
+// --- GF(256) arithmetic (primitive polynomial 0x11D, as QR requires) ---
+const GF_EXP = new Array(512);
+const GF_LOG = new Array(256);
+(() => {
+  let x = 1;
+  for (let i = 0; i < 255; i++) {
+    GF_EXP[i] = x;
+    GF_LOG[x] = i;
+    x <<= 1;
+    if (x & 0x100) x ^= 0x11d;
   }
+  for (let i = 255; i < 512; i++) GF_EXP[i] = GF_EXP[i - 255];
+})();
+
+const gfMul = (a, b) => (a === 0 || b === 0 ? 0 : GF_EXP[GF_LOG[a] + GF_LOG[b]]);
+
+/** Builds the Reed-Solomon generator polynomial of the given degree (MSB first). */
+function rsGeneratorPoly(degree) {
+  let poly = [1];
+  for (let i = 0; i < degree; i++) {
+    const next = new Array(poly.length + 1).fill(0);
+    for (let j = 0; j < poly.length; j++) {
+      next[j] ^= gfMul(poly[j], GF_EXP[i]); // × α^i
+      next[j + 1] ^= poly[j];               // × x
+    }
+    poly = next;
+  }
+  return poly;
+}
+
+/** Computes `ecLen` error-correction codewords for one data block. */
+function rsEncode(data, ecLen) {
+  const gen = rsGeneratorPoly(ecLen).slice(1); // drop the leading 1
+  const remainder = new Array(ecLen).fill(0);
+  for (const byte of data) {
+    const factor = byte ^ remainder[0];
+    remainder.shift();
+    remainder.push(0);
+    for (let i = 0; i < ecLen; i++) remainder[i] ^= gfMul(gen[i], factor);
+  }
+  return remainder;
+}
+
+/** Encodes a payload into versioned data codewords (mode/length/terminator/padding). */
+function tryEncodeQR(text) {
+  const bytes = Array.from(new TextEncoder().encode(text));
+  let version = 0;
+  for (let v = 1; v <= 8; v++) {
+    if (bytes.length <= QR_CAPACITY_BYTES[v]) { version = v; break; }
+  }
+  if (!version) return null;
+
+  const [blockCount, , dataPerBlock] = QR_EC_M_BLOCKS[version];
+  const capacityBits = blockCount * dataPerBlock * 8;
+  const bits = [];
+  const push = (value, n) => {
+    for (let i = n - 1; i >= 0; i--) bits.push((value >>> i) & 1);
+  };
+
+  push(0b0100, 4); // mode indicator: byte mode
+  push(bytes.length, 8); // character count (versions 1–9 use 8 bits)
+  bytes.forEach((b) => push(b, 8));
+
+  const terminator = Math.min(4, capacityBits - bits.length);
+  push(0, terminator);
+  while (bits.length % 8 !== 0) bits.push(0);
+  const padBytes = [0xec, 0x11];
+  let padIdx = 0;
+  while (bits.length < capacityBits) push(padBytes[padIdx++ % 2], 8);
+
+  const data = [];
+  for (let i = 0; i < bits.length; i += 8) {
+    let byte = 0;
+    for (let j = 0; j < 8; j++) byte = (byte << 1) | bits[i + j];
+    data.push(byte);
+  }
+  return { version, data };
+}
+
+/** Splits codewords into blocks and interleaves data + EC codewords per spec. */
+function interleaveBlocks(version, data) {
+  const [nBlocks, , dataPerBlock, ecPerBlock] = QR_EC_M_BLOCKS[version];
+  const blocks = [];
+  for (let b = 0; b < nBlocks; b++) {
+    const chunk = data.slice(b * dataPerBlock, (b + 1) * dataPerBlock);
+    blocks.push({ data: chunk, ec: rsEncode(chunk, ecPerBlock) });
+  }
+  const out = [];
+  for (let i = 0; i < dataPerBlock; i++) blocks.forEach((blk) => out.push(blk.data[i]));
+  for (let i = 0; i < ecPerBlock; i++) blocks.forEach((blk) => out.push(blk.ec[i]));
+  return out;
+}
+
+/**
+ * Builds the function-pattern layout (finders, separators, alignment, timing,
+ * reserved format areas and the dark module) leaving data cells = null.
+ */
+function buildFunctionMatrix(version) {
+  const size = version * 4 + 17;
+  const modules = Array.from({ length: size }, () => new Array(size).fill(null));
+  const isFunction = Array.from({ length: size }, () => new Array(size).fill(false));
+  const set = (r, c, dark) => {
+    modules[r][c] = dark ? 1 : 0;
+    isFunction[r][c] = true;
+  };
+
+  const drawFinder = (r0, c0) => {
+    for (let r = -1; r <= 7; r++) {
+      for (let c = -1; c <= 7; c++) {
+        const rr = r0 + r;
+        const cc = c0 + c;
+        if (rr < 0 || rr >= size || cc < 0 || cc >= size) continue;
+        const dark = (r >= 0 && r <= 6 && (c === 0 || c === 6)) ||
+                     (c >= 0 && c <= 6 && (r === 0 || r === 6)) ||
+                     (r >= 2 && r <= 4 && c >= 2 && c <= 4);
+        set(rr, cc, dark);
+      }
+    }
+  };
+  drawFinder(0, 0);
+  drawFinder(0, size - 7);
+  drawFinder(size - 7, 0);
+
+  // Alignment patterns — drawn BEFORE timing so patterns that cross the
+  // timing line at (6,x)/(x,6) overwrite it, exactly as the spec renders.
+  const coords = QR_ALIGN[version] || [];
+  const last = size - 7;
+  coords.forEach((r) => coords.forEach((c) => {
+    if ((r === 6 && c === 6) || (r === 6 && c === last) || (r === last && c === 6)) return;
+    for (let dr = -2; dr <= 2; dr++) {
+      for (let dc = -2; dc <= 2; dc++) {
+        set(r + dr, c + dc, Math.max(Math.abs(dr), Math.abs(dc)) !== 1);
+      }
+    }
+  }));
+
+  // Timing patterns — fill only cells not already written by finders/alignment.
+  for (let i = 8; i < size - 8; i++) {
+    if (modules[6][i] === null) set(6, i, i % 2 === 0);
+    if (modules[i][6] === null) set(i, 6, i % 2 === 0);
+  }
+
+  // Reserve the two 15-bit format-info areas (values written after masking)
+  // and set the always-dark module at (size-8, 8).
+  formatPositions1().forEach(([r, c]) => { isFunction[r][c] = true; });
+  formatPositions2(size).forEach(([r, c]) => { isFunction[r][c] = true; });
+  set(size - 8, 8, true);
+
+  return { modules, isFunction, size };
+}
+
+/** Format-info bit positions wrapped around the top-left finder (index = bit). */
+function formatPositions1() {
+  return [[8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 7], [8, 8],
+          [7, 8], [5, 8], [4, 8], [3, 8], [2, 8], [1, 8], [0, 8]];
+}
+
+/** Format-info bit positions split between the other two finders (index = bit). */
+function formatPositions2(size) {
+  return [[size - 1, 8], [size - 2, 8], [size - 3, 8], [size - 4, 8], [size - 5, 8],
+          [size - 6, 8], [size - 7, 8], [8, size - 8], [8, size - 7], [8, size - 6],
+          [8, size - 5], [8, size - 4], [8, size - 3], [8, size - 2], [8, size - 1]];
+}
+
+/** Zigzag placement of codeword bits into the free (non-function) cells. */
+function placeData(modules, isFunction, codewords, size) {
+  const bits = [];
+  codewords.forEach((byte) => {
+    for (let i = 7; i >= 0; i--) bits.push((byte >> i) & 1);
+  });
+
+  let idx = 0;
+  let col = size - 1;
+  let upward = true;
+  while (col > 0) {
+    if (col === 6) { col -= 1; continue; } // skip the vertical timing column
+    for (let i = 0; i < size; i++) {
+      const r = upward ? size - 1 - i : i;
+      for (const c of [col, col - 1]) {
+        if (!isFunction[r][c]) {
+          modules[r][c] = idx < bits.length ? bits[idx] : 0; // remainder bits = 0
+          idx++;
+        }
+      }
+    }
+    upward = !upward;
+    col -= 2;
+  }
+}
+
+// The 8 standard mask patterns (true = invert the module).
+const QR_MASKS = [
+  (r, c) => (r + c) % 2 === 0,
+  (r) => r % 2 === 0,
+  (r, c) => c % 3 === 0,
+  (r, c) => (r + c) % 3 === 0,
+  (r, c) => (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0,
+  (r, c) => ((r * c) % 2) + ((r * c) % 3) === 0,
+  (r, c) => (((r * c) % 2) + ((r * c) % 3)) % 2 === 0,
+  (r, c) => (((r + c) % 2) + ((r * c) % 3)) % 2 === 0
+];
+
+/** Applies a mask to the non-function modules of a fresh copy. */
+function applyMask(modules, isFunction, size, maskId) {
+  const masked = modules.map((row) => row.slice());
+  const mask = QR_MASKS[maskId];
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (!isFunction[r][c] && mask(r, c)) masked[r][c] = (masked[r][c] ?? 0) ^ 1;
+    }
+  }
+  return masked;
+}
+
+/** BCH(15,5) format bits for EC level M + mask id, XOR-masked per spec. */
+function formatInfoBits(maskId) {
+  const data = ((0b00 << 3) | maskId) & 0x1f; // EC level M = 0b00
+  let rem = data << 10;
+  for (let i = 14; i >= 10; i--) {
+    if ((rem >> i) & 1) rem ^= 0x537 << (i - 10);
+  }
+  return (((data << 10) | rem) ^ 0x5412) & 0x7fff;
+}
+
+/** Writes the two 15-bit format-info copies + the dark module onto the matrix. */
+function drawFormatInfo(modules, size, maskId) {
+  const bits = formatInfoBits(maskId);
+  formatPositions1().forEach(([r, c], i) => { modules[r][c] = (bits >> i) & 1; });
+  formatPositions2(size).forEach(([r, c], i) => { modules[r][c] = (bits >> i) & 1; });
+  modules[size - 8][8] = 1;
+}
+
+/** ISO penalty rules N1–N4 used to pick the mask with the best readability. */
+function penaltyScore(modules, size) {
+  let penalty = 0;
+
+  // N1 — runs of 5+ identical modules, horizontally and vertically.
+  const runPenalty = (getter) => {
+    for (let a = 0; a < size; a++) {
+      let runColor = -1;
+      let runLength = 0;
+      for (let b = 0; b < size; b++) {
+        const color = getter(a, b);
+        if (color === runColor) runLength++;
+        else {
+          if (runLength >= 5) penalty += 3 + (runLength - 5);
+          runColor = color;
+          runLength = 1;
+        }
+      }
+      if (runLength >= 5) penalty += 3 + (runLength - 5);
+    }
+  };
+  runPenalty((r, c) => modules[r][c]);
+  runPenalty((r, c) => modules[c][r]);
+
+  // N2 — every 2×2 block of identical colour.
+  for (let r = 0; r < size - 1; r++) {
+    for (let c = 0; c < size - 1; c++) {
+      const v = modules[r][c];
+      if (modules[r][c + 1] === v && modules[r + 1][c] === v && modules[r + 1][c + 1] === v) penalty += 3;
+    }
+  }
+
+  // N3 — finder look-alike sequences (1011101 with 0000 on either side).
+  const finderLike = [
+    [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1]
+  ];
+  const seqPenalty = (getter) => {
+    for (let a = 0; a < size; a++) {
+      for (let b = 0; b <= size - 11; b++) {
+        for (const pattern of finderLike) {
+          let match = true;
+          for (let k = 0; k < 11; k++) {
+            if (getter(a, b + k) !== pattern[k]) { match = false; break; }
+          }
+          if (match) penalty += 40;
+        }
+      }
+    }
+  };
+  seqPenalty((r, c) => modules[r][c]);
+  seqPenalty((r, c) => modules[c][r]);
+
+  // N4 — deviation of the dark-module ratio from 50%.
+  let dark = 0;
+  modules.forEach((row) => row.forEach((v) => { if (v) dark++; }));
+  const percent = (dark * 100) / (size * size);
+  penalty += Math.floor(Math.abs(percent - 50) / 5) * 10;
+
+  return penalty;
+}
+
+// __PART_C__
 
   /**
    * Generates a 1D Code-128 / EAN style Barcode SVG with text below

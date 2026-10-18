@@ -557,6 +557,25 @@ body {
   white-space: nowrap;
 }
 
+.wiz-grid-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.wiz-grid-table th.sortable:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.sort-indicator {
+  display: inline-block;
+  margin-inline-start: 4px;
+  font-size: 9px;
+  color: var(--accent-color);
+  min-width: 10px;
+}
+
 [dir="rtl"] .wiz-grid-table th {
   border-right: none;
   border-left: 1px solid var(--border-color);

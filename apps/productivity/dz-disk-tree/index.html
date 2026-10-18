@@ -23,6 +23,7 @@
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" id="itemExportCsv">تصدير كملف CSV...</button>
             <button class="dropdown-item" id="itemExportJson">تصدير تقرير JSON...</button>
+            <button class="dropdown-item" id="itemPrintReport">طباعة تقرير الفحص الشامل (Print Audit Report)...</button>
             <button class="dropdown-item" id="itemSaveTreemapImg">حفظ المخطط كصورة PNG...</button>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" id="itemExit">إعادة ضبط البرنامج</button>
@@ -205,14 +206,14 @@
             <table class="wiz-grid-table tree-grid">
               <thead>
                 <tr>
-                  <th class="col-name" style="width:36%;">الاسم (Name)</th>
-                  <th class="col-pct" style="width:14%;">النسبة (Percent)</th>
-                  <th class="col-size" style="width:10%;">الحجم (Size)</th>
-                  <th class="col-allocated" style="width:10%;">المحجوز (Allocated)</th>
-                  <th class="col-files" style="width:8%;">ملفات</th>
-                  <th class="col-folders" style="width:8%;">مجلدات</th>
-                  <th class="col-total" style="width:7%;">% الإجمالي</th>
-                  <th class="col-modified" style="width:13%;">تاريخ التعديل</th>
+                  <th class="col-name sortable" data-sort="name" style="width:36%;">الاسم (Name) <span class="sort-indicator"></span></th>
+                  <th class="col-pct sortable" data-sort="pct" style="width:14%;">النسبة (Percent) <span class="sort-indicator"></span></th>
+                  <th class="col-size sortable" data-sort="size" style="width:10%;">الحجم (Size) <span class="sort-indicator">▼</span></th>
+                  <th class="col-allocated sortable" data-sort="allocated" style="width:10%;">المحجوز (Allocated) <span class="sort-indicator"></span></th>
+                  <th class="col-files sortable" data-sort="files" style="width:8%;">ملفات <span class="sort-indicator"></span></th>
+                  <th class="col-folders sortable" data-sort="folders" style="width:8%;">مجلدات <span class="sort-indicator"></span></th>
+                  <th class="col-total sortable" data-sort="total" style="width:7%;">% الإجمالي <span class="sort-indicator"></span></th>
+                  <th class="col-modified sortable" data-sort="modified" style="width:13%;">تاريخ التعديل <span class="sort-indicator"></span></th>
                 </tr>
               </thead>
               <tbody id="treeTableBody">
@@ -233,12 +234,12 @@
               <thead>
                 <tr>
                   <th style="width:40px;">#</th>
-                  <th style="width:28%;">اسم الملف (File Name)</th>
-                  <th style="width:12%;">الحجم (Size)</th>
-                  <th style="width:12%;">المحجوز (Allocated)</th>
-                  <th style="width:8%;">الامتداد</th>
-                  <th style="width:26%;">المسار الكامل (Path)</th>
-                  <th style="width:14%;">تاريخ التعديل</th>
+                  <th class="sortable" data-sort="name" style="width:28%;">اسم الملف (File Name) <span class="sort-indicator"></span></th>
+                  <th class="sortable" data-sort="size" style="width:12%;">الحجم (Size) <span class="sort-indicator">▼</span></th>
+                  <th class="sortable" data-sort="allocated" style="width:12%;">المحجوز (Allocated) <span class="sort-indicator"></span></th>
+                  <th class="sortable" data-sort="extension" style="width:8%;">الامتداد <span class="sort-indicator"></span></th>
+                  <th class="sortable" data-sort="path" style="width:26%;">المسار الكامل (Path) <span class="sort-indicator"></span></th>
+                  <th class="sortable" data-sort="modified" style="width:14%;">تاريخ التعديل <span class="sort-indicator"></span></th>
                 </tr>
               </thead>
               <tbody id="filesTableBody">
@@ -256,13 +257,13 @@
             <table class="wiz-grid-table extensions-grid">
               <thead>
                 <tr>
-                  <th style="width:12%;">الامتداد (Ext)</th>
+                  <th class="sortable" data-sort="ext" style="width:12%;">الامتداد (Ext) <span class="sort-indicator"></span></th>
                   <th style="width:6%;">اللون</th>
-                  <th style="width:16%;">التصنيف</th>
-                  <th style="width:14%;">الحجم (Size)</th>
-                  <th style="width:14%;">المحجوز (Allocated)</th>
-                  <th style="width:24%;">نسبة الاستهلاك (% of Total)</th>
-                  <th style="width:14%;">عدد الملفات</th>
+                  <th class="sortable" data-sort="category" style="width:16%;">التصنيف <span class="sort-indicator"></span></th>
+                  <th class="sortable" data-sort="size" style="width:14%;">الحجم (Size) <span class="sort-indicator">▼</span></th>
+                  <th class="sortable" data-sort="allocated" style="width:14%;">المحجوز (Allocated) <span class="sort-indicator"></span></th>
+                  <th class="sortable" data-sort="pct" style="width:24%;">نسبة الاستهلاك (% of Total) <span class="sort-indicator"></span></th>
+                  <th class="sortable" data-sort="count" style="width:14%;">عدد الملفات <span class="sort-indicator"></span></th>
                 </tr>
               </thead>
               <tbody id="extensionsTableBody">

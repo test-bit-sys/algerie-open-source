@@ -72,6 +72,11 @@ class DiskTreeApp {
     this.showAllocated = false;
     this.cushionShading = true;
 
+    this.treeSortCol = 'size';
+    this.treeSortDir = 'desc';
+    this.filesSortCol = 'size';
+    this.filesSortDir = 'desc';
+
     this.scanData = null;
     this.selectedNode = null;
     this.expandedNodes = new Set();
@@ -325,6 +330,22 @@ class DiskTreeApp {
       this.treemap.render();
     });
 
+    document.getElementById('optUnitAuto')?.addEventListener('click', () => {
+      this.unitMode = 'auto';
+      this.renderTreeTable();
+      if (this.scanData) this.renderFilesTable(this.scanData.topFiles);
+    });
+    document.getElementById('optUnitMB')?.addEventListener('click', () => {
+      this.unitMode = 'mb';
+      this.renderTreeTable();
+      if (this.scanData) this.renderFilesTable(this.scanData.topFiles);
+    });
+    document.getElementById('optUnitGB')?.addEventListener('click', () => {
+      this.unitMode = 'gb';
+      this.renderTreeTable();
+      if (this.scanData) this.renderFilesTable(this.scanData.topFiles);
+    });
+
     // View Menu
     document.getElementById('viewShowTree')?.addEventListener('click', () => this.switchTab('tree'));
     document.getElementById('viewShowFiles')?.addEventListener('click', () => this.switchTab('files'));
@@ -334,9 +355,33 @@ class DiskTreeApp {
       this.applyTheme(this.currentTheme === 'dark' ? 'light' : 'dark');
     });
 
+    // Print & Reset Report
+    document.getElementById('itemPrintReport')?.addEventListener('click', () => this.exportHtmlReport());
+    document.getElementById('itemExit')?.addEventListener('click', () => this.resetState());
+    document.getElementById('btnExportTopCsv')?.addEventListener('click', () => this.exportCsv());
+    document.getElementById('btnExportTopJson')?.addEventListener('click', () => this.exportJson());
+    document.getElementById('itemSelectAll')?.addEventListener('click', () => {
+      if (this.scanData && this.scanData.tree) this.selectNode(this.scanData.tree);
+    });
+
     // Modal closes
     this.dom.propCloseBtn?.addEventListener('click', () => this.dom.propertiesModal.classList.remove('open'));
     this.dom.aboutCloseBtn?.addEventListener('click', () => this.dom.aboutModal.classList.remove('open'));
+  }
+
+  resetState() {
+    this.scanData = null;
+    this.selectedNode = null;
+    this.expandedNodes.clear();
+    this.treemap.setData(null);
+    this.dom.treeTableBody.innerHTML = `<tr class="empty-row"><td colspan="8" class="text-center text-muted">جاهز للفحص — اختر قرصاً أو مساراً ثم اضغط "فحص (Scan)"</td></tr>`;
+    this.dom.filesTableBody.innerHTML = `<tr class="empty-row"><td colspan="7" class="text-center text-muted">لا توجد ملفات معروضة حالياً</td></tr>`;
+    this.dom.extensionsTableBody.innerHTML = `<tr class="empty-row"><td colspan="7" class="text-center text-muted">لا توجد بيانات امتدادات</td></tr>`;
+    this.dom.sbState.textContent = 'جاهز للفحص (Ready)';
+    this.dom.sbStats.textContent = 'Files: 0 | Folders: 0';
+    this.dom.sbScanned.textContent = 'Scanned: 0 B';
+    this.dom.sbTime.textContent = 'Time: 0.00s';
+    this.dom.sbSelected.textContent = 'None';
   }
 
   closeAllMenus() {
@@ -443,7 +488,10 @@ class DiskTreeApp {
       });
     });
 
-    // Keyboard Shortcuts
+    // Table Header Sorting
+    this.initSortHeaders();
+
+    // Keyboard Shortcuts & Grid Navigation
     window.addEventListener('keydown', (e) => {
       if (['INPUT', 'SELECT'].includes(e.target.tagName)) return;
       if (e.key === 'F5') {
@@ -453,11 +501,123 @@ class DiskTreeApp {
         if (this.isScanning) this.cancelScan();
         this.closeAllMenus();
         this.closeContextMenu();
+        if (this.dom.propertiesModal) this.dom.propertiesModal.classList.remove('open');
+        if (this.dom.aboutModal) this.dom.aboutModal.classList.remove('open');
       } else if (e.ctrlKey && e.key.toLowerCase() === 'c') {
         if (this.selectedNode) {
           e.preventDefault();
           this.copySelectedPath();
         }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        this.navigateRow(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        this.navigateRow(-1);
+      } else if (e.key === 'ArrowRight') {
+        if (this.selectedNode && this.selectedNode.isDirectory) {
+          e.preventDefault();
+          this.expandedNodes.add(this.selectedNode);
+          this.renderTreeTable();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (this.selectedNode && this.selectedNode.isDirectory) {
+          e.preventDefault();
+          this.expandedNodes.delete(this.selectedNode);
+          this.renderTreeTable();
+        }
+      } else if (e.key === 'Enter') {
+        if (this.selectedNode && this.selectedNode.isDirectory) {
+          e.preventDefault();
+          this.treemap.zoomToNode(this.selectedNode);
+          this.updateBreadcrumbs();
+        }
+      } else if (e.key === 'Backspace') {
+        e.preventDefault();
+        this.treemap.zoomOut();
+        this.updateBreadcrumbs();
+      }
+    });
+  }
+
+  navigateRow(direction) {
+    let tbody;
+    if (this.activeTab === 'tree') tbody = this.dom.treeTableBody;
+    else if (this.activeTab === 'files') tbody = this.dom.filesTableBody;
+    else tbody = this.dom.extensionsTableBody;
+
+    const rows = Array.from(tbody.querySelectorAll('tr:not(.empty-row)'));
+    if (rows.length === 0) return;
+
+    const currentIndex = rows.findIndex((r) => r.classList.contains('selected'));
+    let nextIndex = 0;
+    if (currentIndex >= 0) {
+      nextIndex = Math.max(0, Math.min(rows.length - 1, currentIndex + direction));
+    }
+    const targetRow = rows[nextIndex];
+    if (targetRow) {
+      targetRow.click();
+      targetRow.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  initSortHeaders() {
+    // Tree Grid Headers
+    document.querySelectorAll('.tree-grid th.sortable').forEach((th) => {
+      th.addEventListener('click', () => {
+        const col = th.getAttribute('data-sort');
+        if (this.treeSortCol === col) {
+          this.treeSortDir = this.treeSortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          this.treeSortCol = col;
+          this.treeSortDir = col === 'name' ? 'asc' : 'desc';
+        }
+        this.updateHeaderIndicators('.tree-grid', this.treeSortCol, this.treeSortDir);
+        this.renderTreeTable();
+      });
+    });
+
+    // Files Grid Headers
+    document.querySelectorAll('.files-grid th.sortable').forEach((th) => {
+      th.addEventListener('click', () => {
+        const col = th.getAttribute('data-sort');
+        if (this.filesSortCol === col) {
+          this.filesSortDir = this.filesSortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          this.filesSortCol = col;
+          this.filesSortDir = col === 'name' || col === 'extension' || col === 'path' ? 'asc' : 'desc';
+        }
+        this.updateHeaderIndicators('.files-grid', this.filesSortCol, this.filesSortDir);
+        if (this.scanData) this.renderFilesTable(this.scanData.topFiles);
+      });
+    });
+
+    // Extensions Grid Headers
+    this.extSortCol = 'size';
+    this.extSortDir = 'desc';
+    document.querySelectorAll('.extensions-grid th.sortable').forEach((th) => {
+      th.addEventListener('click', () => {
+        const col = th.getAttribute('data-sort');
+        if (this.extSortCol === col) {
+          this.extSortDir = this.extSortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          this.extSortCol = col;
+          this.extSortDir = col === 'ext' || col === 'category' ? 'asc' : 'desc';
+        }
+        this.updateHeaderIndicators('.extensions-grid', this.extSortCol, this.extSortDir);
+        if (this.scanData) this.renderExtensionsTable(this.scanData.extensions, this.scanData.stats.totalSize);
+      });
+    });
+  }
+
+  updateHeaderIndicators(selector, sortCol, sortDir) {
+    document.querySelectorAll(`${selector} th.sortable`).forEach((th) => {
+      const ind = th.querySelector('.sort-indicator');
+      if (!ind) return;
+      if (th.getAttribute('data-sort') === sortCol) {
+        ind.textContent = sortDir === 'asc' ? '▲' : '▼';
+      } else {
+        ind.textContent = '';
       }
     });
   }
@@ -467,7 +627,7 @@ class DiskTreeApp {
     this.dom.paneTabs.forEach((btn) => {
       btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
     });
-    this.dom.tabPanels.forEach((pane) => {
+    this.dom.tabPanes.forEach((pane) => {
       const matches = pane.id === `tabContent${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`;
       pane.classList.toggle('active', matches);
     });
@@ -610,6 +770,117 @@ class DiskTreeApp {
     this.renderExtensionsTable(data.extensions, stats.totalSize);
   }
 
+  formatSize(bytes) {
+    if (this.unitMode === 'mb') {
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+    if (this.unitMode === 'gb') {
+      return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+    }
+    return SquarifiedTreemap.formatBytes(bytes);
+  }
+
+  sortNodes(nodes, col, dir) {
+    return [...nodes].sort((a, b) => {
+      let valA, valB;
+      switch (col) {
+        case 'name':
+          valA = (a.name || '').toLowerCase();
+          valB = (b.name || '').toLowerCase();
+          return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        case 'allocated':
+          valA = a.allocatedSize || 0;
+          valB = b.allocatedSize || 0;
+          break;
+        case 'files':
+          valA = a.filesCount || 0;
+          valB = b.filesCount || 0;
+          break;
+        case 'folders':
+          valA = a.foldersCount || 0;
+          valB = b.foldersCount || 0;
+          break;
+        case 'modified':
+          valA = new Date(a.modified || 0).getTime();
+          valB = new Date(b.modified || 0).getTime();
+          break;
+        case 'size':
+        case 'pct':
+        case 'total':
+        default:
+          valA = a.size || 0;
+          valB = b.size || 0;
+          break;
+      }
+      return dir === 'asc' ? valA - valB : valB - valA;
+    });
+  }
+
+  sortFiles(files, col, dir) {
+    return [...files].sort((a, b) => {
+      let valA, valB;
+      switch (col) {
+        case 'name':
+          valA = (a.name || '').toLowerCase();
+          valB = (b.name || '').toLowerCase();
+          return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        case 'extension':
+          valA = (a.extension || '').toLowerCase();
+          valB = (b.extension || '').toLowerCase();
+          return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        case 'path':
+          valA = (a.path || '').toLowerCase();
+          valB = (b.path || '').toLowerCase();
+          return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        case 'allocated':
+          valA = a.allocatedSize || 0;
+          valB = b.allocatedSize || 0;
+          break;
+        case 'modified':
+          valA = new Date(a.modified || 0).getTime();
+          valB = new Date(b.modified || 0).getTime();
+          break;
+        case 'size':
+        default:
+          valA = a.size || 0;
+          valB = b.size || 0;
+          break;
+      }
+      return dir === 'asc' ? valA - valB : valB - valA;
+    });
+  }
+
+  sortExtensions(exts, col, dir) {
+    return [...exts].sort((a, b) => {
+      let valA, valB;
+      switch (col) {
+        case 'ext':
+          valA = (a.extension || '').toLowerCase();
+          valB = (b.extension || '').toLowerCase();
+          return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        case 'category':
+          valA = (a.category || '').toLowerCase();
+          valB = (b.category || '').toLowerCase();
+          return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        case 'allocated':
+          valA = a.allocatedSize || 0;
+          valB = b.allocatedSize || 0;
+          break;
+        case 'count':
+          valA = a.count || 0;
+          valB = b.count || 0;
+          break;
+        case 'size':
+        case 'pct':
+        default:
+          valA = a.size || 0;
+          valB = b.size || 0;
+          break;
+      }
+      return dir === 'asc' ? valA - valB : valB - valA;
+    });
+  }
+
   renderTreeTable() {
     const tbody = this.dom.treeTableBody;
     tbody.innerHTML = '';
@@ -659,8 +930,8 @@ class DiskTreeApp {
             <span class="pct-text">${pctOfParent}%</span>
           </div>
         </td>
-        <td class="col-size col-mono">${SquarifiedTreemap.formatBytes(node.size)}</td>
-        <td class="col-allocated col-mono">${SquarifiedTreemap.formatBytes(node.allocatedSize)}</td>
+        <td class="col-size col-mono">${this.formatSize(node.size)}</td>
+        <td class="col-allocated col-mono">${this.formatSize(node.allocatedSize)}</td>
         <td class="col-files col-mono">${isDir ? (node.filesCount || 0).toLocaleString() : '-'}</td>
         <td class="col-folders col-mono">${isDir ? (node.foldersCount || 0).toLocaleString() : '-'}</td>
         <td class="col-total col-mono">${pctOfTotal}%</td>
@@ -706,12 +977,10 @@ class DiskTreeApp {
 
       // Render children if expanded
       if (isDir && isExpanded && node.children) {
-        // Show subdirectories first, sorted by size descending
-        const subDirs = node.children
-          .filter((c) => c.isDirectory)
-          .sort((a, b) => b.size - a.size);
+        const subDirs = node.children.filter((c) => c.isDirectory);
+        const sortedDirs = this.sortNodes(subDirs, this.treeSortCol, this.treeSortDir);
 
-        for (const child of subDirs) {
+        for (const child of sortedDirs) {
           renderNodeRows(child, depth + 1, node.size);
         }
       }
@@ -729,15 +998,17 @@ class DiskTreeApp {
       return;
     }
 
-    topFiles.forEach((file, index) => {
+    const sortedFiles = this.sortFiles(topFiles, this.filesSortCol, this.filesSortDir);
+
+    sortedFiles.forEach((file, index) => {
       const tr = document.createElement('tr');
       if (this.selectedNode === file) tr.classList.add('selected');
 
       tr.innerHTML = `
         <td style="color:var(--text-muted);">${index + 1}</td>
         <td style="font-weight:600;">${file.name}</td>
-        <td class="col-mono">${SquarifiedTreemap.formatBytes(file.size)}</td>
-        <td class="col-mono">${SquarifiedTreemap.formatBytes(file.allocatedSize)}</td>
+        <td class="col-mono">${this.formatSize(file.size)}</td>
+        <td class="col-mono">${this.formatSize(file.allocatedSize)}</td>
         <td><span class="badge">${file.extension}</span></td>
         <td class="col-mono" style="color:var(--text-secondary); max-width:280px; overflow:hidden; text-overflow:ellipsis;">${file.path}</td>
         <td class="col-mono">${file.modified ? new Date(file.modified).toLocaleDateString() : '-'}</td>
@@ -765,7 +1036,9 @@ class DiskTreeApp {
       return;
     }
 
-    extensions.forEach((ext) => {
+    const sortedExts = this.sortExtensions(extensions, this.extSortCol || 'size', this.extSortDir || 'desc');
+
+    sortedExts.forEach((ext) => {
       const tr = document.createElement('tr');
       const pct = totalSize > 0 ? ((ext.size / totalSize) * 100).toFixed(1) : '0.0';
       const catColor = SquarifiedTreemap.CATEGORY_COLORS[ext.category] || SquarifiedTreemap.CATEGORY_COLORS.other;
@@ -774,8 +1047,8 @@ class DiskTreeApp {
         <td style="font-weight:700;">${ext.extension}</td>
         <td><span class="legend-dot" style="background:${catColor.bg}; display:inline-block;"></span></td>
         <td style="color:var(--text-secondary);">${ext.category}</td>
-        <td class="col-mono">${SquarifiedTreemap.formatBytes(ext.size)}</td>
-        <td class="col-mono">${SquarifiedTreemap.formatBytes(ext.allocatedSize)}</td>
+        <td class="col-mono">${this.formatSize(ext.size)}</td>
+        <td class="col-mono">${this.formatSize(ext.allocatedSize)}</td>
         <td>
           <div class="pct-cell-wrap">
             <div class="pct-bar-track">
@@ -795,6 +1068,108 @@ class DiskTreeApp {
 
       tbody.appendChild(tr);
     });
+  }
+
+  exportHtmlReport() {
+    if (!this.scanData) {
+      alert('الرجاء بدء فحص مسار أو قرص أولاً قبل إنشاء التقرير.');
+      return;
+    }
+    const { stats, topFiles, extensions } = this.scanData;
+    const treemapImg = this.dom.treemapCanvas.toDataURL('image/png');
+    const scanDate = new Date().toLocaleString();
+    const durSec = (stats.durationMs / 1000).toFixed(2);
+
+    const reportHtml = `<!DOCTYPE html>
+<html lang="${this.currentLang}" dir="${this.currentLang === 'ar' ? 'rtl' : 'ltr'}">
+<head>
+  <meta charset="UTF-8">
+  <title>DZ-DiskTree Audit Report — ${this.dom.pathInput.value}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #1e293b; padding: 24px; margin: 0; }
+    h1 { font-size: 20px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284c7; padding-bottom: 12px; }
+    .badge { background: #0284c7; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: normal; }
+    .meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
+    .meta-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; }
+    .meta-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600; }
+    .meta-val { font-size: 18px; font-weight: bold; color: #0f172a; margin-top: 4px; font-family: monospace; }
+    .section-title { font-size: 15px; font-weight: 700; margin: 24px 0 10px 0; color: #0f172a; border-inline-start: 4px solid #0284c7; padding-inline-start: 8px; }
+    .treemap-img-wrap { border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; margin-bottom: 24px; text-align: center; }
+    .treemap-img { max-width: 100%; height: auto; display: block; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+    th { background: #f1f5f9; padding: 8px; text-align: start; border: 1px solid #e2e8f0; font-weight: 600; color: #475569; }
+    td { padding: 6px 8px; border: 1px solid #e2e8f0; font-family: monospace; font-size: 11px; }
+    .pct-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; width: 100px; display: inline-block; vertical-align: middle; margin-inline-end: 6px; }
+    .pct-fill { height: 100%; background: #0284c7; }
+    @media print {
+      body { padding: 0; }
+      .no-print { display: none; }
+      @page { margin: 1.5cm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print" style="margin-bottom: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+    <button onclick="window.print()" style="background:#0284c7; color:#fff; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; font-weight:bold;">طباعة التقرير (Print Report)</button>
+  </div>
+  <h1>
+    <span>DZ-DiskTree — تقرير تدقيق وتحليل سعة القرص</span>
+    <span class="badge">Algerie Open Source</span>
+  </h1>
+  <div class="meta-grid">
+    <div class="meta-card"><div class="meta-label">المسار المفحوص</div><div class="meta-val" style="font-size:13px; word-break:break-all;">${this.dom.pathInput.value}</div></div>
+    <div class="meta-card"><div class="meta-label">إجمالي السعة المفحوصة</div><div class="meta-val">${SquarifiedTreemap.formatBytes(stats.totalSize)}</div></div>
+    <div class="meta-card"><div class="meta-label">إجمالي الملفات / المجلدات</div><div class="meta-val">${stats.totalFiles.toLocaleString()} / ${stats.totalFolders.toLocaleString()}</div></div>
+    <div class="meta-card"><div class="meta-label">زمن الفحص / التاريخ</div><div class="meta-val">${durSec}s | ${scanDate}</div></div>
+  </div>
+
+  <div class="section-title">المخطط البياني التفاعلي للسعة (Cushioned Treemap Snapshot)</div>
+  <div class="treemap-img-wrap">
+    <img class="treemap-img" src="${treemapImg}" alt="Disk Treemap Snapshot" />
+  </div>
+
+  <div class="section-title">توزيع الاستهلاك حسب نوع الملف (File Types Breakdown)</div>
+  <table>
+    <thead><tr><th>الامتداد</th><th>التصنيف</th><th>الحجم</th><th>المحجوز</th><th>النسبة من الإجمالي</th><th>عدد الملفات</th></tr></thead>
+    <tbody>
+      ${(extensions || []).slice(0, 15).map(ext => {
+        const pct = stats.totalSize > 0 ? ((ext.size / stats.totalSize) * 100).toFixed(1) : 0;
+        return `<tr>
+          <td><strong>${ext.extension}</strong></td>
+          <td>${ext.category}</td>
+          <td>${SquarifiedTreemap.formatBytes(ext.size)}</td>
+          <td>${SquarifiedTreemap.formatBytes(ext.allocatedSize)}</td>
+          <td><div class="pct-bar"><div class="pct-fill" style="width:${pct}%"></div></div> ${pct}%</td>
+          <td>${ext.count.toLocaleString()}</td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>
+
+  <div class="section-title" style="page-break-before: always;">أكبر 25 ملف مستهلك للمساحة (Top 25 Largest Files)</div>
+  <table>
+    <thead><tr><th>#</th><th>اسم الملف</th><th>الحجم</th><th>المحجوز</th><th>النوع</th><th>المسار الكامل</th><th>تاريخ التعديل</th></tr></thead>
+    <tbody>
+      ${(topFiles || []).slice(0, 25).map((f, i) => `<tr>
+        <td>${i + 1}</td>
+        <td><strong>${f.name}</strong></td>
+        <td>${SquarifiedTreemap.formatBytes(f.size)}</td>
+        <td>${SquarifiedTreemap.formatBytes(f.allocatedSize)}</td>
+        <td>${f.extension}</td>
+        <td style="word-break:break-all;">${f.path}</td>
+        <td>${f.modified ? new Date(f.modified).toLocaleDateString() : '-'}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+</body>
+</html>`;
+
+    const printWin = window.open('', '_blank');
+    if (printWin) {
+      printWin.document.write(reportHtml);
+      printWin.document.close();
+      printWin.focus();
+    }
   }
 
   selectNode(node) {
