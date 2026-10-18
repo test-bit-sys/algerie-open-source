@@ -15,7 +15,7 @@ Provide lightweight utilities that eliminate repetitive manual workflows, stream
 | Project Identifier | Status | Target Application | Key Features |
 | :--- | :--- | :--- | :--- |
 | [**`dz-disk-tree`**](dz-disk-tree/) | **Production Ready** | **DZ-DiskTree (محلل مساحات الأقراص)** | Open-source WizTree alternative: Squarified Treemap, NTFS cluster analysis, file types breakdown, top largest files, 100% offline. |
-| **`dz-archive`** | **In Roadmap** | **DZ-Archive (أداة الأرشفة والضغط)** | Open-source WinRAR / 7-Zip alternative: multi-format extraction and compression (ZIP, RAR, 7Z, TAR), encrypted volumes. |
+| [**`dz-archive`**](dz-archive/) | **Production Ready** | **DZ-Archive (أداة الأرشفة والضغط)** | Open-source WinRAR / 7-Zip alternative: ZIP & TAR creation, hardware benchmark, CRC32 integrity test, file preview. |
 | **`dz-player`** | **In Roadmap** | **DZ-Player (مشغل الوسائط المتعددة)** | Open-source VLC alternative: lightweight offline video/audio player with Arabic subtitle encoding and audio boost. |
 | **`dz-pdf`** | **In Roadmap** | **DZ-PDF (محرر ومدمج وثائق PDF)** | Offline PDF toolkit: merge, split, compress, watermark, form-fill, and OCR text extraction. |
 | **`dz-idara-kit`** | **Planned** | **DZ-Citizen Kit (حقيبة المواطن الإدارية)** | Pre-filled printable models for administrative procedures (Certificats de résidence, Déclarations sur l'honneur, Procurations, Contrats types). |

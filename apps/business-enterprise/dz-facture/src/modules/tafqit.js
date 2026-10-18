@@ -217,7 +217,7 @@ export function tafqitDZD(amount, options = {}) {
   }
   if (centimes > 0) {
     const cWords = numberToArabicWords(centimes);
-    let cText = centimes === 1 ? 'سنتيم واحد' : centimes === 2 ? 'سنتيمان' : centimes <= 10 ? `${cWords} سنتيمات` : `${cWords} سنتیماً`;
+    let cText = centimes === 1 ? 'سنتيم واحد' : centimes === 2 ? 'سنتيمان' : centimes <= 10 ? `${cWords} سنتيمات` : `${cWords} سنتيماً`;
     result += ` و${cText}`;
   }
   if (legalSuffix) result += ' لا غير';

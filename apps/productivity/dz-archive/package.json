@@ -1,0 +1,29 @@
+{
+  "name": "dz-archive",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-Archive — Modern, High-Performance Open-Source WinRAR Alternative for the Algerian National Open-Source Software Ecosystem (DZ Open Suite). Built with Vanilla JavaScript, HTML5, CSS3, and Vite.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "archive",
+    "winrar-alternative",
+    "zip",
+    "tar",
+    "compression",
+    "benchmark",
+    "vanilla-js",
+    "vite",
+    "offline-first",
+    "dz-open-suite"
+  ],
+  "author": "Algeria Open Source Community",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

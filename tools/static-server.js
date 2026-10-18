@@ -135,9 +135,9 @@ export function startStaticServer({ name = 'DZ Open Suite', port, mapUrl, allowe
 
   server.on('error', (err) => {
     if (err && err.code === 'EADDRINUSE') {
-      console.error(`\n❌ Port ${portNumber} is already in use.`);
-      console.error(`   Stop the other server first, or run with a different port:`);
-      console.error(`   PORT=${portNumber + 1} npm start\n`);
+      console.error(`\n[ERROR] Port ${portNumber} is already in use.`);
+      console.error(`        Stop the other server first, or run with a different port:`);
+      console.error(`        PORT=${portNumber + 1} npm start\n`);
       process.exitCode = 1;
     } else {
       throw err;
@@ -146,9 +146,9 @@ export function startStaticServer({ name = 'DZ Open Suite', port, mapUrl, allowe
 
   server.listen(portNumber, () => {
     console.log(`\n======================================================`);
-    console.log(`🇩🇿 ${name}`);
-    console.log(`🚀 Server running at: http://localhost:${portNumber}`);
-    console.log(`📡 Offline-first | Trilingual (AR/FR/EN) | Zero dependencies`);
+    console.log(`DZ Open Suite - ${name}`);
+    console.log(`[INFO] Server running at: http://localhost:${portNumber}`);
+    console.log(`[SYS] Offline-first | Trilingual (AR/FR/EN) | Zero dependencies`);
     console.log(`======================================================\n`);
   });
 

@@ -81,6 +81,49 @@ export function calculateLineItem({ quantity = 1, unitPriceHT = 0, discountPerce
   };
 }
 
+/**
+ * Splits a set of TTC (tax-inclusive retail) line amounts into exact HT and
+ * TVA components, grouped by TVA rate. Guarantees totalHT + totalTVA ===
+ * totalTTC to the cent, so the POS always charges exactly the shelf prices.
+ *
+ * This is the retail (POS) model — the printed shelf price is authoritative.
+ * The inverse model (HT-first, used for A4 B2B invoices) lives in
+ * `calculateInvoiceTotals` below.
+ *
+ * items: [{ quantity, unitPriceTTC, tvaRate }]
+ */
+export function splitTTCByRates(items = []) {
+  const groups = {};
+  let totalTTC = 0;
+
+  items.forEach((item) => {
+    const qty = Number(item.quantity) || 0;
+    const lineTTC = round2((Number(item.unitPriceTTC) || 0) * qty);
+    const rate = Number(item.tvaRate) || 0;
+    const key = String(rate);
+
+    totalTTC = round2(totalTTC + lineTTC);
+    groups[key] = round2((groups[key] || 0) + lineTTC);
+  });
+
+  const tvaBreakdown = {};
+  let totalHT = 0;
+  let totalTVA = 0;
+
+  Object.keys(groups).forEach((key) => {
+    const rate = Number(key);
+    const groupTTC = groups[key];
+    const groupTVA = rate > 0 ? round2((groupTTC * rate) / (100 + rate)) : 0;
+    const groupHT = round2(groupTTC - groupTVA);
+
+    tvaBreakdown[key] = { baseHT: groupHT, amountTVA: groupTVA };
+    totalHT = round2(totalHT + groupHT);
+    totalTVA = round2(totalTVA + groupTVA);
+  });
+
+  return { totalTTC, totalHT, totalTVA, tvaBreakdown };
+}
+
 export function calculateInvoiceTotals({ items = [], paymentMethod = PAYMENT_METHODS.VIREMENT, timbreOptions = {} }) {
   let totalHT = 0;
   let totalDiscount = 0;

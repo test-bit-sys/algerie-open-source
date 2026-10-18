@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Archive — أداة الضغط والأرشفة المفتوحة المصدر | DZ Open Suite</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <link rel="stylesheet" href="src/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Header Bar -->
+  <header class="header-bar">
+    <div class="brand-section">
+      <div class="brand-logo-wrap">
+        <img src="/assets/logo.svg" alt="DZ Open Suite" class="brand-logo-img">
+      </div>
+      <div class="brand-info">
+        <h1>
+          <span>DZ-Archive</span>
+          <span class="brand-badge">WinRAR Alternative</span>
+        </h1>
+        <p data-i18n="appSubtitle">أداة الضغط والأرشفة وفك التشفير المفتوحة المصدر</p>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- Hidden file inputs -->
+      <input type="file" id="hiddenFileInput" multiple style="display:none;">
+      <input type="file" id="hiddenArchiveInput" accept=".zip,.tar,.gz" style="display:none;">
+
+      <button id="btnOpenArchive" class="btn btn-secondary">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 4h-4L13 2H5c-1.11 0-2 .9-2 2v16a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6a2 2 0 0 0-2-2zm0 16H5V8h14v12z"/></svg>
+        <span>فتح أرشيف</span>
+      </button>
+
+      <!-- Language Selector -->
+      <select id="langSelect" class="select-field" title="Language">
+        <option value="ar">العربية (Algeria)</option>
+        <option value="fr">Français (DZ)</option>
+        <option value="en">English</option>
+      </select>
+
+      <!-- Theme Toggle -->
+      <button id="themeToggle" class="btn btn-secondary btn-icon" title="Toggle Dark/Light Mode">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+      </button>
+
+      <!-- GitHub Link -->
+      <a href="https://github.com/test-bit-sys/algerie-open-source" target="_blank" rel="noopener" class="btn btn-secondary btn-icon" title="GitHub">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- WinRAR Action Toolbar -->
+  <nav class="action-toolbar">
+    <button id="btnAdd" class="tool-btn" title="Add files to archive">
+      <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      <span data-i18n="toolAdd">إضافة ملفات</span>
+    </button>
+
+    <button id="btnExtract" class="tool-btn" title="Extract archive" disabled>
+      <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      <span data-i18n="toolExtract">استخراج إلى</span>
+    </button>
+
+    <button id="btnTest" class="tool-btn" title="Test archive integrity" disabled>
+      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      <span data-i18n="toolTest">فحص السلامة</span>
+    </button>
+
+    <button id="btnView" class="tool-btn" title="Preview selected file" disabled>
+      <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      <span data-i18n="toolView">معاينة</span>
+    </button>
+
+    <button id="btnDelete" class="tool-btn" title="Delete selected" disabled>
+      <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      <span data-i18n="toolDelete">حذف</span>
+    </button>
+
+    <div class="tool-separator"></div>
+
+    <button id="btnBenchmark" class="tool-btn" title="Hardware Compression Benchmark">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6l5.2 3.1.8-1.3-4-2.4V7z"/></svg>
+      <span data-i18n="toolBenchmark">اختبار السرعة</span>
+    </button>
+
+    <button id="btnInfo" class="tool-btn" title="Archive Information">
+      <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+      <span data-i18n="toolInfo">معلومات</span>
+    </button>
+  </nav>
+
+  <!-- Address & Search Bar -->
+  <div class="address-bar">
+    <div class="breadcrumbs-box" id="archiveBreadcrumbs">
+      <span class="crumb-link">archive.zip</span>
+    </div>
+
+    <div class="search-input-wrap">
+      <input type="text" id="searchFilesInput" class="input-field" placeholder="بحث في الأرشيف..." data-i18n="searchPlaceholder">
+    </div>
+  </div>
+
+  <!-- Main Viewport -->
+  <main class="main-viewport">
+    <div class="archive-card">
+      
+      <!-- Drag & Drop Overlay -->
+      <div id="dropOverlay" class="drop-overlay">
+        <svg class="svg-icon" style="width:48px; height:48px; color:var(--accent-blue);" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+        <h3 data-i18n="dropPrompt">أفلت الأرشيف أو الملفات هنا لفتحها فوراً</h3>
+      </div>
+
+      <!-- Files Table -->
+      <div class="table-scroll-container">
+        <table class="files-table">
+          <thead>
+            <tr>
+              <th style="width:350px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" id="selectAllCheck">
+                  <span data-i18n="colName">اسم الملف</span>
+                </div>
+              </th>
+              <th data-i18n="colSize">الحجم الأصلي</th>
+              <th data-i18n="colPacked">المضغوط</th>
+              <th data-i18n="colRatio">النسبة</th>
+              <th data-i18n="colType">النوع</th>
+              <th data-i18n="colModified">تاريخ التعديل</th>
+              <th data-i18n="colCrc">CRC-32</th>
+            </tr>
+          </thead>
+          <tbody id="filesTableBody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Status Bar -->
+  <footer class="status-bar">
+    <div class="status-left">
+      <span><strong id="statusSelected">0</strong> <span data-i18n="statusSelected">محدد</span></span>
+      <span>•</span>
+      <span><strong id="statusTotalFiles">0</strong> <span data-i18n="statusTotalFiles">ملف</span></span>
+      <span>•</span>
+      <span><span data-i18n="statusTotalSize">الحجم</span>: <strong id="statusTotalSize">0 B</strong></span>
+    </div>
+    <div class="status-right">
+      <span><span data-i18n="statusPackedSize">المضغوط</span>: <strong id="statusPackedSize">0 B</strong></span>
+      <span>•</span>
+      <span>وفر المساحة: <strong id="statusRatio" style="color:var(--accent-emerald);">0%</strong></span>
+    </div>
+  </footer>
+
+  <!-- Modal: WinRAR Benchmark -->
+  <div id="modalBenchmark" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 data-i18n="modalBenchmarkTitle">اختبار أداء وسرعة الضغط (WinRAR Benchmark)</h3>
+        <button class="btn btn-secondary btn-icon close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="benchmark-display">
+          <div class="benchmark-speed-num" id="bmSpeed">0</div>
+          <div class="benchmark-unit">KB/s</div>
+          <div style="font-size:0.85rem; color:var(--text-secondary);" id="bmStatus">جاري الاختبار...</div>
+
+          <div class="benchmark-stats-row">
+            <span data-i18n="threadsLabel">المسارات المتزامنة:</span>
+            <span class="cell-mono" id="bmThreads">4</span>
+          </div>
+          <div class="benchmark-stats-row">
+            <span data-i18n="scoreLabel">التقييم الإجمالي:</span>
+            <span class="cell-mono" style="font-weight:700; color:var(--accent-emerald);" id="bmScore">-</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnStartBenchmark" class="btn btn-primary" data-i18n="btnStart">بدء الاختبار</button>
+        <button class="btn btn-secondary close-modal-btn" data-i18n="btnCancel">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: File Preview -->
+  <div id="modalPreview" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width:720px;">
+      <div class="modal-header">
+        <h3 id="previewModalTitle">معاينة الملف</h3>
+        <button class="btn btn-secondary btn-icon close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body" id="previewModalBody">
+        <!-- Rendered text / image -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close-modal-btn" data-i18n="btnCancel">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Test Archive Integrity -->
+  <div id="modalTest" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 data-i18n="modalTestTitle">فحص سلامة الأرشيف</h3>
+        <button class="btn btn-secondary btn-icon close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body" id="testModalBody">
+        <!-- Result -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close-modal-btn" data-i18n="btnCancel">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Archive Info -->
+  <div id="modalInfo" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 data-i18n="modalInfoTitle">معلومات الأرشيف الفنية</h3>
+        <button class="btn btn-secondary btn-icon close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body" id="infoModalBody">
+        <!-- Info details -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close-modal-btn" data-i18n="btnCancel">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
