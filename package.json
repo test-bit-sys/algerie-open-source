@@ -1,12 +1,16 @@
 {
   "name": "algerie-open-source",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "engines": {
+    "node": ">=18"
+  },
   "private": true,
   "description": "DZ Open Suite — The Algerian National Open-Source Software Ecosystem. Modern, 100% offline-first, trilingual (AR/FR/EN) software alternatives for Algeria.",
   "type": "module",
   "scripts": {
     "start": "node server.js",
     "start:dz-facture": "node apps/business-enterprise/dz-facture/server.js",
+    "test": "node --check server.js && node --check apps/productivity/dz-disk-tree/server.js && node --check apps/productivity/dz-archive/server.js && node --check apps/multimedia/dz-player/server.js && node --check apps/office-suite/dz-pdf/server.js",
     "start:disk-tree": "node apps/productivity/dz-disk-tree/server.js",
     "start:archive": "node apps/productivity/dz-archive/server.js",
     "start:player": "node apps/multimedia/dz-player/server.js",
@@ -39,5 +43,13 @@
     "arabic"
   ],
   "author": "Algeria Open Source Community",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/test-bit-sys/algerie-open-source.git"
+  },
+  "bugs": {
+    "url": "https://github.com/test-bit-sys/algerie-open-source/issues"
+  },
+  "homepage": "https://github.com/test-bit-sys/algerie-open-source#readme"
 }

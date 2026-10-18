@@ -84,10 +84,6 @@
 > **Solution Nationale de Facturation Commerciale, Caisses Enregistreuses, Stocks & Moteur Fiscal**  
 > *Port : `:3000` • Répertoire : [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/)*
 
-<div align="center">
-  <img src="assets/screenshots/dz-facture.png" alt="Capture d'écran DZ-Facture & POS" width="800">
-</div>
-
 - **📜 Conformité Rigoureuse au Décret Exécutif 05-468** : Émission de factures réglementaires intégrant NIF (15 chiffres), NIS (20 chiffres), Registre de Commerce (RC), Article d'Imposition et coordonnées bancaires/postales (RIB/CCP).
 - **💰 Moteur Fiscal Algérien** : Calcul automatique de la TVA (19% normal, 9% réduit, 0% exonéré) et du droit de timbre fiscal avec plafonds légaux.
 - **✍️ Moteur de Tafqit Monétaire** : Conversion des montants en toutes lettres en arabe juridique, français et anglais (*ex. Huit cent onze mille sept cents Dinars Algériens et zéro centime*).
@@ -105,10 +101,6 @@ npm start
 ### 2. 🌳 DZ-Disk-Tree (Alternative WizTree 1:1)
 > **Analyseur Haute Vitesse d'Espace Disque & Treemap Cushioned 3D**  
 > *Port : `:3001` • Répertoire : [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/)*
-
-<div align="center">
-  <img src="assets/screenshots/dz-disk-tree.png" alt="Capture d'écran DZ-Disk-Tree" width="800">
-</div>
 
 - **🖥️ Affichage Découpé Synchronisé (Split View)** : Arborescence hiérarchique détaillée en haut et Treemap biseauté (**Cushioned Treemap Canvas**) en bas avec séparateur redimensionnable par glisser-déposer.
 - **⚡ Liaison Bidirectionnelle Instantanée** : Sélectionner un dossier dans l'arborescence zoome la carte géométrique ; cliquer sur un bloc sélectionne la ligne correspondante dans la table.
@@ -128,10 +120,6 @@ npm run start:disk-tree
 > **Compresseur Haute Performance, Chiffrement AES-256-GCM & Benchmark Matériel**  
 > *Port : `:3002` • Répertoire : [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/)*
 
-<div align="center">
-  <img src="assets/screenshots/dz-archive.png" alt="Capture d'écran DZ-Archive" width="800">
-</div>
-
 - **🗜️ Interface Iconique WinRAR** : Barre de menus complète (`Fichier`, `Commandes`, `Outils`, `Options`, `Aide`) et grande barre d'outils classique (`Ajouter`, `Extraire vers`, `Tester`, `Afficher`, `Supprimer`, `Rechercher`, `Assistant`, `Infos`, `Verrouiller`, `Commentaire`, `Benchmark`).
 - **📑 Dialogue de Compression à 6 Onglets** : Paramétrage avancé via `Général`, `Avancé`, `Fichiers`, `Sauvegarde`, `Temps`, et `Commentaire`.
 - **🔐 Chiffrement Cryptographique Robuste AES-256-GCM** : Sécurisation matérielle par mot de passe via l'API Web Crypto avec dérivation PBKDF2.
@@ -149,10 +137,6 @@ npm run start:archive
 ### 4. 🎬 DZ-Player (Alternative VLC Media Player 1:1)
 > **Lecteur Multimédia Avancé avec Amplification 300% & Studio d'Effets Unifié**  
 > *Port : `:3003` • Répertoire : [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/)*
-
-<div align="center">
-  <img src="assets/screenshots/dz-player.png" alt="Capture d'écran DZ-Player" width="800">
-</div>
 
 - **📻 Expérience VLC Authentique** : Menus supérieurs classiques, viewport vidéo sombre avec cône emblématique et barre de contrôle de lecture.
 - **🔊 Super-Amplification Sonore jusqu'à 300%** : Pipeline audio via `GainNode` permettant de porter le volume à 300% avec jauge numérique en temps réel.
@@ -174,10 +158,6 @@ npm run start:player
 ### 5. 📄 DZ-PDF Pro (Alternative Adobe Acrobat Pro 1:1)
 > **Suite de Documents PDF, Tampons Administratifs Officiels & Signatures Numériques**  
 > *Port : `:3004` • Répertoire : [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/)*
-
-<div align="center">
-  <img src="assets/screenshots/dz-pdf-pro.png" alt="Capture d'écran DZ-PDF Pro" width="800">
-</div>
 
 - **🛠️ Palette d'Outils Complète Acrobat** : Sélection (`V`), Main (`H`), Stylet (`P`), Surligneur (`U`), Texte (`T`), Masquage/Caviardage (**Redaction Tool** `R`), et Notes adhésives (**Sticky Notes** `N`).
 - **🏛️ Sceau et Tampons Officiels Algériens** :

@@ -916,3 +916,32 @@ body {
     display: block !important;
   }
 }
+
+/* ============================================================
+   A4 Invoice Full-Page Printing
+   app.js adds .print-target to #tab-invoices right before
+   window.print() — only the document sheet reaches the paper.
+   ============================================================ */
+@media print {
+  #tab-invoices.print-target > div {
+    display: block !important;
+    grid-template-columns: none !important;
+  }
+
+  #a4SheetColumn {
+    background: #fff !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+  }
+
+  #a4PrintSheet {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-size: 10.5pt !important;
+  }
+}
+

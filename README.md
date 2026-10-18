@@ -83,10 +83,6 @@
 > **National Invoicing, Retail Point-of-Sale, Stock Tracking & Algerian Fiscal Engine**  
 > *Port: `:3000` • Path: [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/)*
 
-<div align="center">
-  <img src="assets/screenshots/dz-facture.png" alt="DZ-Facture & POS Screenshot" width="800">
-</div>
-
 - **📜 Executive Decree 05-468 Compliance**: Strictly generates legally valid invoices with NIF (15 digits), NIS (20 digits), Registre de Commerce (RC), Article d'Imposition, and bank/postal RIB credentials.
 - **💰 Algerian Fiscal Engine**: Automated VAT calculation (19% standard, 9% reduced, 0% exempt) and Fiscal Stamp Duty (*Droit de Timbre Fiscal*) with legal thresholds.
 - **✍️ Arabic Currency Tafqit**: Converts monetary sums into legal written Arabic, French, and English Dinars (*e.g., ثمانمائة وإحدى عشر ألف وسبعمائة دينار جزائري لا غير*).
@@ -104,10 +100,6 @@ npm start
 ### 2. 🌳 DZ-Disk-Tree (WizTree 1:1 Alternative)
 > **High-Performance Storage Space Analyzer & Cushioned Squarified Treemap**  
 > *Port: `:3001` • Path: [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/)*
-
-<div align="center">
-  <img src="assets/screenshots/dz-disk-tree.png" alt="DZ-Disk-Tree Screenshot" width="800">
-</div>
 
 - **🖥️ Synchronized Split Desktop Window**: Multi-column hierarchical tree grid in the top pane and squarified cushioned treemap in the bottom pane with an interactive draggable splitter.
 - **⚡ Bidirectional Focus Linking**: Selecting any folder in the tree grid zooms the treemap; clicking any visual tile highlights the corresponding item in the tree grid.
@@ -127,10 +119,6 @@ npm run start:disk-tree
 > **High-Performance Archiver, AES-256-GCM Encryption & Multi-Threaded Benchmark**  
 > *Port: `:3002` • Path: [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/)*
 
-<div align="center">
-  <img src="assets/screenshots/dz-archive.png" alt="DZ-Archive Screenshot" width="800">
-</div>
-
 - **🗜️ Iconic WinRAR Desktop Interface**: Classic menu bar (`File`, `Commands`, `Tools`, `Options`, `Help`) and big toolbar (`Add`, `Extract To`, `Test`, `View`, `Delete`, `Find`, `Wizard`, `Info`, `Lock`, `Comment`, `Benchmark`).
 - **📑 6-Tab Compression Dialog**: Parameters dialog with `General`, `Advanced`, `Files`, `Backup`, `Time`, and `Comment` configuration tabs.
 - **🔐 AES-256-GCM Cryptographic Security**: Hardware-accelerated client-side encryption via Web Crypto API with PBKDF2 key derivation and password authentication.
@@ -148,10 +136,6 @@ npm run start:archive
 ### 4. 🎬 DZ-Player (VLC Media Player 1:1 Alternative)
 > **Advanced Multimedia Player with 300% Volume Boost & Unified Effects Studio**  
 > *Port: `:3003` • Path: [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/)*
-
-<div align="center">
-  <img src="assets/screenshots/dz-player.png" alt="DZ-Player Screenshot" width="800">
-</div>
 
 - **📻 Authentic VLC Experience**: Classic VLC top menus, dark high-contrast video viewport with orange cone emblem, and bottom control bar.
 - **🔊 300% Volume Super-Boost**: Custom `GainNode` audio graph pipeline capable of clean amplification up to 300% with a live percentage indicator badge.
@@ -173,10 +157,6 @@ npm run start:player
 ### 5. 📄 DZ-PDF Pro (Adobe Acrobat Pro 1:1 Alternative)
 > **Administrative Document Suite, Algerian Official Seals & Certified Digital Signatures**  
 > *Port: `:3004` • Path: [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/)*
-
-<div align="center">
-  <img src="assets/screenshots/dz-pdf-pro.png" alt="DZ-PDF Pro Screenshot" width="800">
-</div>
 
 - **🛠️ Acrobat Command Palette**: Selection tool (`V`), Hand pan tool (`H`), Freehand pen (`P`), Text highlighter (`U`), Typewriter text tool (`T`), Blackout redaction tool (`R`), and Sticky notes (`N`).
 - **🏛️ Official Algerian Administrative Stamps**:

@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DZ-Facture & POS | منظومة الفوترة والكاشير وإدارة المخزون الجزائرية</title>
+  <meta name="description" content="DZ-Facture & POS — منظومة جزائرية مفتوحة المصدر للفوترة التجارية، نقاط البيع (كاشير)، إدارة المخزون، والمصاريف، متوافقة مع المرسوم 05-468 وتعمل 100% بدون إنترنت.">
+  <meta name="theme-color" content="#008744">
   <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
   <link rel="stylesheet" href="src/styles.css">
 </head>
@@ -329,8 +331,8 @@
         <section id="tab-invoices" class="tab-pane">
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
             
-            <!-- Invoice Form Builder -->
-            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; gap:1rem;">
+            <!-- Invoice Form Builder (hidden on print: only the sheet is printed) -->
+            <div class="no-print" style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; gap:1rem;">
               <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
                 <h3 style="font-size:1.05rem; font-weight:800;" data-i18n="invoiceEditorTitle">محرر المستندات والوثائق الرسمية</h3>
                 <button class="btn btn-primary btn-sm" id="btnPrintA4">
@@ -393,8 +395,8 @@
               </div>
             </div>
 
-            <!-- Right: A4 Document Sheet Preview -->
-            <div style="background:#475569; border-radius:var(--radius); padding:1rem; overflow-y:auto; display:flex; justify-content:center;">
+            <!-- Right: A4 Document Sheet Preview (the only part sent to the printer) -->
+            <div id="a4SheetColumn" style="background:#475569; border-radius:var(--radius); padding:1rem; overflow-y:auto; display:flex; justify-content:center;">
               <article class="a4-page-preview" id="a4PrintSheet" style="background:#fff; color:#0f172a; width:100%; max-width:540px; padding:24px; font-size:8.5pt; box-shadow:0 6px 20px rgba(0,0,0,0.3); border-radius:4px; display:flex; flex-direction:column; justify-content:space-between; min-height:760px;">
                 <div>
                   <!-- Header with QR and Company Info -->
