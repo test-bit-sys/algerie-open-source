@@ -1,0 +1,21 @@
+{
+  "name": "dz-disk-tree",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-DiskTree — High-Performance Disk Space Analyzer and Squarified Treemap Visualizer. An open-source WizTree alternative for the Algerian National Open-Source Software Ecosystem (DZ Open Suite).",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "disk-analyzer",
+    "treemap",
+    "squarified-treemap",
+    "wiztree-alternative",
+    "disk-space",
+    "offline-first",
+    "dz-open-suite"
+  ],
+  "author": "Algeria Open Source Community",
+  "license": "MIT"
+}

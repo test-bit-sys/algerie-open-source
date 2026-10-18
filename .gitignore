@@ -36,3 +36,9 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Local business data backups (never commit merchant data)
+backups/
+*.backup
+dz_facture_backup_*.json
+
