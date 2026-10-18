@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DZ-Archive — أداة الضغط والأرشفة المفتوحة المصدر | DZ Open Suite</title>
+  <title>DZ-Archive — أداة الضغط والأرشفة الاحترافية | WinRAR Desktop Alternative</title>
   <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
   <link rel="stylesheet" href="src/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,175 +12,652 @@
 </head>
 <body>
 
-  <!-- Top Header Bar -->
-  <header class="header-bar">
-    <div class="brand-section">
-      <div class="brand-logo-wrap">
-        <img src="/assets/logo.svg" alt="DZ Open Suite" class="brand-logo-img">
-      </div>
-      <div class="brand-info">
-        <h1>
-          <span>DZ-Archive</span>
-          <span class="brand-badge">WinRAR Alternative</span>
-        </h1>
-        <p data-i18n="appSubtitle">أداة الضغط والأرشفة وفك التشفير المفتوحة المصدر</p>
-      </div>
-    </div>
+  <!-- Hidden File Pickers -->
+  <input type="file" id="hiddenFileInput" multiple style="display:none;">
+  <input type="file" id="hiddenArchiveInput" accept=".zip,.tar,.gz" style="display:none;">
 
-    <div class="header-controls">
-      <!-- Hidden file inputs -->
-      <input type="file" id="hiddenFileInput" multiple style="display:none;">
-      <input type="file" id="hiddenArchiveInput" accept=".zip,.tar,.gz" style="display:none;">
+  <div class="desktop-app-window">
 
-      <button id="btnOpenArchive" class="btn btn-secondary">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 4h-4L13 2H5c-1.11 0-2 .9-2 2v16a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6a2 2 0 0 0-2-2zm0 16H5V8h14v12z"/></svg>
-        <span>فتح أرشيف</span>
+    <!-- 1. Classic Desktop Menu Bar -->
+    <header class="desktop-menu-bar">
+      <div class="menu-items">
+        <!-- File Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="mFile">ملف (File)</button>
+          <div class="dropdown-menu" id="mFileMenu">
+            <button class="dropdown-item" id="miOpenArchive">فتح أرشيف... (Ctrl+O)</button>
+            <button class="dropdown-item" id="miSaveCopy">حفظ نسخة من الأرشيف باسم...</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="miSetDefaultPassword">تعيين كلمة مرور افتراضية...</button>
+            <button class="dropdown-item" id="miClearPassword">إزالة كلمة المرور</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="miSelectAll">تحديد الكل (Ctrl+A)</button>
+            <button class="dropdown-item" id="miDeselectAll">إلغاء التحديد</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="miCloseArchive">إغلاق الأرشيف الحالي</button>
+          </div>
+        </div>
+
+        <!-- Commands Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="mCommands">أوامر (Commands)</button>
+          <div class="dropdown-menu" id="mCommandsMenu">
+            <button class="dropdown-item" id="miAdd">إضافة ملفات للأرشيف... (Alt+A)</button>
+            <button class="dropdown-item" id="miExtract">استخراج إلى مجلد محدد... (Alt+E)</button>
+            <button class="dropdown-item" id="miTest">فحص سلامة الأرشيف (Alt+T)</button>
+            <button class="dropdown-item" id="miView">معاينة الملف المحدد (Alt+V)</button>
+            <button class="dropdown-item" id="miDelete">حذف الملفات المحددة (Del)</button>
+            <button class="dropdown-item" id="miRename">إعادة تسمية الملف (F2)</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="miLockArchive">قفل الأرشيف ضد التعديل</button>
+            <button class="dropdown-item" id="miAddComment">إضافة / تعديل تعليق الأرشيف</button>
+          </div>
+        </div>
+
+        <!-- Tools Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="mTools">أدوات (Tools)</button>
+          <div class="dropdown-menu" id="mToolsMenu">
+            <button class="dropdown-item" id="miBenchmark">اختبار سرعة العتاد والمعالج (Alt+B)</button>
+            <button class="dropdown-item" id="miInfo">معلومات الأرشيف الفنية (Alt+I)</button>
+            <button class="dropdown-item" id="miWizard">مساعد الأرشفة الإرشادي (Wizard)</button>
+          </div>
+        </div>
+
+        <!-- Options Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="mOptions">خيارات (Options)</button>
+          <div class="dropdown-menu" id="mOptionsMenu">
+            <button class="dropdown-item" id="miToggleTree">إظهار / إخفاء شجرة المجلدات</button>
+            <button class="dropdown-item" id="miToggleComment">إظهار / إخفاء لوحة التعليق</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="miToggleTheme">تبديل المظهر الداكن / الفاتح</button>
+          </div>
+        </div>
+
+        <!-- Help Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="mHelp">مساعدة (Help)</button>
+          <div class="dropdown-menu" id="mHelpMenu">
+            <button class="dropdown-item" id="miAbout">حول DZ-Archive (About)...</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Header Right Controls -->
+      <div class="menu-actions">
+        <!-- Language Selector -->
+        <select id="langSelect" class="menu-select">
+          <option value="ar">العربية (DZ)</option>
+          <option value="fr">Français (DZ)</option>
+          <option value="en">English</option>
+        </select>
+        <!-- Theme Toggle Button -->
+        <button id="themeToggleBtn" class="menu-icon-btn" title="Toggle Theme">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. Classic WinRAR Big Toolbar -->
+    <nav class="winrar-toolbar">
+      <button id="btnAdd" class="tb-btn" title="Add files to archive (Alt+A)">
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+        </div>
+        <span class="tb-label" data-i18n="toolAdd">إضافة</span>
       </button>
 
-      <!-- Language Selector -->
-      <select id="langSelect" class="select-field" title="Language">
-        <option value="ar">العربية (Algeria)</option>
-        <option value="fr">Français (DZ)</option>
-        <option value="en">English</option>
-      </select>
-
-      <!-- Theme Toggle -->
-      <button id="themeToggle" class="btn btn-secondary btn-icon" title="Toggle Dark/Light Mode">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+      <button id="btnExtract" class="tb-btn" title="Extract archive contents (Alt+E)" disabled>
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+        </div>
+        <span class="tb-label" data-i18n="toolExtract">استخراج إلى</span>
       </button>
 
-      <!-- GitHub Link -->
-      <a href="https://github.com/test-bit-sys/algerie-open-source" target="_blank" rel="noopener" class="btn btn-secondary btn-icon" title="GitHub">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-      </a>
+      <button id="btnTest" class="tb-btn" title="Test archive integrity (Alt+T)" disabled>
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+        </div>
+        <span class="tb-label" data-i18n="toolTest">فحص</span>
+      </button>
+
+      <button id="btnView" class="tb-btn" title="View selected file (Alt+V)" disabled>
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+        </div>
+        <span class="tb-label" data-i18n="toolView">معاينة</span>
+      </button>
+
+      <button id="btnDelete" class="tb-btn" title="Delete selected files (Del)" disabled>
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+          </svg>
+        </div>
+        <span class="tb-label" data-i18n="toolDelete">حذف</span>
+      </button>
+
+      <div class="tb-sep"></div>
+
+      <button id="btnFind" class="tb-btn" title="Find files in archive">
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </div>
+        <span class="tb-label">بحث</span>
+      </button>
+
+      <button id="btnWizard" class="tb-btn" title="Archiving Wizard">
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29c-.39-.39-1.02-.39-1.41 0L1.29 18.96c-.39.39-.39 1.02 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05c.39-.39.39-1.02 0-1.41l-2.33-2.35zm-1.03 5.49l-1.41-1.41 6.64-6.64 1.41 1.41-6.64 6.64z"/>
+          </svg>
+        </div>
+        <span class="tb-label">المساعد</span>
+      </button>
+
+      <button id="btnInfo" class="tb-btn" title="Archive Information (Alt+I)">
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+          </svg>
+        </div>
+        <span class="tb-label" data-i18n="toolInfo">معلومات</span>
+      </button>
+
+      <div class="tb-sep"></div>
+
+      <button id="btnLock" class="tb-btn" title="Lock archive against modification">
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+          </svg>
+        </div>
+        <span class="tb-label">قفل</span>
+      </button>
+
+      <button id="btnComment" class="tb-btn" title="Toggle archive comment drawer">
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+          </svg>
+        </div>
+        <span class="tb-label">تعليق</span>
+      </button>
+
+      <button id="btnBenchmark" class="tb-btn" title="Hardware Compression Benchmark (Alt+B)">
+        <div class="tb-icon-box">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6l5.2 3.1.8-1.3-4-2.4V7z"/>
+          </svg>
+        </div>
+        <span class="tb-label" data-i18n="toolBenchmark">اختبار</span>
+      </button>
+    </nav>
+
+    <!-- 3. Address & Search Bar -->
+    <div class="address-bar">
+      <!-- Up Folder Button -->
+      <button id="btnUpFolder" class="btn-up-folder" title="Up to parent folder (Backspace)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/>
+        </svg>
+      </button>
+
+      <!-- Path Breadcrumbs -->
+      <div class="breadcrumbs-box" id="archiveBreadcrumbs">
+        <span class="crumb-link active">archive.zip</span>
+      </div>
+
+      <!-- Quick Search Filter -->
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input type="text" id="searchFilesInput" class="search-input" placeholder="بحث في الأرشيف..." data-i18n="searchPlaceholder" spellcheck="false">
+        <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">&times;</button>
+      </div>
     </div>
-  </header>
 
-  <!-- WinRAR Action Toolbar -->
-  <nav class="action-toolbar">
-    <button id="btnAdd" class="tool-btn" title="Add files to archive">
-      <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-      <span data-i18n="toolAdd">إضافة ملفات</span>
-    </button>
+    <!-- 4. Main Multi-Pane Workspace -->
+    <main class="main-workspace">
 
-    <button id="btnExtract" class="tool-btn" title="Extract archive" disabled>
-      <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-      <span data-i18n="toolExtract">استخراج إلى</span>
-    </button>
+      <!-- Left: Folder Tree Sidebar -->
+      <aside class="folder-tree-sidebar" id="folderTreeSidebar">
+        <div class="tree-sidebar-header">
+          <span>شجرة المجلدات (Folders)</span>
+        </div>
+        <div class="tree-sidebar-content" id="treeSidebarContent">
+          <!-- Folder branches rendered dynamically -->
+        </div>
+      </aside>
 
-    <button id="btnTest" class="tool-btn" title="Test archive integrity" disabled>
-      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-      <span data-i18n="toolTest">فحص السلامة</span>
-    </button>
+      <!-- Center: Detailed Files Grid -->
+      <div class="files-grid-container">
+        <!-- Drag & Drop Overlay -->
+        <div id="dropOverlay" class="drop-overlay">
+          <svg class="drop-icon" viewBox="0 0 24 24">
+            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+          </svg>
+          <h3 data-i18n="dropPrompt">أفلت الأرشيف أو الملفات هنا لفتحها فوراً</h3>
+          <p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">يدعم صيغ ZIP و TAR و GZ مع تشفير AES-256</p>
+        </div>
 
-    <button id="btnView" class="tool-btn" title="Preview selected file" disabled>
-      <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-      <span data-i18n="toolView">معاينة</span>
-    </button>
+        <div class="table-scroll-wrap">
+          <table class="winrar-files-table">
+            <thead>
+              <tr>
+                <th class="col-name sortable" data-sort="name" style="width:38%;">
+                  <div class="th-content">
+                    <input type="checkbox" id="selectAllCheck" title="Select / Deselect All">
+                    <span data-i18n="colName">الاسم (Name)</span>
+                    <span class="sort-indicator"></span>
+                  </div>
+                </th>
+                <th class="col-size sortable" data-sort="size" style="width:11%;">
+                  <span data-i18n="colSize">الحجم الأصلي</span>
+                  <span class="sort-indicator"></span>
+                </th>
+                <th class="col-packed sortable" data-sort="compressedSize" style="width:11%;">
+                  <span data-i18n="colPacked">المضغوط</span>
+                  <span class="sort-indicator"></span>
+                </th>
+                <th class="col-ratio sortable" data-sort="ratio" style="width:9%;">
+                  <span data-i18n="colRatio">النسبة</span>
+                  <span class="sort-indicator"></span>
+                </th>
+                <th class="col-type sortable" data-sort="type" style="width:11%;">
+                  <span data-i18n="colType">النوع</span>
+                  <span class="sort-indicator"></span>
+                </th>
+                <th class="col-modified sortable" data-sort="modified" style="width:12%;">
+                  <span data-i18n="colModified">تاريخ التعديل</span>
+                  <span class="sort-indicator"></span>
+                </th>
+                <th class="col-crc sortable" data-sort="crc32" style="width:8%;">
+                  <span data-i18n="colCrc">CRC-32</span>
+                  <span class="sort-indicator"></span>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="filesTableBody">
+              <tr class="empty-row">
+                <td colspan="7" class="empty-state">
+                  لا يوجد أرشيف مفتوح حالياً. اسحب ملف مضغوط إلى هنا أو اضغط "إضافة" لإنشاء أرشيف جديد.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-    <button id="btnDelete" class="tool-btn" title="Delete selected" disabled>
-      <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-      <span data-i18n="toolDelete">حذف</span>
-    </button>
+      <!-- Right: WinRAR Comment Drawer -->
+      <aside class="comment-drawer" id="commentDrawer">
+        <div class="comment-drawer-header">
+          <div class="comment-drawer-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+            </svg>
+            <span>تعليق الأرشيف (Comment)</span>
+          </div>
+          <button id="btnCloseComment" class="btn-icon-small" title="Close Comment">&times;</button>
+        </div>
+        <div class="comment-drawer-body">
+          <textarea id="commentTextArea" class="comment-textarea" placeholder="أدخل تعليق الأرشيف هنا..." spellcheck="false"></textarea>
+        </div>
+        <div class="comment-drawer-footer">
+          <button id="btnSaveComment" class="btn-action-small">حفظ التعليق في الأرشيف</button>
+        </div>
+      </aside>
 
-    <div class="tool-separator"></div>
+    </main>
 
-    <button id="btnBenchmark" class="tool-btn" title="Hardware Compression Benchmark">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6l5.2 3.1.8-1.3-4-2.4V7z"/></svg>
-      <span data-i18n="toolBenchmark">اختبار السرعة</span>
-    </button>
+    <!-- 5. Status Bar -->
+    <footer class="desktop-status-bar">
+      <div class="sb-left">
+        <span><strong id="statusSelected">0</strong> <span data-i18n="statusSelected">محدد</span></span>
+        <span class="sb-sep">•</span>
+        <span><strong id="statusTotalFiles">0</strong> <span data-i18n="statusTotalFiles">ملف</span></span>
+        <span class="sb-sep">•</span>
+        <span><span data-i18n="statusTotalSize">الحجم</span>: <strong id="statusTotalSize">0 B</strong></span>
+      </div>
+      <div class="sb-right">
+        <span><span data-i18n="statusPackedSize">المضغوط</span>: <strong id="statusPackedSize">0 B</strong></span>
+        <span class="sb-sep">•</span>
+        <span>وفر المساحة: <strong id="statusRatio" style="color:var(--accent-emerald);">0%</strong></span>
+        <span class="sb-sep">•</span>
+        <span id="statusLockBadge" style="display:none; color:var(--accent-amber); font-weight:bold;">[LOCKED]</span>
+        <span id="statusEncBadge" style="display:none; color:var(--accent-rose); font-weight:bold;">[AES-256]</span>
+      </div>
+    </footer>
 
-    <button id="btnInfo" class="tool-btn" title="Archive Information">
-      <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-      <span data-i18n="toolInfo">معلومات</span>
-    </button>
-  </nav>
+  </div>
 
-  <!-- Address & Search Bar -->
-  <div class="address-bar">
-    <div class="breadcrumbs-box" id="archiveBreadcrumbs">
-      <span class="crumb-link">archive.zip</span>
-    </div>
+  <!-- Right Click Context Menu -->
+  <div id="contextMenu" class="desktop-context-menu" style="display:none;">
+    <button class="ctx-item" id="ctxView">معاينة الملف (View)</button>
+    <button class="ctx-item" id="ctxExtract">استخراج الملف المحدد (Extract)</button>
+    <button class="ctx-item" id="ctxCopyName">نسخ الاسم (Copy Name)</button>
+    <div class="ctx-divider"></div>
+    <button class="ctx-item" id="ctxDelete" style="color:var(--accent-rose);">حذف من الأرشيف (Delete)</button>
+  </div>
 
-    <div class="search-input-wrap">
-      <input type="text" id="searchFilesInput" class="input-field" placeholder="بحث في الأرشيف..." data-i18n="searchPlaceholder">
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal 1: WinRAR 6-Tab "Archive name and parameters" Dialog -->
+  <div id="modalAdd" class="modal-backdrop">
+    <div class="modal-dialog modal-winrar-params">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+          <h3 id="modalAddTitle">اسم الأرشيف ومعايير الضغط (Archive name and parameters)</h3>
+        </div>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="dialog-tabs-bar">
+        <button class="dialog-tab-btn active" data-tab="general">عام (General)</button>
+        <button class="dialog-tab-btn" data-tab="advanced">متقدم (Advanced)</button>
+        <button class="dialog-tab-btn" data-tab="files">ملفات (Files)</button>
+        <button class="dialog-tab-btn" data-tab="backup">نسخ احتياطي (Backup)</button>
+        <button class="dialog-tab-btn" data-tab="time">الوقت (Time)</button>
+        <button class="dialog-tab-btn" data-tab="comment">تعليق (Comment)</button>
+      </div>
+
+      <!-- Modal Body Tab Panes -->
+      <div class="dialog-tabs-content">
+        <!-- Tab 1: General -->
+        <div class="dialog-pane active" id="paneGeneral">
+          <div class="param-row">
+            <label class="param-label">اسم الأرشيف (Archive name):</label>
+            <div class="input-with-button">
+              <input type="text" id="inputArchiveName" class="dialog-input" value="dz-archive.zip" spellcheck="false">
+              <button class="btn-dialog-small" id="btnBrowseSave">استعراض...</button>
+            </div>
+          </div>
+
+          <div class="param-grid-2">
+            <!-- Format Box -->
+            <fieldset class="param-group-box">
+              <legend>صيغة الأرشيف (Archive format)</legend>
+              <label class="radio-label">
+                <input type="radio" name="archiveFormat" value="zip" checked>
+                <span>ZIP (Universal Standard)</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="archiveFormat" value="tar">
+                <span>TAR (POSIX Container)</span>
+              </label>
+            </fieldset>
+
+            <!-- Compression Method Box -->
+            <fieldset class="param-group-box">
+              <legend>طريقة الضغط (Compression method)</legend>
+              <select id="selectCompMethod" class="dialog-select">
+                <option value="store">تخزين فقط (Store - أسرع)</option>
+                <option value="fastest">الأسرع (Fastest)</option>
+                <option value="fast">سريع (Fast)</option>
+                <option value="normal" selected>عادي (Normal - موصى به)</option>
+                <option value="good">جيد (Good)</option>
+                <option value="best">الأفضل (Best - أقصى ضغط)</option>
+              </select>
+
+              <div style="margin-top:12px;">
+                <label class="param-sublabel">حجم التجزئة (Split to volumes):</label>
+                <select id="selectSplitVolume" class="dialog-select">
+                  <option value="0">تلقائي (بدون تقسيم)</option>
+                  <option value="100mb">100 MB</option>
+                  <option value="700mb">700 MB (CD-R)</option>
+                  <option value="4480mb">4480 MB (DVD-R)</option>
+                </select>
+              </div>
+            </fieldset>
+          </div>
+
+          <!-- Archiving Options Box -->
+          <fieldset class="param-group-box" style="margin-top:12px;">
+            <legend>خيارات الأرشفة (Archiving options)</legend>
+            <div class="checkbox-grid">
+              <label class="checkbox-label">
+                <input type="checkbox" id="chkDeleteOriginal">
+                <span>حذف الملفات الأصلية بعد انتهاء الضغط</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="chkCreateSolid" checked>
+                <span>إنشاء أرشيف متماسك (Solid Archive)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="chkLockArchive">
+                <span>قفل الأرشيف لمنع أي تعديل مستقبلي</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="chkTestAfter">
+                <span>فحص سلامة الأرشيف تلقائياً بعد إنشائه</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Password Button -->
+          <div class="password-trigger-box">
+            <button id="btnOpenPasswordModal" class="btn-password-set">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+              </svg>
+              <span id="btnPasswordText">تعيين كلمة مرور... (Set password)</span>
+            </button>
+            <span id="passwordIndicator" class="password-status-tag" style="display:none;">تشفير AES-256 مفعّل</span>
+          </div>
+        </div>
+
+        <!-- Tab 2: Advanced -->
+        <div class="dialog-pane" id="paneAdvanced">
+          <fieldset class="param-group-box">
+            <legend>إعدادات الضغط المتقدمة (Advanced compression)</legend>
+            <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:10px;">
+              يستخدم المحرك خوارزمية Deflate الحديثة مع دعم معالجة التدفق عبر تقنية CompressionStream.
+            </p>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chkMemoryBuffer" checked>
+              <span>تحسين الذاكرة المؤقتة للأداء العالي (64 MB Ring Buffer)</span>
+            </label>
+            <label class="checkbox-label" style="margin-top:8px;">
+              <input type="checkbox" id="chkAddRecovery" checked>
+              <span>إضافة سجل استعادة للأعطال (Recovery Record 3%)</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <!-- Tab 3: Files -->
+        <div class="dialog-pane" id="paneFiles">
+          <fieldset class="param-group-box">
+            <legend>تصفية واستثناء الملفات (File filters)</legend>
+            <label class="param-sublabel">استثناء الملفات ذات الامتدادات:</label>
+            <input type="text" id="inputExcludeFilters" class="dialog-input" value="*.bak, *.tmp, *.log, Thumbs.db" spellcheck="false">
+            <label class="checkbox-label" style="margin-top:12px;">
+              <input type="checkbox" id="chkPreservePaths" checked>
+              <span>الحفاظ على المسار الهيكلي للمجلدات (Preserve Full Paths)</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <!-- Tab 4: Backup -->
+        <div class="dialog-pane" id="paneBackup">
+          <fieldset class="param-group-box">
+            <legend>النسخ الاحتياطي والأرشفة المؤرخة</legend>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chkAppendDate">
+              <span>إضافة التاريخ والوقت تلقائياً لاسم الأرشيف</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <!-- Tab 5: Time -->
+        <div class="dialog-pane" id="paneTime">
+          <fieldset class="param-group-box">
+            <legend>توقيت الملفات (File times)</legend>
+            <label class="checkbox-label">
+              <input type="checkbox" checked disabled>
+              <span>حفظ تاريخ التعديل الأصلي لكل ملف (MS-DOS / UNIX Epoch)</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <!-- Tab 6: Comment -->
+        <div class="dialog-pane" id="paneComment">
+          <div class="param-row">
+            <label class="param-label">نص تعليق الأرشيف (Archive comment):</label>
+            <textarea id="dialogCommentText" class="dialog-textarea" placeholder="اكتب تعليقاً يظهر في اللوحة الجانبية عند فتح هذا الأرشيف..." spellcheck="false"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btnConfirmCreateArchive" class="btn btn-primary">موافق (OK)</button>
+        <button class="btn btn-secondary close-modal-btn">إلغاء (Cancel)</button>
+      </div>
     </div>
   </div>
 
-  <!-- Main Viewport -->
-  <main class="main-viewport">
-    <div class="archive-card">
-      
-      <!-- Drag & Drop Overlay -->
-      <div id="dropOverlay" class="drop-overlay">
-        <svg class="svg-icon" style="width:48px; height:48px; color:var(--accent-blue);" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-        <h3 data-i18n="dropPrompt">أفلت الأرشيف أو الملفات هنا لفتحها فوراً</h3>
-      </div>
-
-      <!-- Files Table -->
-      <div class="table-scroll-container">
-        <table class="files-table">
-          <thead>
-            <tr>
-              <th style="width:350px;">
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <input type="checkbox" id="selectAllCheck">
-                  <span data-i18n="colName">اسم الملف</span>
-                </div>
-              </th>
-              <th data-i18n="colSize">الحجم الأصلي</th>
-              <th data-i18n="colPacked">المضغوط</th>
-              <th data-i18n="colRatio">النسبة</th>
-              <th data-i18n="colType">النوع</th>
-              <th data-i18n="colModified">تاريخ التعديل</th>
-              <th data-i18n="colCrc">CRC-32</th>
-            </tr>
-          </thead>
-          <tbody id="filesTableBody">
-            <!-- Populated dynamically -->
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- Status Bar -->
-  <footer class="status-bar">
-    <div class="status-left">
-      <span><strong id="statusSelected">0</strong> <span data-i18n="statusSelected">محدد</span></span>
-      <span>•</span>
-      <span><strong id="statusTotalFiles">0</strong> <span data-i18n="statusTotalFiles">ملف</span></span>
-      <span>•</span>
-      <span><span data-i18n="statusTotalSize">الحجم</span>: <strong id="statusTotalSize">0 B</strong></span>
-    </div>
-    <div class="status-right">
-      <span><span data-i18n="statusPackedSize">المضغوط</span>: <strong id="statusPackedSize">0 B</strong></span>
-      <span>•</span>
-      <span>وفر المساحة: <strong id="statusRatio" style="color:var(--accent-emerald);">0%</strong></span>
-    </div>
-  </footer>
-
-  <!-- Modal: WinRAR Benchmark -->
-  <div id="modalBenchmark" class="modal-backdrop">
-    <div class="modal-dialog">
+  <!-- Modal 2: Set Password Dialog -->
+  <div id="modalPassword" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width:440px;">
       <div class="modal-header">
-        <h3 data-i18n="modalBenchmarkTitle">اختبار أداء وسرعة الضغط (WinRAR Benchmark)</h3>
-        <button class="btn btn-secondary btn-icon close-modal-btn">&times;</button>
+        <h3>تعيين كلمة مرور الأرشيف (Set password)</h3>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="param-row">
+          <label class="param-label">أدخل كلمة المرور:</label>
+          <input type="password" id="inputPassword" class="dialog-input" spellcheck="false">
+        </div>
+        <div class="param-row" style="margin-top:10px;">
+          <label class="param-label">إعادة إدخال كلمة المرور للتأكيد:</label>
+          <input type="password" id="inputPasswordConfirm" class="dialog-input" spellcheck="false">
+        </div>
+        <label class="checkbox-label" style="margin-top:12px;">
+          <input type="checkbox" id="chkShowPassword">
+          <span>إظهار كلمة المرور (Show password)</span>
+        </label>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:10px;">
+          تشفير قوي بمعيار AES-256-GCM واشتقاق المفاتيح بـ PBKDF2 (100,000 دورة).
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="btnApplyPassword" class="btn btn-primary">حفظ كلمة المرور</button>
+        <button id="btnClearPasswordModal" class="btn btn-secondary">إلغاء التشفير</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Password Required Prompt (Decryption) -->
+  <div id="modalPromptPassword" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width:420px;">
+      <div class="modal-header">
+        <h3>الأرشيف محمي بكلمة مرور</h3>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">
+          هذا الملف مشفر بتشفير AES-256. الرجاء إدخال كلمة المرور الصحيحة لفك الضغط والاستخراج:
+        </p>
+        <input type="password" id="inputDecryptPassword" class="dialog-input" placeholder="كلمة المرور..." spellcheck="false">
+      </div>
+      <div class="modal-footer">
+        <button id="btnConfirmDecryptPassword" class="btn btn-primary">فك التشفير (Decrypt)</button>
+        <button class="btn btn-secondary close-modal-btn">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Multi-View Internal File Viewer (Text / Hex / Media) -->
+  <div id="modalPreview" class="modal-backdrop">
+    <div class="modal-dialog modal-viewer-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+          <h3 id="previewModalTitle">معاينة الملف (Internal File Viewer)</h3>
+        </div>
+        <!-- View mode tabs -->
+        <div class="viewer-mode-tabs">
+          <button class="viewer-tab-btn active" data-mode="text">نص (Text)</button>
+          <button class="viewer-tab-btn" data-mode="hex">ست عشري (Hex)</button>
+          <button class="viewer-tab-btn" data-mode="media">وسائط (Media)</button>
+        </div>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body viewer-body" id="previewModalBody">
+        <!-- Rendered text / hex / image -->
+      </div>
+      <div class="modal-footer">
+        <button id="btnDownloadCurrentPreview" class="btn btn-primary">حفظ نسخة من هذا الملف</button>
+        <button class="btn btn-secondary close-modal-btn">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: WinRAR Benchmark Window -->
+  <div id="modalBenchmark" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width:520px;">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6l5.2 3.1.8-1.3-4-2.4V7z"/>
+          </svg>
+          <h3 data-i18n="modalBenchmarkTitle">اختبار سرعة العتاد والمعالج (WinRAR Benchmark)</h3>
+        </div>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
       </div>
       <div class="modal-body">
         <div class="benchmark-display">
           <div class="benchmark-speed-num" id="bmSpeed">0</div>
           <div class="benchmark-unit">KB/s</div>
-          <div style="font-size:0.85rem; color:var(--text-secondary);" id="bmStatus">جاري الاختبار...</div>
+          <div class="benchmark-status" id="bmStatus">جاهز لبدء الاختبار</div>
 
-          <div class="benchmark-stats-row">
-            <span data-i18n="threadsLabel">المسارات المتزامنة:</span>
-            <span class="cell-mono" id="bmThreads">4</span>
+          <div class="benchmark-stats-grid">
+            <div class="bm-stat-row">
+              <span data-i18n="threadsLabel">المسارات المتزامنة (Threads):</span>
+              <span class="cell-mono" id="bmThreads">4</span>
+            </div>
+            <div class="bm-stat-row">
+              <span>البيانات المعالجة (Processed):</span>
+              <span class="cell-mono" id="bmProcessed">0 MB</span>
+            </div>
+            <div class="bm-stat-row">
+              <span data-i18n="scoreLabel">التقييم الإجمالي (Rating Score):</span>
+              <span class="cell-mono" style="font-weight:700; color:var(--accent-emerald);" id="bmScore">-</span>
+            </div>
           </div>
-          <div class="benchmark-stats-row">
-            <span data-i18n="scoreLabel">التقييم الإجمالي:</span>
-            <span class="cell-mono" style="font-weight:700; color:var(--accent-emerald);" id="bmScore">-</span>
+
+          <div style="margin-top:16px; display:flex; justify-content:center;">
+            <label class="checkbox-label">
+              <input type="checkbox" id="chkMultithreading" checked>
+              <span>تعدد المسارات المتزامنة (Multithreading)</span>
+            </label>
           </div>
         </div>
       </div>
@@ -191,31 +668,15 @@
     </div>
   </div>
 
-  <!-- Modal: File Preview -->
-  <div id="modalPreview" class="modal-backdrop">
-    <div class="modal-dialog" style="max-width:720px;">
-      <div class="modal-header">
-        <h3 id="previewModalTitle">معاينة الملف</h3>
-        <button class="btn btn-secondary btn-icon close-modal-btn">&times;</button>
-      </div>
-      <div class="modal-body" id="previewModalBody">
-        <!-- Rendered text / image -->
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary close-modal-btn" data-i18n="btnCancel">إغلاق</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Test Archive Integrity -->
+  <!-- Modal 6: Test Archive Integrity -->
   <div id="modalTest" class="modal-backdrop">
     <div class="modal-dialog">
       <div class="modal-header">
-        <h3 data-i18n="modalTestTitle">فحص سلامة الأرشيف</h3>
-        <button class="btn btn-secondary btn-icon close-modal-btn">&times;</button>
+        <h3 data-i18n="modalTestTitle">فحص سلامة الأرشيف (CRC-32 Integrity Test)</h3>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
       </div>
       <div class="modal-body" id="testModalBody">
-        <!-- Result -->
+        <!-- Result filled dynamically -->
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary close-modal-btn" data-i18n="btnCancel">إغلاق</button>
@@ -223,18 +684,46 @@
     </div>
   </div>
 
-  <!-- Modal: Archive Info -->
+  <!-- Modal 7: Archive Info -->
   <div id="modalInfo" class="modal-backdrop">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width:540px;">
       <div class="modal-header">
-        <h3 data-i18n="modalInfoTitle">معلومات الأرشيف الفنية</h3>
-        <button class="btn btn-secondary btn-icon close-modal-btn">&times;</button>
+        <h3 data-i18n="modalInfoTitle">معلومات الأرشيف الفنية (Archive Information)</h3>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
       </div>
       <div class="modal-body" id="infoModalBody">
-        <!-- Info details -->
+        <!-- Info filled dynamically -->
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary close-modal-btn" data-i18n="btnCancel">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 8: About WinRAR / DZ-Archive Dialog -->
+  <div id="modalAbout" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width:480px; text-align:center;">
+      <div class="modal-header">
+        <h3>حول DZ-Archive (About)</h3>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img src="/assets/logo.svg" alt="DZ Open Suite" style="width:56px; height:56px; margin:0 auto 12px auto; display:block;">
+        <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:4px;">DZ-Archive v2.0</h2>
+        <p style="color:var(--accent-blue); font-weight:600; font-size:0.85rem; margin-bottom:12px;">
+          البديل الجزائري المفتوح المصدر لبرنامج WinRAR
+        </p>
+        <p style="font-size:0.825rem; color:var(--text-secondary); line-height:1.6; margin-bottom:14px;">
+          برنامج سطح مكتب فائق السرعة والأمان مصمم بالكامل بلغات الويب النقية (Vanilla JS, HTML5, CSS3)
+          وفق معمارية HeyPuter العالمية. يدعم أرشيفات ZIP و TAR، وتشفير AES-256، والتعليقات، واختبار سرعة العتاد،
+          ويعمل 100% بدون إنترنت داخل جهازك.
+        </p>
+        <div style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">
+          Algeria Open Source Community | MIT License
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:center;">
+        <button class="btn btn-primary close-modal-btn">موافق</button>
       </div>
     </div>
   </div>
