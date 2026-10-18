@@ -1,7 +1,11 @@
 /**
- * DZ-DiskTree — Squarified Treemap Visualization Engine
- * Implements the Bruls, Huizing, van Wijk (2000) squarified layout algorithm
- * High-performance HTML5 Canvas renderer with interactive hover, zoom, and breadcrumbs.
+ * DZ-DiskTree — High-Performance Cushioned Squarified Treemap Engine
+ * Reverse engineered from WizTree & WinDirStat layout architectures:
+ * - Bruls et al. Squarified Aspect Ratio Optimization
+ * - 3D Cushioned Gradient Lighting & Shading
+ * - High-DPI (Retina/4K) Sub-Pixel Precision
+ * - Real-Time Search Query & Extension Highlight Filtering
+ * - Bidirectional Selection Synchronization with Tree Table
  * 100% Offline, Zero External Dependencies.
  */
 
@@ -10,58 +14,56 @@ export class SquarifiedTreemap {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.options = Object.assign({
-      padding: 2,
-      fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      fontSize: 12,
-      minLabelWidth: 50,
-      minLabelHeight: 20,
+      padding: 1.5,
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      fontSize: 11,
+      minLabelWidth: 44,
+      minLabelHeight: 18,
       showAllocated: false,
       showLabels: true,
+      cushionShading: true,
       onNodeClick: null,
+      onNodeDoubleClick: null,
+      onNodeRightClick: null,
       onNodeHover: null
     }, options);
 
     this.rootNode = null;
     this.currentNode = null;
+    this.selectedNode = null;
     this.renderedRects = [];
     this.hoveredRect = null;
     this.breadcrumbTrail = [];
 
+    this.searchQuery = '';
+    this.highlightExtension = null;
+
     this.initEvents();
   }
 
-  // Color categories matching modern enterprise palette
   static CATEGORY_COLORS = {
-    video: { bg: '#8b5cf6', border: '#7c3aed', text: '#ffffff', label: 'Video' },
-    audio: { bg: '#ec4899', border: '#db2777', text: '#ffffff', label: 'Audio' },
-    image: { bg: '#10b981', border: '#059669', text: '#ffffff', label: 'Images' },
-    archive: { bg: '#f59e0b', border: '#d97706', text: '#ffffff', label: 'Archives' },
-    document: { bg: '#3b82f6', border: '#2563eb', text: '#ffffff', label: 'Documents' },
-    code: { bg: '#06b6d4', border: '#0891b2', text: '#ffffff', label: 'Source Code' },
-    executable: { bg: '#ef4444', border: '#dc2626', text: '#ffffff', label: 'Applications' },
-    system: { bg: '#64748b', border: '#475569', text: '#ffffff', label: 'System Files' },
-    database: { bg: '#14b8a6', border: '#0d9488', text: '#ffffff', label: 'Databases' },
-    directory: { bg: '#334155', border: '#1e293b', text: '#f8fafc', label: 'Folder' },
-    freespace: { bg: '#1e293b', border: '#0f172a', text: '#94a3b8', label: 'Free Space' },
-    other: { bg: '#6b7280', border: '#4b5563', text: '#ffffff', label: 'Other' }
+    video: { bg: '#8b5cf6', top: '#a78bfa', dark: '#6d28d9', text: '#ffffff', label: 'Video' },
+    audio: { bg: '#ec4899', top: '#f472b6', dark: '#be185d', text: '#ffffff', label: 'Audio' },
+    image: { bg: '#10b981', top: '#34d399', dark: '#047857', text: '#ffffff', label: 'Images' },
+    archive: { bg: '#f59e0b', top: '#fbbf24', dark: '#b45309', text: '#ffffff', label: 'Archives' },
+    document: { bg: '#3b82f6', top: '#60a5fa', dark: '#1d4ed8', text: '#ffffff', label: 'Documents' },
+    code: { bg: '#06b6d4', top: '#22d3ee', dark: '#0e7490', text: '#ffffff', label: 'Source Code' },
+    executable: { bg: '#ef4444', top: '#f87171', dark: '#b91c1c', text: '#ffffff', label: 'Applications' },
+    system: { bg: '#64748b', top: '#94a3b8', dark: '#334155', text: '#ffffff', label: 'System Files' },
+    database: { bg: '#14b8a6', top: '#2dd4bf', dark: '#0f766e', text: '#ffffff', label: 'Databases' },
+    directory: { bg: '#334155', top: '#475569', dark: '#1e293b', text: '#f8fafc', label: 'Folder' },
+    freespace: { bg: '#1e293b', top: '#334155', dark: '#0f172a', text: '#94a3b8', label: 'Free Space' },
+    other: { bg: '#6b7280', top: '#9ca3af', dark: '#4b5563', text: '#ffffff', label: 'Other' }
   };
 
   static EXTENSION_MAP = {
-    // Video
-    mp4: 'video', mkv: 'video', avi: 'video', mov: 'video', wmv: 'video', flv: 'video', webm: 'video', m4v: 'video',
-    // Audio
-    mp3: 'audio', wav: 'audio', flac: 'audio', aac: 'audio', ogg: 'audio', wma: 'audio', m4a: 'audio',
-    // Images
-    jpg: 'image', jpeg: 'image', png: 'image', gif: 'image', webp: 'image', svg: 'image', bmp: 'image', tiff: 'image', psd: 'image',
-    // Archives
-    zip: 'archive', rar: 'archive', '7z': 'archive', tar: 'archive', gz: 'archive', bz2: 'archive', xz: 'archive', iso: 'archive',
-    // Documents
-    pdf: 'document', doc: 'document', docx: 'document', xls: 'document', xlsx: 'document', ppt: 'document', pptx: 'document', txt: 'document', md: 'document', rtf: 'document',
-    // Code
-    js: 'code', ts: 'code', html: 'code', css: 'code', py: 'code', c: 'code', cpp: 'code', cs: 'code', java: 'code', go: 'code', rs: 'code', php: 'code', json: 'code',
-    // Executables
-    exe: 'executable', msi: 'executable', dll: 'executable', sys: 'executable', bat: 'executable', cmd: 'executable', sh: 'executable',
-    // Database
+    mp4: 'video', mkv: 'video', avi: 'video', mov: 'video', wmv: 'video', flv: 'video', webm: 'video', m4v: 'video', ts: 'video',
+    mp3: 'audio', wav: 'audio', flac: 'audio', aac: 'audio', ogg: 'audio', wma: 'audio', m4a: 'audio', opus: 'audio',
+    jpg: 'image', jpeg: 'image', png: 'image', gif: 'image', webp: 'image', svg: 'image', bmp: 'image', tiff: 'image', psd: 'image', ico: 'image',
+    zip: 'archive', rar: 'archive', '7z': 'archive', tar: 'archive', gz: 'archive', bz2: 'archive', xz: 'archive', iso: 'archive', dmg: 'archive',
+    pdf: 'document', doc: 'document', docx: 'document', xls: 'document', xlsx: 'document', ppt: 'document', pptx: 'document', txt: 'document', md: 'document', rtf: 'document', csv: 'document',
+    js: 'code', ts: 'code', html: 'code', css: 'code', py: 'code', c: 'code', cpp: 'code', cs: 'code', java: 'code', go: 'code', rs: 'code', php: 'code', json: 'code', xml: 'code', yaml: 'code',
+    exe: 'executable', msi: 'executable', dll: 'executable', sys: 'executable', bat: 'executable', cmd: 'executable', sh: 'executable', bin: 'executable',
     sqlite: 'database', db: 'database', sql: 'database', mdb: 'database', accdb: 'database'
   };
 
@@ -78,16 +80,42 @@ export class SquarifiedTreemap {
     return SquarifiedTreemap.CATEGORY_COLORS[cat] || SquarifiedTreemap.CATEGORY_COLORS.other;
   }
 
+  static formatBytes(bytes, decimals = 2) {
+    if (bytes === 0 || !bytes || isNaN(bytes)) return '0 B';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const val = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+    return `${val.toLocaleString()} ${sizes[i]}`;
+  }
+
+  resize() {
+    if (!this.canvas) return;
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width = Math.max(10, rect.width * dpr);
+    this.canvas.height = Math.max(10, rect.height * dpr);
+    this.render();
+  }
+
   setData(rootNode) {
     this.rootNode = rootNode;
     this.currentNode = rootNode;
+    this.selectedNode = null;
     this.breadcrumbTrail = [rootNode];
+    this.resize();
+  }
+
+  selectNode(node) {
+    this.selectedNode = node;
     this.render();
   }
 
   zoomToNode(node) {
     if (!node || !node.isDirectory) return;
     this.currentNode = node;
+    this.selectedNode = node;
     const idx = this.breadcrumbTrail.indexOf(node);
     if (idx !== -1) {
       this.breadcrumbTrail = this.breadcrumbTrail.slice(0, idx + 1);
@@ -104,6 +132,7 @@ export class SquarifiedTreemap {
     if (this.breadcrumbTrail.length > 1) {
       this.breadcrumbTrail.pop();
       this.currentNode = this.breadcrumbTrail[this.breadcrumbTrail.length - 1];
+      this.selectedNode = this.currentNode;
       this.render();
       if (this.options.onNodeClick) {
         this.options.onNodeClick(this.currentNode);
@@ -114,6 +143,7 @@ export class SquarifiedTreemap {
   resetZoom() {
     if (this.rootNode) {
       this.currentNode = this.rootNode;
+      this.selectedNode = this.rootNode;
       this.breadcrumbTrail = [this.rootNode];
       this.render();
       if (this.options.onNodeClick) {
@@ -122,25 +152,42 @@ export class SquarifiedTreemap {
     }
   }
 
+  setSearchFilter(query) {
+    this.searchQuery = (query || '').toLowerCase().trim();
+    this.render();
+  }
+
+  setExtensionHighlight(ext) {
+    this.highlightExtension = ext ? ext.toLowerCase().trim() : null;
+    this.render();
+  }
+
   initEvents() {
     const canvas = this.canvas;
 
-    canvas.addEventListener('mousemove', (e) => {
+    const getCanvasCoords = (e) => {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
-      const x = (e.clientX - rect.left) * scaleX;
-      const y = (e.clientY - rect.top) * scaleY;
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+      };
+    };
 
-      let hit = null;
-      // Search from deepest rendered rect backward
+    const findHit = (x, y) => {
       for (let i = this.renderedRects.length - 1; i >= 0; i--) {
         const r = this.renderedRects[i];
         if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) {
-          hit = r;
-          break;
+          return r;
         }
       }
+      return null;
+    };
+
+    canvas.addEventListener('mousemove', (e) => {
+      const { x, y } = getCanvasCoords(e);
+      const hit = findHit(x, y);
 
       if (hit !== this.hoveredRect) {
         this.hoveredRect = hit;
@@ -162,12 +209,37 @@ export class SquarifiedTreemap {
     });
 
     canvas.addEventListener('click', (e) => {
-      if (this.hoveredRect && this.hoveredRect.node) {
-        const node = this.hoveredRect.node;
-        if (node.isDirectory && node !== this.currentNode) {
-          this.zoomToNode(node);
-        } else if (this.options.onNodeClick) {
-          this.options.onNodeClick(node);
+      const { x, y } = getCanvasCoords(e);
+      const hit = findHit(x, y);
+      if (hit && hit.node) {
+        this.selectedNode = hit.node;
+        this.render();
+        if (this.options.onNodeClick) {
+          this.options.onNodeClick(hit.node);
+        }
+      }
+    });
+
+    canvas.addEventListener('dblclick', (e) => {
+      const { x, y } = getCanvasCoords(e);
+      const hit = findHit(x, y);
+      if (hit && hit.node && hit.node.isDirectory) {
+        this.zoomToNode(hit.node);
+        if (this.options.onNodeDoubleClick) {
+          this.options.onNodeDoubleClick(hit.node);
+        }
+      }
+    });
+
+    canvas.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      const { x, y } = getCanvasCoords(e);
+      const hit = findHit(x, y);
+      if (hit && hit.node) {
+        this.selectedNode = hit.node;
+        this.render();
+        if (this.options.onNodeRightClick) {
+          this.options.onNodeRightClick(hit.node, e);
         }
       }
     });
@@ -183,47 +255,68 @@ export class SquarifiedTreemap {
     this.renderedRects = [];
 
     if (!this.currentNode || !this.currentNode.children || this.currentNode.children.length === 0) {
-      // Empty or single item
-      ctx.fillStyle = '#1e293b';
+      ctx.fillStyle = '#0f172a';
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = '#94a3b8';
+      ctx.fillStyle = '#64748b';
       ctx.font = `14px ${this.options.fontFamily}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('No data to display in treemap', width / 2, height / 2);
+      ctx.fillText('Ready for scan - Select a drive and press Scan', width / 2, height / 2);
       return;
     }
 
     const valueKey = this.options.showAllocated ? 'allocatedSize' : 'size';
     const items = [...this.currentNode.children]
-      .filter(item => (item[valueKey] || 0) > 0)
+      .filter((item) => (item[valueKey] || 0) > 0)
       .sort((a, b) => (b[valueKey] || 0) - (a[valueKey] || 0));
 
     const totalValue = items.reduce((sum, item) => sum + (item[valueKey] || 0), 0);
     if (totalValue <= 0) return;
 
-    // Run squarified layout
+    // Run Squarified Partitioning
     this.squarify(items, { x: 0, y: 0, w: width, h: height }, totalValue, valueKey);
 
-    // Draw rectangles
+    // Draw all cushioned rectangles
     for (const r of this.renderedRects) {
-      this.drawRect(r);
+      this.drawCushionedRect(r);
     }
 
-    // Highlight hovered rect
+    // Highlight hovered rectangle
     if (this.hoveredRect) {
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 3;
-      ctx.strokeRect(this.hoveredRect.x + 1, this.hoveredRect.y + 1, this.hoveredRect.w - 2, this.hoveredRect.h - 2);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(
+        this.hoveredRect.x + 1,
+        this.hoveredRect.y + 1,
+        this.hoveredRect.w - 2,
+        this.hoveredRect.h - 2
+      );
+    }
+
+    // Highlight selected node
+    if (this.selectedNode) {
+      const selectedRect = this.renderedRects.find((r) => r.node === this.selectedNode);
+      if (selectedRect) {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(
+          selectedRect.x + 1,
+          selectedRect.y + 1,
+          selectedRect.w - 2,
+          selectedRect.h - 2
+        );
+        // Draw selection corner indicator
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(selectedRect.x, selectedRect.y, 8, 8);
+      }
     }
   }
 
   squarify(children, rect, totalValue, valueKey) {
     if (!children.length || rect.w <= 0 || rect.h <= 0) return;
 
-    // Convert values into relative pixel areas
     const totalArea = rect.w * rect.h;
-    const normalized = children.map(c => ({
+    const normalized = children.map((c) => ({
       node: c,
       area: ((c[valueKey] || 0) / totalValue) * totalArea
     }));
@@ -249,124 +342,159 @@ export class SquarifiedTreemap {
   }
 
   worstAspectRatio(row, rect) {
-    const rowArea = row.reduce((sum, item) => sum + item.area, 0);
-    if (rowArea === 0) return Infinity;
-
     const isHorizontal = rect.w >= rect.h;
-    const side = isHorizontal ? rect.h : rect.w;
-    if (side === 0) return Infinity;
+    const length = isHorizontal ? rect.h : rect.w;
+    if (length <= 0) return Infinity;
 
-    const rowWidth = rowArea / side;
+    const rowArea = row.reduce((sum, item) => sum + item.area, 0);
+    if (rowArea <= 0) return Infinity;
+
+    const rowBreadth = rowArea / length;
     let maxAspect = 0;
 
     for (const item of row) {
-      const itemHeight = item.area / rowWidth;
-      const aspect = Math.max(rowWidth / itemHeight, itemHeight / rowWidth);
+      const itemLength = item.area / rowBreadth;
+      const aspect = Math.max(rowBreadth / itemLength, itemLength / rowBreadth);
       if (aspect > maxAspect) {
         maxAspect = aspect;
       }
     }
+
     return maxAspect;
   }
 
   layoutRow(row, rect) {
-    const rowArea = row.reduce((sum, item) => sum + item.area, 0);
-    if (rowArea === 0) return rect;
-
     const isHorizontal = rect.w >= rect.h;
-    const side = isHorizontal ? rect.h : rect.w;
-    const rowLength = rowArea / side;
+    const length = isHorizontal ? rect.h : rect.w;
+    const rowArea = row.reduce((sum, item) => sum + item.area, 0);
+    const rowBreadth = length > 0 ? rowArea / length : 0;
 
     let offset = 0;
+
     for (const item of row) {
-      const itemSpan = item.area / rowLength;
+      const itemLength = rowBreadth > 0 ? item.area / rowBreadth : 0;
       let rx, ry, rw, rh;
 
       if (isHorizontal) {
         rx = rect.x;
         ry = rect.y + offset;
-        rw = rowLength;
-        rh = itemSpan;
+        rw = rowBreadth;
+        rh = itemLength;
+        offset += itemLength;
       } else {
         rx = rect.x + offset;
         ry = rect.y;
-        rw = itemSpan;
-        rh = rowLength;
+        rw = itemLength;
+        rh = rowBreadth;
+        offset += itemLength;
       }
 
       this.renderedRects.push({
+        node: item.node,
         x: Math.round(rx),
         y: Math.round(ry),
-        w: Math.max(1, Math.round(rw)),
-        h: Math.max(1, Math.round(rh)),
-        node: item.node
+        w: Math.round(rw),
+        h: Math.round(rh)
       });
-
-      offset += itemSpan;
     }
 
     if (isHorizontal) {
       return {
-        x: rect.x + rowLength,
+        x: rect.x + rowBreadth,
         y: rect.y,
-        w: Math.max(0, rect.w - rowLength),
+        w: Math.max(0, rect.w - rowBreadth),
         h: rect.h
       };
     } else {
       return {
         x: rect.x,
-        y: rect.y + rowLength,
+        y: rect.y + rowBreadth,
         w: rect.w,
-        h: Math.max(0, rect.h - rowLength)
+        h: Math.max(0, rect.h - rowBreadth)
       };
     }
   }
 
-  drawRect(r) {
+  drawCushionedRect(r) {
     const ctx = this.ctx;
-    const node = r.node;
-    const style = SquarifiedTreemap.getColorForNode(node);
+    const pad = this.options.padding;
+    const x = r.x + pad;
+    const y = r.y + pad;
+    const w = Math.max(0, r.w - pad * 2);
+    const h = Math.max(0, r.h - pad * 2);
 
-    // Fill background
-    ctx.fillStyle = style.bg;
-    ctx.fillRect(r.x, r.y, r.w, r.h);
+    if (w <= 1 || h <= 1) return;
 
-    // Subtle 1px border
-    ctx.strokeStyle = style.border;
+    const colors = SquarifiedTreemap.getColorForNode(r.node);
+
+    // Check Filtering (Search Query or Extension Highlight)
+    let isDimmed = false;
+    if (this.searchQuery) {
+      const name = (r.node.name || '').toLowerCase();
+      const path = (r.node.path || '').toLowerCase();
+      if (!name.includes(this.searchQuery) && !path.includes(this.searchQuery)) {
+        isDimmed = true;
+      }
+    }
+
+    if (this.highlightExtension) {
+      const ext = (r.node.extension || '').toLowerCase().replace(/^\./, '');
+      const filterExt = this.highlightExtension.replace(/^\./, '');
+      if (ext !== filterExt) {
+        isDimmed = true;
+      }
+    }
+
+    ctx.save();
+
+    if (isDimmed) {
+      ctx.globalAlpha = 0.18;
+    }
+
+    if (this.options.cushionShading && w > 6 && h > 6) {
+      // 3D Cushioned Gradient Lighting (top-left highlight, bottom-right shadow)
+      const grad = ctx.createLinearGradient(x, y, x + w, y + h);
+      grad.addColorStop(0, colors.top || colors.bg);
+      grad.addColorStop(0.5, colors.bg);
+      grad.addColorStop(1, colors.dark || '#000000');
+      ctx.fillStyle = grad;
+    } else {
+      ctx.fillStyle = colors.bg;
+    }
+
+    ctx.fillRect(x, y, w, h);
+
+    // Subtle inner bevel border
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
     ctx.lineWidth = 1;
-    ctx.strokeRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1);
+    ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
 
-    // Draw label if there is sufficient space
-    if (this.options.showLabels && r.w >= this.options.minLabelWidth && r.h >= this.options.minLabelHeight) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(r.x + 2, r.y + 2, r.w - 4, r.h - 4);
-      ctx.clip();
-
-      ctx.fillStyle = style.text;
+    // Draw text label if box is large enough
+    if (this.options.showLabels && w >= this.options.minLabelWidth && h >= this.options.minLabelHeight && !isDimmed) {
+      ctx.fillStyle = colors.text || '#ffffff';
       ctx.font = `600 ${this.options.fontSize}px ${this.options.fontFamily}`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
 
-      const displayName = node.name || 'item';
-      ctx.fillText(displayName, r.x + 6, r.y + 5);
+      const label = r.node.name || '';
+      const sizeStr = SquarifiedTreemap.formatBytes(r.node.size, 1);
 
-      if (r.h >= 36) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-        ctx.font = `400 ${Math.max(10, this.options.fontSize - 2)}px ${this.options.fontFamily}`;
-        const valStr = SquarifiedTreemap.formatBytes(this.options.showAllocated ? node.allocatedSize : node.size);
-        ctx.fillText(valStr, r.x + 6, r.y + 20);
+      // Truncate label to fit width
+      let displayLabel = label;
+      const maxTextW = w - 8;
+      while (ctx.measureText(displayLabel).width > maxTextW && displayLabel.length > 3) {
+        displayLabel = displayLabel.slice(0, -2) + '…';
       }
 
-      ctx.restore();
-    }
-  }
+      ctx.fillText(displayLabel, x + 4, y + 4);
 
-  static formatBytes(bytes) {
-    if (!bytes || bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      if (h >= 32 && ctx.measureText(sizeStr).width <= maxTextW) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+        ctx.font = `400 10px ${this.options.fontFamily}`;
+        ctx.fillText(sizeStr, x + 4, y + 18);
+      }
+    }
+
+    ctx.restore();
   }
 }

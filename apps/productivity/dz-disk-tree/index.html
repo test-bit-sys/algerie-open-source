@@ -3,298 +3,416 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DZ-DiskTree — أداة تحليل وتصور مساحات الأقراص والملفات | DZ Open Suite</title>
-  <link rel="icon" type="image/jpeg" href="/assets/logo.jpg">
+  <title>DZ-DiskTree — The Algerian Open-Source WizTree Alternative</title>
+  <meta name="description" content="High-performance disk space analyzer with simultaneous directory tree, cushioned 3D squarified treemap, real-time search, and MFT-speed crawling. Built to HeyPuter standard.">
   <link rel="stylesheet" href="src/styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Top Header Navigation -->
-  <header class="header-bar">
-    <div class="brand-section">
-      <div class="brand-logo-wrap">
-        <img src="/assets/logo.jpg" alt="DZ Open Suite" class="brand-logo-img">
-      </div>
-      <div class="brand-info">
-        <h1>
-          <span>DZ-DiskTree</span>
-          <span class="brand-badge">WizTree Alternative</span>
-        </h1>
-        <p data-i18n="appSubtitle">أداة تحليل وتصور مساحات الأقراص والملفات المفتوحة المصدر</p>
-      </div>
-    </div>
+  <!-- Desktop App Window Shell -->
+  <div class="app-window">
 
-    <div class="header-controls">
-      <!-- Language Switcher -->
-      <select id="langSelect" class="select-field" title="Language">
-        <option value="ar">العربية (Algeria)</option>
-        <option value="fr">Français (DZ)</option>
-        <option value="en">English</option>
-      </select>
-
-      <!-- Theme Toggle -->
-      <button id="themeToggle" class="btn btn-secondary btn-icon" title="Toggle Dark/Light Mode">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
-      </button>
-
-      <!-- GitHub Link -->
-      <a href="https://github.com/test-bit-sys/algerie-open-source" target="_blank" rel="noopener" class="btn btn-outline" title="GitHub Repository">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-        <span>GitHub</span>
-      </a>
-    </div>
-  </header>
-
-  <!-- Scan Target Bar -->
-  <section class="scan-bar-container">
-    <div class="scan-inputs">
-      <div class="quick-drives" id="drivesList">
-        <!-- Injected dynamically: C:\, D:\, etc. -->
-      </div>
-
-      <div class="path-input-wrap">
-        <input type="text" id="pathInput" class="input-field" placeholder="C:\..." spellcheck="false" autocomplete="off">
-      </div>
-    </div>
-
-    <div style="display:flex; align-items:center; gap:8px;">
-      <button id="scanBtn" class="btn btn-primary">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.59L8.41 12 9.83 10.59 12 12.76l4.17-4.17L17.59 10z"/></svg>
-        <span data-i18n="scanBtn">بدء الفحص السريع</span>
-      </button>
-
-      <button id="cancelBtn" class="btn btn-danger" style="display:none;" disabled>
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        <span data-i18n="cancelBtn">إلغاء</span>
-      </button>
-    </div>
-  </section>
-
-  <!-- Metrics Overview Cards -->
-  <section class="metrics-grid">
-    <div class="metric-card">
-      <div class="metric-label">
-        <svg class="svg-icon" style="color:var(--accent-blue);" viewBox="0 0 24 24"><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/></svg>
-        <span data-i18n="totalSize">إجمالي الحجم</span>
-      </div>
-      <div class="metric-value" id="metricTotalSize">0 B</div>
-      <div class="metric-sub" data-i18n="statusReady">جاهز للفحص</div>
-    </div>
-
-    <div class="metric-card">
-      <div class="metric-label">
-        <svg class="svg-icon" style="color:var(--accent-purple);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-        <span data-i18n="allocatedSize">المساحة المحجوزة</span>
-      </div>
-      <div class="metric-value" id="metricAllocated">0 B</div>
-      <div class="metric-sub">NTFS 4KB Cluster Aligned</div>
-    </div>
-
-    <div class="metric-card">
-      <div class="metric-label">
-        <svg class="svg-icon" style="color:var(--accent-emerald);" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-        <span data-i18n="filesCount">عدد الملفات</span>
-      </div>
-      <div class="metric-value" id="metricFiles">0</div>
-      <div class="metric-sub">Total Indexed Files</div>
-    </div>
-
-    <div class="metric-card">
-      <div class="metric-label">
-        <svg class="svg-icon" style="color:var(--accent-amber);" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-        <span data-i18n="foldersCount">عدد المجلدات</span>
-      </div>
-      <div class="metric-value" id="metricFolders">0</div>
-      <div class="metric-sub">Directories Traversed</div>
-    </div>
-
-    <div class="metric-card">
-      <div class="metric-label">
-        <svg class="svg-icon" style="color:var(--accent-rose);" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-        <span data-i18n="duration">مدة الفحص</span>
-      </div>
-      <div class="metric-value" id="metricDuration">0.00s</div>
-      <div class="metric-sub">High-Speed Scanner</div>
-    </div>
-  </section>
-
-  <!-- View Switcher Tabs Bar -->
-  <nav class="view-tabs-bar">
-    <div class="tabs-list">
-      <button class="tab-btn active" data-view="treemap">
-        <svg viewBox="0 0 24 24"><path d="M3 3v18h18V3H3zm8 16H5v-6h6v6zm0-8H5V5h6v6zm8 8h-6v-6h6v6zm0-8h-6V5h6v6z"/></svg>
-        <span data-i18n="tabTreemap">المخطط المساحي (Treemap)</span>
-      </button>
-
-      <button class="tab-btn" data-view="tree">
-        <svg viewBox="0 0 24 24"><path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3h7zM4 5h3v4H4V5zm13 0h3v4h-3V5zm0 10h3v4h-3v-4z"/></svg>
-        <span data-i18n="tabTree">شجرة المجلدات</span>
-      </button>
-
-      <button class="tab-btn" data-view="extensions">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-        <span data-i18n="tabExtensions">أنواع الملفات والامتدادات</span>
-      </button>
-
-      <button class="tab-btn" data-view="topfiles">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-        <span data-i18n="tabTopFiles">أكبر الملفات حجماً</span>
-      </button>
-    </div>
-
-    <div class="tab-actions">
-      <button id="btnExportCsv" class="btn btn-secondary" title="Export CSV">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-        <span data-i18n="exportCsv">تصدير CSV</span>
-      </button>
-
-      <button id="btnExportJson" class="btn btn-secondary" title="Export JSON">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
-        <span data-i18n="exportJson">تقرير JSON</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Main Viewports -->
-  <main class="main-content">
-    
-    <!-- Tab 1: Treemap -->
-    <section id="tab-treemap" class="tab-panel active">
-      <div class="treemap-toolbar">
-        <div class="treemap-breadcrumbs" id="treemapBreadcrumbs">
-          <span class="crumb-item">/</span>
-        </div>
-
-        <div class="treemap-controls">
-          <button id="btnZoomOut" class="btn btn-secondary" title="Up One Level">
-            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg>
-            <span data-i18n="zoomOut">مستوى للأعلى</span>
-          </button>
-
-          <button id="btnResetZoom" class="btn btn-outline" title="Reset View">
-            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
-            <span data-i18n="resetZoom">إعادة الضبط</span>
-          </button>
-
-          <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer;">
-            <input type="checkbox" id="chkAllocated">
-            <span data-i18n="toggleAllocated">المساحة المحجوزة</span>
-          </label>
-
-          <button id="btnExportImg" class="btn btn-secondary" title="Save Image">
-            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-            <span data-i18n="exportImg">حفظ الصورة</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Treemap Canvas & Tooltip Container -->
-      <div class="treemap-canvas-wrapper">
-        <canvas id="treemapCanvas" class="treemap-canvas"></canvas>
-        <div id="treemapTooltip" class="treemap-tooltip"></div>
-      </div>
-
-      <!-- Treemap Category Legend -->
-      <div class="treemap-legend">
-        <div class="legend-item"><span class="legend-color-dot" style="background:#8b5cf6;"></span><span>Video</span></div>
-        <div class="legend-item"><span class="legend-color-dot" style="background:#ec4899;"></span><span>Audio</span></div>
-        <div class="legend-item"><span class="legend-color-dot" style="background:#10b981;"></span><span>Images</span></div>
-        <div class="legend-item"><span class="legend-color-dot" style="background:#f59e0b;"></span><span>Archives</span></div>
-        <div class="legend-item"><span class="legend-color-dot" style="background:#3b82f6;"></span><span>Documents</span></div>
-        <div class="legend-item"><span class="legend-color-dot" style="background:#06b6d4;"></span><span>Code</span></div>
-        <div class="legend-item"><span class="legend-color-dot" style="background:#ef4444;"></span><span>Executables</span></div>
-        <div class="legend-item"><span class="legend-color-dot" style="background:#14b8a6;"></span><span>Database</span></div>
-        <div class="legend-item"><span class="legend-color-dot" style="background:#334155;"></span><span>Folders</span></div>
-      </div>
-    </section>
-
-    <!-- Tab 2: Directory Tree -->
-    <section id="tab-tree" class="tab-panel">
-      <div class="table-card" style="padding:16px;">
-        <div id="treeContainer">
-          <p style="color:var(--text-muted); font-size:0.875rem;" data-i18n="noData">لم يتم إجراء أي فحص بعد. اختر قرصاً أو مساراً واضغط بدء الفحص.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tab 3: File Extensions Breakdown -->
-    <section id="tab-extensions" class="tab-panel">
-      <div class="table-card">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th data-i18n="extCol">الامتداد</th>
-              <th data-i18n="categoryCol">التصنيف</th>
-              <th data-i18n="countCol">عدد الملفات</th>
-              <th data-i18n="sizeCol">الحجم</th>
-              <th data-i18n="allocatedSize">المساحة المحجوزة</th>
-              <th data-i18n="percentCol">النسبة</th>
-            </tr>
-          </thead>
-          <tbody id="extensionsTableBody">
-            <tr>
-              <td colspan="6" style="text-align:center; padding:30px; color:var(--text-muted);" data-i18n="noData">
-                لم يتم إجراء أي فحص بعد. اختر قرصاً أو مساراً واضغط بدء الفحص.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Tab 4: Top Largest Files -->
-    <section id="tab-topfiles" class="tab-panel">
-      <div class="table-card">
-        <div class="table-toolbar">
-          <div style="flex:1; max-width:400px;">
-            <input type="text" id="searchTopFiles" class="input-field" placeholder="بحث في أكبر الملفات..." style="width:100%; border:1px solid var(--border-color); border-radius:var(--radius-sm);" data-i18n="searchPlaceholder">
+    <!-- 1. Classic Desktop Menu Bar -->
+    <header class="menu-bar">
+      <div class="menu-items">
+        <!-- File Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="menuFileBtn">ملف (File)</button>
+          <div class="dropdown-menu" id="menuFileDropdown">
+            <button class="dropdown-item" id="itemScanFolder">اختيار مجلد للفحص... (Ctrl+O)</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="itemExportCsv">تصدير كملف CSV...</button>
+            <button class="dropdown-item" id="itemExportJson">تصدير تقرير JSON...</button>
+            <button class="dropdown-item" id="itemSaveTreemapImg">حفظ المخطط كصورة PNG...</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="itemExit">إعادة ضبط البرنامج</button>
           </div>
-          <span style="font-size:0.8rem; color:var(--text-secondary);">Top 500 Largest Files</span>
         </div>
 
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:50px;">#</th>
-              <th data-i18n="fileNameCol">اسم الملف</th>
-              <th data-i18n="extCol">الامتداد</th>
-              <th data-i18n="sizeCol">الحجم</th>
-              <th data-i18n="allocatedSize">المحجوز</th>
-              <th data-i18n="filePathCol">المسار الكامل</th>
-              <th style="width:60px;" data-i18n="actionCol">إجراء</th>
-            </tr>
-          </thead>
-          <tbody id="topFilesTableBody">
-            <tr>
-              <td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);" data-i18n="noData">
-                لم يتم إجراء أي فحص بعد. اختر قرصاً أو مساراً واضغط بدء الفحص.
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- Edit Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="menuEditBtn">تعديل (Edit)</button>
+          <div class="dropdown-menu" id="menuEditDropdown">
+            <button class="dropdown-item" id="itemCopyPath">نسخ المسار الكامل (Ctrl+C)</button>
+            <button class="dropdown-item" id="itemCopyName">نسخ اسم الملف / المجلد</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="itemSelectAll">تحديد الكل</button>
+          </div>
+        </div>
+
+        <!-- Scan Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="menuScanBtn">فحص (Scan)</button>
+          <div class="dropdown-menu" id="menuScanDropdown">
+            <button class="dropdown-item" id="itemStartScan">بدء الفحص (F5)</button>
+            <button class="dropdown-item" id="itemCancelScan">إلغاء الفحص (Esc)</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="itemScanRootC">فحص القرص الرئيسي (C:\)</button>
+            <button class="dropdown-item" id="itemScanWorkspace">فحص مجلد المشروع الحالي</button>
+          </div>
+        </div>
+
+        <!-- Options Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="menuOptionsBtn">خيارات (Options)</button>
+          <div class="dropdown-menu" id="menuOptionsDropdown">
+            <button class="dropdown-item" id="optToggleAllocated">عرض المساحة المحجوزة (Allocated Space)</button>
+            <button class="dropdown-item" id="optToggleCushion">تفعيل الإضاءة ثلاثية الأبعاد للمخطط (3D Cushion)</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="optUnitAuto">وحدة القياس: تلقائي (Auto)</button>
+            <button class="dropdown-item" id="optUnitMB">وحدة القياس: ميجابايت (MB)</button>
+            <button class="dropdown-item" id="optUnitGB">وحدة القياس: جيجابايت (GB)</button>
+          </div>
+        </div>
+
+        <!-- View Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="menuViewBtn">عرض (View)</button>
+          <div class="dropdown-menu" id="menuViewDropdown">
+            <button class="dropdown-item" id="viewShowTree">شجرة المجلدات (Tree View)</button>
+            <button class="dropdown-item" id="viewShowFiles">قائمة الملفات الكبرى (File View)</button>
+            <button class="dropdown-item" id="viewShowExtensions">أنواع الملفات (Extensions View)</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="viewToggleTreemap">إظهار / إخفاء المخطط السفلي</button>
+            <button class="dropdown-item" id="viewToggleTheme">تبديل المظهر الداكن / الفاتح</button>
+          </div>
+        </div>
+
+        <!-- Help Menu -->
+        <div class="menu-dropdown-wrap">
+          <button class="menu-btn" id="menuHelpBtn">مساعدة (Help)</button>
+          <div class="dropdown-menu" id="menuHelpDropdown">
+            <button class="dropdown-item" id="itemAbout">حول DZ-DiskTree (About)...</button>
+          </div>
+        </div>
       </div>
-    </section>
 
-  </main>
+      <!-- App Header Right Actions -->
+      <div class="menu-actions">
+        <!-- Language -->
+        <select id="langSelect" class="menu-select">
+          <option value="ar">العربية (DZ)</option>
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+        </select>
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="menu-icon-btn" title="Toggle Theme">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
 
-  <!-- Enterprise Footer -->
-  <footer class="footer-bar">
-    <div class="footer-left">
-      <span>DZ-DiskTree v1.0.0</span>
-      <span>•</span>
-      <span data-i18n="demoNotice">وضع محلي مستقل 100%</span>
-      <span>•</span>
-      <span>NTFS/EXT4/APFS Architecture</span>
+    <!-- 2. Drive Selector & Action Bar -->
+    <div class="toolbar">
+      <!-- Drive Selector Combo -->
+      <div class="toolbar-group drive-selector-wrap">
+        <label class="toolbar-label">القرص (Drive):</label>
+        <select id="driveSelect" class="drive-select"></select>
+
+        <!-- Drive Usage Meter Bar -->
+        <div class="drive-meter" id="driveMeter" title="Drive Capacity Gauge">
+          <div class="drive-meter-used" id="driveMeterFill" style="width:0%;"></div>
+          <span class="drive-meter-text" id="driveMeterText">0% Used</span>
+        </div>
+      </div>
+
+      <!-- Path Input -->
+      <div class="toolbar-group path-wrap">
+        <label class="toolbar-label">المسار:</label>
+        <input type="text" id="pathInput" class="path-input" placeholder="C:\..." spellcheck="false">
+        <button class="btn-tb" id="btnBrowseFolder" title="Browse Local Folder">...</button>
+      </div>
+
+      <!-- Scan & Cancel Buttons -->
+      <div class="toolbar-group">
+        <button id="scanBtn" class="btn-scan">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span id="scanBtnText">فحص (Scan)</span>
+        </button>
+
+        <button id="cancelBtn" class="btn-cancel" style="display:none;" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+          </svg>
+          <span>إلغاء</span>
+        </button>
+      </div>
+
+      <!-- Quick Filter Search Input -->
+      <div class="toolbar-group filter-search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="quickFilterInput" class="filter-input" placeholder="تصفية فورية: *.mp4, folder:Windows...">
+        <button id="clearFilterBtn" class="filter-clear-btn" style="display:none;">&times;</button>
+      </div>
     </div>
-    <div class="footer-right">
-      <a href="https://github.com/test-bit-sys/algerie-open-source" target="_blank" rel="noopener" style="color:var(--text-secondary); text-decoration:none;">
-        DZ Open Suite &copy; 2026 Algeria Open Source Community
-      </a>
+
+    <!-- 3. Main Split Screen Workspace (Top Table + Bottom Treemap) -->
+    <main class="workspace-split" id="workspaceSplit">
+
+      <!-- TOP PANE: Multi-Tab Data Grid -->
+      <div class="split-pane top-pane" id="topPane">
+        <!-- Tab Navigation Bar -->
+        <div class="pane-tabs-bar">
+          <div class="pane-tabs">
+            <button class="pane-tab-btn active" data-tab="tree">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3h7z"></path>
+              </svg>
+              <span>شجرة المجلدات (Tree View)</span>
+            </button>
+            <button class="pane-tab-btn" data-tab="files">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <span>قائمة الملفات (File View)</span>
+            </button>
+            <button class="pane-tab-btn" data-tab="extensions">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>أنواع الملفات (File Types)</span>
+            </button>
+          </div>
+
+          <div class="pane-tab-actions">
+            <button class="btn-tb-small" id="btnExportTopCsv" title="Export to CSV">CSV</button>
+            <button class="btn-tb-small" id="btnExportTopJson" title="Export to JSON">JSON</button>
+          </div>
+        </div>
+
+        <!-- Tab 1: Tree View Table (Hierarchical Grid) -->
+        <div class="tab-pane-content active" id="tabContentTree">
+          <div class="table-scroll-wrap">
+            <table class="wiz-grid-table tree-grid">
+              <thead>
+                <tr>
+                  <th class="col-name" style="width:36%;">الاسم (Name)</th>
+                  <th class="col-pct" style="width:14%;">النسبة (Percent)</th>
+                  <th class="col-size" style="width:10%;">الحجم (Size)</th>
+                  <th class="col-allocated" style="width:10%;">المحجوز (Allocated)</th>
+                  <th class="col-files" style="width:8%;">ملفات</th>
+                  <th class="col-folders" style="width:8%;">مجلدات</th>
+                  <th class="col-total" style="width:7%;">% الإجمالي</th>
+                  <th class="col-modified" style="width:13%;">تاريخ التعديل</th>
+                </tr>
+              </thead>
+              <tbody id="treeTableBody">
+                <tr class="empty-row">
+                  <td colspan="8" class="text-center text-muted">
+                    جاهز للفحص — اختر قرصاً أو مساراً ثم اضغط "فحص (Scan)"
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 2: File View (Top Files Table) -->
+        <div class="tab-pane-content" id="tabContentFiles">
+          <div class="table-scroll-wrap">
+            <table class="wiz-grid-table files-grid">
+              <thead>
+                <tr>
+                  <th style="width:40px;">#</th>
+                  <th style="width:28%;">اسم الملف (File Name)</th>
+                  <th style="width:12%;">الحجم (Size)</th>
+                  <th style="width:12%;">المحجوز (Allocated)</th>
+                  <th style="width:8%;">الامتداد</th>
+                  <th style="width:26%;">المسار الكامل (Path)</th>
+                  <th style="width:14%;">تاريخ التعديل</th>
+                </tr>
+              </thead>
+              <tbody id="filesTableBody">
+                <tr class="empty-row">
+                  <td colspan="7" class="text-center text-muted">لا توجد ملفات معروضة حالياً</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 3: File Extensions View -->
+        <div class="tab-pane-content" id="tabContentExtensions">
+          <div class="table-scroll-wrap">
+            <table class="wiz-grid-table extensions-grid">
+              <thead>
+                <tr>
+                  <th style="width:12%;">الامتداد (Ext)</th>
+                  <th style="width:6%;">اللون</th>
+                  <th style="width:16%;">التصنيف</th>
+                  <th style="width:14%;">الحجم (Size)</th>
+                  <th style="width:14%;">المحجوز (Allocated)</th>
+                  <th style="width:24%;">نسبة الاستهلاك (% of Total)</th>
+                  <th style="width:14%;">عدد الملفات</th>
+                </tr>
+              </thead>
+              <tbody id="extensionsTableBody">
+                <tr class="empty-row">
+                  <td colspan="7" class="text-center text-muted">لا توجد بيانات امتدادات</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPLITTER HANDLE: Draggable Divider Bar -->
+      <div class="splitter-handle" id="splitterHandle" title="Drag to Resize Top and Bottom Panes">
+        <div class="splitter-line"></div>
+      </div>
+
+      <!-- BOTTOM PANE: High-DPI Treemap Canvas (Simultaneous View) -->
+      <div class="split-pane bottom-pane" id="bottomPane">
+        <!-- Treemap Mini Toolbar -->
+        <div class="treemap-toolbar">
+          <div class="treemap-breadcrumbs" id="treemapBreadcrumbs">
+            <span class="crumb-item active">/</span>
+          </div>
+
+          <div class="treemap-tools">
+            <button class="btn-tb-small" id="btnZoomOut" title="Up One Level">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+              <span>أعلى</span>
+            </button>
+
+            <button class="btn-tb-small" id="btnResetZoom" title="Reset to Root">إعادة ضبط</button>
+
+            <button class="btn-tb-small" id="btnToggleMaximizeTreemap" title="Maximize / Restore Treemap">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+              </svg>
+              <span id="txtMaxRestore">تكبير المخطط</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="treemap-canvas-container" id="treemapCanvasContainer">
+          <canvas id="treemapCanvas" class="treemap-canvas"></canvas>
+          <div id="treemapTooltip" class="wiz-tooltip" style="display:none;"></div>
+        </div>
+
+        <!-- Color Categories Legend Bar -->
+        <div class="treemap-legend" id="treemapLegend">
+          <div class="legend-chip" data-cat="video"><span class="legend-dot" style="background:#8b5cf6;"></span><span>Video</span></div>
+          <div class="legend-chip" data-cat="audio"><span class="legend-dot" style="background:#ec4899;"></span><span>Audio</span></div>
+          <div class="legend-chip" data-cat="image"><span class="legend-dot" style="background:#10b981;"></span><span>Images</span></div>
+          <div class="legend-chip" data-cat="archive"><span class="legend-dot" style="background:#f59e0b;"></span><span>Archives</span></div>
+          <div class="legend-chip" data-cat="document"><span class="legend-dot" style="background:#3b82f6;"></span><span>Documents</span></div>
+          <div class="legend-chip" data-cat="code"><span class="legend-dot" style="background:#06b6d4;"></span><span>Code</span></div>
+          <div class="legend-chip" data-cat="executable"><span class="legend-dot" style="background:#ef4444;"></span><span>Apps/Executables</span></div>
+          <div class="legend-chip" data-cat="database"><span class="legend-dot" style="background:#14b8a6;"></span><span>Database</span></div>
+          <div class="legend-chip" data-cat="system"><span class="legend-dot" style="background:#64748b;"></span><span>System</span></div>
+          <div class="legend-chip" data-cat="directory"><span class="legend-dot" style="background:#334155;"></span><span>Folders</span></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- 4. Windows Desktop Status Bar -->
+    <footer class="status-bar">
+      <div class="status-cell status-state" id="sbState">جاهز للفحص (Ready)</div>
+      <div class="status-cell status-stats" id="sbStats">القرص: - | الملفات: 0 | المجلدات: 0</div>
+      <div class="status-cell status-scanned" id="sbScanned">المساحة المفحوصة: 0 B</div>
+      <div class="status-cell status-time" id="sbTime">المدة: 0.00s</div>
+      <div class="status-cell status-selected" id="sbSelected">العنصر المحدد: لا شيء</div>
+    </footer>
+
+  </div>
+
+  <!-- Context Menu (Desktop Right Click) -->
+  <div class="context-menu" id="contextMenu" style="display:none;">
+    <div class="context-item" id="ctxCopyPath">نسخ المسار الكامل (Copy Path)</div>
+    <div class="context-item" id="ctxCopyName">نسخ الاسم (Copy Name)</div>
+    <div class="context-divider"></div>
+    <div class="context-item" id="ctxZoomTreemap">تكبير المخطط لهذا المجلد</div>
+    <div class="context-item" id="ctxFilterExt">تصفية حسب هذا الامتداد</div>
+    <div class="context-divider"></div>
+    <div class="context-item" id="ctxProperties">خصائص (Properties)...</div>
+  </div>
+
+  <!-- Properties Dialog Modal -->
+  <div class="modal-backdrop" id="propertiesModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title" id="propTitle">خصائص العنصر</h3>
+        <button class="modal-close-btn" id="propCloseBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="prop-row">
+          <span class="prop-label">الاسم:</span>
+          <span class="prop-val" id="propName">-</span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">النوع:</span>
+          <span class="prop-val" id="propType">-</span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">المسار الكامل:</span>
+          <span class="prop-val mono" id="propPath">-</span>
+        </div>
+        <div class="prop-divider"></div>
+        <div class="prop-row">
+          <span class="prop-label">الحجم الفعلي (Size):</span>
+          <span class="prop-val" id="propSize">-</span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">المساحة على القرص (Allocated):</span>
+          <span class="prop-val" id="propAllocated">-</span>
+        </div>
+        <div class="prop-row" id="propContainsRow">
+          <span class="prop-label">يحتوي على:</span>
+          <span class="prop-val" id="propContains">-</span>
+        </div>
+        <div class="prop-divider"></div>
+        <div class="prop-row">
+          <span class="prop-label">تاريخ التعديل:</span>
+          <span class="prop-val" id="propModified">-</span>
+        </div>
+      </div>
     </div>
-  </footer>
+  </div>
+
+  <!-- About Dialog Modal -->
+  <div class="modal-backdrop" id="aboutModal">
+    <div class="modal-window" style="max-width:480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">حول DZ-DiskTree</h3>
+        <button class="modal-close-btn" id="aboutCloseBtn">&times;</button>
+      </div>
+      <div class="modal-body text-center" style="gap:12px; padding:24px;">
+        <h2 style="font-size:18px; font-weight:800; color:var(--accent-color);">DZ-DiskTree v2.0 Enterprise</h2>
+        <p style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
+          البديل الجزائري المفتوح المصدر لبرنامج <strong>WizTree</strong> الشهير.<br>
+          مبني وفق معايير مشروع <strong>HeyPuter/everything</strong> بالاعتماد الحصري على JavaScript الصافي، مع شجرة متزامنة ومخطط Treemap ثلاثي الأبعاد.
+        </p>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+          DZ Open Suite • 100% Offline • Zero Emojis • MIT License
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="src/app.js"></script>
 </body>
