@@ -1,45 +1,52 @@
 /**
- * DZ-Player: Modern Cinema Design System & Styles
- * HeyPuter / VLC standard: zero emojis, SVG icons, dark/light themes, RTL support.
+ * DZ-Player — Windows Desktop & HeyPuter Architecture Design System
+ * Authentic VLC Media Player Desktop Clone: Menu Bar, Adjustments and Effects (Ctrl+E),
+ * 10-Band Graphic EQ, 300% Volume Boost, A-B Loop, and Video Geometry.
+ * 100% Offline-First | Zero Emojis | Vector SVGs Only
  */
 
 :root {
-  --bg-primary: #0a0c10;
-  --bg-secondary: #12161f;
-  --bg-tertiary: #1b212d;
-  --bg-glass: rgba(18, 22, 31, 0.78);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.18);
+  --bg-app: #090d16;
+  --bg-surface: #131b2e;
+  --bg-elevated: #1e293b;
+  --bg-hover: rgba(255, 255, 255, 0.08);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  --accent-color: #0ea5e9;
-  --accent-hover: #38bdf8;
-  --accent-glow: rgba(14, 165, 233, 0.25);
-  --danger-color: #ef4444;
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-full: 9999px;
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  --accent-color: #38bdf8;
+  --accent-hover: #0284c7;
+  --accent-glow: rgba(56, 189, 248, 0.25);
+  --accent-amber: #f59e0b;
+  --accent-emerald: #10b981;
+  --accent-rose: #ef4444;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
 }
 
 [data-theme="light"] {
-  --bg-primary: #f1f5f9;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #e2e8f0;
-  --bg-glass: rgba(255, 255, 255, 0.85);
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-hover: rgba(0, 0, 0, 0.16);
+  --bg-app: #e2e8f0;
+  --bg-surface: #f8fafc;
+  --bg-elevated: #cbd5e1;
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  --border-color: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.25);
+
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
+
   --accent-color: #0284c7;
   --accent-hover: #0369a1;
-  --accent-glow: rgba(2, 132, 199, 0.18);
+  --accent-glow: rgba(2, 132, 199, 0.2);
 }
 
 * {
@@ -50,169 +57,194 @@
 }
 
 body {
-  font-family: var(--font-family);
-  background-color: var(--bg-primary);
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
   color: var(--text-primary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
   overflow: hidden;
   user-select: none;
 }
 
-/* App Header / Topbar */
-.app-header {
-  height: 52px;
-  background-color: var(--bg-secondary);
+.desktop-vlc-window {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 1. Classic VLC Desktop Menu Bar */
+.vlc-menu-bar {
+  height: 30px;
+  background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
-  z-index: 40;
+  padding: 0 10px;
+  z-index: 100;
   flex-shrink: 0;
 }
 
-.brand-section {
+.menu-items {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 2px;
 }
 
-.brand-badge {
+.menu-dropdown-wrap {
+  position: relative;
+}
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.menu-btn:hover,
+.menu-btn.active {
+  background: var(--bg-hover);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  inset-inline-start: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  min-width: 230px;
+  padding: 4px 0;
+  display: none;
+  z-index: 200;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 12px;
+  padding: 6px 14px;
+  text-align: start;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-item:hover {
+  background: var(--accent-color);
+  color: #ffffff;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 0;
+}
+
+.menu-actions {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: -0.02em;
 }
 
-.brand-badge svg {
-  color: var(--accent-color);
-}
-
-.brand-tag {
-  background: rgba(14, 165, 233, 0.12);
-  color: var(--accent-color);
+.menu-select {
+  background: var(--bg-app);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   font-size: 11px;
   padding: 2px 8px;
-  border-radius: var(--radius-full);
-  font-weight: 600;
-  border: 1px solid var(--accent-glow);
+  border-radius: var(--radius-sm);
+  outline: none;
+  cursor: pointer;
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-icon {
+.menu-icon-btn {
   background: transparent;
-  border: 1px solid transparent;
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: var(--transition);
 }
 
-.btn-icon:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  border-color: var(--border-hover);
+.menu-icon-btn:hover {
+  background: var(--bg-hover);
 }
 
-.btn-icon.active {
-  background: var(--accent-glow);
-  color: var(--accent-color);
-  border-color: var(--accent-color);
-}
-
-/* App Body / Main Container */
+/* 2. Player Viewport Container */
 .player-container {
   flex: 1;
-  display: flex;
   position: relative;
-  overflow: hidden;
+  display: flex;
   background: #000000;
+  overflow: hidden;
 }
 
-/* Video Stage */
 .video-stage {
   flex: 1;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   overflow: hidden;
   background: #000000;
 }
 
-video {
+#main-video {
   max-width: 100%;
   max-height: 100%;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  outline: none;
-  transition: transform 0.2s ease, filter 0.1s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-/* Subtitle Overlay */
+/* Subtitle Display Overlay */
 .subtitle-overlay {
   position: absolute;
-  bottom: 80px;
-  left: 5%;
-  right: 5%;
+  bottom: 50px;
+  left: 20px;
+  right: 20px;
+  pointer-events: none;
   display: flex;
   justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  z-index: 25;
-  transition: bottom 0.2s ease;
-}
-
-.player-container.controls-hidden .subtitle-overlay {
-  bottom: 30px;
+  z-index: 20;
 }
 
 .subtitle-text {
+  color: #ffffff;
   text-align: center;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-weight: 700;
   line-height: 1.4;
-  white-space: pre-wrap;
-  transition: var(--transition);
-  max-width: 90%;
-  padding: 4px 12px;
-  border-radius: 4px;
+  padding: 4px 14px;
+  border-radius: var(--radius-sm);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.9);
 }
 
-/* Subtitle sizes */
-.subtitle-text.size-small { font-size: 18px; }
-.subtitle-text.size-medium { font-size: 24px; }
-.subtitle-text.size-large { font-size: 32px; }
-.subtitle-text.size-huge { font-size: 42px; }
+.subtitle-text.size-small { font-size: 16px; }
+.subtitle-text.size-medium { font-size: 22px; }
+.subtitle-text.size-large { font-size: 28px; }
 
-/* Subtitle shadow styles */
-.subtitle-text.style-shadow {
-  text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 3px 6px rgba(0, 0, 0, 0.9);
-}
-.subtitle-text.style-box {
-  background: rgba(0, 0, 0, 0.85);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-.subtitle-text.style-semi {
-  background: rgba(0, 0, 0, 0.45);
-  text-shadow: 1px 1px 2px #000;
-}
-
-/* Empty State / Dropzone */
+/* Empty State / Drop Target */
 .empty-state {
   position: absolute;
   inset: 0;
@@ -220,317 +252,487 @@ video {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  background: radial-gradient(circle at center, rgba(30, 41, 59, 0.4) 0%, rgba(10, 12, 16, 0.95) 100%);
-  z-index: 10;
+  background: radial-gradient(circle at center, #131b2e 0%, #090d16 80%);
   padding: 24px;
   text-align: center;
+  z-index: 10;
 }
 
-.empty-icon {
+.empty-state.hidden {
+  display: none !important;
+}
+
+.empty-icon-wrap {
   width: 72px;
   height: 72px;
-  border-radius: 20px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-color);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  margin-bottom: 16px;
 }
 
 .empty-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
 
 .empty-subtitle {
-  font-size: 14px;
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  max-width: 480px;
-  line-height: 1.5;
+  max-width: 500px;
+  line-height: 1.6;
 }
 
-.btn-primary {
-  background: var(--accent-color);
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: var(--radius-md);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 4px 14px var(--accent-glow);
-}
-
-.btn-primary:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-}
-
-/* Floating Cinema Controls Bar */
-.controls-bar {
+/* OSD Banner */
+.osd-banner {
   position: absolute;
+  top: 24px;
+  inset-inline-start: 24px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-strong);
+  color: var(--accent-color);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  z-index: 30;
+  backdrop-filter: blur(4px);
+}
+
+/* Playlist Slide-over Drawer */
+.playlist-drawer {
+  position: absolute;
+  top: 0;
   bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(10, 12, 16, 0.94) 0%, rgba(10, 12, 16, 0.6) 70%, transparent 100%);
-  padding: 18px 24px 16px 24px;
+  inset-inline-end: -320px;
+  width: 320px;
+  background: var(--bg-surface);
+  border-inline-start: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  z-index: 30;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 40;
+  transition: inset-inline-end 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.5);
 }
 
-.player-container.controls-hidden .controls-bar {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(12px);
+.playlist-drawer.open {
+  inset-inline-end: 0;
 }
 
-/* Timeline & Progress Bar */
-.timeline-container {
+.playlist-header {
+  height: 38px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  gap: 14px;
-  width: 100%;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+.playlist-list {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  padding: 6px 0;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.playlist-item:hover {
+  background: var(--bg-hover);
+}
+
+.playlist-item.active {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+/* 3. Authentic VLC Bottom Controls & Sliders */
+.vlc-controls-panel {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 6px 12px 8px 12px;
+  flex-shrink: 0;
+  z-index: 50;
+}
+
+.timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.time-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  min-width: 44px;
 }
 
 .progress-track {
   flex: 1;
   height: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  border-radius: 3px;
   position: relative;
   cursor: pointer;
-  transition: height 0.15s ease;
-}
-
-.progress-track:hover {
-  height: 10px;
+  overflow: hidden;
 }
 
 .progress-buffered {
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
-  background: rgba(255, 255, 255, 0.35);
-  border-radius: var(--radius-full);
-  width: 0%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .progress-fill {
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
+  height: 100%;
   background: var(--accent-color);
-  border-radius: var(--radius-full);
-  width: 0%;
-  box-shadow: 0 0 10px var(--accent-color);
+  border-radius: 3px;
 }
 
 .progress-scrubber {
   position: absolute;
+  right: 0;
   top: 50%;
-  right: -6px;
-  transform: translateY(-50%) scale(0);
-  width: 14px;
-  height: 14px;
+  transform: translate(50%, -50%);
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  transition: transform 0.15s ease;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
 }
 
-.progress-track:hover .progress-scrubber {
-  transform: translateY(-50%) scale(1);
-}
-
-.time-display {
-  font-size: 12px;
-  font-family: monospace;
-  color: var(--text-secondary);
-  white-space: nowrap;
-}
-
-/* Controls Buttons Row */
-.controls-row {
+.controls-action-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.controls-group {
-  display: flex;
-  align-items: center;
   gap: 8px;
 }
 
-.btn-ctrl {
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vlc-btn {
   background: transparent;
-  border: none;
-  color: #ffffff;
-  width: 36px;
-  height: 36px;
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.15s ease;
 }
 
-.btn-ctrl:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--accent-color);
+.vlc-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-color);
 }
 
 .btn-play-master {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--accent-color);
-  color: #ffffff;
-  box-shadow: 0 4px 16px var(--accent-glow);
+  background: var(--accent-color) !important;
+  color: #000000 !important;
+  border-radius: var(--radius-sm);
 }
 
 .btn-play-master:hover {
-  background: var(--accent-hover);
-  transform: scale(1.05);
-  color: #ffffff;
+  background: var(--accent-hover) !important;
 }
 
-/* Volume Slider with 300% Boost indicator */
-.volume-container {
+.vlc-btn.active-loop {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.speed-control-box {
   display: flex;
   align-items: center;
-  gap: 8px;
-  position: relative;
+  margin-inline-start: 4px;
+}
+
+.speed-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding: 2px 6px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+}
+
+.center-track-title {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 12px;
+}
+
+.volume-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .volume-slider {
-  width: 80px;
-  -webkit-appearance: none;
+  width: 90px;
   height: 4px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.2);
-  outline: none;
+  accent-color: var(--accent-color);
   cursor: pointer;
-}
-
-.volume-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .volume-badge {
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--text-secondary);
   min-width: 38px;
+  text-align: end;
 }
 
 .volume-badge.boosted {
-  color: var(--warning-color);
+  color: var(--accent-amber);
 }
 
-/* Modals (Equalizer, Video Effects, Subtitles) */
+/* Modals */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.7);
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 50;
-  padding: 16px;
+  z-index: 500;
+  backdrop-filter: blur(2px);
 }
 
-.modal-backdrop.open {
+.modal-backdrop.active {
   display: flex;
 }
 
-.modal-window {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  width: 100%;
-  max-width: 680px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+.modal-dialog, .modal-window {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  width: 90%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.vlc-adjustments-window {
+  max-width: 640px;
 }
 
 .modal-header {
-  padding: 16px 20px;
+  height: 38px;
+  background: var(--bg-elevated);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 12px;
 }
 
-.modal-title {
-  font-size: 16px;
+.modal-header h3 {
+  font-size: 12px;
   font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
-.modal-title svg {
-  color: var(--accent-color);
+.btn-icon-small {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.btn-icon-small:hover {
+  color: var(--text-primary);
 }
 
 .modal-body {
-  padding: 20px;
-  max-height: 75vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  padding: 16px;
+  overflow: auto;
 }
 
-/* Equalizer Grid */
-.eq-container {
+.modal-footer {
+  padding: 10px 16px;
+  background: var(--bg-app);
+  border-top: 1px solid var(--border-color);
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: #000000;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-hover);
+}
+
+/* VLC Adjustments Window Tabs */
+.vlc-tabs-bar {
+  display: flex;
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-color);
+  padding: 4px 8px 0 8px;
+  gap: 2px;
+}
+
+.vlc-tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  cursor: pointer;
+}
+
+.vlc-tab-btn.active {
+  background: var(--bg-surface);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.vlc-tab-contents {
+  padding: 16px;
+}
+
+.vlc-tab-pane {
+  display: none;
+}
+
+.vlc-tab-pane.active {
+  display: block;
+}
+
+.vlc-sub-panel {
+  background: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+
+/* EQ UI */
+.visualizer-canvas {
+  width: 100%;
+  height: 60px;
+  background: #000000;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  margin-bottom: 12px;
 }
 
 .eq-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-tertiary);
-  padding: 10px 14px;
-  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+
+.vlc-select {
+  background: var(--bg-app);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+.vlc-input {
+  width: 100%;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+.vlc-input:focus {
+  border-color: var(--accent-color);
+}
+
+.vlc-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
 }
 
 .eq-bands-wrapper {
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: 8px;
-  background: var(--bg-tertiary);
-  padding: 20px 16px 12px 16px;
-  border-radius: var(--radius-md);
+  background: var(--bg-app);
   border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 10px;
 }
 
 .eq-band-col {
@@ -538,220 +740,90 @@ video {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  flex: 1;
+}
+
+.eq-val-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  min-height: 14px;
 }
 
 .eq-slider {
-  writing-mode: bt-lr; /* IE */
-  -webkit-appearance: slider-vertical; /* WebKit */
+  writing-mode: vertical-lr;
+  direction: rtl;
   width: 8px;
-  height: 140px;
+  height: 110px;
+  accent-color: var(--accent-color);
   cursor: pointer;
 }
 
-.eq-freq-label {
+.eq-freq-text {
+  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
-.eq-gain-label {
-  font-size: 10px;
-  font-family: monospace;
-  color: var(--accent-color);
-}
-
-/* Visualizer Canvas */
-.visualizer-canvas {
-  width: 100%;
-  height: 70px;
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-}
-
-/* Effects Sliders Grid */
-.effects-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
-
-.effect-card {
-  background: var(--bg-tertiary);
-  padding: 12px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.effect-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.effect-slider {
-  width: 100%;
-  -webkit-appearance: none;
-  height: 4px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.2);
-  outline: none;
-}
-
-.effect-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--accent-color);
-  cursor: pointer;
-}
-
-/* Pills & Segmented Controls */
+/* Video Effects UI */
 .pills-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px;
 }
 
 .pill-btn {
-  background: var(--bg-tertiary);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.pill-btn:hover {
-  background: var(--border-hover);
   color: var(--text-primary);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
 }
 
 .pill-btn.active {
   background: var(--accent-color);
-  color: #ffffff;
+  color: #000000;
+  font-weight: 700;
   border-color: var(--accent-color);
 }
 
-/* Playlist Drawer */
-.playlist-drawer {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 320px;
-  background: var(--bg-secondary);
-  border-left: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  z-index: 35;
-  transform: translateX(100%);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-[dir="rtl"] .playlist-drawer {
-  right: auto;
-  left: 0;
-  border-left: none;
-  border-right: 1px solid var(--border-color);
-  transform: translateX(-100%);
-}
-
-.playlist-drawer.open {
-  transform: translateX(0);
-}
-
-.playlist-header {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.playlist-list {
-  flex: 1;
-  overflow-y: auto;
-  list-style: none;
-}
-
-.playlist-item {
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.effects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
-  border-bottom: 1px solid var(--border-color);
-  cursor: pointer;
-  transition: var(--transition);
 }
 
-.playlist-item:hover {
-  background: var(--bg-tertiary);
-}
-
-.playlist-item.active {
-  background: var(--accent-glow);
-  border-left: 3px solid var(--accent-color);
-}
-
-[dir="rtl"] .playlist-item.active {
-  border-left: none;
-  border-right: 3px solid var(--accent-color);
-}
-
-.playlist-item-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.playlist-item-title {
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.playlist-item-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-/* Toast Notifications */
-.toast-container {
-  position: fixed;
-  top: 64px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-secondary);
+.effect-card {
+  background: var(--bg-app);
   border: 1px solid var(--border-color);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  color: var(--text-primary);
-  padding: 8px 18px;
-  border-radius: var(--radius-full);
-  font-size: 13px;
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+
+.effect-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
   font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.effect-slider {
+  width: 100%;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+}
+
+.checkbox-label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  gap: 6px;
+  font-size: 11px;
+  cursor: pointer;
 }
 
-.toast-container.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(4px);
+.cell-mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
 }

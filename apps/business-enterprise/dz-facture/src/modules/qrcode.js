@@ -332,32 +332,140 @@ function penaltyScore(modules, size) {
   return penalty;
 }
 
-// __PART_C__
-
+export class QRCodeSVG {
   /**
-   * Generates a 1D Code-128 / EAN style Barcode SVG with text below
+   * Encodes `text` and returns { size, matrix } — the raw QR module grid.
+   * Exposed for unit tests and advanced embedding use-cases.
    */
-  static generateBarcodeSVG(code, width = 200, height = 65) {
-    const clean = String(code).trim() || '0000000000000';
-    let bars = '';
-    const numBars = 55;
-    const barWidth = width / numBars;
+  static generateMatrix(text) {
+    const input = String(text ?? '');
+    let encoded = tryEncodeQR(input);
+    let payload = input;
+    while (!encoded && payload.length > 0) {
+      // Payload too large for v8/M — shrink 10% at a time. Never happens with
+      // the app's invoice payloads; kept so the API stays total & defensive.
+      payload = payload.slice(0, Math.max(1, Math.floor(payload.length * 0.9)));
+      encoded = tryEncodeQR(payload);
+    }
+    if (!encoded) encoded = tryEncodeQR('');
 
-    // Deterministic bar widths based on digit values
-    for (let i = 0; i < numBars; i++) {
-      const charCode = clean.charCodeAt(i % clean.length) || 48;
-      const isBlack = ((charCode * (i + 1)) % 7) > 2 || i < 3 || i > numBars - 4 || i === 27;
-      if (isBlack) {
-        const x = (i * barWidth).toFixed(2);
-        bars += `<rect x="${x}" y="0" width="${barWidth.toFixed(2)}" height="${height - 18}" fill="#0f172a" />`;
+    const codewords = interleaveBlocks(encoded.version, encoded.data);
+    const { modules, isFunction, size } = buildFunctionMatrix(encoded.version);
+    placeData(modules, isFunction, codewords, size);
+
+    let best = null;
+    let bestPenalty = Infinity;
+    for (let maskId = 0; maskId < 8; maskId++) {
+      const masked = applyMask(modules, isFunction, size, maskId);
+      drawFormatInfo(masked, size, maskId);
+      const score = penaltyScore(masked, size);
+      if (score < bestPenalty) {
+        bestPenalty = score;
+        best = masked;
+      }
+    }
+    return { size, matrix: best };
+  }
+
+  /** Renders a scannable, spec-compliant QR code as an inline SVG string. */
+  static generateSVG(text, size = 120) {
+    const { size: moduleCount, matrix } = QRCodeSVG.generateMatrix(text);
+    const quiet = 4; // mandatory quiet zone
+    const total = moduleCount + quiet * 2;
+    const cell = size / total;
+
+    let rects = '';
+    for (let r = 0; r < moduleCount; r++) {
+      for (let c = 0; c < moduleCount; c++) {
+        if (matrix[r][c]) {
+          const x = ((c + quiet) * cell).toFixed(2);
+          const y = ((r + quiet) * cell).toFixed(2);
+          rects += `<rect x="${x}" y="${y}" width="${cell.toFixed(2)}" height="${cell.toFixed(2)}" fill="#0f172a" />`;
+        }
       }
     }
 
-    return `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#fff; border-radius:4px; padding:4px;">
-        ${bars}
-        <text x="${width / 2}" y="${height - 3}" font-family="monospace" font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle" letter-spacing="3">${clean}</text>
-      </svg>
-    `;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="display:block; shape-rendering:crispEdges; background:#fff; border-radius:4px;">${rects}</svg>`;
   }
+
+  /**
+   * Generates a REAL, scanner-readable Code 128-B barcode SVG with the
+   * human-readable text rendered below the bars.
+   */
+  static generateBarcodeSVG(code, width = 200, height = 65) {
+    const clean = String(code ?? '').trim() || '0000000000000';
+    const codes = encodeCode128B(clean);
+    const quietModules = 10;
+
+    // Total width in modules: quiet + Σ pattern widths + quiet.
+    const patternModules = codes.reduce(
+      (sum, c) => sum + [...CODE128_PATTERNS[c]].reduce((s, d) => s + Number(d), 0),
+      0
+    );
+    const moduleWidth = width / (quietModules * 2 + patternModules);
+
+    let rects = '';
+    let x = quietModules * moduleWidth;
+    codes.forEach((c) => {
+      let isBar = true;
+      for (const digit of CODE128_PATTERNS[c]) {
+        const w = Number(digit) * moduleWidth;
+        if (isBar) {
+          rects += `<rect x="${x.toFixed(2)}" y="0" width="${w.toFixed(2)}" height="${height - 18}" fill="#0f172a" />`;
+        }
+        x += w;
+        isBar = !isBar;
+      }
+    });
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="background:#fff; border-radius:4px;">${rects}<text x="${width / 2}" y="${height - 4}" font-family="monospace" font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle" letter-spacing="2">${escapeXmlText(clean)}</text></svg>`;
+  }
+}
+
+// ============================================================
+// 2) CODE 128-B — real, scanner-readable barcode (GS1 spec)
+// ============================================================
+
+// Bar/space widths for codes 0–106. Every pattern sums to 11 modules,
+// except the Stop pattern (106) which uses 13 (includes the final bar).
+const CODE128_PATTERNS = [
+  '212222', '222122', '222221', '121223', '121322', '131222', '122213', '122312', '132212', '221213',
+  '221312', '231212', '112232', '122132', '122231', '113222', '123122', '123221', '223211', '221132',
+  '221231', '213212', '223112', '312131', '311222', '321122', '321221', '312212', '322112', '322211',
+  '212123', '212321', '232121', '111323', '131123', '131321', '112313', '132113', '132311', '211313',
+  '231113', '231311', '112133', '112331', '132131', '113123', '113321', '133121', '313121', '211331',
+  '231131', '213113', '213311', '213131', '311123', '311321', '331121', '312113', '312311', '332111',
+  '314111', '221411', '431111', '111224', '111422', '121124', '121421', '141122', '141221', '112214',
+  '112412', '122114', '122411', '142112', '142211', '241211', '221114', '413111', '241112', '134111',
+  '111242', '121142', '121241', '114212', '124112', '124211', '411212', '421112', '421211', '212141',
+  '214121', '412121', '111143', '111341', '131141', '114113', '114311', '411113', '411311', '113141',
+  '114131', '311141', '411131', '211412', '211214', '211232', '2331112'
+];
+// Index guide: 0–102 = data codes, 103 = Start A, 104 = Start B, 105 = Start C, 106 = Stop.
+
+/** Encodes ASCII text as a Code 128-B symbol (Start B + data + checksum + Stop). */
+export function encodeCode128B(text) {
+  const clean = [...String(text ?? '')]
+    .map((ch) => (ch.charCodeAt(0) >= 32 && ch.charCodeAt(0) <= 126 ? ch : '?'))
+    .join('');
+
+  const codes = [104]; // Start B
+  let checksum = 104;
+  [...clean].forEach((ch, i) => {
+    const value = ch.charCodeAt(0) - 32;
+    codes.push(value);
+    checksum += value * (i + 1);
+  });
+  codes.push(checksum % 103);
+  codes.push(106); // Stop
+  return codes;
+}
+
+/** Minimal XML escaping for the human-readable text under the barcode. */
+function escapeXmlText(value) {
+  return String(value)
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"');
 }

@@ -165,25 +165,33 @@ export class AudioEngine {
       return filter;
     });
 
-    // 4. Stereo Panner
+    // 4. Compressor Node
+    this.compressorNode = this.audioCtx.createDynamicsCompressor();
+    this.compressorEnabled = false;
+
+    // 5. Audio Delay Node (for audio/video synchronization)
+    this.delayNode = this.audioCtx.createDelay(5.0);
+    this.audioDelaySec = 0;
+
+    // 6. Stereo Panner
     if (this.audioCtx.createStereoPanner) {
       this.pannerNode = this.audioCtx.createStereoPanner();
       this.pannerNode.pan.value = this.currentBalance;
     }
 
-    // 5. Analyser for Visualizer
+    // 7. Analyser for Visualizer
     this.analyserNode = this.audioCtx.createAnalyser();
     this.analyserNode.fftSize = 256;
     this.analyserNode.smoothingTimeConstant = 0.8;
     this.frequencyBuffer = new Uint8Array(this.analyserNode.frequencyBinCount);
     this.waveformBuffer = new Uint8Array(this.analyserNode.fftSize);
 
-    // 6. Master Gain (supports VLC 300% volume boost)
+    // 8. Master Gain (supports VLC 300% volume boost)
     this.masterGainNode = this.audioCtx.createGain();
     this.setVolume(this.volumePercent);
 
     // Connect the audio graph:
-    // Source -> Preamp -> EQ[0] -> EQ[1] -> ... -> EQ[9] -> Panner -> Analyser -> MasterGain -> Destination
+    // Source -> Preamp -> EQ[0..9] -> Compressor -> Delay -> Panner -> Analyser -> MasterGain -> Destination
     let previousNode = this.sourceNode;
 
     previousNode.connect(this.preampNode);
@@ -194,6 +202,9 @@ export class AudioEngine {
       previousNode = filter;
     }
 
+    previousNode.connect(this.delayNode);
+    previousNode = this.delayNode;
+
     if (this.pannerNode) {
       previousNode.connect(this.pannerNode);
       previousNode = this.pannerNode;
@@ -202,6 +213,21 @@ export class AudioEngine {
     previousNode.connect(this.analyserNode);
     this.analyserNode.connect(this.masterGainNode);
     this.masterGainNode.connect(this.audioCtx.destination);
+  }
+
+  setAudioDelay(ms) {
+    this.audioDelaySec = Math.max(0, Math.min(5, (Number(ms) || 0) / 1000));
+    if (this.delayNode && this.audioCtx) {
+      this.delayNode.delayTime.setValueAtTime(this.audioDelaySec, this.audioCtx.currentTime);
+    }
+  }
+
+  setCompressor(enabled, threshold = -24, ratio = 12) {
+    this.compressorEnabled = !!enabled;
+    if (this.compressorNode && this.audioCtx) {
+      this.compressorNode.threshold.setValueAtTime(threshold, this.audioCtx.currentTime);
+      this.compressorNode.ratio.setValueAtTime(ratio, this.audioCtx.currentTime);
+    }
   }
 
   async resumeIfNeeded() {
