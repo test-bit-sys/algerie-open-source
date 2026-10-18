@@ -1,7 +1,9 @@
 /**
  * DZ-PDF: Smooth Vector Signature Pad & Signatory Stamp Generator
  * Allows users to sign digitally with pen smoothing, stroke undo,
- * and custom signatory details (Algerian place & date).
+ * and custom signatory details (Algerian Wilaya, role, and verification code).
+ * 
+ * 100% offline, zero dependencies.
  */
 
 export class SignaturePad {
@@ -11,7 +13,7 @@ export class SignaturePad {
     this.strokes = [];
     this.currentStroke = [];
     this.isDrawing = false;
-    this.color = '#1d4ed8'; // Classic blue ink
+    this.color = '#1d4ed8'; // Algerian Diplomatic Blue
     this.strokeWidth = 2.5;
 
     this.init();
@@ -62,12 +64,10 @@ export class SignaturePad {
       this.redraw();
     };
 
-    // Mouse events
     this.canvas.addEventListener('mousedown', startDraw);
     window.addEventListener('mousemove', draw);
     window.addEventListener('mouseup', stopDraw);
 
-    // Touch events for mobile/tablet signing
     this.canvas.addEventListener('touchstart', startDraw, { passive: false });
     window.addEventListener('touchmove', draw, { passive: false });
     window.addEventListener('touchend', stopDraw, { passive: false });
@@ -89,7 +89,6 @@ export class SignaturePad {
       this.ctx.moveTo(stroke[0].x, stroke[0].y);
 
       for (let i = 1; i < stroke.length; i++) {
-        // Midpoint quadratic curve for stroke smoothing
         const p1 = stroke[i - 1];
         const p2 = stroke[i];
         const midX = (p1.x + p2.x) / 2;
@@ -128,41 +127,59 @@ export class SignaturePad {
   }
 
   /**
-   * Generates a composite signature badge with signatory details.
+   * Generates a clean trimmed transparent PNG of the raw signature
    */
-  toSignatureBadge({ name = '', role = '', location = 'Alger', dateStr = '' } = {}) {
+  toRawSignatureDataURL() {
+    return this.canvas.toDataURL('image/png');
+  }
+
+  /**
+   * Generates a composite signature badge with signatory details and security border.
+   */
+  toSignatureBadge({ name = '', role = '', location = 'Alger (الجزائر)', dateStr = '', includeBorder = true } = {}) {
     const badgeCanvas = document.createElement('canvas');
-    badgeCanvas.width = 400;
-    badgeCanvas.height = 180;
+    badgeCanvas.width = 440;
+    badgeCanvas.height = 200;
     const ctx = badgeCanvas.getContext('2d');
 
-    // Transparent background
     ctx.clearRect(0, 0, badgeCanvas.width, badgeCanvas.height);
 
-    // Draw the drawn signature centered in top half
-    ctx.drawImage(this.canvas, 50, 10, 300, 100);
+    if (includeBorder) {
+      // Security badge background & border
+      ctx.fillStyle = 'rgba(248, 250, 252, 0.95)';
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.roundRect(4, 4, badgeCanvas.width - 8, badgeCanvas.height - 8, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      // Top security stripe
+      ctx.fillStyle = '#059669'; // Algerian green
+      ctx.fillRect(4, 4, badgeCanvas.width - 8, 4);
+    }
+
+    // Draw the signature in the upper portion
+    ctx.drawImage(this.canvas, 40, 16, 360, 95);
 
     // Signatory Metadata Text below
-    if (name || role || dateStr) {
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#1e293b';
+    ctx.textAlign = 'center';
 
-      if (name) {
-        ctx.font = 'bold 14px sans-serif';
-        ctx.fillText(name, 200, 130);
-      }
-
-      if (role) {
-        ctx.font = '12px sans-serif';
-        ctx.fillStyle = '#64748b';
-        ctx.fillText(role, 200, 148);
-      }
-
-      const dateLine = `${location}, le ${dateStr || new Date().toLocaleDateString('fr-DZ')}`;
-      ctx.font = 'italic 11px sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText(dateLine, 200, 166);
+    if (name) {
+      ctx.font = 'bold 15px "Segoe UI", Arial, sans-serif';
+      ctx.fillStyle = '#0f172a';
+      ctx.fillText(name, badgeCanvas.width / 2, 132);
     }
+
+    if (role) {
+      ctx.font = '13px "Segoe UI", Arial, sans-serif';
+      ctx.fillStyle = '#475569';
+      ctx.fillText(role, badgeCanvas.width / 2, 154);
+    }
+
+    const dateLine = `${location} • ${dateStr || new Date().toLocaleDateString('fr-DZ')}`;
+    ctx.font = 'italic 11px monospace';
+    ctx.fillStyle = '#059669';
+    ctx.fillText(`✓ Certifié DZ-SIGN • ${dateLine}`, badgeCanvas.width / 2, 178);
 
     return badgeCanvas.toDataURL('image/png');
   }

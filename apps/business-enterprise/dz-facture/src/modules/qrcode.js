@@ -463,9 +463,15 @@ export function encodeCode128B(text) {
 
 /** Minimal XML escaping for the human-readable text under the barcode. */
 function escapeXmlText(value) {
-  return String(value)
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"');
+  // Entity prefixes are assembled via unicode escapes so no raw markup is
+  // ever present in the source stream of this file.
+  const AMP = '\u0026';
+  return String(value).replace(/[\u0026\u003C\u003E\u0022]/g, (ch) => {
+    switch (ch) {
+      case '\u0026': return AMP + 'amp;';
+      case '\u003C': return AMP + 'lt;';
+      case '\u003E': return AMP + 'gt;';
+      default: return AMP + 'quot;';
+    }
+  });
 }

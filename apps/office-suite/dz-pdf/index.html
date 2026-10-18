@@ -3,65 +3,303 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DZ-PDF Suite — The Algerian Open-Source Adobe Acrobat Alternative</title>
-  <meta name="description" content="100% offline-first PDF merger, page splitter, rotator, digital signature stamper, and Algerian administrative stamp suite. Built to the HeyPuter/everything standard.">
+  <title>DZ-PDF Pro — The Algerian Open-Source Adobe Acrobat Alternative</title>
+  <meta name="description" content="100% offline-first Adobe Acrobat Pro desktop alternative. Page editor, organizer, digital signatures, Algerian administrative stamps, Bates numbering, annotations, and redactions. Built to the HeyPuter/everything standard.">
   <link rel="stylesheet" href="./src/styles.css">
 </head>
 <body>
 
-  <!-- Topbar Header -->
-  <header class="app-header">
-    <div class="brand-section">
-      <div class="brand-badge">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <polyline points="14 2 14 8 20 8"></polyline>
-          <line x1="16" y1="13" x2="8" y2="13"></line>
-          <line x1="16" y1="17" x2="8" y2="17"></line>
-          <polyline points="10 9 9 9 8 9"></polyline>
-        </svg>
-        <span data-i18n="appTitle">DZ-PDF Suite</span>
-      </div>
-      <span class="brand-tag" data-i18n="tagline">Acrobat Alternative</span>
+  <!-- 1. ACROBAT DESKTOP MENU BAR -->
+  <nav class="desktop-menu-bar" id="desktop-menu-bar">
+    <div class="menu-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      <span>DZ-PDF Pro</span>
     </div>
 
-    <div class="header-actions">
-      <!-- Add Pages / Files -->
-      <button class="btn-primary" id="btn-open-files">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        <span data-i18n="openFiles">إضافة صفحات / ملفات</span>
-      </button>
+    <!-- File Menu -->
+    <div class="menu-item" id="menu-file">
+      <span class="menu-title" data-i18n="menuFile">ملف</span>
+      <div class="menu-dropdown">
+        <button class="menu-option" id="m-open-file">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          <span data-i18n="mOpenFile">فتح ملفات أو صور...</span>
+          <span class="menu-shortcut">Ctrl+O</span>
+        </button>
+        <div class="menu-separator"></div>
+        <button class="menu-option" id="m-sample-cert">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span data-i18n="mSampleCert">نموذج: شهادة إدارية رسمية جزائرية</span>
+        </button>
+        <button class="menu-option" id="m-sample-invoice">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span data-i18n="mSampleInvoice">نموذج: فاتورة وعقد تجاري رسمي (DZD)</span>
+        </button>
+        <button class="menu-option" id="m-blank-page">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span data-i18n="mBlankPage">إدراج صفحة بيضاء جديدة</span>
+          <span class="menu-shortcut">Ctrl+N</span>
+        </button>
+        <div class="menu-separator"></div>
+        <button class="menu-option" id="m-save-pdf">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span data-i18n="mSavePdf">حفظ وتصدير PDF مجمع</span>
+          <span class="menu-shortcut">Ctrl+S</span>
+        </button>
+        <button class="menu-option" id="m-export-images">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <span data-i18n="mExportImages">تصدير الصفحة كصورة عالية الدقة</span>
+        </button>
+        <button class="menu-option" id="m-print">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span data-i18n="mPrint">طباعة المستند...</span>
+          <span class="menu-shortcut">Ctrl+P</span>
+        </button>
+        <div class="menu-separator"></div>
+        <button class="menu-option" id="m-doc-props">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span data-i18n="mDocProps">خصائص المستند</span>
+          <span class="menu-shortcut">Ctrl+D</span>
+        </button>
+      </div>
+    </div>
 
-      <!-- Export PDF Button -->
-      <button class="btn-primary" id="btn-export-pdf" style="background:#10b981; box-shadow:0 4px 12px rgba(16,185,129,0.25);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        <span data-i18n="exportPdf">تصدير وحفظ PDF</span>
-      </button>
+    <!-- Edit Menu -->
+    <div class="menu-item" id="menu-edit">
+      <span class="menu-title" data-i18n="menuEdit">تحرير</span>
+      <div class="menu-dropdown">
+        <button class="menu-option" id="m-undo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          <span data-i18n="mUndo">تراجع</span>
+          <span class="menu-shortcut">Ctrl+Z</span>
+        </button>
+        <button class="menu-option" id="m-clear-ann">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <span data-i18n="mClearAnn">مسح تأشيرات الصفحة الحالية</span>
+        </button>
+        <div class="menu-separator"></div>
+        <button class="menu-option" id="m-rotate-cw">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+          <span data-i18n="mRotateCW">تدوير 90° باتجاه عقارب الساعة</span>
+          <span class="menu-shortcut">Ctrl+R</span>
+        </button>
+        <button class="menu-option" id="m-rotate-ccw">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          <span data-i18n="mRotateCCW">تدوير 90° عكس عقارب الساعة</span>
+          <span class="menu-shortcut">Ctrl+Shift+R</span>
+        </button>
+        <button class="menu-option" id="m-duplicate-page">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span data-i18n="mDuplicate">تكرار الصفحة الحالية</span>
+        </button>
+        <button class="menu-option" id="m-delete-page">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span data-i18n="mDelete">حذف الصفحة الحالية</span>
+          <span class="menu-shortcut">Del</span>
+        </button>
+      </div>
+    </div>
 
-      <!-- Theme Switcher -->
-      <button class="btn-icon" id="btn-theme" title="Theme">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-      </button>
+    <!-- View Menu -->
+    <div class="menu-item" id="menu-view">
+      <span class="menu-title" data-i18n="menuView">عرض</span>
+      <div class="menu-dropdown">
+        <button class="menu-option" id="m-mode-editor">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+          <span data-i18n="mModeEditor">محرر وقارئ الصفحة الفردية</span>
+          <span class="menu-shortcut">Ctrl+1</span>
+        </button>
+        <button class="menu-option" id="m-mode-organizer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span data-i18n="mModeOrganizer">تنظيم وترتيب صفحات المستند</span>
+          <span class="menu-shortcut">Ctrl+2</span>
+        </button>
+        <div class="menu-separator"></div>
+        <button class="menu-option" id="m-zoom-in">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          <span data-i18n="mZoomIn">تكبير</span>
+          <span class="menu-shortcut">Ctrl++</span>
+        </button>
+        <button class="menu-option" id="m-zoom-out">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          <span data-i18n="mZoomOut">تصغير</span>
+          <span class="menu-shortcut">Ctrl+-</span>
+        </button>
+        <button class="menu-option" id="m-zoom-100">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span data-i18n="mZoom100">الحجم الفعلي (100%)</span>
+          <span class="menu-shortcut">Ctrl+0</span>
+        </button>
+        <button class="menu-option" id="m-fit-width">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+          <span data-i18n="mFitWidth">ملائمة العرض</span>
+        </button>
+        <div class="menu-separator"></div>
+        <button class="menu-option" id="m-toggle-sidebar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+          <span data-i18n="mToggleSidebar">إظهار / إخفاء اللوحة الجانبية</span>
+          <span class="menu-shortcut">F4</span>
+        </button>
+      </div>
+    </div>
 
-      <!-- Language Selector -->
-      <select id="lang-select" class="tab-btn" style="background:var(--bg-tertiary); font-weight:700;">
+    <!-- Tools Menu -->
+    <div class="menu-item" id="menu-tools">
+      <span class="menu-title" data-i18n="menuTools">أدوات</span>
+      <div class="menu-dropdown">
+        <button class="menu-option" id="m-tool-stamps">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span data-i18n="mToolStamps">الأختام والمصادقات الإدارية الجزائرية</span>
+          <span class="menu-shortcut">S</span>
+        </button>
+        <button class="menu-option" id="m-tool-sign">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg>
+          <span data-i18n="mToolSign">لوحة التوقيع الرقمي المعتمد</span>
+          <span class="menu-shortcut">D</span>
+        </button>
+        <button class="menu-option" id="m-tool-watermark">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+          <span data-i18n="mToolWatermark">إدارة العلامة المائية والترقيم الجبائي</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Help Menu -->
+    <div class="menu-item" id="menu-help">
+      <span class="menu-title" data-i18n="menuHelp">مساعدة</span>
+      <div class="menu-dropdown">
+        <button class="menu-option" id="m-shortcuts">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="8" x2="6.01" y2="8"></line><line x1="10" y1="8" x2="10.01" y2="8"></line><line x1="14" y1="8" x2="14.01" y2="8"></line><line x1="18" y1="8" x2="18.01" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span data-i18n="mShortcuts">اختصارات لوحة المفاتيح</span>
+        </button>
+        <button class="menu-option" id="m-about">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span data-i18n="mAbout">حول استوديو DZ-PDF Pro</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 2. ACROBAT COMMAND TOOLBAR -->
+  <header class="acrobat-toolbar" id="acrobat-toolbar">
+    <!-- Left: Primary File Actions -->
+    <div class="toolbar-group">
+      <button class="tb-btn" id="tb-open" title="Open Document (Ctrl+O)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+        <span class="tb-btn-text" data-i18n="tbOpen">فتح</span>
+      </button>
+      <button class="tb-btn tb-btn-success" id="tb-save" title="Save / Export PDF (Ctrl+S)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        <span class="tb-btn-text" data-i18n="tbSave">تصدير PDF</span>
+      </button>
+      <button class="tb-btn" id="tb-print" title="Print (Ctrl+P)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      </button>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <!-- Mode Switcher Tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab-btn active" id="btn-mode-editor" title="Single Page Reader & Editor">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <span data-i18n="modeEditor">محرر الصفحة</span>
+      </button>
+      <button class="mode-tab-btn" id="btn-mode-organizer" title="Organize Pages Grid">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span data-i18n="modeOrganizer">تنظيم الصفحات</span>
+      </button>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <!-- Page Pagination Controls -->
+    <div class="toolbar-group pagination-group">
+      <button class="tb-btn-icon" id="btn-prev-page" title="Previous Page">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <div class="page-num-indicator">
+        <input type="number" id="input-current-page" value="1" min="1" max="1">
+        <span>/</span>
+        <span id="label-total-pages">0</span>
+      </div>
+      <button class="tb-btn-icon" id="btn-next-page" title="Next Page">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <!-- Zoom & Rotation Controls -->
+    <div class="toolbar-group zoom-group">
+      <button class="tb-btn-icon" id="btn-zoom-out" title="Zoom Out (Ctrl+-)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      </button>
+      <select id="select-zoom" class="zoom-dropdown">
+        <option value="0.5">50%</option>
+        <option value="0.75">75%</option>
+        <option value="1.0" selected>100%</option>
+        <option value="1.25">125%</option>
+        <option value="1.5">150%</option>
+        <option value="2.0">200%</option>
+      </select>
+      <button class="tb-btn-icon" id="btn-zoom-in" title="Zoom In (Ctrl++)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      </button>
+      <button class="tb-btn-icon" id="btn-fit-page" title="Fit Entire Page">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+      </button>
+      <button class="tb-btn-icon" id="btn-quick-rotate" title="Rotate Page 90° (Ctrl+R)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+      </button>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <!-- Annotation & Acrobat Tools Palette -->
+    <div class="toolbar-group tools-palette" id="tools-palette">
+      <button class="tool-btn active" id="tool-select" data-tool="select" title="Selection Tool (V)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7 18 3-7 7-3L3 3z"></path></svg>
+      </button>
+      <button class="tool-btn" id="tool-pan" data-tool="pan" title="Hand Pan Tool (H)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path></svg>
+      </button>
+      <button class="tool-btn" id="tool-pen" data-tool="pen" title="Freehand Pen (P)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path></svg>
+      </button>
+      <button class="tool-btn" id="tool-highlighter" data-tool="highlighter" title="Text Highlighter (U)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      </button>
+      <button class="tool-btn" id="tool-text" data-tool="text" title="Add Text Annotation (T)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+      </button>
+      <button class="tool-btn" id="tool-redact" data-tool="redact" title="Redaction Blackout Box (R)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="currentColor"></rect></svg>
+      </button>
+      <button class="tool-btn" id="tool-note" data-tool="note" title="Sticky Note Comment (N)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      </button>
+      <button class="tool-btn tool-badge-btn" id="tool-stamp" title="Official Algerian Stamp (S)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span data-i18n="tbStamp">أختام رسمية</span>
+      </button>
+      <button class="tool-btn tool-badge-btn" id="tool-sign" title="Fill & Sign Digital Signature (D)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><circle cx="11" cy="11" r="2"></circle></svg>
+        <span data-i18n="tbSign">توقيع</span>
+      </button>
+    </div>
+
+    <!-- Right Controls: Theme & Language -->
+    <div class="toolbar-group right-controls">
+      <button class="tb-btn-icon" id="btn-theme" title="Toggle Theme">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
+      <select id="lang-select" class="lang-dropdown">
         <option value="ar">العربية (DZ)</option>
         <option value="fr">Français</option>
         <option value="en">English</option>
@@ -69,172 +307,366 @@
     </div>
   </header>
 
-  <!-- Secondary Tools Navbar -->
-  <nav class="tool-navbar">
-    <div class="nav-tabs">
-      <button class="tab-btn active" id="tab-organizer">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"></rect>
-          <rect x="14" y="3" width="7" height="7"></rect>
-          <rect x="14" y="14" width="7" height="7"></rect>
-          <rect x="3" y="14" width="7" height="7"></rect>
-        </svg>
-        <span data-i18n="organizerTab">تنظيم الصفحات</span>
-      </button>
-
-      <button class="tab-btn" id="tab-stamps">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        <span data-i18n="stampsTab">الأختام والمصادقة</span>
-      </button>
-
-      <button class="tab-btn" id="tab-signature">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-          <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-          <path d="M2 2l7.586 7.586"></path>
-          <circle cx="11" cy="11" r="2"></circle>
-        </svg>
-        <span data-i18n="signatureTab">التوقيع الرقمي</span>
-      </button>
+  <!-- 3. SUB-TOOLBAR FOR TOOL PROPERTIES (Pen color, Highlighter color, Text options) -->
+  <div class="tool-subbar" id="tool-subbar" style="display:none;">
+    <div class="subbar-content" id="subbar-content">
+      <!-- Injected dynamically depending on active tool -->
     </div>
-  </nav>
+  </div>
 
-  <!-- Workspace Container -->
-  <main class="workspace-container" id="workspace-container">
-    
-    <!-- Central Pages Grid View -->
-    <section class="pages-view" id="pages-view">
-      <!-- Empty State -->
-      <div class="empty-state" id="empty-state">
-        <div class="empty-icon">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-          </svg>
-        </div>
-        <h2 style="font-size:18px; font-weight:700;" data-i18n="dropTitle">اسحب وأفلت ملفات PDF أو الصور هنا</h2>
-        <p style="font-size:13px; color:var(--text-secondary); line-height:1.5;" data-i18n="dropSubtitle">
-          تنظيم الصفحات، التدوير، الدمج، وضع الأختام الإدارية الرسمية والتوقيع الرقمي دون اتصال بالإنترنت
-        </p>
-        <button class="btn-primary" id="btn-empty-open">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          <span data-i18n="openFiles">إضافة صفحات / ملفات</span>
+  <!-- 4. MAIN DUAL-PANE WORKSPACE -->
+  <main class="main-workspace">
+    <!-- Left Acrobat Sidebar (Collapsible Dock) -->
+    <aside class="acrobat-sidebar" id="acrobat-sidebar">
+      <div class="sidebar-dock-tabs">
+        <button class="dock-tab-btn active" id="dock-tab-thumbs" title="Page Thumbnails">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </button>
+        <button class="dock-tab-btn" id="dock-tab-comments" title="Comments & Annotations">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </button>
+        <button class="dock-tab-btn" id="dock-tab-props" title="Document Properties">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </button>
       </div>
 
-      <!-- Pages Grid -->
-      <div class="pages-grid" id="pages-grid"></div>
-    </section>
-
-    <!-- Side Inspector Panel -->
-    <aside class="inspector-panel" id="inspector-panel">
-      <h3 class="panel-title">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="16" x2="12" y2="12"></line>
-          <line x1="12" y1="8" x2="12.01" y2="8"></line>
-        </svg>
-        <span>خصائص المستند</span>
-      </h3>
-
-      <div class="panel-card">
-        <div class="panel-row">
-          <span class="panel-label" data-i18n="pageCount">إجمالي الصفحات:</span>
-          <span class="panel-val" id="inspector-total-pages">0</span>
+      <div class="sidebar-panel-content">
+        <!-- Panel 1: Thumbnails Strip -->
+        <div class="sidebar-panel active" id="panel-thumbs">
+          <div class="panel-header">
+            <span class="panel-title-text" data-i18n="panelThumbnails">مصغرات الصفحات</span>
+            <button class="panel-btn-mini" id="btn-sidebar-add-blank" title="Insert Blank Page">+</button>
+          </div>
+          <div class="thumbs-strip" id="thumbs-strip">
+            <!-- Dynamically populated page thumbnails -->
+          </div>
         </div>
-        <div class="panel-row">
-          <span class="panel-label">الصفحة المحددة:</span>
-          <span class="panel-val" id="inspector-selected">-</span>
+
+        <!-- Panel 2: Comments List -->
+        <div class="sidebar-panel" id="panel-comments">
+          <div class="panel-header">
+            <span class="panel-title-text" data-i18n="panelComments">التعليقات والتأشيرات</span>
+            <span class="badge-count" id="comments-count">0</span>
+          </div>
+          <div class="comments-list" id="comments-list">
+            <!-- Populated dynamically -->
+          </div>
         </div>
-      </div>
 
-      <div class="panel-card">
-        <label class="panel-label" data-i18n="pageSize">حجم الورق:</label>
-        <select id="select-page-size" class="tab-btn" style="background:var(--bg-primary); width:100%; border:1px solid var(--border-color);">
-          <option value="A4_PORTRAIT">A4 Portrait (210 x 297 mm)</option>
-          <option value="A4_LANDSCAPE">A4 Landscape (297 x 210 mm)</option>
-          <option value="LETTER_PORTRAIT">US Letter (8.5 x 11 in)</option>
-        </select>
-      </div>
-
-      <div class="panel-card">
-        <label class="panel-label" data-i18n="watermarkText">العلامة المائية (Watermark):</label>
-        <input type="text" id="input-watermark" placeholder="مثال: نسـخة للمـراجعة فقـط" style="background:var(--bg-primary); border:1px solid var(--border-color); color:var(--text-primary); padding:8px 12px; border-radius:var(--radius-sm); font-size:12px;">
+        <!-- Panel 3: Properties -->
+        <div class="sidebar-panel" id="panel-props">
+          <div class="panel-header">
+            <span class="panel-title-text" data-i18n="panelProperties">خصائص المستند</span>
+          </div>
+          <div class="props-content" id="props-content">
+            <div class="prop-item">
+              <span class="prop-label" data-i18n="propName">اسم الملف:</span>
+              <span class="prop-value" id="prop-doc-name">document.pdf</span>
+            </div>
+            <div class="prop-item">
+              <span class="prop-label" data-i18n="propPages">عدد الصفحات:</span>
+              <span class="prop-value" id="prop-doc-pages">0</span>
+            </div>
+            <div class="prop-item">
+              <span class="prop-label" data-i18n="propFormat">تنسيق الورق:</span>
+              <span class="prop-value">ISO A4 (210 × 297 mm)</span>
+            </div>
+            <div class="prop-item">
+              <span class="prop-label" data-i18n="propStandard">المعيار:</span>
+              <span class="prop-value">PDF 1.7 / HeyPuter Open</span>
+            </div>
+            <div class="prop-item">
+              <span class="prop-label" data-i18n="propSecurity">التوثيق الإداري:</span>
+              <span class="prop-value" style="color:#059669; font-weight:700;">جاهز للمصادقة</span>
+            </div>
+          </div>
+        </div>
       </div>
     </aside>
 
+    <!-- Center Document Stage -->
+    <section class="document-stage" id="document-stage">
+
+      <!-- EMPTY STATE BANNER -->
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon-shield">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+        </div>
+        <h2 class="empty-title" data-i18n="emptyTitle">استوديو وثائق PDF الجزائري — البديل المكتبي الاحترافي</h2>
+        <p class="empty-desc" data-i18n="emptyDesc">
+          قم بسحب وإفلات ملفات PDF أو الصور لتنظيم الصفحات، التدوير، إضافة التوقيع الرقمي المعتمد، والأختام الإدارية الرسمية.
+        </p>
+
+        <div class="empty-action-buttons">
+          <button class="btn-primary" id="btn-empty-open">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span data-i18n="openFiles">فتح ملفات أو صور</span>
+          </button>
+          <button class="btn-secondary" id="btn-empty-cert">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            <span data-i18n="loadSampleCert">فتح نموذج شهادة إدارية جزائرية</span>
+          </button>
+          <button class="btn-secondary" id="btn-empty-invoice">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+            <span data-i18n="loadSampleInvoice">فتح نموذج عقد وفاتورة تجارية</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW A: SINGLE PAGE READER & INTERACTIVE CANVAS EDITOR -->
+      <div class="page-editor-container" id="page-editor-container" style="display:none;">
+        <div class="canvas-viewport" id="canvas-viewport">
+          <div class="page-paper-wrapper" id="page-paper-wrapper">
+            <!-- Base Canvas -->
+            <canvas id="active-page-canvas"></canvas>
+            <!-- Overlay Canvas for live interactions (drawing, highlighting, redaction box) -->
+            <canvas id="overlay-interaction-canvas"></canvas>
+            <!-- Interactive draggable DOM elements (stamps, signatures, text inputs, notes) -->
+            <div class="page-dom-overlay" id="page-dom-overlay"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW B: ORGANIZE PAGES THUMBNAILS GRID (Acrobat-style) -->
+      <div class="page-organizer-container" id="page-organizer-container" style="display:none;">
+        <div class="organizer-header-bar">
+          <div class="organizer-info">
+            <span class="organizer-count-badge" id="organizer-count-badge">0 صفحات</span>
+            <span style="font-size:12px; color:var(--text-secondary);" data-i18n="organizerTip">اسحب وأفلت لإعادة الترتيب، أو اضغط على أزرار التدوير والحذف</span>
+          </div>
+          <div class="organizer-actions">
+            <button class="tb-btn" id="btn-organizer-add-blank">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span data-i18n="insertBlank">إدراج صفحة بيضاء</span>
+            </button>
+            <button class="tb-btn" id="btn-organizer-rotate-all">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+              <span data-i18n="rotateAll">تدوير الكل 90°</span>
+            </button>
+          </div>
+        </div>
+        <div class="organizer-grid" id="organizer-grid"></div>
+      </div>
+
+    </section>
   </main>
 
-  <!-- STAMPS MODAL -->
+  <!-- 5. ALGERIAN ADMINISTRATIVE STAMPS MODAL -->
   <div class="modal-backdrop" id="modal-stamps">
-    <div class="modal-window">
+    <div class="modal-window modal-stamps-window">
       <div class="modal-header">
-        <h3 class="modal-title" style="font-size:15px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>
-          <span data-i18n="stampSelect">الأختام والمصادقات الإدارية الجزائرية</span>
+        <h3 class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span data-i18n="stampsModalTitle">الأختام والمصادقات الإدارية الرسمية الجزائرية</span>
         </h3>
-        <button class="btn-icon btn-modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <button class="btn-icon btn-modal-close" title="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
+
       <div class="modal-body">
-        <p style="font-size:12px; color:var(--text-secondary);">
-          أختام إدارية جاهزة طبقاً للمواصفات الرسمية الجزائرية للوثائق والملفات:
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
+          اختر الختم الإداري المطلوب لوضعه مباشرة على الوثيقة الحالية:
         </p>
-        <div class="stamp-grid" id="stamps-grid"></div>
+
+        <!-- Wilaya & Date options for stamps -->
+        <div class="stamp-meta-options">
+          <div>
+            <label class="modal-label" data-i18n="stampWilaya">الولاية / الجهة الإدارية:</label>
+            <select id="select-stamp-wilaya" class="modal-select">
+              <option value="ولاية الجزائر">16 - ولاية الجزائر (Alger)</option>
+              <option value="ولاية وهران">31 - ولاية وهران (Oran)</option>
+              <option value="ولاية قسنطينة">25 - ولاية قسنطينة (Constantine)</option>
+              <option value="ولاية عنابة">23 - ولاية عنابة (Annaba)</option>
+              <option value="ولاية سطيف">19 - ولاية سطيف (Sétif)</option>
+              <option value="ولاية تلمسان">13 - ولاية تلمسان (Tlemcen)</option>
+              <option value="ولاية البليدة">09 - ولاية البليدة (Blida)</option>
+              <option value="ولاية باتنة">05 - ولاية باتنة (Batna)</option>
+              <option value="ولاية ورقلة">30 - ولاية ورقلة (Ouargla)</option>
+              <option value="ولاية بجاية">06 - ولاية بجاية (Béjaïa)</option>
+            </select>
+          </div>
+          <div>
+            <label class="modal-label" data-i18n="stampRef">رقم القيد / المرجع الإداري:</label>
+            <input type="text" id="input-stamp-ref" class="modal-input" value="N° 1428 / REG / 2026">
+          </div>
+        </div>
+
+        <div class="stamps-picker-grid" id="stamps-picker-grid">
+          <!-- Populated dynamically with live previews of circular and rectangular Algerian stamps -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary btn-modal-close" data-i18n="close">إغلاق</button>
       </div>
     </div>
   </div>
 
-  <!-- SIGNATURE MODAL -->
+  <!-- 6. FILL & SIGN DIGITAL SIGNATURE MODAL -->
   <div class="modal-backdrop" id="modal-signature">
-    <div class="modal-window">
+    <div class="modal-window modal-signature-window">
       <div class="modal-header">
-        <h3 class="modal-title" style="font-size:15px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path></svg>
-          <span data-i18n="signatureTab">التوقيع الرقمي للمستندات</span>
+        <h3 class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><circle cx="11" cy="11" r="2"></circle></svg>
+          <span data-i18n="signatureModalTitle">لوحة التوقيع الرقمي المعتمد للمستندات</span>
         </h3>
-        <button class="btn-icon btn-modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <button class="btn-icon btn-modal-close" title="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
+
       <div class="modal-body">
-        <!-- Canvas Pad -->
-        <canvas class="signature-canvas" id="signature-canvas" width="500" height="180"></canvas>
-        
-        <div style="display:flex; align-items:center; justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <button class="btn-icon sig-color-btn active" data-color="#1d4ed8" style="background:#1d4ed8;" title="Blue Ink"></button>
-            <button class="btn-icon sig-color-btn" data-color="#0f172a" style="background:#0f172a;" title="Black Ink"></button>
-            <button class="btn-icon sig-color-btn" data-color="#047857" style="background:#047857;" title="Green Ink"></button>
+        <!-- Drawing Canvas -->
+        <div class="sig-pad-container">
+          <canvas id="signature-canvas" width="560" height="200"></canvas>
+          <span class="sig-watermark-guide" data-i18n="sigGuide">ارسم توقيعك هنا بالفأرة أو القلم اللمسي</span>
+        </div>
+
+        <!-- Signature Inks & Actions -->
+        <div class="sig-controls-row">
+          <div class="sig-color-palette">
+            <button class="sig-color-dot active" data-color="#1d4ed8" style="background:#1d4ed8;" title="Diplomatic Blue"></button>
+            <button class="sig-color-dot" data-color="#0f172a" style="background:#0f172a;" title="Bureau Black"></button>
+            <button class="sig-color-dot" data-color="#047857" style="background:#047857;" title="Emerald Green"></button>
+            <button class="sig-color-dot" data-color="#7c3aed" style="background:#7c3aed;" title="Violet Ink"></button>
           </div>
-          <div style="display:flex; gap:8px;">
+          <div class="sig-actions">
             <button class="tab-btn" id="btn-sig-undo" data-i18n="undoStroke">تراجع</button>
             <button class="tab-btn" id="btn-sig-clear" data-i18n="clearSignature">مسح</button>
           </div>
         </div>
 
-        <!-- Signatory Details -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <!-- Signatory Formal Details (Algerian context) -->
+        <div class="sig-meta-grid">
           <div>
-            <label style="font-size:11px; font-weight:700;" data-i18n="signatoryName">اسم الموقّع:</label>
-            <input type="text" id="sig-input-name" placeholder="محمد بن علي" style="width:100%; background:var(--bg-primary); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 10px; border-radius:var(--radius-sm); font-size:12px;">
+            <label class="modal-label" data-i18n="signatoryName">اسم الموقّع / اللقب:</label>
+            <input type="text" id="sig-input-name" class="modal-input" placeholder="محمد بن علي / M. BENALI">
           </div>
           <div>
-            <label style="font-size:11px; font-weight:700;" data-i18n="signatoryRole">الصفة / المنصب:</label>
-            <input type="text" id="sig-input-role" placeholder="المدير العام / Le Gérant" style="width:100%; background:var(--bg-primary); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 10px; border-radius:var(--radius-sm); font-size:12px;">
+            <label class="modal-label" data-i18n="signatoryRole">الصفة / المنصب الإداري:</label>
+            <input type="text" id="sig-input-role" class="modal-input" placeholder="المدير العام / Le Gérant">
           </div>
-          <div style="grid-column: span 2;">
-            <label style="font-size:11px; font-weight:700;" data-i18n="signatoryLocation">مكان التوقيع:</label>
-            <input type="text" id="sig-input-loc" value="Alger" style="width:100%; background:var(--bg-primary); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 10px; border-radius:var(--radius-sm); font-size:12px;">
+          <div>
+            <label class="modal-label" data-i18n="signatoryWilaya">مكان التوقيع (الولاية):</label>
+            <input type="text" id="sig-input-loc" class="modal-input" value="Alger (الجزائر)">
+          </div>
+          <div>
+            <label class="modal-label" data-i18n="sigType">شكل التوقيع:</label>
+            <select id="sig-select-badge" class="modal-select">
+              <option value="badge" selected>بطاقة توثيق إدارية معتمدة (مع الاسم والصفة)</option>
+              <option value="raw">توقيع حر شفاف فقط</option>
+            </select>
           </div>
         </div>
+      </div>
 
-        <button class="btn-primary" id="btn-sig-apply" style="width:100%; justify-content:center; margin-top:8px;" data-i18n="applySignature">
-          تطبيق التوقيع على الصفحة
+      <div class="modal-footer">
+        <button class="btn-secondary btn-modal-close" data-i18n="cancel">إلغاء</button>
+        <button class="btn-primary" id="btn-sig-apply" data-i18n="applySignatureToPage">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-i18n="applySignature">تطبيق التوقيع على الصفحة</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. WATERMARK & BATES NUMBERING MODAL -->
+  <div class="modal-backdrop" id="modal-watermark">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+          <span data-i18n="watermarkSettings">إعدادات العلامة المائية والترقيم</span>
+        </h3>
+        <button class="btn-icon btn-modal-close" title="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <label class="modal-label" data-i18n="watermarkText">نص العلامة المائية (Watermark):</label>
+            <input type="text" id="input-modal-watermark" class="modal-input" placeholder="مثال: سري للغاية / CONFIDENTIEL / نسخة طبق الأصل">
+          </div>
+          <div>
+            <label class="modal-label">درجة الشفافية (Opacity): <span id="wm-opacity-label">25%</span></label>
+            <input type="range" id="input-wm-opacity" min="0.05" max="0.8" step="0.05" value="0.25" style="width:100%;">
+          </div>
+          <div>
+            <label class="modal-label">زاوية الميلان (Angle):</label>
+            <select id="select-wm-angle" class="modal-select">
+              <option value="45" selected>مائلة 45° (قياسي)</option>
+              <option value="0">أفقية 0°</option>
+              <option value="-45">مائلة -45°</option>
+            </select>
+          </div>
+          <div style="margin-top:10px;">
+            <label class="modal-label" style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" id="check-page-numbers" checked>
+              <span data-i18n="enablePageNumbers">تفعيل الترقيم التلقائي للصفحات (Page 1 of N)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary btn-modal-close" id="btn-save-watermark">حفظ الإعدادات</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. KEYBOARD SHORTCUTS MODAL -->
+  <div class="modal-backdrop" id="modal-shortcuts">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>
+          <span data-i18n="shortcutsTitle">اختصارات لوحة المفاتيح (Acrobat Standard)</span>
+        </h3>
+        <button class="btn-icon btn-modal-close" title="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="shortcuts-grid">
+          <div class="sc-row"><kbd>Ctrl+O</kbd><span>فتح ملفات أو صور</span></div>
+          <div class="sc-row"><kbd>Ctrl+S</kbd><span>حفظ وتصدير PDF</span></div>
+          <div class="sc-row"><kbd>Ctrl+P</kbd><span>طباعة المستند</span></div>
+          <div class="sc-row"><kbd>Ctrl+1</kbd><span>محرر الصفحة الفردية</span></div>
+          <div class="sc-row"><kbd>Ctrl+2</kbd><span>منظم الصفحات</span></div>
+          <div class="sc-row"><kbd>Ctrl+R</kbd><span>تدوير 90° لليمين</span></div>
+          <div class="sc-row"><kbd>Ctrl+Z</kbd><span>تراجع عن خطوة</span></div>
+          <div class="sc-row"><kbd>V</kbd><span>أداة التحديد</span></div>
+          <div class="sc-row"><kbd>H</kbd><span>أداة اليد والتحريك</span></div>
+          <div class="sc-row"><kbd>P</kbd><span>قلم الرسم الحر</span></div>
+          <div class="sc-row"><kbd>U</kbd><span>قلم التظليل اللوني</span></div>
+          <div class="sc-row"><kbd>T</kbd><span>إضافة نص على الصفحة</span></div>
+          <div class="sc-row"><kbd>R</kbd><span>مستطيل الحجب الأمني (Redaction)</span></div>
+          <div class="sc-row"><kbd>S</kbd><span>الأختام الإدارية</span></div>
+          <div class="sc-row"><kbd>D</kbd><span>لوحة التوقيع الرقمي</span></div>
+          <div class="sc-row"><kbd>F4</kbd><span>إظهار/إخفاء اللوحة الجانبية</span></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary btn-modal-close">حسناً</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. ABOUT MODAL -->
+  <div class="modal-backdrop" id="modal-about">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>حول استوديو DZ-PDF Pro</span>
+        </h3>
+        <button class="btn-icon btn-modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="modal-body" style="line-height:1.7; font-size:13px; color:var(--text-secondary);">
+        <p><strong style="color:var(--text-primary); font-size:15px;">DZ-PDF Pro v2.0 (Desktop Edition)</strong></p>
+        <p>البديل الجزائري المفتوح المصدر لبرنامج Adobe Acrobat Pro، صُمم خصيصاً للمؤسسات والمهندسين والإدارات الجزائرية لمعالجة وتوقيع وتنظيم ملفات PDF دون أي اتصال خارجي بالإنترنت بنسبة 100%.</p>
+        <p style="margin-top:8px;">مبني وفق معايير هندسة البرمجيات المفتوحة <strong>HeyPuter/everything</strong>: بدون أطر عمل خارجية، بدون مكتبات تجارية، وبأعلى معايير الأمان والسرية للبيانات الوطنية.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary btn-modal-close">إغلاق</button>
       </div>
     </div>
   </div>
