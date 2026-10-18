@@ -1,0 +1,27 @@
+{
+  "name": "dz-slides",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-Impress / عارض الجزائر — The Algerian Open-Source Presentation Studio & Microsoft PowerPoint / Google Slides Alternative. 100% offline-first, slide deck designer, Algerian university PFE defense templates, startup pitch decks, and fullscreen presentation mode with presenter timer and laser pointer. Built to the HeyPuter/everything standard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "presentation",
+    "powerpoint-alternative",
+    "google-slides-alternative",
+    "slide-deck",
+    "soutenance-pfe",
+    "pitch-deck",
+    "fullscreen-slideshow",
+    "laser-pointer",
+    "offline-first",
+    "algeria-open-source"
+  ],
+  "author": "DZ Open Suite Contributors",
+  "license": "MIT"
+}

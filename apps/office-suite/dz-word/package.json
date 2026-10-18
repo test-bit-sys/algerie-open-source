@@ -1,0 +1,26 @@
+{
+  "name": "dz-word",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-Writer / كاتب الجزائر — The Algerian Open-Source Word Processor & Microsoft Word / Google Docs Alternative. 100% offline-first, native mixed Arabic-French document engine, official Algerian ministerial & administrative templates, print-to-PDF, and export tools. Built to the HeyPuter/everything standard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "word-processor",
+    "document-editor",
+    "writer",
+    "microsoft-word-alternative",
+    "google-docs-alternative",
+    "algerian-administrative-templates",
+    "offline-first",
+    "arabic-word-processor",
+    "algeria-open-source"
+  ],
+  "author": "DZ Open Suite Contributors",
+  "license": "MIT"
+}

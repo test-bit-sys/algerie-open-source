@@ -1,0 +1,27 @@
+{
+  "name": "dz-calc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-Sheets / جداول الجزائر — The Algerian Open-Source Spreadsheet & Microsoft Excel / Google Sheets Alternative. 100% offline-first, high-performance calculation grid, native Algerian fiscal functions (=TAFQIT_AR, =TVA_DZ, =TIMBRE_DZ), built-in payroll (Fiche de Paie) & accounting templates (TCR, SCF). Built to the HeyPuter/everything standard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "spreadsheet",
+    "excel-alternative",
+    "google-sheets-alternative",
+    "data-grid",
+    "algerian-fiscal-functions",
+    "tafqit",
+    "payroll",
+    "accounting-scf",
+    "offline-first",
+    "algeria-open-source"
+  ],
+  "author": "DZ Open Suite Contributors",
+  "license": "MIT"
+}
