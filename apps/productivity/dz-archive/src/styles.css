@@ -560,10 +560,14 @@ body {
   width: 260px;
   background: var(--bg-surface);
   border-inline-start: 1px solid var(--border-color);
-  display: flex;
+  display: none;
   flex-direction: column;
   flex-shrink: 0;
   overflow: hidden;
+}
+
+.comment-drawer.open {
+  display: flex;
 }
 
 .comment-drawer-header {

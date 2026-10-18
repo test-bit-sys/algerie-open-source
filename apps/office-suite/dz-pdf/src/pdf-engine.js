@@ -555,7 +555,57 @@ export class PDFEngine {
       ctx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('N', x, y);
+    } else if (ann.type === 'measure') {
+      const x1 = ann.start.x * canvasW;
+      const y1 = ann.start.y * canvasH;
+      const x2 = ann.end.x * canvasW;
+      const y2 = ann.end.y * canvasH;
+
+      ctx.save();
+      ctx.strokeStyle = '#0284c7';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([6, 4]);
+
+      // Main measurement line
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+
+      // End caps
+      ctx.setLineDash([]);
+      const angle = Math.atan2(y2 - y1, x2 - x1);
+      const capLen = 10;
+      const perpAngle = angle + Math.PI / 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x1 - Math.cos(perpAngle) * capLen, y1 - Math.sin(perpAngle) * capLen);
+      ctx.lineTo(x1 + Math.cos(perpAngle) * capLen, y1 + Math.sin(perpAngle) * capLen);
+      ctx.moveTo(x2 - Math.cos(perpAngle) * capLen, y2 - Math.sin(perpAngle) * capLen);
+      ctx.lineTo(x2 + Math.cos(perpAngle) * capLen, y2 + Math.sin(perpAngle) * capLen);
+      ctx.stroke();
+
+      // Midpoint distance pill badge
+      const midX = (x1 + x2) / 2;
+      const midY = (y1 + y2) / 2;
+
+      ctx.font = 'bold 12px "Segoe UI", Arial, sans-serif';
+      const text = ann.distStr || '0.00 m';
+      const textW = ctx.measureText(text).width;
+
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(midX - textW / 2 - 8, midY - 12, textW + 16, 24, 4) : ctx.rect(midX - textW / 2 - 8, midY - 12, textW + 16, 24);
+      ctx.fill();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, midX, midY);
+      ctx.restore();
     }
 
     ctx.restore();

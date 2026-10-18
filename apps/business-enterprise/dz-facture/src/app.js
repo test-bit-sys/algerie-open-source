@@ -1708,7 +1708,14 @@ function updateA4Calculations() {
   document.getElementById('sheetCompanyAi').textContent = company.ai || '-';
   document.getElementById('sheetCompanyRib').textContent = company.rib || '-';
 
-  document.getElementById('sheetDocType').textContent = docType;
+  const docTypeLabels = {
+    FACTURE: { ar: 'فاتورة تجارية رسمية (FACTURE)', fr: 'FACTURE COMMERCIALE', en: 'COMMERCIAL INVOICE' },
+    PROFORMA: { ar: 'فاتورة أولية / عرض أسعار (FACTURE PROFORMA)', fr: 'FACTURE PROFORMA / DEVIS', en: 'PROFORMA INVOICE' },
+    BL: { ar: 'سند تسليم واستلام (BON DE LIVRAISON)', fr: 'BON DE LIVRAISON (B.L)', en: 'DELIVERY NOTE' },
+    AVOIR: { ar: 'فاتورة استدراك وإلغاء (FACTURE D\'AVOIR)', fr: 'FACTURE D\'AVOIR', en: 'CREDIT NOTE' }
+  };
+  const docLabel = (docTypeLabels[docType] && docTypeLabels[docType][currentLang]) || docType;
+  document.getElementById('sheetDocType').textContent = docLabel;
   document.getElementById('sheetDocNum').textContent = `N°: ${docNum}`;
   document.getElementById('sheetDocDate').textContent = docDate;
 

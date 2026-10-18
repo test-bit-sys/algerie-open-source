@@ -52,6 +52,8 @@
             <button class="dropdown-item" id="miSpeedNormal">سرعة عادية ( = )</button>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" id="miAbLoop">تكرار المقطع A-B (A-B Loop)</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="miBookmarks">الإشارات المرجعية (Bookmarks - Ctrl+B)...</button>
           </div>
         </div>
 
@@ -559,7 +561,35 @@
     </div>
   </div>
 
-  <!-- Modal 4: About DZ-Player / VLC Alternative -->
+  <!-- Modal 4: VLC Custom Bookmarks Manager (Ctrl+B) -->
+  <div class="modal-backdrop" id="modal-bookmarks">
+    <div class="modal-dialog" style="max-width:500px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+          </svg>
+          <h3 style="margin:0; font-size:14px; font-weight:700;">الإشارات المرجعية (Edit Bookmarks - Ctrl+B)</h3>
+        </div>
+        <button class="btn-icon-small btn-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <input type="text" id="bmTitleInput" class="vlc-input" placeholder="عنوان الإشارة المرجعية..." style="flex:1;">
+          <button id="btnCreateBookmark" class="btn-primary" style="white-space:nowrap; padding:6px 14px; font-size:12px;">+ تسجيل اللحظة الحالية</button>
+        </div>
+        <div id="bookmarksListContainer" style="max-height:220px; overflow-y:auto; border:1px solid var(--border-color); border-radius:4px; padding:6px; background:var(--bg-app); font-size:12px; min-height:80px;">
+          <div style="color:var(--text-muted); text-align:center; padding:24px 0;">لا توجد إشارات مرجعية مسجلة لهذا المقطع</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnClearAllBookmarks" class="btn-secondary" style="font-size:11px;">مسح كافة الإشارات</button>
+        <button class="btn-primary close-modal-btn">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: About DZ-Player / VLC Alternative -->
   <div class="modal-backdrop" id="modal-about">
     <div class="modal-dialog" style="max-width:480px; text-align:center;">
       <div class="modal-header">

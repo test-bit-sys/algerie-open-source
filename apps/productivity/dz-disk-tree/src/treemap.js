@@ -495,6 +495,6 @@ export class SquarifiedTreemap {
       }
     }
 
-    ctx.restore();
   }
 }
+

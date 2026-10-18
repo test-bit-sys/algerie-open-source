@@ -241,7 +241,9 @@ class DZPdfProApp {
     this.pages = [];
     this.currentPageIndex = 0;
     this.viewMode = 'editor'; // 'editor' | 'organizer'
-    this.activeTool = 'select'; // 'select' | 'pan' | 'pen' | 'highlighter' | 'text' | 'redact' | 'note'
+    this.activeTool = 'select'; // 'select' | 'pan' | 'pen' | 'highlighter' | 'text' | 'redact' | 'note' | 'measure'
+    this.measureScale = 1.0;
+    this.measureStart = null;
 
     // Tool Settings
     this.penColor = '#dc2626';
@@ -615,6 +617,7 @@ class DZPdfProApp {
         else if (k === 't') this.triggerToolSelect('text');
         else if (k === 'r') this.triggerToolSelect('redact');
         else if (k === 'n') this.triggerToolSelect('note');
+        else if (k === 'm') this.triggerToolSelect('measure');
         else if (k === 's') this.openStampsModal();
         else if (k === 'd') this.openSignatureModal();
       }
@@ -642,6 +645,8 @@ class DZPdfProApp {
       this.viewport.style.cursor = 'crosshair';
     } else if (tool === 'note') {
       this.viewport.style.cursor = 'pointer';
+    } else if (tool === 'measure') {
+      this.viewport.style.cursor = 'crosshair';
     }
   }
 
@@ -713,6 +718,24 @@ class DZPdfProApp {
 
       document.getElementById('sub-text-size')?.addEventListener('change', (e) => {
         this.textFontSize = parseInt(e.target.value);
+      });
+    } else if (this.activeTool === 'measure') {
+      subbar.style.display = 'flex';
+      content.innerHTML = `
+        <span style="font-weight:700;">أداة قياس المخططات (Measuring Tool):</span>
+        <span>المقياس (Scale):</span>
+        <select id="sub-measure-scale" class="modal-select" style="padding:2px 6px;">
+          <option value="1" ${this.measureScale === 1.0 ? 'selected' : ''}>1:1 (100px = 1.0m)</option>
+          <option value="0.5" ${this.measureScale === 0.5 ? 'selected' : ''}>1:50 (100px = 0.5m)</option>
+          <option value="2.0" ${this.measureScale === 2.0 ? 'selected' : ''}>1:200 (100px = 2.0m)</option>
+          <option value="5.0" ${this.measureScale === 5.0 ? 'selected' : ''}>1:500 (100px = 5.0m)</option>
+        </select>
+        <span>المسافة المقاسة:</span>
+        <strong id="measure-readout" style="color:#0284c7; font-family:monospace; font-size:13px;">0.00 m</strong>
+      `;
+
+      document.getElementById('sub-measure-scale')?.addEventListener('change', (e) => {
+        this.measureScale = parseFloat(e.target.value);
       });
     } else {
       subbar.style.display = 'none';
@@ -1094,6 +1117,9 @@ class DZPdfProApp {
       } else if (this.activeTool === 'note') {
         const coords = getNormCoords(e);
         this.promptStickyNote(coords);
+      } else if (this.activeTool === 'measure') {
+        this.isDrawing = true;
+        this.measureStart = getNormCoords(e);
       }
     });
 
@@ -1128,6 +1154,67 @@ class DZPdfProApp {
         const rw = Math.abs(cur.x - this.redactStart.x) * overlay.width;
         const rh = Math.abs(cur.y - this.redactStart.y) * overlay.height;
         octx.fillRect(rx, ry, rw, rh);
+      } else if (this.activeTool === 'measure' && this.measureStart) {
+        const cur = getNormCoords(e);
+        octx.clearRect(0, 0, overlay.width, overlay.height);
+
+        const x1 = this.measureStart.x * overlay.width;
+        const y1 = this.measureStart.y * overlay.height;
+        const x2 = cur.x * overlay.width;
+        const y2 = cur.y * overlay.height;
+
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const distPx = Math.sqrt(dx * dx + dy * dy);
+        const scaleVal = this.measureScale || 1.0;
+        const meters = ((distPx / 100) * scaleVal).toFixed(2);
+        const distStr = `${meters} m`;
+
+        const readoutEl = document.getElementById('measure-readout');
+        if (readoutEl) readoutEl.textContent = distStr;
+
+        octx.save();
+        octx.strokeStyle = '#0284c7';
+        octx.lineWidth = 2.5;
+        octx.setLineDash([6, 4]);
+        octx.beginPath();
+        octx.moveTo(x1, y1);
+        octx.lineTo(x2, y2);
+        octx.stroke();
+
+        octx.setLineDash([]);
+        const angle = Math.atan2(dy, dx);
+        const capLen = 10;
+        const perp = angle + Math.PI / 2;
+
+        octx.beginPath();
+        octx.moveTo(x1 - Math.cos(perp) * capLen, y1 - Math.sin(perp) * capLen);
+        octx.lineTo(x1 + Math.cos(perp) * capLen, y1 + Math.sin(perp) * capLen);
+        octx.moveTo(x2 - Math.cos(perp) * capLen, y2 - Math.sin(perp) * capLen);
+        octx.lineTo(x2 + Math.cos(perp) * capLen, y2 + Math.sin(perp) * capLen);
+        octx.stroke();
+
+        const midX = (x1 + x2) / 2;
+        const midY = (y1 + y2) / 2;
+        octx.font = 'bold 12px "Segoe UI", Arial, sans-serif';
+        const tw = octx.measureText(distStr).width;
+        octx.fillStyle = '#0f172a';
+        if (octx.roundRect) {
+          octx.beginPath();
+          octx.roundRect(midX - tw / 2 - 8, midY - 12, tw + 16, 24, 4);
+          octx.fill();
+        } else {
+          octx.fillRect(midX - tw / 2 - 8, midY - 12, tw + 16, 24);
+        }
+        octx.strokeStyle = '#38bdf8';
+        octx.lineWidth = 1;
+        octx.stroke();
+
+        octx.fillStyle = '#f8fafc';
+        octx.textAlign = 'center';
+        octx.textBaseline = 'middle';
+        octx.fillText(distStr, midX, midY);
+        octx.restore();
       }
     });
 
@@ -1169,6 +1256,28 @@ class DZPdfProApp {
           this.showToast('Redaction blackout applied');
         }
         this.redactStart = null;
+      } else if (this.activeTool === 'measure' && this.measureStart) {
+        const cur = getNormCoords(e);
+        const dx = (cur.x - this.measureStart.x) * overlay.width;
+        const dy = (cur.y - this.measureStart.y) * overlay.height;
+        const distPx = Math.sqrt(dx * dx + dy * dy);
+        if (distPx > 10) {
+          const scaleVal = this.measureScale || 1.0;
+          const meters = ((distPx / 100) * scaleVal).toFixed(2);
+          const distStr = `${meters} m`;
+          page.annotations.push({
+            type: 'measure',
+            start: { ...this.measureStart },
+            end: { ...cur },
+            distStr,
+            length: parseFloat(meters),
+            timestamp: Date.now()
+          });
+          this.renderCurrentPage();
+          this.renderSidebarComments();
+          this.showToast(`تم قياس المسافة: ${distStr}`);
+        }
+        this.measureStart = null;
       }
 
       octx.clearRect(0, 0, overlay.width, overlay.height);

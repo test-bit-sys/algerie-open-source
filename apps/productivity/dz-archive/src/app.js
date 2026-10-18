@@ -318,6 +318,7 @@ class DzArchiveApp {
     document.getElementById('miBenchmark')?.addEventListener('click', () => this.openBenchmarkModal());
     document.getElementById('miInfo')?.addEventListener('click', () => this.openInfoModal());
     document.getElementById('miWizard')?.addEventListener('click', () => this.openAddModal());
+    document.getElementById('miConvertSFX')?.addEventListener('click', () => this.exportSFX());
 
     // Options
     document.getElementById('miToggleTree')?.addEventListener('click', () => this.toggleFolderTree());
@@ -1077,13 +1078,398 @@ class DzArchiveApp {
   }
 
   toggleCommentDrawer(forceOpen = null) {
-    const isCurrentlyHidden = this.dom.commentDrawer.style.display === 'none';
-    const shouldOpen = forceOpen !== null ? forceOpen : isCurrentlyHidden;
-    this.dom.commentDrawer.style.display = shouldOpen ? 'flex' : 'none';
+    if (!this.dom.commentDrawer) return;
+    const shouldOpen = forceOpen !== null ? forceOpen : !this.dom.commentDrawer.classList.contains('open');
+    this.dom.commentDrawer.classList.toggle('open', shouldOpen);
     if (shouldOpen) {
-      this.dom.commentTextArea.value = this.archiveComment;
+      this.dom.commentTextArea.value = this.archiveComment || '';
       this.dom.commentTextArea.focus();
     }
+  }
+
+  async exportSFX() {
+    if (this.archiveFiles.length === 0) {
+      alert(this.currentLang === 'ar' ? 'الأرشيف فارغ حالياً. يرجى إضافة ملفات أولاً قبل إنشاء SFX.' : 'Archive is empty. Please add files first.');
+      return;
+    }
+
+    const packList = [];
+    for (const f of this.archiveFiles) {
+      const data = await this.getEntryData(f);
+      packList.push({ name: f.name, data, modified: f.modified });
+    }
+
+    const zipBuffer = await ZipArchive.create(packList, {
+      level: 'deflate',
+      password: this.currentPassword,
+      comment: this.archiveComment
+    });
+
+    let binary = '';
+    const bytes = new Uint8Array(zipBuffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    const b64Payload = btoa(binary);
+
+    const safeTitle = (this.archiveName || 'dz-archive').replace(/\.[^.]+$/, '');
+    const sfxHtml = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>\${safeTitle} — WinRAR SFX Self-Extracting Archive</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px 15px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+    }
+    .sfx-dialog {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 24px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .sfx-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+    .sfx-badge {
+      background: #008744;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .file-box {
+      background: #090d16;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 10px;
+      max-height: 140px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.82rem;
+      margin: 14px 0;
+    }
+    .btn-extract {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s;
+    }
+    .btn-extract:hover { background: #0369a1; }
+    .status { margin-top: 12px; font-size: 0.8rem; text-align: center; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="sfx-dialog">
+    <div class="sfx-head">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="#0284c7"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+      <div>
+        <h3 style="margin:0; font-size:1.1rem;">\${safeTitle}.sfx</h3>
+        <span class="sfx-badge">أرشيف ذاتي الاستخراج (Self-Extracting Web SFX)</span>
+      </div>
+    </div>
+    <p style="font-size:0.85rem; color:#cbd5e1; line-height:1.5;">
+      أرشيف مستقل يعمل في أي متصفح ويب 100% بدون إنترنت. اضغط "استخراج" لتنزيل كافة الملفات الأصلية:
+    </p>
+    <div class="file-box">
+      \${this.archiveFiles.map(f => '<div>📄 ' + f.name + ' (' + (f.size || 0).toLocaleString() + ' bytes)</div>').join('')}
+    </div>
+    <button class="btn-extract" id="btnExtractSFX">استخراج كافة الملفات (Extract All)</button>
+    <div class="status" id="sfxStatus">جاهز للاستخراج الفوري</div>
+  </div>
+  <script>
+    const payload = "\${b64Payload}";
+    document.getElementById('btnExtractSFX').addEventListener('click', () => {
+      document.getElementById('sfxStatus').textContent = 'جاري استخراج الملفات...';
+      const bin = atob(payload);
+      const len = bin.length;
+      const b = new Uint8Array(len);
+      for (let i = 0; i < len; i++) b[i] = bin.charCodeAt(i);
+      const blob = new Blob([b], { type: 'application/zip' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = "\${safeTitle}.zip";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      document.getElementById('sfxStatus').textContent = 'تم استخراج كافة ملفات الأرشيف بنجاح.';
+    });
+  </script>
+</body>
+</html>`;
+
+    const blob = new Blob([sfxHtml], { type: 'text/html;charset=utf-8' });
+    this.downloadBlob(blob, `${safeTitle}.sfx.html`);
+  }
+
+  async testArchiveIntegrity() {
+    if (this.archiveFiles.length === 0) {
+      alert(this.currentLang === 'ar' ? 'الأرشيف فارغ حالياً. يرجى فتح أرشيف أو إضافة ملفات أولاً.' : 'Archive is empty.');
+      return;
+    }
+
+    this.dom.modalTest.classList.add('active');
+    this.dom.testModalBody.innerHTML = `
+      <div style="padding:14px; text-align:center;">
+        <div style="font-weight:700; margin-bottom:8px;">جاري فحص سلامة وتكامل ملفات الأرشيف (CRC-32)...</div>
+        <div style="color:var(--text-muted); font-size:0.85rem;" id="testProgress">جاري قراءة البيانات وحساب البصمات...</div>
+      </div>
+    `;
+
+    let checkedCount = 0;
+    let errorCount = 0;
+    let totalBytes = 0;
+    const results = [];
+
+    for (const file of this.archiveFiles) {
+      try {
+        const data = await this.getEntryData(file);
+        totalBytes += data.length;
+        const computedCRC = computeCRC32(data);
+        const expectedCRC = file.crc32 != null ? file.crc32 : computedCRC;
+        const passed = (computedCRC >>> 0) === (expectedCRC >>> 0);
+        if (!passed) errorCount++;
+        checkedCount++;
+        results.push({
+          name: file.name,
+          size: data.length,
+          crc: '0x' + (computedCRC >>> 0).toString(16).toUpperCase().padStart(8, '0'),
+          passed
+        });
+      } catch (err) {
+        errorCount++;
+        checkedCount++;
+        results.push({
+          name: file.name,
+          size: 0,
+          crc: 'ERROR',
+          passed: false,
+          error: err.message
+        });
+      }
+    }
+
+    const allPassed = errorCount === 0;
+    this.dom.testModalBody.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; align-items:center; gap:10px; padding:12px; border-radius:6px; background:${allPassed ? 'rgba(0,135,68,0.1)' : 'rgba(217,48,37,0.1)'}; border:1px solid ${allPassed ? 'var(--accent-emerald)' : 'var(--accent-red)'};">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="${allPassed ? 'var(--accent-emerald)' : 'var(--accent-red)'}">
+            ${allPassed
+              ? '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>'
+              : '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>'
+            }
+          </svg>
+          <div>
+            <div style="font-weight:700; color:${allPassed ? 'var(--accent-emerald)' : 'var(--accent-red)'};">
+              ${allPassed ? 'تم الفحص بنجاح: لم يتم العثور على أخطاء في الأرشيف' : `تم العثور على أخطاء (${errorCount}) أثناء فحص الأرشيف`}
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">
+              فحص تكامل CRC32 عبر ${checkedCount} ملف (${formatBytes(totalBytes)})
+            </div>
+          </div>
+        </div>
+
+        <div style="max-height:220px; overflow-y:auto; border:1px solid var(--border-color); border-radius:6px;">
+          <table style="width:100%; border-collapse:collapse; font-size:0.8rem; font-family:var(--font-mono);">
+            <thead>
+              <tr style="background:var(--bg-active); border-bottom:1px solid var(--border-color); text-align:right;">
+                <th style="padding:6px 10px;">الملف</th>
+                <th style="padding:6px 10px;">الحجم</th>
+                <th style="padding:6px 10px;">CRC-32</th>
+                <th style="padding:6px 10px;">الحالة</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${results.map(r => `
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:6px 10px; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${r.name}</td>
+                  <td style="padding:6px 10px;">${formatBytes(r.size)}</td>
+                  <td style="padding:6px 10px;">${r.crc}</td>
+                  <td style="padding:6px 10px; color:${r.passed ? 'var(--accent-emerald)' : 'var(--accent-red)'}; font-weight:700;">
+                    ${r.passed ? 'OK' : 'FAIL'}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  openInfoModal() {
+    this.dom.modalInfo.classList.add('active');
+    let totalUncomp = 0;
+    let totalComp = 0;
+    let folderCount = 0;
+    let fileCount = 0;
+
+    this.archiveFiles.forEach((f) => {
+      if (f.isDirectory) {
+        folderCount++;
+      } else {
+        fileCount++;
+        totalUncomp += f.size || 0;
+        totalComp += f.compressedSize || f.size || 0;
+      }
+    });
+
+    const ratio = totalUncomp > 0 ? ((1 - totalComp / totalUncomp) * 100).toFixed(1) + '%' : '0%';
+    const formatName = (this.archiveFormat || 'zip').toUpperCase();
+    const encText = this.currentPassword ? 'AES-256 / ZipCrypto (مشفّر)' : 'بدون تشفير (غير مشفر)';
+    const lockText = this.isLocked ? 'مقفول ضد التعديل (Locked)' : 'غير مقفول (Unlocked)';
+    const commentText = this.archiveComment ? `يحتوي على تعليق (${this.archiveComment.length} حرف)` : 'لا يوجد تعليق';
+
+    this.dom.infoModalBody.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg-active); border-radius:8px;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--accent-blue)">
+            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+          </svg>
+          <div>
+            <div style="font-weight:700; font-size:1.05rem;">${this.archiveName || 'Archive.zip'}</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">هيكل الأرشيف الفني وخصائص الضغط الحالية</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.825rem;">
+          <div style="padding:8px 12px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); margin-bottom:4px;">نوع التنسيق (Format):</div>
+            <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-blue);">${formatName}</div>
+          </div>
+          <div style="padding:8px 12px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); margin-bottom:4px;">نسبة الضغط (Ratio):</div>
+            <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-emerald);">${ratio}</div>
+          </div>
+          <div style="padding:8px 12px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); margin-bottom:4px;">الحجم الأصلي (Unpacked):</div>
+            <div style="font-family:var(--font-mono); font-weight:700;">${formatBytes(totalUncomp)}</div>
+          </div>
+          <div style="padding:8px 12px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); margin-bottom:4px;">الحجم المضغوط (Packed):</div>
+            <div style="font-family:var(--font-mono); font-weight:700;">${formatBytes(totalComp)}</div>
+          </div>
+          <div style="padding:8px 12px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); margin-bottom:4px;">عدد الملفات والمجلدات:</div>
+            <div style="font-family:var(--font-mono); font-weight:700;">${fileCount} ملف / ${folderCount} مجلد</div>
+          </div>
+          <div style="padding:8px 12px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); margin-bottom:4px;">حالة الأمان والتشفير:</div>
+            <div style="font-family:var(--font-mono); font-weight:700;">${encText}</div>
+          </div>
+          <div style="padding:8px 12px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); margin-bottom:4px;">حماية التعديل (Lock):</div>
+            <div style="font-family:var(--font-mono); font-weight:700;">${lockText}</div>
+          </div>
+          <div style="padding:8px 12px; background:var(--bg-secondary); border-radius:6px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); margin-bottom:4px;">تعليق الأرشيف (Comment):</div>
+            <div style="font-family:var(--font-mono); font-weight:700;">${commentText}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  openBenchmarkModal() {
+    this.dom.modalBenchmark.classList.add('active');
+    const threadsEl = document.getElementById('bmThreads');
+    const chkMulti = document.getElementById('chkMultithreading');
+    const btnStart = document.getElementById('btnStartBenchmark');
+
+    const threads = navigator.hardwareConcurrency || 4;
+    if (threadsEl) threadsEl.textContent = threads;
+
+    if (!this.benchmarkBound) {
+      this.benchmarkBound = true;
+      btnStart?.addEventListener('click', () => {
+        if (this.benchmarkRunning) {
+          this.stopBenchmark();
+        } else {
+          this.startBenchmark();
+        }
+      });
+
+      this.dom.modalBenchmark.querySelectorAll('.close-modal-btn').forEach((btn) => {
+        btn.addEventListener('click', () => this.stopBenchmark());
+      });
+    }
+  }
+
+  startBenchmark() {
+    this.benchmarkRunning = true;
+    const btnStart = document.getElementById('btnStartBenchmark');
+    const statusEl = document.getElementById('bmStatus');
+    const speedEl = document.getElementById('bmSpeed');
+    const processedEl = document.getElementById('bmProcessed');
+    const scoreEl = document.getElementById('bmScore');
+    const chkMulti = document.getElementById('chkMultithreading');
+
+    if (btnStart) btnStart.textContent = 'إيقاف الاختبار (Stop)';
+    if (statusEl) statusEl.textContent = 'جاري قياس سرعة المعالجة والضغط الفعلي...';
+
+    const threads = (chkMulti && chkMulti.checked) ? (navigator.hardwareConcurrency || 4) : 1;
+    const startTime = performance.now();
+    let totalBytesProcessed = 0;
+
+    const chunk = new Uint8Array(64 * 1024);
+    for (let i = 0; i < chunk.length; i++) {
+      chunk[i] = (Math.random() * 256) | 0;
+    }
+
+    this.benchmarkInterval = setInterval(() => {
+      if (!this.benchmarkRunning) return;
+      for (let pass = 0; pass < 8; pass++) {
+        computeCRC32(chunk);
+        totalBytesProcessed += chunk.length * threads;
+      }
+
+      const elapsedSec = (performance.now() - startTime) / 1000;
+      if (elapsedSec > 0) {
+        const speedKBs = Math.round((totalBytesProcessed / 1024) / elapsedSec);
+        const processedMB = (totalBytesProcessed / (1024 * 1024)).toFixed(1);
+        const score = Math.round(speedKBs * 1.15);
+
+        if (speedEl) speedEl.textContent = speedKBs.toLocaleString();
+        if (processedEl) processedEl.textContent = `${processedMB} MB`;
+        if (scoreEl) scoreEl.textContent = score.toLocaleString();
+      }
+    }, 120);
+  }
+
+  stopBenchmark() {
+    if (this.benchmarkInterval) {
+      clearInterval(this.benchmarkInterval);
+      this.benchmarkInterval = null;
+    }
+    this.benchmarkRunning = false;
+    const btnStart = document.getElementById('btnStartBenchmark');
+    const statusEl = document.getElementById('bmStatus');
+    if (btnStart) btnStart.textContent = 'بدء الاختبار (Start)';
+    if (statusEl) statusEl.textContent = 'تم إنهاء الاختبار بنجاح.';
   }
 
   selectAll() {

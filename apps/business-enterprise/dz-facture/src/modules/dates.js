@@ -16,7 +16,7 @@
  *  - Full ISO strings / Date objects are converted to the LOCAL calendar day.
  *  - Invalid input returns '' (never throws).
  */
-export function toLocalDateKey(date = new Date()) {
+export function toLocalDateKey(date) {
   if (date == null) return '';
 
   if (typeof date === 'string') {

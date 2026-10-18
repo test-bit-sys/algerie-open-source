@@ -39,6 +39,7 @@ class DZPlayerApp {
     this.initControls();
     this.initEffectsDialog();
     this.initModals();
+    this.initBookmarks();
     this.initKeyboardShortcuts();
     this.initDragAndDrop();
   }
@@ -135,6 +136,11 @@ class DZPlayerApp {
       btnConfirmPlayUrl: document.getElementById('btnConfirmPlayUrl'),
       modalMediaInfo: document.getElementById('modal-media-info'),
       mediaInfoBody: document.getElementById('mediaInfoBody'),
+      modalBookmarks: document.getElementById('modal-bookmarks'),
+      bmTitleInput: document.getElementById('bmTitleInput'),
+      btnCreateBookmark: document.getElementById('btnCreateBookmark'),
+      bookmarksListContainer: document.getElementById('bookmarksListContainer'),
+      btnClearAllBookmarks: document.getElementById('btnClearAllBookmarks'),
       modalAbout: document.getElementById('modal-about')
     };
   }
@@ -213,6 +219,7 @@ class DZPlayerApp {
     document.getElementById('miSpeedSlower')?.addEventListener('click', () => this.changeSpeed(-0.25));
     document.getElementById('miSpeedNormal')?.addEventListener('click', () => this.setSpeed(1.0));
     document.getElementById('miAbLoop')?.addEventListener('click', () => this.toggleAbLoop());
+    document.getElementById('miBookmarks')?.addEventListener('click', () => this.openBookmarksModal());
 
     // 3. Audio Menu
     document.getElementById('miAudioEffects')?.addEventListener('click', () => this.openEffectsDialog('audio'));
@@ -605,6 +612,21 @@ class DZPlayerApp {
       } else if (e.shiftKey && e.key.toLowerCase() === 's') {
         e.preventDefault();
         this.takeSnapshot();
+      } else if (e.ctrlKey && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        this.openBookmarksModal();
+      } else if (e.key.toLowerCase() === 'j') {
+        e.preventDefault();
+        this.adjustAudioDelay(-50);
+      } else if (e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        this.adjustAudioDelay(50);
+      } else if (e.key.toLowerCase() === 'g') {
+        e.preventDefault();
+        this.adjustSubtitleSync(-50);
+      } else if (e.key.toLowerCase() === 'h') {
+        e.preventDefault();
+        this.adjustSubtitleSync(50);
       } else if (e.ctrlKey && e.key.toLowerCase() === 'e') {
         e.preventDefault();
         this.openEffectsDialog('audio');
@@ -1008,6 +1030,102 @@ class DZPlayerApp {
 
   stopVisualizer() {
     if (this.visualizerId) cancelAnimationFrame(this.visualizerId);
+  }
+
+  adjustAudioDelay(delta) {
+    this.audioDelayMs = (this.audioDelayMs || 0) + delta;
+    if (this.dom.valAudioSync) this.dom.valAudioSync.textContent = `${this.audioDelayMs > 0 ? '+' : ''}${this.audioDelayMs} ms`;
+    this.showOSD(`تأخير الصوت: ${this.audioDelayMs > 0 ? '+' : ''}${this.audioDelayMs} ms`);
+  }
+
+  initBookmarks() {
+    this.bookmarks = [];
+    this.loadBookmarks();
+
+    this.dom.btnCreateBookmark?.addEventListener('click', () => this.createBookmark());
+    this.dom.btnClearAllBookmarks?.addEventListener('click', () => this.clearAllBookmarks());
+  }
+
+  openBookmarksModal() {
+    this.loadBookmarks();
+    this.renderBookmarks();
+    this.dom.modalBookmarks.classList.add('active');
+    this.dom.bmTitleInput.value = '';
+    this.dom.bmTitleInput.focus();
+  }
+
+  loadBookmarks() {
+    const key = `dz_player_bm_${this.currentFileName || 'default'}`;
+    try {
+      this.bookmarks = JSON.parse(localStorage.getItem(key) || '[]');
+    } catch {
+      this.bookmarks = [];
+    }
+  }
+
+  saveBookmarks() {
+    const key = `dz_player_bm_${this.currentFileName || 'default'}`;
+    localStorage.setItem(key, JSON.stringify(this.bookmarks));
+  }
+
+  createBookmark() {
+    const curTime = this.dom.video.currentTime || 0;
+    const title = this.dom.bmTitleInput.value.trim() || `علامة عند ${this.formatTime(curTime)}`;
+    this.bookmarks.push({ id: Date.now(), title, time: curTime });
+    this.saveBookmarks();
+    this.renderBookmarks();
+    this.dom.bmTitleInput.value = '';
+    this.showOSD(`تم حفظ الإشارة: ${title}`);
+  }
+
+  deleteBookmark(id) {
+    this.bookmarks = this.bookmarks.filter(b => b.id !== id);
+    this.saveBookmarks();
+    this.renderBookmarks();
+  }
+
+  clearAllBookmarks() {
+    if (confirm(this.currentLang === 'ar' ? 'هل تريد حذف كافة الإشارات المرجعية؟' : 'Delete all bookmarks?')) {
+      this.bookmarks = [];
+      this.saveBookmarks();
+      this.renderBookmarks();
+    }
+  }
+
+  renderBookmarks() {
+    const c = this.dom.bookmarksListContainer;
+    if (!c) return;
+    if (this.bookmarks.length === 0) {
+      c.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:24px 0;">لا توجد إشارات مرجعية مسجلة لهذا المقطع</div>';
+      return;
+    }
+
+    c.innerHTML = this.bookmarks.map(b => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 8px; border-bottom:1px solid var(--border-color);">
+        <div style="cursor:pointer; flex:1;" data-jump="${b.time}" class="bm-jump-item">
+          <strong style="color:var(--accent-orange); margin-inline-end:8px;">[${this.formatTime(b.time)}]</strong>
+          <span>${b.title}</span>
+        </div>
+        <button data-del="${b.id}" class="btn-icon-small bm-del-item" style="color:var(--accent-rose);">&times;</button>
+      </div>
+    `).join('');
+
+    c.querySelectorAll('.bm-jump-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const t = parseFloat(el.getAttribute('data-jump'));
+        this.dom.video.currentTime = t;
+        this.dom.modalBookmarks.classList.remove('active');
+        this.showOSD(`قفز إلى: ${this.formatTime(t)}`);
+      });
+    });
+
+    c.querySelectorAll('.bm-del-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.getAttribute('data-del'));
+        this.deleteBookmark(id);
+      });
+    });
   }
 }
 
