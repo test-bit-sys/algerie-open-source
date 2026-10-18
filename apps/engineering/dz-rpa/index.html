@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-RPA Pro — محرك الحسابات الزلزالية الجزائري RPA 99 / Version 2003</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070c18;
+      --bg-surface: #0f172a;
+      --bg-card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #0284c7;
+      --accent-hover: #0369a1;
+      --accent-glow: rgba(2, 132, 199, 0.25);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Cairo', 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Nav */
+    header.app-header {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-wrap img {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand-text p {
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #334155;
+      border-color: #64748b;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Main Container */
+    main.rpa-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    @media (max-width: 1024px) {
+      main.rpa-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Form Panel */
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-label span.param-sym {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    select, input[type="number"], input[type="text"] {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Results Dashboard */
+    .results-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .stat-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
+    }
+
+    .stat-name {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-val {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-unit {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: normal;
+      margin-inline-start: 4px;
+    }
+
+    /* Graphical Visualization */
+    .vis-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .building-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #090e1a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      overflow-x: auto;
+    }
+
+    .floor-row {
+      display: grid;
+      grid-template-columns: 80px 140px 1fr 100px;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.82rem;
+    }
+
+    .floor-name {
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .floor-force-bar-wrap {
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      height: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .floor-force-bar {
+      background: linear-gradient(90deg, var(--accent) 0%, #38bdf8 100%);
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+
+    .floor-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Native Terminal Hint */
+    .native-box {
+      background: #040711;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .native-box code {
+      word-break: break-all;
+    }
+
+    /* Table */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: right;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.data-table th {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    table.data-table tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Print styles */
+    @media print {
+      header.app-header, .header-actions, .native-box, .btn { display: none !important; }
+      body, main.rpa-container { background: #fff !important; color: #000 !important; }
+      .panel, .stat-card, .vis-card, .building-diagram { border: 1px solid #ccc !important; background: #fff !important; color: #000 !important; }
+      .stat-val, .brand-text h1, .panel-title { color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="app-header">
+    <a href="../../../index.html" class="brand-wrap">
+      <img src="assets/logo.svg" alt="DZ-RPA">
+      <div class="brand-text">
+        <h1>DZ-RPA Pro</h1>
+        <p>محرك الحساب الزلزالي الجزائري (DTR-BC 2-48 / RPA 99 v2003)</p>
+      </div>
+    </a>
+    <div class="header-actions">
+      <button class="btn" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        <span>طباعة المذكرة التقنية</span>
+      </button>
+      <a href="../../../index.html" class="btn btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>العودة للبوابة</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="rpa-container">
+    
+    <!-- Input Form -->
+    <section class="panel">
+      <div class="panel-title">
+        <span>معايير المنشأة والموقع (DTR RPA)</span>
+        <span style="font-size:0.75rem; color:var(--accent); font-weight:600;">نسخة رسمية 2003</span>
+      </div>
+
+      <!-- Wilaya & Zone -->
+      <div class="form-group">
+        <label class="form-label" for="wilayaSelect">
+          <span>الولاية (Wilaya)</span>
+          <span class="param-sym" id="zoneBadge">المنطقة الزلزالية: Zone III</span>
+        </label>
+        <select id="wilayaSelect"></select>
+      </div>
+
+      <!-- Building Group -->
+      <div class="form-group">
+        <label class="form-label" for="groupSelect">
+          <span>مجموعة الاستخدام والأهمية (Groupe d'Usage)</span>
+          <span class="param-sym">A = معامل التسارع</span>
+        </label>
+        <select id="groupSelect">
+          <option value="1A">Groupe 1A : منشآت حيوية واستراتيجية (مستشفيات، مراكز طوارئ)</option>
+          <option value="1B">Groupe 1B : منشآت كبرى (مساجد كبرى، ملاعب، مدارس)</option>
+          <option value="2" selected>Groupe 2 : منشآت متوسطة (عمارات سكنية، مكاتب إدارية)</option>
+          <option value="3">Groupe 3 : منشآت خفيفة (حظائر مؤقتة، مستودعات زراعية)</option>
+        </select>
+      </div>
+
+      <!-- Soil Site Classification -->
+      <div class="form-group">
+        <label class="form-label" for="soilSelect">
+          <span>تصنيف التربة والموقع (Catégorie de Sol)</span>
+          <span class="param-sym">T1, T2</span>
+        </label>
+        <select id="soilSelect">
+          <option value="S1">S1 : صخرية صلبة جداً (Rocher / Sol ferme) [T2=0.30s]</option>
+          <option value="S2" selected>S2 : تربة متماسكة (Sol ferme) [T2=0.40s]</option>
+          <option value="S3">S3 : تربة مفككة (Sol meuble) [T2=0.50s]</option>
+          <option value="S4">S4 : تربة هشة جداً (Sol très meuble) [T2=0.70s]</option>
+        </select>
+      </div>
+
+      <!-- Structural Behavior Factor R -->
+      <div class="form-group">
+        <label class="form-label" for="structSelect">
+          <span>نظام مقاومة القوى الجانبية (Système de Contreventement)</span>
+          <span class="param-sym">R</span>
+        </label>
+        <select id="structSelect">
+          <option value="5.0" selected>Portiques en béton armé (هيكل أعمدة وروافد خرسانية) [R=5.0]</option>
+          <option value="3.5">Voiles porteurs en béton armé (جدران قص خرسانية) [R=3.5]</option>
+          <option value="4.0">Système mixte (هيكل مختلط أعمدة وجدران قص) [R=4.0]</option>
+          <option value="4.0">Ossature métallique contreventée (هيكل معدني مدعم) [R=4.0]</option>
+          <option value="2.0">Maçonnerie chaînée (بناء مقيد) [R=2.0]</option>
+        </select>
+      </div>
+
+      <!-- Building Dimensions -->
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="buildingHeight">
+            <span>ارتفاع المبنى (hn)</span>
+            <span class="param-sym">متر</span>
+          </label>
+          <input type="number" id="buildingHeight" value="24" min="3" max="150" step="0.5">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="numStories">
+            <span>عدد الطوابق (R+)</span>
+            <span class="param-sym">طابق</span>
+          </label>
+          <input type="number" id="numStories" value="8" min="1" max="40" step="1">
+        </div>
+      </div>
+
+      <!-- Weight & Damping -->
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="totalWeight">
+            <span>وزن المنشأة (W)</span>
+            <span class="param-sym">kN</span>
+          </label>
+          <input type="number" id="totalWeight" value="12000" min="100" max="1000000" step="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="dampingRatio">
+            <span>نسبة التخميد (ξ)</span>
+            <span class="param-sym">%</span>
+          </label>
+          <input type="number" id="dampingRatio" value="7.0" min="2" max="15" step="0.5">
+        </div>
+      </div>
+
+      <!-- Quality Factor Q -->
+      <div class="form-group">
+        <label class="form-label" for="qualityFactor">
+          <span>معامل الجودة (Facteur de Qualité Q)</span>
+          <span class="param-sym">1 + Σ Pq</span>
+        </label>
+        <input type="number" id="qualityFactor" value="1.20" min="1.0" max="1.5" step="0.05">
+      </div>
+
+      <!-- Terminal Native Engine Hint -->
+      <div class="native-box">
+        <div>
+          <div style="font-size:0.7rem; color:#94a3b8; margin-bottom:2px;">محرك بايثون الأصلي في سطر الأوامر:</div>
+          <code id="cliCmd">python apps/engineering/dz-rpa/rpa_engine.py</code>
+        </div>
+        <button class="btn" style="padding:4px 8px; font-size:0.75rem;" onclick="copyCmd()">نسخ</button>
+      </div>
+    </section>
+
+    <!-- Calculation Results -->
+    <section class="results-panel">
+      
+      <!-- Key Statistics -->
+      <div class="stats-row">
+        <div class="stat-card featured">
+          <span class="stat-name">قوة القص القاعدية الإجمالية (V)</span>
+          <div class="stat-val"><span id="valV">0.0</span><span class="stat-unit">kN</span></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-name">معامل تسارع المنطقة (A)</span>
+          <div class="stat-val"><span id="valA">0.00</span></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-name">معامل التضخيم الديناميكي (D)</span>
+          <div class="stat-val"><span id="valD">0.00</span></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-name">الدور الأساسي التقديري (T)</span>
+          <div class="stat-val"><span id="valT">0.00</span><span class="stat-unit">ثانية</span></div>
+        </div>
+      </div>
+
+      <!-- Floor Distribution Visualization -->
+      <div class="vis-card">
+        <div class="panel-title">
+          <span>التوزيع العمودي للقوى الزلزالية على الطوابق (Fk & Vk)</span>
+          <span style="font-size:0.75rem; color:#38bdf8;">DTR-BC 2-48 Art. 4.2.5</span>
+        </div>
+
+        <div class="building-diagram" id="floorsDiagram">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Detailed Results Table -->
+      <div class="vis-card">
+        <div class="panel-title">
+          <span>جدول القوى وعزوم الانقلاب الطابقية</span>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>الطابق</th>
+              <th>الارتفاع hk (م)</th>
+              <th>الوزن Wk (kN)</th>
+              <th>القوة الجانبية Fk (kN)</th>
+              <th>قوة القص Vk (kN)</th>
+              <th>عزم الانقلاب Mk (kN.m)</th>
+            </tr>
+          </thead>
+          <tbody id="floorsTableBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    // 58 Wilayas RPA 99/2003 Seismic Zoning
+    const WILAYAS_ZONES = [
+      { id: 1, name: "01 - أدرار (Adrar)", zone: "0" },
+      { id: 2, name: "02 - الشلف (Chlef)", zone: "III" },
+      { id: 3, name: "03 - الأغواط (Laghouat)", zone: "I" },
+      { id: 4, name: "04 - أم البواقي (Oum El Bouaghi)", zone: "I" },
+      { id: 5, name: "05 - باتنة (Batna)", zone: "IIa" },
+      { id: 6, name: "06 - بجاية (Béjaïa)", zone: "IIa" },
+      { id: 7, name: "07 - بسكرة (Biskra)", zone: "I" },
+      { id: 8, name: "08 - بشار (Béchar)", zone: "0" },
+      { id: 9, name: "09 - البليدة (Blida)", zone: "III" },
+      { id: 10, name: "10 - البويرة (Bouira)", zone: "IIa" },
+      { id: 11, name: "11 - تمنراست (Tamanrasset)", zone: "0" },
+      { id: 12, name: "12 - تبسة (Tébessa)", zone: "I" },
+      { id: 13, name: "13 - تلمسان (Tlemcen)", zone: "I" },
+      { id: 14, name: "14 - تيارت (Tiaret)", zone: "I" },
+      { id: 15, name: "15 - تيزي وزو (Tizi Ouzou)", zone: "IIa" },
+      { id: 16, name: "16 - الجزائر العاصمة (Alger)", zone: "III" },
+      { id: 17, name: "17 - الجلفة (Djelfa)", zone: "I" },
+      { id: 18, name: "18 - جيجل (Jijel)", zone: "IIa" },
+      { id: 19, name: "19 - سطيف (Sétif)", zone: "IIa" },
+      { id: 20, name: "20 - سعيدة (Saïda)", zone: "I" },
+      { id: 21, name: "21 - سكيكدة (Skikda)", zone: "IIa" },
+      { id: 22, name: "22 - سيدي بلعباس (Sidi Bel Abbès)", zone: "I" },
+      { id: 23, name: "23 - عنابة (Annaba)", zone: "IIa" },
+      { id: 24, name: "24 - قالمة (Guelma)", zone: "IIa" },
+      { id: 25, name: "25 - قسنطينة (Constantine)", zone: "IIa" },
+      { id: 26, name: "26 - المدية (Médéa)", zone: "IIb" },
+      { id: 27, name: "27 - مستغانم (Mostaganem)", zone: "IIa" },
+      { id: 28, name: "28 - المسيلة (M'Sila)", zone: "IIa" },
+      { id: 29, name: "29 - معسكر (Mascara)", zone: "IIa" },
+      { id: 30, name: "30 - ورقلة (Ouargla)", zone: "0" },
+      { id: 31, name: "31 - وهران (Oran)", zone: "IIa" },
+      { id: 32, name: "32 - البيض (El Bayadh)", zone: "0" },
+      { id: 33, name: "33 - إليزي (Illizi)", zone: "0" },
+      { id: 34, name: "34 - برج بوعريريج (Bordj Bou Arréridj)", zone: "IIa" },
+      { id: 35, name: "35 - بومرداس (Boumerdès)", zone: "III" },
+      { id: 36, name: "36 - الطارف (El Tarf)", zone: "IIa" },
+      { id: 37, name: "37 - تندوف (Tindouf)", zone: "0" },
+      { id: 38, name: "38 - تسمسيلت (Tissemsilt)", zone: "IIa" },
+      { id: 39, name: "39 - الوادي (El Oued)", zone: "0" },
+      { id: 40, name: "40 - خنشلة (Khenchela)", zone: "I" },
+      { id: 41, name: "41 - سوق أهراس (Souk Ahras)", zone: "I" },
+      { id: 42, name: "42 - تيبازة (Tipaza)", zone: "III" },
+      { id: 43, name: "43 - ميلة (Mila)", zone: "IIa" },
+      { id: 44, name: "44 - عين الدفلى (Aïn Defla)", zone: "IIb" },
+      { id: 45, name: "45 - النعامة (Naâma)", zone: "0" },
+      { id: 46, name: "46 - عين تموشنت (Aïn Témouchent)", zone: "IIa" },
+      { id: 47, name: "47 - غرداية (Ghardaïa)", zone: "0" },
+      { id: 48, name: "48 - غليزان (Relizane)", zone: "IIa" },
+      { id: 49, name: "49 - تيميمون (Timimoun)", zone: "0" },
+      { id: 50, name: "50 - برج باجي مختار (Bordj Badji Mokhtar)", zone: "0" },
+      { id: 51, name: "51 - أولاد جلال (Ouled Djellal)", zone: "I" },
+      { id: 52, name: "52 - بني عباس (Béni Abbès)", zone: "0" },
+      { id: 53, name: "53 - عين صالح (In Salah)", zone: "0" },
+      { id: 54, name: "54 - عين قزام (In Guezzam)", zone: "0" },
+      { id: 55, name: "55 - تقرت (Touggourt)", zone: "0" },
+      { id: 56, name: "56 - جانت (Djanet)", zone: "0" },
+      { id: 57, name: "57 - المغير (El M'Ghair)", zone: "0" },
+      { id: 58, name: "58 - المنيعة (El Meniaa)", zone: "0" }
+    ];
+
+    // RPA Acceleration Matrix A (Zone x Group)
+    const ACCEL_MATRIX = {
+      "0":   { "1A": 0.00, "1B": 0.00, "2": 0.00, "3": 0.00 },
+      "I":   { "1A": 0.15, "1B": 0.12, "2": 0.10, "3": 0.07 },
+      "IIa": { "1A": 0.25, "1B": 0.20, "2": 0.15, "3": 0.10 },
+      "IIb": { "1A": 0.30, "1B": 0.25, "2": 0.20, "3": 0.14 },
+      "III": { "1A": 0.40, "1B": 0.30, "2": 0.25, "3": 0.18 }
+    };
+
+    // Soil Parameters (T1, T2)
+    const SOIL_PARAMS = {
+      "S1": { T1: 0.15, T2: 0.30 },
+      "S2": { T1: 0.15, T2: 0.40 },
+      "S3": { T1: 0.15, T2: 0.50 },
+      "S4": { T1: 0.15, T2: 0.70 }
+    };
+
+    // Populate Wilayas
+    const wilayaSelect = document.getElementById('wilayaSelect');
+    WILAYAS_ZONES.forEach(w => {
+      const opt = document.createElement('option');
+      opt.value = w.id;
+      opt.textContent = w.name;
+      if (w.id === 16) opt.selected = true; // Alger default
+      wilayaSelect.appendChild(opt);
+    });
+
+    function calculateRPA() {
+      const wilayaId = parseInt(wilayaSelect.value, 10);
+      const wilayaData = WILAYAS_ZONES.find(w => w.id === wilayaId) || WILAYAS_ZONES[15];
+      const zone = wilayaData.zone;
+      const group = document.getElementById('groupSelect').value;
+      const soil = document.getElementById('soilSelect').value;
+      const R = parseFloat(document.getElementById('structSelect').value);
+      const Hn = parseFloat(document.getElementById('buildingHeight').value);
+      const stories = parseInt(document.getElementById('numStories').value, 10);
+      const W = parseFloat(document.getElementById('totalWeight').value);
+      const xi = parseFloat(document.getElementById('dampingRatio').value);
+      const Q = parseFloat(document.getElementById('qualityFactor').value);
+
+      document.getElementById('zoneBadge').textContent = `المنطقة الزلزالية: Zone ${zone}`;
+
+      // A
+      const A = ACCEL_MATRIX[zone][group];
+
+      // Damping correction eta
+      const eta = Math.max(0.7, Math.sqrt(7.0 / (2.0 + xi)));
+
+      // Fundamental Period T (approx Ct * Hn^0.75)
+      const Ct = 0.075; // Concrete frame
+      const T = Ct * Math.pow(Hn, 0.75);
+
+      // Soil T1, T2
+      const { T1, T2 } = SOIL_PARAMS[soil];
+
+      // Dynamic Amplification D
+      let D = 2.5 * eta;
+      if (T <= T1) {
+        D = 1.0 + (T / T1) * (2.5 * eta - 1.0);
+      } else if (T <= T2) {
+        D = 2.5 * eta;
+      } else if (T <= 3.0) {
+        D = 2.5 * eta * Math.pow(T2 / T, 2.0 / 3.0);
+      } else {
+        D = 2.5 * eta * Math.pow(T2 / 3.0, 2.0 / 3.0) * Math.pow(3.0 / T, 5.0 / 3.0);
+      }
+
+      // Base Shear Force V = (A * D * Q / R) * W
+      const V = (A * D * Q / R) * W;
+
+      // Update UI Stats
+      document.getElementById('valV').textContent = V.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+      document.getElementById('valA').textContent = A.toFixed(2);
+      document.getElementById('valD').textContent = D.toFixed(3);
+      document.getElementById('valT').textContent = T.toFixed(3);
+
+      // CLI hint
+      document.getElementById('cliCmd').textContent = `npm run native:rpa -- --wilaya ${wilayaId} --group ${group} --soil ${soil} --weight ${W} --height ${Hn} --stories ${stories}`;
+
+      // Distribute Forces by floor
+      let Ft = 0;
+      if (T > 0.7) {
+        Ft = 0.07 * T * V;
+        if (Ft > 0.25 * V) Ft = 0.25 * V;
+      }
+
+      const floorHeight = Hn / stories;
+      const floorWeight = W / stories;
+      let sumWh = 0;
+      const floorsData = [];
+
+      for (let k = 1; k <= stories; k++) {
+        const hk = k * floorHeight;
+        sumWh += floorWeight * hk;
+        floorsData.push({ k, hk, Wk: floorWeight });
+      }
+
+      const remainingV = V - Ft;
+      let cumV = 0;
+
+      // Calculate forces from top down
+      for (let i = floorsData.length - 1; i >= 0; i--) {
+        const f = floorsData[i];
+        let Fk = (remainingV * f.Wk * f.hk) / sumWh;
+        if (f.k === stories) {
+          Fk += Ft;
+        }
+        cumV += Fk;
+        f.Fk = Fk;
+        f.Vk = cumV;
+        f.Mk = cumV * floorHeight;
+      }
+
+      // Render Visual Diagram and Table
+      renderDiagramAndTable(floorsData, V);
+    }
+
+    function renderDiagramAndTable(floors, totalV) {
+      const diagram = document.getElementById('floorsDiagram');
+      const tbody = document.getElementById('floorsTableBody');
+      diagram.innerHTML = '';
+      tbody.innerHTML = '';
+
+      const maxForce = Math.max(...floors.map(f => f.Fk), 1);
+
+      // Reverse order (top floor first)
+      for (let i = floors.length - 1; i >= 0; i--) {
+        const f = floors[i];
+        const pct = (f.Fk / maxForce) * 100;
+
+        // Diagram Row
+        const row = document.createElement('div');
+        row.className = 'floor-row';
+        row.innerHTML = `
+          <div class="floor-name">طابق R+${f.k}</div>
+          <div class="floor-val">${f.Fk.toFixed(1)} kN</div>
+          <div class="floor-force-bar-wrap">
+            <div class="floor-force-bar" style="width: ${pct}%;"></div>
+          </div>
+          <div style="font-size:0.75rem; color:#94a3b8; font-family:monospace;">Vk: ${f.Vk.toFixed(1)} kN</div>
+        `;
+        diagram.appendChild(row);
+
+        // Table Row
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>R+${f.k}</strong></td>
+          <td style="font-family:monospace;">${f.hk.toFixed(2)}</td>
+          <td style="font-family:monospace;">${f.Wk.toFixed(1)}</td>
+          <td style="font-family:monospace; color:#38bdf8; font-weight:700;">${f.Fk.toFixed(2)}</td>
+          <td style="font-family:monospace; color:#10b981; font-weight:700;">${f.Vk.toFixed(2)}</td>
+          <td style="font-family:monospace;">${f.Mk.toFixed(1)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    function copyCmd() {
+      const cmd = document.getElementById('cliCmd').textContent;
+      navigator.clipboard.writeText(cmd).then(() => {
+        alert("تم نسخ أمر سطر الأوامر لتشغيل محرك بايثون الأصلي!");
+      });
+    }
+
+    // Event listeners
+    [
+      'wilayaSelect', 'groupSelect', 'soilSelect', 'structSelect',
+      'buildingHeight', 'numStories', 'totalWeight', 'dampingRatio', 'qualityFactor'
+    ].forEach(id => {
+      document.getElementById(id).addEventListener('input', calculateRPA);
+    });
+
+    // Initial calculation
+    calculateRPA();
+  </script>
+</body>
+</html>

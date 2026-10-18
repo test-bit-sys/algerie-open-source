@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="paieGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#4338ca"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="22" fill="url(#paieGrad)"/>
+  <!-- Pay Slip Sheet -->
+  <rect x="24" y="20" width="52" height="60" rx="5" fill="#1e1b4b" stroke="#818cf8" stroke-width="2.5"/>
+  <!-- Top Header / Barcode simulation -->
+  <line x1="32" y1="28" x2="68" y2="28" stroke="#a5b4fc" stroke-width="3" stroke-linecap="round"/>
+  <!-- Pay Lines -->
+  <line x1="32" y1="38" x2="55" y2="38" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+  <line x1="62" y1="38" x2="68" y2="38" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+  <line x1="32" y1="46" x2="52" y2="46" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+  <line x1="62" y1="46" x2="68" y2="46" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+  <line x1="32" y1="54" x2="58" y2="54" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+  <line x1="62" y1="54" x2="68" y2="54" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+  <!-- Total Net Badge -->
+  <rect x="30" y="62" width="40" height="12" rx="3" fill="#10b981"/>
+  <text x="50" y="71" font-family="sans-serif" font-size="7" font-weight="900" fill="#ffffff" text-anchor="middle">NET DZD</text>
+</svg>

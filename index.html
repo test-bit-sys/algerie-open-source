@@ -368,6 +368,20 @@
       font-weight: 500;
     }
 
+    .native-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+    }
+
     .app-description {
       font-size: 0.84rem;
       color: var(--text-muted);
@@ -506,24 +520,27 @@
   <section class="hero-section">
     <div class="hero-badge">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-      <span>12 برمجية مكتبية سيادية جاهزة للتشغيل والتجربة الفورية 100% بدون إنترنت</span>
+      <span>15 برمجية سيادية وهندسية ومكتبية جاهزة للتشغيل الفوري مع محركات أصلية (Rust, C#, Python) 100% بدون إنترنت</span>
     </div>
     <h1 class="hero-title">
       جرب البرمجيات الجزائرية مباشرة في <span>المتصفح</span>
     </h1>
     <p class="hero-subtitle">
-      المنظومة الوطنية الشاملة للبدائل البرمجية المكتبية الحرة والمستقلة. اضغط على أي برنامج لتجربته فورياً في متصفحك دون الحاجة لتثبيت أي شيء أو إنشاء حسابات.
+      المنظومة الوطنية الشاملة للبدائل البرمجية المكتبية الحرة والمستقلة. اضغط على أي برنامج لتجربته فورياً في متصفحك أو تشغيل المحرك الأصلي عالي الأداء دون الحاجة لاتصال بالإنترنت.
     </p>
 
     <!-- Category Filters -->
     <div class="filter-tabs" id="filterTabs">
-      <button class="filter-tab active" data-category="all">كافة البرمجيات (12)</button>
+      <button class="filter-tab active" data-category="all">كافة البرمجيات (15)</button>
       <button class="filter-tab" data-category="office">حزمة المكتب (Word, Calc, Slides, PDF)</button>
+      <button class="filter-tab" data-category="finance">المالية والمحاسبة (Compta SCF, Paie RH)</button>
+      <button class="filter-tab" data-category="engineering">الهندسة المدنية والزلازل (DZ-RPA)</button>
       <button class="filter-tab" data-category="business">التجارة ونقاط البيع (DZ-Facture POS)</button>
       <button class="filter-tab" data-category="productivity">أدوات الإنتاجية (WizTree, WinRAR)</button>
       <button class="filter-tab" data-category="media">الوسائط والتصميم (Photoshop, VLC)</button>
       <button class="filter-tab" data-category="collaboration">المشاريع والتعليم (Kanban, Miro)</button>
       <button class="filter-tab" data-category="dev">المطورين و 58 ولاية (DevTools)</button>
+      <button class="filter-tab" data-category="native">المحركات الأصلية والأنظمة (Rust, C#, Python)</button>
     </div>
   </section>
 
@@ -748,7 +765,7 @@
       </div>
 
       <!-- 7. DZ-Photo Studio -->
-      <div class="app-card" data-category="media" data-keywords="photo photoshop canva design تصميم فوتوشوب صور رسم طبقات مرشحات">
+      <div class="app-card" data-category="media native" data-keywords="photo photoshop canva design تصميم فوتوشوب صور رسم طبقات مرشحات python numpy">
         <div>
           <div class="app-card-header">
             <div class="app-logo-wrap">
@@ -758,10 +775,16 @@
               <span class="app-category-badge">التصميم والوسائط · المنفذ 3010</span>
               <h2 class="app-title">DZ-Photo Studio</h2>
               <span class="app-alt-badge">بديل Photoshop و PhotoCraft</span>
+              <div>
+                <span class="native-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  محرك بايثون متقدم (Python/NumPy/PIL)
+                </span>
+              </div>
             </div>
           </div>
           <p class="app-description">
-            استوديو تصميم ورسم ومعالجة صور نقطية متعدد الطبقات (Layers Stack) مع مرشحات جزائرية حصرية (غروب الصحراء وبحر الجزائر)، وأبعاد السوشيال ميديا.
+            استوديو تصميم ورسم ومعالجة صور نقطية متعدد الطبقات (Layers Stack) مع مرشحات جزائرية حصرية (غروب الصحراء وبحر الجزائر)، وأبعاد السوشيال ميديا ومحرك بايثون الأصلي.
           </p>
           <ul class="app-features-list">
             <li class="app-feature-item">
@@ -779,7 +802,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             <span>جرب البرنامج الآن (Try Now)</span>
           </a>
-          <div class="cmd-hint">npm run start:photo</div>
+          <div class="cmd-hint">npm run native:photo أو npm run start:photo</div>
         </div>
       </div>
 
@@ -820,7 +843,7 @@
       </div>
 
       <!-- 9. DZ-DevTools -->
-      <div class="app-card" data-category="dev" data-keywords="devtools developers wilayas ccp rip cib edahabia مطورين ولايات كود بريد">
+      <div class="app-card" data-category="dev native" data-keywords="devtools developers wilayas ccp rip cib edahabia rust مطورين ولايات كود بريد">
         <div>
           <div class="app-card-header">
             <div class="app-logo-wrap">
@@ -830,10 +853,16 @@
               <span class="app-category-badge">أدوات المطورين · المنفذ 3009</span>
               <h2 class="app-title">DZ-DevTools Pro</h2>
               <span class="app-alt-badge">المنصة السيادية للمطورين و 58 ولاية</span>
+              <div>
+                <span class="native-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  محرك أصلي مدمج فائق السرعة (Rust CLI)
+                </span>
+              </div>
             </div>
           </div>
           <p class="app-description">
-            المنصة الوطنية للمطورين: قاعدة الـ 58 ولاية المصنفة، حاسبة مفتاح CCP ومولد RIP، فحص بطاقات CIB والذهبية، مدقق NIF/NIS/RC، وحزمة Tafqit SDK.
+            المنصة الوطنية للمطورين: قاعدة الـ 58 ولاية المصنفة، حاسبة مفتاح CCP ومولد RIP، فحص بطاقات CIB والذهبية، مدقق NIF/NIS/RC، مع أداة سطر أوامر Rust مستقلة.
           </p>
           <ul class="app-features-list">
             <li class="app-feature-item">
@@ -851,12 +880,12 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             <span>جرب البرنامج الآن (Try Now)</span>
           </a>
-          <div class="cmd-hint">npm run start:devtools</div>
+          <div class="cmd-hint">npm run native:devtools أو npm run start:devtools</div>
         </div>
       </div>
 
       <!-- 10. DZ-Player -->
-      <div class="app-card" data-category="media" data-keywords="player vlc video audio media مشغل وسائط صوت فيديو ترجمة">
+      <div class="app-card" data-category="media native" data-keywords="player vlc video audio media python dsp مشغل وسائط صوت فيديو ترجمة">
         <div>
           <div class="app-card-header">
             <div class="app-logo-wrap">
@@ -866,6 +895,12 @@
               <span class="app-category-badge">الوسائط المتعددة · المنفذ 3003</span>
               <h2 class="app-title">DZ-Player Pro</h2>
               <span class="app-alt-badge">بديل VLC Media Player 1:1</span>
+              <div>
+                <span class="native-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  محرك معالجة صوت بايثون (Python DSP & Subtitles)
+                </span>
+              </div>
             </div>
           </div>
           <p class="app-description">
@@ -887,12 +922,12 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             <span>جرب البرنامج الآن (Try Now)</span>
           </a>
-          <div class="cmd-hint">npm run start:player</div>
+          <div class="cmd-hint">npm run native:player أو npm run start:player</div>
         </div>
       </div>
 
       <!-- 11. DZ-Archive -->
-      <div class="app-card" data-category="productivity" data-keywords="archive winrar 7zip zip ضغط أرشيف تشفير ملفات">
+      <div class="app-card" data-category="productivity native" data-keywords="archive winrar 7zip zip rust ضغط أرشيف تشفير ملفات">
         <div>
           <div class="app-card-header">
             <div class="app-logo-wrap">
@@ -902,10 +937,16 @@
               <span class="app-category-badge">أدوات النظام · المنفذ 3002</span>
               <h2 class="app-title">DZ-Archive Pro</h2>
               <span class="app-alt-badge">بديل WinRAR و 7-Zip 1:1</span>
+              <div>
+                <span class="native-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  محرك رست أصلي خارق (Rust 7,000+ MB/s)
+                </span>
+              </div>
             </div>
           </div>
           <p class="app-description">
-            أداة أرشفة وضغط وتشفير الملفات بكلمة سر عبر AES-256-GCM، عارض ملفات نصوص وهكسا داخلي، فحص بصمة CRC-32، واختبار كفاءة العتاد والمعالج.
+            أداة أرشفة وضغط وتشفير الملفات بكلمة سر عبر AES-256-GCM، عارض هكسا، فحص CRC-32، مع محرك لغة Rust المتعدد المسارات لاختبار العتاد والضغط الفائق.
           </p>
           <ul class="app-features-list">
             <li class="app-feature-item">
@@ -923,12 +964,12 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             <span>جرب البرنامج الآن (Try Now)</span>
           </a>
-          <div class="cmd-hint">npm run start:archive</div>
+          <div class="cmd-hint">npm run native:archive أو npm run start:archive</div>
         </div>
       </div>
 
       <!-- 12. DZ-DiskTree -->
-      <div class="app-card" data-category="productivity" data-keywords="disk tree wiztree storage مساحة قرص تخزين فحص">
+      <div class="app-card" data-category="productivity native" data-keywords="disk tree wiztree storage rust مساحة قرص تخزين فحص">
         <div>
           <div class="app-card-header">
             <div class="app-logo-wrap">
@@ -938,10 +979,16 @@
               <span class="app-category-badge">أدوات النظام · المنفذ 3001</span>
               <h2 class="app-title">DZ-DiskTree Pro</h2>
               <span class="app-alt-badge">بديل WizTree و TreeSize 1:1</span>
+              <div>
+                <span class="native-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  محرك مسح عتادي لغة رست (Rust 3ms Engine)
+                </span>
+              </div>
             </div>
           </div>
           <p class="app-description">
-            محلل مساحات الأقراص والتخزين فائق السرعة مع خريطة شجرية مجسمة (Cushioned Treemap)، فرز الأعمدة التفاعلي، تقارير تدقيق قابلة للطباعة، وتصدير CSV.
+            محلل مساحات الأقراص والتخزين فائق السرعة مع خريطة شجرية مجسمة، وتطبيق Rust أصلي يقوم بمسح عناقيد القرص في أجزاء من الثانية.
           </p>
           <ul class="app-features-list">
             <li class="app-feature-item">
@@ -959,7 +1006,133 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             <span>جرب البرنامج الآن (Try Now)</span>
           </a>
-          <div class="cmd-hint">npm run start:disk-tree</div>
+          <div class="cmd-hint">npm run native:disk-tree أو npm run start:disk-tree</div>
+        </div>
+      </div>
+
+      <!-- 13. DZ-RPA -->
+      <div class="app-card" data-category="engineering native" data-keywords="rpa seismic earthquake rpa99 rpa2003 cgs هندسة مدنية زلازل مباني قواعد تقنية خرسانة python">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/engineering/dz-rpa/assets/logo.svg" alt="DZ-RPA">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">الهندسة المدنية والزلازل</span>
+              <h2 class="app-title">DZ-RPA Pro</h2>
+              <span class="app-alt-badge">كود الزلازل الجزائري RPA 99 / v2003</span>
+              <div>
+                <span class="native-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  محرك بايثون رسمي وحسابات DTR-BC 2-48
+                </span>
+              </div>
+            </div>
+          </div>
+          <p class="app-description">
+            محرك الحساب الزلزالي الجزائري الرسمي المعتمد على كود RPA 99 / Version 2003. حساب القوة الزلزالية الإجمالية V، مناطق الخطر للـ 58 ولاية، وتوزيع القوى الطابقية Fk.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصنيف زلزالي رسمي لجميع ولايات الجزائر (Zones 0, I, IIa, IIb, III)</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>توزيع القوى الزلزالية على الطوابق وعزوم الانقلاب وحساب معامل السلوك R</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/engineering/dz-rpa/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run native:rpa</div>
+        </div>
+      </div>
+
+      <!-- 14. DZ-Compta SCF -->
+      <div class="app-card" data-category="finance native" data-keywords="compta scf accounting balance journal grand-livre محاسبة نظام مالي ميزانية دفتر يومية csharp dotnet">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/finance-accounting/dz-compta/assets/logo.svg" alt="DZ-Compta">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">المالية والمحاسبة</span>
+              <h2 class="app-title">DZ-Compta SCF Pro</h2>
+              <span class="app-alt-badge">النظام المحاسبي المالي الجزائري SCF</span>
+              <div>
+                <span class="native-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  محرك C# .NET 10 بدقة عشرية 100%
+                </span>
+              </div>
+            </div>
+          </div>
+          <p class="app-description">
+            المحرك المحاسبي المالي السيادي المعتمد على النظام المحاسبي المالي الجزائري (SCF). معالجة قيود اليومية، دفتر الأستاذ، وميزان المراجعة بـ 6 أعمدة بدقة decimal تامة.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>ميزان مراجعة عام 6 أعمدة (Balance Générale) متطابق مدين ودائن بدقة تامة</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير تقارير محاسبية معتمدة لمصالح الضرائب والتجارة بصيغة CSV و PDF</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/finance-accounting/dz-compta/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run native:compta</div>
+        </div>
+      </div>
+
+      <!-- 15. DZ-Paie RH -->
+      <div class="app-card" data-category="finance native" data-keywords="paie rh payroll cnas irg cacbapth رواتب كشف أجور اشتراكات اقتطاعات عمال csharp dotnet">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/finance-accounting/dz-paie/assets/logo.svg" alt="DZ-Paie">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">الموارد البشرية والرواتب</span>
+              <h2 class="app-title">DZ-Paie RH Pro</h2>
+              <span class="app-alt-badge">كشف الراتب والضمان الاجتماعي والـ IRG</span>
+              <div>
+                <span class="native-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  محرك C# .NET 10 وسلم ضرائب DGI
+                </span>
+              </div>
+            </div>
+          </div>
+          <p class="app-description">
+            منظومة حساب كشوف الأجور وقوانين العمل الجزائرية. تطبيق سلم الضريبة على الدخل الإجمالي (IRG) مع تخفيض 40%، واشتراكات الضمان الاجتماعي CNAS (9% عامل و 26% رب عمل).
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>حساب فوري لصافي الدفع (Net à Payer) مع معالجة الساعات الإضافية والمردودية</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير كشوف رواتب رسمية فردية وتفقيط مالي بالدينار الجزائري</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/finance-accounting/dz-paie/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run native:paie</div>
         </div>
       </div>
 
@@ -968,7 +1141,7 @@
 
   <!-- Portal Footer -->
   <footer class="portal-footer">
-    <div>🇩🇿 المنظومة الجزائرية للبرمجيات الحرة (DZ Open Suite) — برمجيات وطنية مستقلة مفتوحة المصدر 100% بدون إنترنت</div>
+    <div>المنظومة الجزائرية للبرمجيات الحرة (DZ Open Suite) — برمجيات وطنية مستقلة مفتوحة المصدر 100% بدون إنترنت</div>
     <div class="footer-links">
       <a href="https://github.com/test-bit-sys/algerie-open-source" target="_blank">المستودع الرئيسي على GitHub</a> •
       <a href="LICENSE">رخصة MIT الحرة</a> •
@@ -987,10 +1160,10 @@
 
     function applyFilters() {
       appCards.forEach(card => {
-        const cat = card.getAttribute('data-category');
+        const cat = card.getAttribute('data-category') || '';
         const keywords = (card.getAttribute('data-keywords') + ' ' + card.innerText).toLowerCase();
 
-        const matchCat = (currentCategory === 'all' || cat === currentCategory);
+        const matchCat = (currentCategory === 'all' || cat.split(' ').includes(currentCategory));
         const matchSearch = (!searchQuery || keywords.includes(searchQuery));
 
         card.style.display = (matchCat && matchSearch) ? 'flex' : 'none';

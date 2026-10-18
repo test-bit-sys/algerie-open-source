@@ -25,7 +25,16 @@
     "dev:archive": "npx vite apps/productivity/dz-archive",
     "dev:player": "npx vite apps/multimedia/dz-player",
     "dev:pdf": "npx vite apps/office-suite/dz-pdf",
-    "build:archive": "npx vite build apps/productivity/dz-archive"
+    "build:archive": "npx vite build apps/productivity/dz-archive",
+    "native:disk-tree": "cargo run --release --manifest-path apps/productivity/dz-disk-tree/native-rust/Cargo.toml",
+    "native:archive": "cargo run --release --manifest-path apps/productivity/dz-archive/native-rust/Cargo.toml -- benchmark",
+    "native:devtools": "cargo run --release --manifest-path apps/developer-tools/dz-devtools/native-rust/Cargo.toml -- list-wilayas",
+    "native:rpa": "python apps/engineering/dz-rpa/rpa_engine.py",
+    "native:photo": "python apps/creative-tools/dz-photo/native-python/photo_engine.py",
+    "native:player": "python apps/multimedia/dz-player/native-python/player_engine.py",
+    "native:compta": "dotnet run --project apps/finance-accounting/dz-compta",
+    "native:paie": "dotnet run --project apps/finance-accounting/dz-paie",
+    "test:native": "cargo check --manifest-path apps/productivity/dz-disk-tree/native-rust/Cargo.toml && cargo check --manifest-path apps/productivity/dz-archive/native-rust/Cargo.toml && cargo check --manifest-path apps/developer-tools/dz-devtools/native-rust/Cargo.toml && dotnet build apps/finance-accounting/dz-compta && dotnet build apps/finance-accounting/dz-paie"
   },
   "keywords": [
     "algeria",

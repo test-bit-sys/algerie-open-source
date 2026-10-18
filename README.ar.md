@@ -2,14 +2,14 @@
 
 <img src="assets/logo.jpg" alt="المنظومة الجزائرية للبرمجيات المفتوحة المصدر" width="680">
 
-# 🇩🇿 المنظومة الجزائرية للبرمجيات المفتوحة المصدر
+# المنظومة الجزائرية للبرمجيات المفتوحة المصدر
 ## DZ Open Suite
 ### المنظومة الوطنية الشاملة للبدائل البرمجية المكتبية الحرة والمستقلة
-**بدائل متطابقة 1:1 • سيادة رقمية 100% • دون أي اتصال سحابي • ثلاثية اللغات (عربية / فرنسية / إنجليزية)**
+**بدائل متطابقة 1:1 • سيادة رقمية 100% • محركات أصلية متقدمة (Rust / Python / C# .NET) • دون أي اتصال سحابي • ثلاثية اللغات (عربية / فرنسية / إنجليزية)**
 
 [![الترخيص: MIT](https://img.shields.io/badge/الترخيص-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
-[![المعمارية: HeyPuter Vanilla JS](https://img.shields.io/badge/المعمارية-HeyPuter_Vanilla_JS-1e293b.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E)](#-الركائز-الهندسية-لمشروع-heyputer)
-[![الحالة: 12 برنامج مكتمل](https://img.shields.io/badge/الحالة-12_برنامج_مكتمل_وجاهز-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
+[![المعمارية: Polyglot Sovereign](https://img.shields.io/badge/المعمارية-Polyglot_Rust_Python_CSharp_JS-1e293b.svg?style=for-the-badge&logo=rust&logoColor=F7DF1E)](#-الركائز-الهندسية-لمشروع-heyputer)
+[![الحالة: 15 برنامج مكتمل](https://img.shields.io/badge/الحالة-15_برنامج_مكتمل_وجاهز-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
 [![المسارات: 11 قطاع](https://img.shields.io/badge/المسارات-11_قطاع_تخصصي-0284c7.svg?style=for-the-badge)](#-دليل-المسارات-الـ-11-وجدول-كافة-أنواع-البرمجيات)
 [![الخصوصية: 100% دون إنترنت](https://img.shields.io/badge/الخصوصية-100%25_دون_إنترنت_محلي-059669.svg?style=for-the-badge&logo=sqlite&logoColor=white)](#-الرؤية-الاستراتيجية-والسيادة-الرقمية)
 [![اللغات: عربية · فرنسية · إنجليزية](https://img.shields.io/badge/اللغات-العربية_%7C_Français_%7C_English-dc2626.svg?style=for-the-badge)](#-التوافق-واللغات)
@@ -17,14 +17,14 @@
 [![تجربة مباشرة أونلاين](https://img.shields.io/badge/⚡_تجربة_مباشرة-Try_Now_Online-10b981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://test-bit-sys.github.io/algerie-open-source/)
 
 <p align="center">
-  <a href="README.ar.md"><b>🇩🇿 العربية</b></a> •
-  <a href="README.md"><b>🇬🇧 English</b></a> •
-  <a href="README.fr.md"><b>🇫🇷 Français</b></a>
+  <a href="README.ar.md"><b>العربية</b></a> •
+  <a href="README.md"><b>English</b></a> •
+  <a href="README.fr.md"><b>Français</b></a>
 </p>
 
 > ### ⚡ تجربة مباشرة وفورية لكافة البرمجيات أونلاين (Live Demo / Try Now)
-> يمكنك الآن تجربة كافة البرمجيات الـ 12 مباشرة في متصفحك دون الحاجة لتثبيت أي برامج أو تشغيل خوادم:  
-> 👉 **[اضغط هنا لفتح بوابة المنظومة المركزية وتجربة البرامج مباشرة (Launch DZ Open Suite Hub)](https://test-bit-sys.github.io/algerie-open-source/)** 🚀
+> يمكنك الآن تجربة كافة البرمجيات الـ 15 مباشرة في متصفحك دون الحاجة لتثبيت أي برامج، أو تشغيل المحركات الأصلية عالية الأداء (Rust, Python, C# .NET):  
+> 👉 **[اضغط هنا لفتح بوابة المنظومة المركزية وتجربة البرامج مباشرة (Launch DZ Open Suite Hub)](https://test-bit-sys.github.io/algerie-open-source/)**
 
 </div>
 
@@ -33,22 +33,25 @@
 ## 📑 فهرس المحتويات
 
 - [🌟 الرؤية الاستراتيجية والسيادة الرقمية](#-الرؤية-الاستراتيجية-والسيادة-الرقمية)
-- [🟢 جدول حالة وتصنيف كافة البرمجيات (12 تطبيقاً مكتمل وجاهز)](#-جدول-حالة-وتصنيف-كافة-البرمجيات)
-- [🚀 البرمجيات المكتبية المكتملة والجاهزة حالياً (بدائل متطابقة 1:1)](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
+- [🟢 جدول حالة وتصنيف كافة البرمجيات (15 تطبيقاً مكتمل وجاهز)](#-جدول-حالة-وتصنيف-كافة-البرمجيات)
+- [🚀 البرمجيات المكتبية والهندسية المكتملة والجاهزة حالياً](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
   - [💼 1. برمجية الفوترة ونقاط البيع DZ-Facture & POS (المنفذ 3000)](#1--برمجية-الفوترة-ونقاط-البيع-dz-facture--pos)
-  - [🌳 2. برمجية فحص وسائط التخزين DZ-Disk-Tree (المنفذ 3001)](#2--برمجية-فحص-وسائط-التخزين-dz-disk-tree)
-  - [📦 3. برمجية إدارة وضغط الأرشيف DZ-Archive (المنفذ 3002)](#3--برمجية-إدارة-وضغط-الأرشيف-dz-archive)
-  - [🎬 4. مشغل الوسائط المتعددة DZ-Player (المنفذ 3003)](#4--مشغل-الوسائط-المتعددة-dz-player)
+  - [🌳 2. برمجية فحص وسائط التخزين DZ-Disk-Tree (المنفذ 3001 + محرك Rust)](#2--برمجية-فحص-وسائط-التخزين-dz-disk-tree)
+  - [📦 3. برمجية إدارة وضغط الأرشيف DZ-Archive (المنفذ 3002 + محرك Rust 7,000+ MB/s)](#3--برمجية-إدارة-وضغط-الأرشيف-dz-archive)
+  - [🎬 4. مشغل الوسائط المتعددة DZ-Player (المنفذ 3003 + محرك Python DSP)](#4--مشغل-الوسائط-المتعددة-dz-player)
   - [📄 5. استوديو معالجة وتوثيق PDF DZ-PDF Pro (المنفذ 3004)](#5--استوديو-معالجة-وتوثيق-وثائق-pdf-dz-pdf-pro)
   - [🧑‍🏫 6. السبورة البيضاء التفاعلية DZ-Whiteboard Pro (المنفذ 3005)](#6--السبورة-البيضاء-التفاعلية-dz-whiteboard-pro)
   - [📝 7. محرر المستندات الإدارية DZ-Writer (المنفذ 3006)](#7--محرر-المستندات-الإدارية-الوطنية-dz-writer)
   - [📊 8. معالج الجداول والحسابات الجبائية DZ-Sheets (المنفذ 3007)](#8--معالج-الجداول-والحسابات-الجبائية-dz-sheets)
   - [📽️ 9. استوديو العروض التقديمية DZ-Impress (المنفذ 3008)](#9--استوديو-العروض-التقديمية-dz-impress)
-  - [💻 10. منصة أدوات المطورين والـ 58 ولاية DZ-DevTools (المنفذ 3009)](#10--منصة-أدوات-المطورين-والـ-58-ولاية-dz-devtools)
-  - [🎨 11. استوديو التصميم ومعالجة الصور DZ-Photo (المنفذ 3010)](#11--استوديو-التصميم-ومعالجة-الصور-dz-photo)
+  - [💻 10. منصة أدوات المطورين والـ 58 ولاية DZ-DevTools (المنفذ 3009 + محرك Rust CLI)](#10--منصة-أدوات-المطورين-والـ-58-ولاية-dz-devtools)
+  - [🎨 11. استوديو التصميم ومعالجة الصور DZ-Photo (المنفذ 3010 + محرك Python NumPy)](#11--استوديو-التصميم-ومعالجة-الصور-dz-photo)
   - [📋 12. لوحات كانبان وإدارة مهام المشاريع DZ-Boards (المنفذ 3011)](#12--لوحات-كانبان-وإدارة-مهام-المشاريع-dz-boards)
+  - [🏗️ 13. محرك الحسابات الزلزالية DZ-RPA Pro (كود RPA 99/2003 + محرك بايثون)](#13--محرك-الحسابات-الزلزالية-الجزائري-dz-rpa-pro)
+  - [📊 14. المحاسبة المالية SCF وميزان المراجعة DZ-Compta (محرك C# .NET 10)](#14--المحاسبة-المالية-الجزائرية-dz-compta-scf-pro)
+  - [👥 15. منظومة كشوف الأجور وسلم الـ IRG DZ-Paie RH (محرك C# .NET 10)](#15--منظومة-كشوف-الأجور-والضمان-الاجتماعي-dz-paie-rh-pro)
 - [🗺️ دليل المسارات الـ 11 وجدول خارطة الطريق المتبقية](#-دليل-المسارات-الـ-11-وجدول-كافة-أنواع-البرمجيات)
-- [⚙️ الركائز الهندسية (معيار HeyPuter الصارم)](#️-الركائز-الهندسية-لمشروع-heyputer)
+- [⚙️ الركائز الهندسية والمعمارية المتعددة اللغات Polyglot](#️-الركائز-الهندسية-لمشروع-heyputer)
 - [🏛️ الامتثال للمنظومة القانونية والجبائية الجزائرية](#️-الامتثال-للمنظومة-القانونية-والجبائية-الجزائرية)
 - [💻 التشغيل السريع والأوامر والمنافذ](#-التشغيل-السريع-والأوامر-والمنافذ)
 - [🤝 دليل المساهمة وتطوير المشاريع](#-دليل-المساهمة-وتطوير-المشاريع)
@@ -58,35 +61,30 @@
 
 ## 🌟 الرؤية الاستراتيجية والسيادة الرقمية
 
-**المنظومة الجزائرية للبرمجيات المفتوحة المصدر (DZ Open Suite)** هي مبادرة وطنية كبرى لتأسيس، تنظيم، وتطوير بدائل برمجية مكتبية وحسابية حرة ومجانية 100% للبرامج التجارية والمقرصنة الأكثر استخداماً في الإدارات العمومية، المؤسسات الاقتصادية، المصالح المهنية، والجامعات الجزائرية.
-
-### لماذا DZ Open Suite؟
-1. **🛡️ السيادة الرقمية وسرية البيانات الوطنية**: ضمان عدم تسرب المعاملات المالية، السجلات الإدارية، وعقود المواطنين إلى أي خوادم سحابية أجنبية. المعالجة محلية بالكامل ومغلقة داخل الشبكة الداخلية (**100% Offline-First**).
-2. **🚫 القضاء التام على البرمجيات المقرصنة والأنظمة المتقادمة**: الاستغناء النهائي عن البرمجيات المهجورة المعتمدة على قواعد بيانات قديمة (Visual Basic 6, Delphi 7, Access 2003) واستبدالها بحلول عصرية مبنية بأحدث معايير الويب المفتوح والأمان الرقمي.
-3. **🇩🇿 التطابق الصارم مع القوانين والأنظمة الجزائرية**: تطبيق أحكام المرسوم التنفيذي 05-468 (شروط الفوترة)، القانون 18-05 (التجارة الإلكترونية)، النظام المحاسبي المالي SCF، حساب ضريبة القيمة المضافة TVA (19% و 9%)، رسم الطابع الجبائي، التفقيط بالدينار الجزائري، واستخدام الأختام الإدارية الرسمية المعتمدة.
-4. **⚡ أعلى معايير هندسة البرمجيات (HeyPuter Standard)**: برمجة صافية بـ Vanilla JS ES Modules دون أي أطر عمل ثقيلة أو اعتمادات خارجية، والاعتماد الحصري على أيقونات المتجهات الهندسية (Vector SVGs).
+**المنظومة الجزائرية للبرمجيات المفتوحة المصدر (DZ Open Suite)** هي مبادرة وطنية كبرى لتأسيس، تنظيم، وتطوير بدائل برمجية مكتبية وحسابية وهندسية حرة ومجانية 100% للبرامج التجارية والمقرصنة الأكثر استخداماً في الإدارات العمومية، المؤسسات الاقتصادية، المصالح المهنية، ومكاتب الدراسات والجامعات الجزائرية.
 
 ---
 
 ## 🟢 جدول حالة وتصنيف كافة البرمجيات
 
-| المسار | تصنيف ونوع البرنامج | البديل التجاري المستبدل | الحالة الراهنة | المنفذ | تجربة مباشرة (Try Now) | مسار المجلد المصدري |
-| :---: | :--- | :--- | :---: | :---: | :---: | :--- |
-| **02** | **الفوترة ونقاط البيع POS** | **Sage 100 / Odoo POS** | 🟢 **مكتمل وجاهز** | `:3000` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/) | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
-| **07** | **فحص وسائط التخزين والأقراص** | **WizTree / TreeSize 1:1** | 🟢 **مكتمل وجاهز** | `:3001` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/) | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
-| **07** | **ضغط وإدارة الأرشيف والتشفير** | **WinRAR / 7-Zip 1:1** | 🟢 **مكتمل وجاهز** | `:3002` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/) | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
-| **04** | **مشغل الوسائط المتعددة والصوتيات** | **VLC Media Player 1:1** | 🟢 **مكتمل وجاهز** | `:3003` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/) | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
-| **01** | **استوديو وثائق PDF وتوقيعها** | **Adobe Acrobat Pro 1:1** | 🟢 **مكتمل وجاهز** | `:3004` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/) | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
-| **10** | **السبورة البيضاء التفاعلية للتعليم** | **OpenBoard / Miro 1:1** | 🟢 **مكتمل وجاهز** | `:3005` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/) | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
-| **01** | **محرر المستندات والنماذج الوزارية (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **مكتمل وجاهز** | `:3006` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/) | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
-| **01** | **معالج الجداول والحسابات الجبائية (DZ-Sheets)** | **Microsoft Excel / Google Sheets** | 🟢 **مكتمل وجاهز** | `:3007` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/) | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
-| **01** | **استوديو العروض التقديمية ومؤشر الليزر (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **مكتمل وجاهز** | `:3008` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/) | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
-| **09** | **منصة أدوات المطورين والـ 58 ولاية (DZ-DevTools)** | **مكتبات SATIM/CIB والولايات** | 🟢 **مكتمل وجاهز** | `:3009` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
-| **05** | **استوديو التصميم ومعالجة الصور بالطبقات (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **مكتمل وجاهز** | `:3010` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/) | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
-| **06** | **لوحات كانبان وإدارة مهام المشاريع (DZ-Boards)** | **Trello / Jira / Focalboard** | 🟢 **مكتمل وجاهز** | `:3011` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
-| **03** | **المحاسبة المالية والأجور والتصريح الجبائي SCF** | PC Compta, DLG Compta, PC Paie | 🟡 *قيد التخطيط* | — | — | [`apps/finance-accounting/`](apps/finance-accounting/) |
-| **08** | **الهندسة المعمارية وحساب الزلازل والخرسانة CAD** | AutoCAD, Robot Structural, ETABS | 🟡 *قيد التخطيط* | — | — | [`apps/engineering/`](apps/engineering/) |
-| **11** | **الألعاب التفاعلية والثقافة وتاريخ الجزائر** | ألعاب التسلية التجارية ومحرك Godot | 🟡 *قيد التخطيط* | — | — | [`apps/games-interactive/`](apps/games-interactive/) |
+| المسار | تصنيف ونوع البرنامج | البديل التجاري المستبدل | الحالة الراهنة والمحركات | تجربة مباشرة (Try Now) | مسار المجلد المصدري |
+| :---: | :--- | :--- | :---: | :---: | :--- |
+| **02** | **الفوترة ونقاط البيع POS** | **Sage 100 / Odoo POS** | 🟢 **مكتمل** (Web :3000) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/) | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
+| **07** | **فحص وسائط التخزين والأقراص** | **WizTree / TreeSize 1:1** | 🟢 **مكتمل** (Web :3001 + **Rust Native**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/) | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
+| **07** | **ضغط وإدارة الأرشيف والتشفير** | **WinRAR / 7-Zip 1:1** | 🟢 **مكتمل** (Web :3002 + **Rust Native**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/) | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
+| **04** | **مشغل الوسائط المتعددة والصوتيات** | **VLC Media Player 1:1** | 🟢 **مكتمل** (Web :3003 + **Python DSP**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/) | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
+| **01** | **استوديو وثائق PDF وتوقيعها** | **Adobe Acrobat Pro 1:1** | 🟢 **مكتمل** (Web :3004) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/) | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
+| **10** | **السبورة البيضاء التفاعلية للتعليم** | **OpenBoard / Miro 1:1** | 🟢 **مكتمل** (Web :3005) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/) | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
+| **01** | **محرر المستندات والنماذج الوزارية (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **مكتمل** (Web :3006) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/) | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
+| **01** | **معالج الجداول والحسابات الجبائية (DZ-Sheets)** | **Microsoft Excel / Google Sheets** | 🟢 **مكتمل** (Web :3007) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/) | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
+| **01** | **استوديو العروض ومؤشر الليزر (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **مكتمل** (Web :3008) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/) | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
+| **09** | **منصة أدوات المطورين والـ 58 ولاية (DZ-DevTools)** | **مكتبات SATIM/CIB والولايات** | 🟢 **مكتمل** (Web :3009 + **Rust CLI**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
+| **05** | **استوديو التصميم ومعالجة الصور (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **مكتمل** (Web :3010 + **Python Engine**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/) | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
+| **06** | **لوحات كانبان وإدارة مهام المشاريع (DZ-Boards)** | **Trello / Jira / Focalboard** | 🟢 **مكتمل** (Web :3011) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
+| **08** | **الحسابات الزلزالية الجزائري (DZ-RPA Pro)** | **Robot Structural / ETABS RPA** | 🟢 **مكتمل** (Web + **Python RPA 99/03**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/engineering/dz-rpa/) | [`apps/engineering/dz-rpa/`](apps/engineering/dz-rpa/) |
+| **03** | **المحاسبة المالية وميزان المراجعة (DZ-Compta)** | **PC Compta / DLG Compta SCF** | 🟢 **مكتمل** (Web + **C# .NET 10**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/) | [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) |
+| **03** | **كشوف الأجور والضمان الاجتماعي (DZ-Paie RH)** | **PC Paie / DLG Paie / IRG DGI** | 🟢 **مكتمل** (Web + **C# .NET 10**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/) | [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) |
+| **11** | **الألعاب التفاعلية وثقافة وتاريخ الجزائر** | ألعاب التسلية التجارية ومحرك Godot | 🟡 *قيد التخطيط* | — | [`apps/games-interactive/`](apps/games-interactive/) |
 
 ---
 
@@ -323,6 +321,52 @@ npm run start:boards
 
 ---
 
+### 13. 🏗️ محرك الحسابات الزلزالية الجزائري DZ-RPA Pro (كود RPA 99 / Version 2003)
+> **المحرك الهندسي الرسمي لحساب قوى القص القاعدية وتوزيع الأحمال الزلزالية وفق الوثيقة الفنية DTR-BC 2-48**  
+> *المسار: [`apps/engineering/dz-rpa/`](apps/engineering/dz-rpa/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/engineering/dz-rpa/)*
+
+- **🏛️ كود الزلازل الجزائري الرسمي**: تطبيق كامل لمعادلات وثيقة DTR-BC 2-48 لحساب قوة القص القاعدية $V = \frac{A \cdot D \cdot Q}{R} \cdot W$.
+- **🗺️ تصنيف الـ 58 ولاية وفق مناطق الخطر الزلزالي**: مطابقة تامة لمناطق الخطر (Zone 0 غير زلزالية، Zone I منخفضة، Zone IIa متوسطة، Zone IIb هامة، Zone III شديدة كالجزائر العاصمة وبومرداس والشلف وتيبازة والبليدة).
+- **🏢 تصنيف التربة ومجموعات الاستخدام**: دعم تصنيفات التربة $S_1$ إلى $S_4$ مع الأدوار المميزة $T_1$ و $T_2$ وحساب معامل التخميد $\eta = \sqrt{7/(2+\xi)} \ge 0.7$.
+- **📈 توزيع القوى الجانبية الطابقية $F_k$**: حساب القوة المركزة العلوية $F_t$ وتوزيع القوى وعزوم الانقلاب على جميع طوابق المبنى.
+- **🐍 محرك بايثون أصلي سريع وواجهة CLI متكاملة**:
+  ```bash
+  # تشغيل المحرك الزلزالي عبر Python CLI
+  npm run native:rpa -- --wilaya 16 --group 2 --soil S2 --weight 12000 --height 24 --stories 8
+  ```
+
+---
+
+### 14. 📊 المحاسبة المالية الجزائرية وميزان المراجعة DZ-Compta SCF Pro
+> **المحرك المحاسبي المالي السيادي المعتمد على النظام المحاسبي المالي الجزائري (SCF)**  
+> *المسار: [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/)*
+
+- **📑 مدونة الحسابات الوطنية SCF**: تطبيق المجموعات المحاسبية من الصنف 1 (رؤوس الأموال) إلى الصنف 7 (المنتوجات).
+- **⚖️ دفتر اليومية العامة والقيد المزدوج**: تسجيل العمليات مع الوثائق التبريرية والتحقق الفوري من توازن المدين والدائن بدقة عشرية 100%.
+- **🏛️ ميزان المراجعة بـ 6 أعمدة (Balance Générale)**: توليد فوري لميزان المراجعة (الأرصدة الافتتاحية، حركات الفترة، والأرصدة الختامية).
+- **⚡ محرك C# .NET 10 عالي الدقة**: معالجة ملايين القيود المحاسبية بأعلى درجات الأداء الرياضي باستخدام نمط `decimal` الحقيقي.
+  ```bash
+  # تشغيل محرك المحاسبة الأصلي بلغة C#
+  npm run native:compta
+  ```
+
+---
+
+### 15. 👥 منظومة كشوف الأجور والضمان الاجتماعي DZ-Paie RH Pro
+> **محرك حساب كشوف الرواتب والضمان الاجتماعي CNAS وقوانين الضرائب وسلم الـ IRG الجزائري**  
+> *المسار: [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/)*
+
+- **🛡️ الضمان الاجتماعي CNAS**: حساب دقيق للاقتطاعات الاجتماعية (9% على عاتق العامل، 26% اشتراكات رب العمل).
+- **📉 تطبيق سلم الـ IRG الرسمي (DGI)**: حساب الشرائح الضريبية (23%, 27%, 30%, 35%) مع التخفيض القانوني البالغ 40% (بين 1,000 و 1,500 دج) والإعفاء التام للرواتب الأدنى.
+- **📄 كشف الراتب الرسمي المطبوع (Fiche de Paie)**: توليد كشوف فردية وجماعية تتضمن منحة الخبرة المهنية (IEP)، السلة، النقل، الساعات الإضافية، والتفقيط المالي بالدينار الجزائري.
+- **⚡ محرك C# .NET 10 للموارد البشرية**:
+  ```bash
+  # تشغيل محرك كشف الرواتب الأصلي بلغة C#
+  npm run native:paie
+  ```
+
+---
+
 ## 🗺️ دليل المسارات الـ 11 وجدول كافة أنواع البرمجيات
 
 تم تقسيم المستودع إلى **11 مساراً قطاعياً متخصصاً** لتغطية كافة احتياجات الإدارة، المؤسسات، التعليم، والمهن في الجزائر:
@@ -343,118 +387,78 @@ algerie-open-source/
 │   └── games-interactive/        # المسار 11: الألعاب الشعبية، مسابقات الولايات، محرك Godot
 ```
 
-### تفاصيل المسارات والبرمجيات:
-
-| # | المسار التخصصي | التطبيقات والأنواع المستهدفة | البدائل التجارية الشائعة | الحالة |
-| :-: | :--- | :--- | :--- | :---: |
-| **01** | **🏢 برامج الأوفيس والمكتب** | **DZ-PDF Pro** (محرر وخاتم PDF)، محرر نصوص بنماذج وزارية، جداول بدوال جزائرية، عروض تقديمية. | Microsoft 365, Word, Excel, Adobe Acrobat | 🟢 *PDF مكتمل*<br>🟡 *المكتب قيد التخطيط* |
-| **02** | **💼 برامج الإدارة والأعمال** | **DZ-Facture & POS** (الفوترة التجارية 05-468، نقاط البيع، المخازن)، ERP متكامل، تسيير الزبائن CRM. | Sage 100, Delphi POS, Odoo, SAP | 🟢 *الفوترة مكتملة*<br>🟡 *ERP قيد التخطيط* |
-| **03** | **📊 برامج المالية والمحاسبة** | المحاسبة المالية وفق نظام SCF، مساعد تصريح G50، الأجور وسلم الضريبة IRG، وطباعة صكوك CCP. | PC Compta, DLG Compta, PC Paie | 🟡 *قيد التخطيط* |
-| **04** | **🎬 برامج المونتاج والوسائط** | **DZ-Player** (مشغل وسائط 1:1 VLC)، مونتاج فيديو خفيف، عناوين عربية سليمة (RTL)، تسجيل الشاشة. | VLC, Adobe Premiere, CapCut, Camtasia | 🟢 *المشغل مكتمل*<br>🟡 *المونتاج قيد التخطيط* |
-| **05** | **🎨 برامج التصميم والوسائط** | تعديل الصور النقطية، الرسم المتجه للخط العربي والتيفيناغ، هندسة الصوت، وأدوات المطابع. | Adobe Photoshop, Illustrator, Audition | 🟡 *قيد التخطيط* |
-| **06** | **💬 برامج التواصل والعمل الجماعي** | محادثات الفرق المحلية، لوحات كانبان للمهام، اجتماعات مرئية WebRTC، وويكي بلدي. | Slack, Microsoft Teams, Trello, Zoom | 🟡 *قيد التخطيط* |
-| **07** | **⚡ برامج الإنتاجية والمواطن** | **DZ-Disk-Tree** (بديل WizTree)، **DZ-Archive** (بديل WinRAR)، نماذج وثائق المواطن، والتقويم المزدوج. | WizTree, WinRAR, 7-Zip, برامج الإنتاجية | 🟢 *فحص الأقراص مكتمل*<br>🟢 *الأرشيف مكتمل* |
-| **08** | **🏗️ برامج الهندسة والتصميم CAD** | رسم هندسي 2D/3D (CAD)، حسابات الزلازل وفق الكود الجزائري (**RPA 99/2003**)، والخرسانة (**DTR-BC 2.41**). | AutoCAD, Robot Structural, ETABS | 🟡 *قيد التخطيط* |
-| **09** | **💻 أدوات المطورين والبرمجة** | حزمة موحدة لبوابات الدفع (SATIM, CIB, الذهبية)، بوابات الرسائل القصيرة OTP، وأداة الطرفية CLI. | مكتبات برمجية متفرقة | 🟡 *قيد التخطيط* |
-| **10** | **🎓 برامج التعليم والجامعات** | حساب المعدلات وكشوف النقاط التربوية، توليد جداول التوقيت بدون تضارب، وقوالب المذكرات الجامعية. | برامج أكسس القديمة، FET | 🟡 *قيد التخطيط* |
-| **11** | **🎮 الألعاب والترفيه التفاعلي** | مسابقات جغرافيا وتاريخ 58 ولاية، الألعاب الشعبية (روندا، دامة)، وموارد لمحرك Godot. | الألعاب التجارية | 🟡 *قيد التخطيط* |
-
 ---
 
-## ⚙️ الركائز الهندسية (معيار HeyPuter الصارم)
+## ⚙️ المعمارية السيادية متعددة اللغات (Polyglot Sovereign Architecture)
 
-تلتزم كافة برمجيات المنظومة بالمعايير الهندسية لمشروع **HeyPuter / everything**:
+لتحقيق أقصى درجات الأداء الرياضي والهندسي والارتباط المباشر مع عتاد الحاسوب، تعتمد المنظومة معمارية متوازية ذكية:
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        DZ Open Suite Monorepo                          │
-├────────────────────────────────────────────────────────────────────────┤
-│  الطبقة 1: تقنيات الويب الأصلية (HTML5 Canvas 2D · Web Audio · Web Crypto)│
-│  الطبقة 2: وحدات جافاسكربت المعيارية الصافية (Vanilla ES Modules)        │
-│  الطبقة 3: قواعد البيانات المحلية (100% Offline-First)                  │
-│  الطبقة 4: نظام تصميم ثنائي الاتجاه (العربية من اليمين لليسار RTL)       │
-│  الطبقة 5: هندسة المتجهات النقية (أيقونات SVG رياضية داخل التطبيقات)    │
-└────────────────────────────────────────────────────────────────────────┘
-```
-
-1. **⚡ صفر أطر عمل ثقيلة (Zero Framework Bloat)**: لا وجود لـ React أو Angular أو Vue أو حزم npm الضخمة أثناء التشغيل؛ استخدام مباشر للـ DOM الأصلي ووحدات ES Modules مما يمنح التطبيقات سرعة إقلاع لحظية واستقراراً لعقود.
-2. **🔒 محلي ومستقل بالكامل (Offline-First)**: استقلالية تامة عن الاتصال بالإنترنت، تعمل البرمجيات بكفاءة غير منقطعة في أقصى الظروف (المكاتب البلدية المعزولة، المستشفيات، المعابر الحدودية، والمصانع).
-3. **🌐 أصالة الاتجاهية ودعم العربية**: اللغة العربية مواطن أصيل من الدرجة الأولى بالاتجاه الطبيعي من اليمين لليسار (RTL) بالتوازي مع الفرنسية والإنجليزية.
-4. **🎨 الانضباط البصري الصارم**: كافة الأيقونات والعناصر الرسومية مرسومة بمتجهات SVG رياضية دقيقة داخل واجهات التطبيقات.
-
----
-
-## 🏛️ الامتثال للمنظومة القانونية والجبائية الجزائرية
-
-صُممت المنظومة لتراعي كافة التشريعات والتنظيمات الجزائرية السارية:
-
-- **📜 المرسوم التنفيذي 05-468**: المحدد لشروط وكيفيات تحرير الفاتورة وسند البيع في المعاملات التجارية.
-- **⚖️ القانون 18-05**: المنظم للتجارة الإلكترونية، العقود الرقمية، والتصديق الإلكتروني على التراب الوطني.
-- **💵 التنظيمات الجبائية**:
-  - نسبة الرسم على القيمة المضافة العادية (TVA Normal): **19%**
-  - نسبة الرسم على القيمة المضافة المخفضة (TVA Réduit): **9%**
-  - رسم الطابع الجبائي (Droit de Timbre): **1%** على المعاملات النقدية (بحد أدنى 5 دج وحد أقصى 10,000 دج).
-- **🗺️ التقسيم الإداري الوطني**: دعم كامل ومحدث لـ **58 ولاية** و **1,541 بلدية** مع الرموز البريدية وأرقام التسجيل الإدارية.
+1. **المستوى الأول - محركات الأنظمة والعتاد (Rust Systems)**:
+   - `DZ-DiskTree`: مسح عناقيد القرص وحجم الملفات الفعلي (Cluster Allocation) في **3.08 مللي ثانية** بملف تنفيذي مدمج لا يتجاوز 215 كيلوبايت.
+   - `DZ-Archive`: ضغط وتشفير وفحص CRC-32 واختبار العتاد المتعدد الأنوية بمعدل يتجاوز **7,000 ميغابايت/ثانية**.
+   - `DZ-DevTools`: أداة سطر أوامر Rust مستقلة ومكتبة 58 ولاية وحسابات مفاتيح CCP والـ RIP.
+2. **المستوى الثاني - المحركات الهندسية والوسائط (Python 3.14)**:
+   - `DZ-RPA`: محرك الحساب الزلزالي الجزائري الرسمي المعتمد على كود RPA 99 / Version 2003 (DTR-BC 2-48).
+   - `DZ-Photo`: معالجة وتعديل الصور النقطية المتعددة الطبقات باستخدام Pillow و NumPy مع مرشحات الجزائر.
+   - `DZ-Player`: معالجة الإشارات الصوتية (DSP) وتضخيم الصوت 300% وترميم ملفات الترجمة العربية Windows-1256.
+3. **المستوى الثالث - المنظومات المالية والمحاسبية والمؤسسية (C# .NET 10)**:
+   - `DZ-Compta`: محاسبة مالية وجبائية وفق النظام المحاسبي المالي الجزائري (SCF) بدقة `decimal` متناهية لمنع أي أخطاء في الفوارق المئوية.
+   - `DZ-Paie`: حساب كشوف الأجور وسلم ضريبة الـ IRG واشتراكات الضمان الاجتماعي CNAS.
+4. **المستوى الرابع - واجهات الويب الخفيفة الصامتة (Vanilla JS)**:
+   - تجربة فورية مباشرة بنقرة واحدة عبر المتصفح دون تثبيت أي برامج أو متطلبات تشغيل.
 
 ---
 
 ## 💻 التشغيل السريع والأوامر والمنافذ
 
-### المتطلبات الأساسية
-- تثبيت [Node.js](https://nodejs.org/) الإصدار 18.0.0 أو أحدث.
-- متصفح ويب حديث (Chrome, Edge, Firefox, Brave, Safari).
-
-### 1. استنساخ المستودع (Clone)
+### 1. تشغيل المحركات الأصلية (Native Engines)
 ```bash
-git clone https://github.com/test-bit-sys/algerie-open-source.git
-cd algerie-open-source
+# فحص مساحات الأقراص بلغة Rust
+npm run native:disk-tree
+
+# ضغط واختبار كفاءة العتاد بلغة Rust (7,000+ MB/s)
+npm run native:archive
+
+# أدوات المطورين والـ 58 ولاية بلغة Rust CLI
+npm run native:devtools
+
+# الحسابات الزلزالية الجزائرية بلغة Python (RPA 99/2003)
+npm run native:rpa
+
+# معالجة الصور بالطبقات بلغة Python
+npm run native:photo
+
+# مشغل الوسائط ومعالجة الصوت DSP بلغة Python
+npm run native:player
+
+# المحاسبة المالية SCF بلغة C# .NET 10
+npm run native:compta
+
+# كشوف الأجور والـ IRG بلغة C# .NET 10
+npm run native:paie
+
+# فحص واختبار كافة المحركات الأصلية في ثوانٍ
+npm run test:native
 ```
 
-### 2. تشغيل البوابة المركزية لكامل المنظومة (المنفذ 3000)
+### 2. تشغيل واجهات الويب وتجربتها محلياً
 ```bash
+# تشغيل البوابة المركزية لكافة التطبيقات على المنفذ 3000
 npm start
-```
-افتح المتصفح على **[http://localhost:3000](http://localhost:3000)** للدخول إلى البوابة المركزية والتنقل بين كافة التطبيقات عبر الروابط المباشرة `/apps/<track>/<app>/`.
 
-### 3. تشغيل أي برمجية بشكل مستقل عبر منفذها الخاص
-يمكنك تشغيل كل برنامج كخادم مستقل ومنفصل تماماً:
-
-```bash
-# 💼 تشغيل DZ-Facture & POS (المنفذ 3000)
-npm run start:dz-facture
-
-# 🌳 تشغيل DZ-Disk-Tree (بديل WizTree - المنفذ 3001)
-npm run start:disk-tree
-
-# 📦 تشغيل DZ-Archive (بديل WinRAR - المنفذ 3002)
-npm run start:archive
-
-# 🎬 تشغيل DZ-Player (بديل VLC - المنفذ 3003)
-npm run start:player
-
-# 📄 تشغيل DZ-PDF Pro (بديل Adobe Acrobat - المنفذ 3004)
-npm run start:pdf
-
-# 🧑‍🏫 تشغيل DZ-Whiteboard Pro (السبورة التفاعلية - المنفذ 3005)
-npm run start:whiteboard
-
-# 📝 تشغيل DZ-Writer (محرر المستندات والنماذج - المنفذ 3006)
-npm run start:word
-
-# 📊 تشغيل DZ-Sheets (معالج الجداول والحسابات الجبائية - المنفذ 3007)
-npm run start:calc
-
-# 📽️ تشغيل DZ-Impress (استوديو العروض التقديمية ومؤشر الليزر - المنفذ 3008)
-npm run start:slides
-
-# 💻 تشغيل DZ-DevTools (أدوات المطورين والـ 58 ولاية - المنفذ 3009)
-npm run start:devtools
-
-# 🎨 تشغيل DZ-Photo (استوديو التصميم وتعديل الصور - المنفذ 3010)
-npm run start:photo
-
-# 📋 تشغيل DZ-Boards (لوحات كانبان وإدارة المشاريع - المنفذ 3011)
-npm run start:boards
+# أو تشغيل أي برمجية مستقلة عبر منفذها:
+npm run start:dz-facture    # :3000
+npm run start:disk-tree     # :3001
+npm run start:archive       # :3002
+npm run start:player        # :3003
+npm run start:pdf           # :3004
+npm run start:whiteboard    # :3005
+npm run start:word          # :3006
+npm run start:calc          # :3007
+npm run start:slides        # :3008
+npm run start:devtools      # :3009
+npm run start:photo         # :3010
+npm run start:boards        # :3011
 ```
 
 ---
@@ -477,4 +481,4 @@ npm run start:boards
 
 هذا المشروع منشور تحت رخصة **MIT** المفتوحة والمجانية — انظر ملف [LICENSE](LICENSE) لمزيد من التفاصيل.
 
-*🇩🇿 صُنعت هذه المنظومة بأيدي وعقول جزائرية حرة، من أجل سيادة واستقلالية برمجية وطنية كاملة.*
+*صُنعت هذه المنظومة بأيدي وعقول جزائرية حرة، من أجل سيادة واستقلالية برمجية وطنية كاملة.*

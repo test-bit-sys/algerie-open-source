@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Paie RH Pro — منظومة الأجور والضمان الاجتماعي والـ IRG الجزائري</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070913;
+      --bg-surface: #0e1222;
+      --bg-card: #181d36;
+      --border: #283056;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Cairo', 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header.app-header {
+      background: rgba(14, 18, 34, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-wrap img {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand-text p {
+      font-size: 0.72rem;
+      color: #818cf8;
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #232a4e;
+      border-color: #3f4c82;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Main Container */
+    main.paie-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    @media (max-width: 1024px) {
+      main.paie-container { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    select, input {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    /* Pay Slip Sheet Style */
+    .slip-container {
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 10px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-size: 0.85rem;
+    }
+
+    .slip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 12px;
+    }
+
+    .slip-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #0f172a;
+      text-align: center;
+    }
+
+    .slip-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: 6px;
+    }
+
+    .slip-meta-item {
+      display: flex;
+      gap: 6px;
+    }
+
+    .slip-meta-item strong {
+      color: #475569;
+    }
+
+    table.slip-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+
+    table.slip-table th, table.slip-table td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 10px;
+      text-align: right;
+    }
+
+    table.slip-table th {
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 800;
+    }
+
+    .num-col {
+      font-family: 'JetBrains Mono', monospace;
+      text-align: left !important;
+    }
+
+    .slip-totals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .slip-total-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .slip-total-box .ttl-lbl {
+      font-size: 0.72rem;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .slip-total-box .ttl-val {
+      font-size: 1.15rem;
+      font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
+      color: #0f172a;
+    }
+
+    .net-to-pay-box {
+      background: #10b981;
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .net-to-pay-val {
+      font-size: 1.5rem;
+      font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .tafqit-box {
+      font-style: italic;
+      color: #475569;
+      font-size: 0.8rem;
+      background: #f1f5f9;
+      padding: 8px 12px;
+      border-radius: 4px;
+      border-right: 3px solid #10b981;
+    }
+
+    .native-box {
+      background: #080c1d;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: #818cf8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    @media print {
+      header.app-header, .card:first-child, .native-box, .btn { display: none !important; }
+      body, main.paie-container { background: #fff !important; padding: 0 !important; }
+      .slip-container { box-shadow: none !important; padding: 0 !important; border: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="app-header">
+    <a href="../../../index.html" class="brand-wrap">
+      <img src="assets/logo.svg" alt="DZ-Paie">
+      <div class="brand-text">
+        <h1>DZ-Paie RH Pro</h1>
+        <p>نظام كشف الرواتب والضمان الاجتماعي (CNAS 9%) وسلم الـ IRG الجزائري</p>
+      </div>
+    </a>
+    <div class="header-actions">
+      <button class="btn" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        <span>طباعة كشف الراتب (Fiche de Paie)</span>
+      </button>
+      <a href="../../../index.html" class="btn btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>العودة للبوابة</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="paie-container">
+
+    <!-- Inputs Form -->
+    <section class="card">
+      <div class="card-title">
+        <span>بيانات الموظف والراتب الأساسي</span>
+        <span style="font-size:0.75rem; color:#818cf8;">سلم الـ IRG وقانون 2022/2026</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="empName">اسم الموظف</label>
+          <input type="text" id="empName" value="كريم بلحاج">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="empPost">المنصب الوظيفي</label>
+          <input type="text" id="empPost" value="مهندس برمجيات أول">
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="empSS">رقم الضمان الاجتماعي</label>
+          <input type="text" id="empSS" value="16 88 1234 56 78">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="empWilaya">الولاية</label>
+          <input type="text" id="empWilaya" value="16 - الجزائر العاصمة">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="baseSalary">الراتب الأساسي (Salaire de Base DZD)</label>
+        <input type="number" id="baseSalary" value="75000" min="20000" step="1000">
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="iepPrime">منحة الخبرة المهنية (IEP)</label>
+          <input type="number" id="iepPrime" value="8500" min="0" step="500">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="nuisancePrime">منحة المردودية / الخطر</label>
+          <input type="number" id="nuisancePrime" value="6500" min="0" step="500">
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="panierPrime">تعويض السلة (Panier)</label>
+          <input type="number" id="panierPrime" value="4400" min="0" step="200">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="transportPrime">تعويض النقل (Transport)</label>
+          <input type="number" id="transportPrime" value="3500" min="0" step="500">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="overtimePay">الساعات الإضافية (Heures Sup.)</label>
+        <input type="number" id="overtimePay" value="0" min="0" step="500">
+      </div>
+
+      <!-- Native C# Hint -->
+      <div class="native-box">
+        <div>
+          <div style="font-size:0.7rem; color:#94a3b8;">محرك C# .NET 10 بدقة متناهية:</div>
+          <code>dotnet run --project apps/finance-accounting/dz-paie</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pay Slip Output Preview -->
+    <section>
+      <div class="slip-container">
+        
+        <div class="slip-header">
+          <div>
+            <h2 style="font-size:1.1rem; font-weight:900; color:#0f172a;">المؤسسة الوطنية الجزائرية للبرمجيات الحرة</h2>
+            <div style="font-size:0.75rem; color:#64748b;">NIF: 001616012345678 · NIS: 00161601000100</div>
+            <div style="font-size:0.75rem; color:#64748b;">الجزائر العاصمة · هاتف: 023.00.00.00</div>
+          </div>
+          <div style="text-align:left;">
+            <div class="slip-title">كشف الراتب الشهري</div>
+            <div style="font-weight:700; color:#475569; font-size:0.85rem;">BULLETIN DE PAIE</div>
+            <div style="font-size:0.8rem; color:#64748b; font-family:monospace;">أكتوبر 2026</div>
+          </div>
+        </div>
+
+        <!-- Meta Info -->
+        <div class="slip-meta-grid">
+          <div class="slip-meta-item">
+            <strong>اسم الموظف:</strong>
+            <span id="slipEmpName">كريم بلحاج</span>
+          </div>
+          <div class="slip-meta-item">
+            <strong>المنصب الوظيفي:</strong>
+            <span id="slipEmpPost">مهندس برمجيات أول</span>
+          </div>
+          <div class="slip-meta-item">
+            <strong>رقم الضمان الاجتماعي:</strong>
+            <span id="slipEmpSS" style="font-family:monospace;">16 88 1234 56 78</span>
+          </div>
+          <div class="slip-meta-item">
+            <strong>الولاية والمقر:</strong>
+            <span id="slipEmpWilaya">16 - الجزائر العاصمة</span>
+          </div>
+        </div>
+
+        <!-- Details Table -->
+        <table class="slip-table">
+          <thead>
+            <tr>
+              <th>الرمز</th>
+              <th>البيان (Désignation)</th>
+              <th style="text-align:left;">القاعدة (Base)</th>
+              <th style="text-align:center;">النسبة (%)</th>
+              <th style="text-align:left;">المكاسب (Gains)</th>
+              <th style="text-align:left;">الاقتطاعات (Retenues)</th>
+            </tr>
+          </thead>
+          <tbody id="slipTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+
+        <!-- Totals Grid -->
+        <div class="slip-totals-grid">
+          <div class="slip-total-box">
+            <div class="ttl-lbl">الراتب الخام (Salaire Brut)</div>
+            <div class="ttl-val" id="slipBrut">0.00</div>
+          </div>
+          <div class="slip-total-box">
+            <div class="ttl-lbl">الضمان الاجتماعي (CNAS 9%)</div>
+            <div class="ttl-val" style="color:#ef4444;" id="slipCNAS">0.00</div>
+          </div>
+          <div class="slip-total-box">
+            <div class="ttl-lbl">الضريبة على الدخل (IRG)</div>
+            <div class="ttl-val" style="color:#ef4444;" id="slipIRG">0.00</div>
+          </div>
+        </div>
+
+        <!-- Net Box -->
+        <div class="net-to-pay-box">
+          <div>
+            <div style="font-size:0.85rem; font-weight:700; opacity:0.9;">الصافي للدفع (NET À PAYER)</div>
+            <div style="font-size:0.75rem; opacity:0.8;">التحويل إلى الحساب الجاري البريدي CCP / البنكي</div>
+          </div>
+          <div class="net-to-pay-val" id="slipNet">0.00 DZD</div>
+        </div>
+
+        <!-- Tafqit In Words -->
+        <div class="tafqit-box" id="slipTafqit">
+          أوقف كشف الراتب عند المبلغ الصافي: صفر دينار جزائري.
+        </div>
+
+        <!-- Signatures footer -->
+        <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:0.78rem; color:#64748b; padding-top:10px; border-top:1px dashed #cbd5e1;">
+          <div>توقيع وتأشيرة الموظف</div>
+          <div>ختم وتوقيع مسير الموارد البشرية</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Numbers to Arabic words (Tafqit)
+    function tafqit(n) {
+      const units = ["", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة", "ستة", "سبعة", "ثمانية", "تسعة"];
+      const teens = ["عشرة", "أحد عشر", "اثنا عشر", "ثلاثة عشر", "أربعة عشر", "خمسة عشر", "ستة عشر", "سبعة عشر", "ثمانية عشر", "تسعة عشر"];
+      const tens = ["", "", "عشرون", "ثلاثون", "أربعون", "خمسون", "ستون", "سبعون", "ثمانون", "تسعون"];
+      const hundreds = ["", "مائة", "مائتان", "ثلاثمائة", "أربعمائة", "خمسمائة", "ستمائة", "سبعمائة", "ثمانمائة", "تسعمائة"];
+
+      n = Math.floor(n);
+      if (n === 0) return "صفر دينار جزائري";
+      if (n < 0) return "سالب " + tafqit(-n);
+
+      function convertGroup(val) {
+        let str = "";
+        const h = Math.floor(val / 100);
+        const rem = val % 100;
+        const t = Math.floor(rem / 10);
+        const u = rem % 10;
+
+        if (h > 0) {
+          str += hundreds[h];
+        }
+
+        if (rem > 0) {
+          if (h > 0) str += " و ";
+          if (rem < 10) {
+            str += units[u];
+          } else if (rem < 20) {
+            str += teens[rem - 10];
+          } else {
+            if (u > 0) str += units[u] + " و ";
+            str += tens[t];
+          }
+        }
+        return str;
+      }
+
+      let res = "";
+      const millions = Math.floor(n / 1000000);
+      const thousands = Math.floor((n % 1000000) / 1000);
+      const remaining = n % 1000;
+
+      if (millions > 0) {
+        res += (millions === 1) ? "مليون" : (millions === 2) ? "مليونان" : (convertGroup(millions) + " ملايين");
+      }
+
+      if (thousands > 0) {
+        if (res) res += " و ";
+        res += (thousands === 1) ? "ألف" : (thousands === 2) ? "ألفان" : (thousands >= 3 && thousands <= 10) ? (convertGroup(thousands) + " آلاف") : (convertGroup(thousands) + " ألف");
+      }
+
+      if (remaining > 0) {
+        if (res) res += " و ";
+        res += convertGroup(remaining);
+      }
+
+      return res + " دينار جزائري تماماً دون سنتيم";
+    }
+
+    // Algerian Official IRG Scale
+    function calculateIRG(imposable) {
+      if (imposable <= 30000) return 0;
+
+      let tax = 0;
+      // Tranche 1: 0 - 20,000 => 0%
+      // Tranche 2: 20,001 - 40,000 => 23%
+      if (imposable > 20000) {
+        const taxable = Math.min(imposable, 40000) - 20000;
+        tax += taxable * 0.23;
+      }
+      // Tranche 3: 40,001 - 80,000 => 27%
+      if (imposable > 40000) {
+        const taxable = Math.min(imposable, 80000) - 40000;
+        tax += taxable * 0.27;
+      }
+      // Tranche 4: 80,001 - 160,000 => 30%
+      if (imposable > 80000) {
+        const taxable = Math.min(imposable, 160000) - 80000;
+        tax += taxable * 0.30;
+      }
+      // Tranche 5: > 160,000 => 35%
+      if (imposable > 160000) {
+        const taxable = imposable - 160000;
+        tax += taxable * 0.35;
+      }
+
+      // Abattement 40% (min 1,000 DA, max 1,500 DA)
+      let abattement = tax * 0.40;
+      if (abattement < 1000) abattement = 1000;
+      if (abattement > 1500) abattement = 1500;
+
+      tax = Math.max(0, tax - abattement);
+
+      // Supplementary relief for 30,000 - 35,000 DA bracket
+      if (imposable > 30000 && imposable < 35000) {
+        const factor = (35000 - imposable) / 5000;
+        tax = tax * (1 - factor * 0.8);
+      }
+
+      return Math.round(tax);
+    }
+
+    function calculatePaie() {
+      const name = document.getElementById('empName').value;
+      const post = document.getElementById('empPost').value;
+      const ss = document.getElementById('empSS').value;
+      const wilaya = document.getElementById('empWilaya').value;
+
+      const base = parseFloat(document.getElementById('baseSalary').value) || 0;
+      const iep = parseFloat(document.getElementById('iepPrime').value) || 0;
+      const nuisance = parseFloat(document.getElementById('nuisancePrime').value) || 0;
+      const panier = parseFloat(document.getElementById('panierPrime').value) || 0;
+      const transport = parseFloat(document.getElementById('transportPrime').value) || 0;
+      const overtime = parseFloat(document.getElementById('overtimePay').value) || 0;
+
+      // Update Meta
+      document.getElementById('slipEmpName').textContent = name;
+      document.getElementById('slipEmpPost').textContent = post;
+      document.getElementById('slipEmpSS').textContent = ss;
+      document.getElementById('slipEmpWilaya').textContent = wilaya;
+
+      // Salaire de Poste (Cotisable CNAS) = Base + IEP + Nuisance + Overtime
+      const cotisable = base + iep + nuisance + overtime;
+      const cnas = cotisable * 0.09;
+
+      // Total Brut = Cotisable + Panier + Transport
+      const brut = cotisable + panier + transport;
+
+      // Imposable = Brut - CNAS
+      const imposable = brut - cnas;
+
+      // IRG
+      const irg = calculateIRG(imposable);
+
+      // Net à Payer
+      const net = brut - cnas - irg;
+
+      // Render Table
+      const tbody = document.getElementById('slipTableBody');
+      tbody.innerHTML = `
+        <tr>
+          <td style="font-family:monospace;">100</td>
+          <td>الراتب الأساسي (Salaire de Base)</td>
+          <td class="num-col">${base.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td style="text-align:center;">-</td>
+          <td class="num-col">${base.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td class="num-col">-</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;">110</td>
+          <td>منحة الخبرة المهنية (IEP)</td>
+          <td class="num-col">${iep.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td style="text-align:center;">-</td>
+          <td class="num-col">${iep.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td class="num-col">-</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;">120</td>
+          <td>منحة المردودية والمسؤولية</td>
+          <td class="num-col">${nuisance.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td style="text-align:center;">-</td>
+          <td class="num-col">${nuisance.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td class="num-col">-</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;">200</td>
+          <td>تعويض السلة والإطعام (Panier)</td>
+          <td class="num-col">${panier.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td style="text-align:center;">-</td>
+          <td class="num-col">${panier.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td class="num-col">-</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;">210</td>
+          <td>تعويض النقل والمصاريف (Transport)</td>
+          <td class="num-col">${transport.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td style="text-align:center;">-</td>
+          <td class="num-col">${transport.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td class="num-col">-</td>
+        </tr>
+        <tr style="background:#fff1f2;">
+          <td style="font-family:monospace; color:#ef4444;">400</td>
+          <td style="color:#ef4444; font-weight:700;">اقتطاع الضمان الاجتماعي (CNAS)</td>
+          <td class="num-col">${cotisable.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td style="text-align:center; font-family:monospace; font-weight:700;">9.00%</td>
+          <td class="num-col">-</td>
+          <td class="num-col" style="color:#ef4444; font-weight:700;">${cnas.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+        </tr>
+        <tr style="background:#fff1f2;">
+          <td style="font-family:monospace; color:#ef4444;">500</td>
+          <td style="color:#ef4444; font-weight:700;">الضريبة على الدخل الإجمالي (IRG Barème)</td>
+          <td class="num-col">${imposable.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td style="text-align:center; font-family:monospace;">سلم DGI</td>
+          <td class="num-col">-</td>
+          <td class="num-col" style="color:#ef4444; font-weight:700;">${irg.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+        </tr>
+      `;
+
+      // Update Summary Values
+      document.getElementById('slipBrut').textContent = brut.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+      document.getElementById('slipCNAS').textContent = cnas.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+      document.getElementById('slipIRG').textContent = irg.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+      document.getElementById('slipNet').textContent = net.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+
+      // Tafqit
+      document.getElementById('slipTafqit').textContent = "أوقف كشف الراتب عند المبلغ الصافي للدفع: " + tafqit(net);
+    }
+
+    [
+      'empName', 'empPost', 'empSS', 'empWilaya',
+      'baseSalary', 'iepPrime', 'nuisancePrime', 'panierPrime', 'transportPrime', 'overtimePay'
+    ].forEach(id => {
+      document.getElementById(id).addEventListener('input', calculatePaie);
+    });
+
+    // Initial calculation
+    calculatePaie();
+  </script>
+</body>
+</html>
