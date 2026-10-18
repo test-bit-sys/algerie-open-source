@@ -119,10 +119,12 @@
     }
 
     .brand-logo {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: var(--radius-md);
-      object-fit: cover;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 2px;
       border: 1px solid var(--border);
     }
 
@@ -199,10 +201,32 @@
 
     /* Hero Section */
     section.hero-section {
-      padding: 56px 0 40px;
+      padding: 44px 0 40px;
       text-align: center;
       border-bottom: 1px solid var(--border);
       background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-page) 100%);
+    }
+
+    .hero-logo-box {
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-fennec-logo {
+      max-width: 290px;
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      background: #ffffff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hero-fennec-logo:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px -6px rgba(22, 163, 74, 0.16);
     }
 
     .hero-badge {
@@ -986,6 +1010,9 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container">
+      <div class="hero-logo-box">
+        <img src="assets/dz-open-source-logo.png" alt="DZ Open Source Logo" class="hero-fennec-logo">
+      </div>
       <div class="hero-badge">
         <span class="dot"></span>
         مشروع جزائري مفتوح المصدر 100%
