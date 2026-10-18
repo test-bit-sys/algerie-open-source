@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="pdfBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </linearGradient>
+    <linearGradient id="goldNib" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="pdfShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base Badge -->
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="url(#pdfBgGrad)" filter="url(#pdfShadow)"/>
+  <rect x="9.5" y="9.5" width="101" height="101" rx="24.5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+
+  <!-- White PDF Document Base -->
+  <rect x="28" y="24" width="64" height="72" rx="8" fill="#ffffff" filter="url(#pdfShadow)"/>
+
+  <!-- Acrobat-Style Dynamic Loop Curves (Stylized) -->
+  <path d="M42 42 C48 34 72 34 78 42 C82 46 80 54 74 60 C64 70 42 78 36 86" fill="none" stroke="#d93025" stroke-width="6" stroke-linecap="round"/>
+  <path d="M46 72 C56 68 76 68 84 84" fill="none" stroke="#d93025" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Official Republic Seal Circle (Top-Right) -->
+  <circle cx="76" cy="38" r="14" fill="#008744" filter="url(#pdfShadow)"/>
+  <circle cx="76" cy="38" r="12" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2,2"/>
+  <path d="M75 32.5 A 5.5 5.5 0 1 0 80 41 A 4.5 4.5 0 1 1 75 32.5 Z" fill="#d93025"/>
+  <polygon points="77.5,35.5 78.5,37.5 80.5,37.5 79,39 79.5,41 77.5,39.8 75.5,41 76,39 74.5,37.5 76.5,37.5" fill="#d93025"/>
+
+  <!-- Golden Calligraphy Signature Nib in Bottom-Right -->
+  <g transform="translate(68, 68)" filter="url(#pdfShadow)">
+    <polygon points="14,0 24,10 20,26 8,26 4,10" fill="url(#goldNib)"/>
+    <line x1="14" y1="0" x2="14" y2="16" stroke="#78350f" stroke-width="1.5"/>
+    <circle cx="14" cy="16" r="1.5" fill="#78350f"/>
+    <polygon points="14,0 12,5 16,5" fill="#ffffff"/>
+  </g>
+</svg>

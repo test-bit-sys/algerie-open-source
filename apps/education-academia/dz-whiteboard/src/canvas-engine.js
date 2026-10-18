@@ -193,7 +193,7 @@ export class CanvasEngine {
       };
     }
 
-    if (el.type === 'shape' || el.type === 'sticky') {
+    if (el.type === 'shape' || el.type === 'sticky' || el.type === 'image') {
       return {
         x: el.x,
         y: el.y,
@@ -235,7 +235,7 @@ export class CanvasEngine {
   isPointInsideElement(el, px, py) {
     const b = this.getElementBounds(el);
 
-    if (el.type === 'shape' || el.type === 'sticky' || el.type === 'text') {
+    if (el.type === 'shape' || el.type === 'sticky' || el.type === 'text' || el.type === 'image') {
       return px >= b.x && px <= b.x + b.width && py >= b.y && py <= b.y + b.height;
     }
 
@@ -411,6 +411,8 @@ export class CanvasEngine {
       this.drawText(ctx, el);
     } else if (el.type === 'sticky') {
       this.drawStickyNote(ctx, el);
+    } else if (el.type === 'image') {
+      this.drawImageElement(ctx, el);
     }
 
     ctx.restore();
@@ -681,6 +683,22 @@ export class CanvasEngine {
     });
 
     ctx.restore();
+  }
+
+  drawImageElement(ctx, el) {
+    if (!el.imgObj) {
+      if (el.src) {
+        el.imgObj = new Image();
+        el.imgObj.src = el.src;
+        el.imgObj.onload = () => this.render();
+      }
+      return;
+    }
+    if (el.imgObj.complete && el.imgObj.naturalWidth > 0) {
+      ctx.save();
+      ctx.drawImage(el.imgObj, el.x, el.y, el.width, el.height);
+      ctx.restore();
+    }
   }
 
   // --- Selection Overlay & Bounding Box ---

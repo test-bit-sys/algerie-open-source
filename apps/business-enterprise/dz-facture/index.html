@@ -6,7 +6,7 @@
   <title>DZ-Facture & POS | منظومة الفوترة والكاشير وإدارة المخزون الجزائرية</title>
   <meta name="description" content="DZ-Facture & POS — منظومة جزائرية مفتوحة المصدر للفوترة التجارية، نقاط البيع (كاشير)، إدارة المخزون، والمصاريف، متوافقة مع المرسوم 05-468 وتعمل 100% بدون إنترنت.">
   <meta name="theme-color" content="#008744">
-  <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
     <aside class="sidebar no-print">
       <div>
         <div class="sidebar-header" style="display:flex; align-items:center; gap:0.75rem;">
-          <img src="assets/logo.jpg" alt="DZ-Facture POS Logo" style="width:44px; height:44px; border-radius:10px; object-fit:contain; background:#ffffff; padding:2px; box-shadow:0 3px 12px rgba(0,135,68,0.25);" />
+          <img src="assets/logo.svg" alt="DZ-Facture POS Logo" style="width:44px; height:44px; border-radius:10px; object-fit:contain; background:#ffffff; padding:2px; box-shadow:0 3px 12px rgba(0,135,68,0.25);" />
           <div>
             <div class="brand-title">DZ-Facture & POS</div>
             <div class="brand-subtitle" data-i18n="brandSubtitle">المنظومة التجارية الجزائرية</div>
@@ -1021,9 +1021,72 @@
         </div>
       </form>
     </div>
+
+  <!-- MODAL: CLIENT STATEMENT OF ACCOUNT (كشف حساب عميل) -->
+  <div class="modal-overlay" id="clientStatementModal">
+    <div class="modal-dialog" style="max-width:780px; width:95%; max-height:90vh; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border);" class="no-print">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <h4 style="font-weight:800; margin:0;" id="stmtModalTitle">كشف حساب عميل تفصيلي (Relevé de Compte)</h4>
+        </div>
+        <button class="btn btn-outline btn-sm" id="btnCloseClientStatementModal">✕</button>
+      </div>
+
+      <div style="overflow-y:auto; flex:1; padding-right:4px;" id="clientStatementContentArea">
+        <div id="stmtPrintHeader" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem; background:var(--input-bg); padding:1rem; border-radius:var(--radius); border:1px solid var(--border);">
+          <div>
+            <h3 id="stmtClientName" style="font-weight:800; font-size:1.15rem; color:var(--primary); margin-bottom:0.25rem;">-</h3>
+            <div id="stmtClientMeta" style="font-size:0.82rem; color:var(--text-muted); line-height:1.5;">-</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.75rem; color:var(--text-muted);" id="stmtPrintDateLabel">تاريخ الإصدار: 2026-10-18</div>
+            <div id="stmtBalanceTag" style="display:inline-block; margin-top:0.35rem; padding:0.25rem 0.75rem; border-radius:12px; font-weight:800; font-size:0.9rem; background:#fee2e2; color:#dc2626;">الرصيد: 0.00 دج</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.75rem; margin-bottom:1.25rem;">
+          <div style="background:var(--card-bg); padding:0.75rem; border-radius:var(--radius); border:1px solid var(--border); text-align:center;">
+            <div style="font-size:0.72rem; color:var(--text-muted); font-weight:700;" id="stmtLblTotalPurchases">إجمالي المعاملات / الفواتير</div>
+            <div id="stmtTotalInvoiced" style="font-size:1.05rem; font-weight:800; margin-top:0.25rem;">0.00 دج</div>
+          </div>
+          <div style="background:var(--card-bg); padding:0.75rem; border-radius:var(--radius); border:1px solid var(--border); text-align:center;">
+            <div style="font-size:0.72rem; color:var(--text-muted); font-weight:700;" id="stmtLblTotalPaid">إجمالي المبالغ المسددة</div>
+            <div id="stmtTotalPaid" style="font-size:1.05rem; font-weight:800; color:#16a34a; margin-top:0.25rem;">0.00 دج</div>
+          </div>
+          <div style="background:var(--card-bg); padding:0.75rem; border-radius:var(--radius); border:1px solid var(--border); text-align:center;">
+            <div style="font-size:0.72rem; color:var(--text-muted); font-weight:700;" id="stmtLblCurrentBalance">الرصيد الحالي المستحق</div>
+            <div id="stmtRemainingDebt" style="font-size:1.05rem; font-weight:800; color:#dc2626; margin-top:0.25rem;">0.00 دج</div>
+          </div>
+        </div>
+
+        <table class="data-table" style="font-size:0.8rem; width:100%;">
+          <thead>
+            <tr>
+              <th id="stmtThDate">التاريخ</th>
+              <th id="stmtThType">البيان / النوع</th>
+              <th id="stmtThRef">رقم السند</th>
+              <th style="text-align:right;" id="stmtThDebit">مدين (+)</th>
+              <th style="text-align:right;" id="stmtThCredit">دائن (-)</th>
+              <th style="text-align:right;" id="stmtThBalance">الرصيد التراكمي</th>
+            </tr>
+          </thead>
+          <tbody id="clientStatementTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.25rem; padding-top:0.75rem; border-top:1px solid var(--border);" class="no-print">
+        <button class="btn btn-outline" id="btnPrintClientStatement">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span id="stmtBtnPrintText">طباعة كشف الحساب</span>
+        </button>
+        <button class="btn btn-primary" id="btnCloseClientStatementBottom">إغلاق</button>
+      </div>
+    </div>
   </div>
 
-  <!-- MODAL: POS TICKET PRINT PREVIEW (80mm) -->
   <div class="modal-overlay" id="ticketPrintModal">
     <div class="modal-dialog" style="max-width:400px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;" class="no-print">

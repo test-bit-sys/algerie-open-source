@@ -1348,6 +1348,7 @@ function addToCart(product) {
       quantity: 1
     });
   }
+  sound.playBeep();
   renderCart();
 }
 
@@ -1940,6 +1941,17 @@ function initClients() {
     document.getElementById('debtPaymentModal').classList.remove('active');
   });
 
+  // Client Statement of Account modal bindings
+  document.getElementById('btnCloseClientStatementModal')?.addEventListener('click', () => {
+    document.getElementById('clientStatementModal').classList.remove('active');
+  });
+  document.getElementById('btnCloseClientStatementBottom')?.addEventListener('click', () => {
+    document.getElementById('clientStatementModal').classList.remove('active');
+  });
+  document.getElementById('btnPrintClientStatement')?.addEventListener('click', () => {
+    window.print();
+  });
+
   document.getElementById('debtPaymentForm')?.addEventListener('submit', e => {
     e.preventDefault();
     const clientId = document.getElementById('debtClientId').value;
@@ -1960,6 +1972,107 @@ function initClients() {
       showToast(`${currentLang === 'ar' ? 'تم تسجيل دفعة بقيمة' : 'Versement de'} ${formatCurrency(amount)}`);
     }
   });
+}
+
+function openClientStatement(clientId) {
+  const clients = LocalDB.getClients();
+  const client = clients.find(c => c.id === clientId);
+  if (!client) return;
+
+  const invoices = LocalDB.getInvoices();
+  const payments = LocalDB.getPayments();
+
+  // Filter invoices belonging to this client (by ID or exact name)
+  const clientInvoices = invoices.filter(inv => {
+    return (inv.clientId && inv.clientId === client.id) ||
+           (inv.clientName && inv.clientName.trim().toLowerCase() === client.name.trim().toLowerCase());
+  });
+
+  // Filter debt payments recorded for this client
+  const clientPayments = payments.filter(p => p.clientId === client.id);
+
+  // Build statement ledger
+  const ledger = [];
+
+  // Historical initial balance if present
+  if (client.initialBalance && Number(client.initialBalance) > 0) {
+    ledger.push({
+      date: '0000-00-00',
+      type: currentLang === 'ar' ? 'رصيد سابق / افتتاحي' : 'Solde initial',
+      ref: 'INITIAL',
+      debit: Number(client.initialBalance),
+      credit: 0
+    });
+  }
+
+  clientInvoices.forEach(inv => {
+    const isCredit = inv.paymentMethod === 'A_TERME';
+    ledger.push({
+      date: inv.docDate || toLocalDateKey(inv.createdAt) || todayLocalISO(),
+      type: inv.docType === 'FACTURE' ? (currentLang === 'ar' ? 'فاتورة بيع' : 'Facture') :
+            inv.docType === 'BL' ? (currentLang === 'ar' ? 'سند تسليم BL' : 'Bon de Livraison') :
+            inv.docType === 'PROFORMA' ? (currentLang === 'ar' ? 'فاتورة شكلية' : 'Proforma') :
+            (currentLang === 'ar' ? 'وصل كاشير' : 'Ticket POS'),
+      ref: inv.docNumber || inv.id || '-',
+      debit: Number(inv.totalTTC) || 0,
+      credit: isCredit ? 0 : (Number(inv.totalTTC) || 0)
+    });
+  });
+
+  clientPayments.forEach(p => {
+    ledger.push({
+      date: toLocalDateKey(p.date) || todayLocalISO(),
+      type: currentLang === 'ar' ? 'دفعة سداد نقدية' : 'Règlement de dette',
+      ref: p.id || 'REG',
+      debit: 0,
+      credit: Number(p.amount) || 0
+    });
+  });
+
+  // Sort chronological
+  ledger.sort((a, b) => (a.date > b.date ? 1 : -1));
+
+  let runningBal = 0;
+  let totalInvoiced = 0;
+  let totalPaid = 0;
+
+  const rowsHtml = ledger.map(item => {
+    totalInvoiced += item.debit;
+    totalPaid += item.credit;
+    runningBal += (item.debit - item.credit);
+    const dateDisplay = item.date === '0000-00-00' ? (currentLang === 'ar' ? 'افتتاحي' : 'Initial') : item.date;
+    return `
+      <tr>
+        <td style="font-family:monospace;">${escapeHtml(dateDisplay)}</td>
+        <td style="font-weight:600;">${escapeHtml(item.type)}</td>
+        <td style="font-family:monospace; color:var(--primary); font-weight:700;">${escapeHtml(item.ref)}</td>
+        <td style="text-align:right; font-weight:700;">${item.debit > 0 ? formatCurrency(item.debit) : '-'}</td>
+        <td style="text-align:right; color:#16a34a; font-weight:700;">${item.credit > 0 ? formatCurrency(item.credit) : '-'}</td>
+        <td style="text-align:right; font-weight:800; ${runningBal > 0 ? 'color:#dc2626;' : 'color:#16a34a;'}">${formatCurrency(Math.max(0, runningBal))}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // Populate modal data
+  document.getElementById('stmtClientName').textContent = client.name;
+  document.getElementById('stmtClientMeta').textContent = `${currentLang === 'ar' ? 'الهاتف' : 'Tél'}: ${client.phone || '-'} | ${currentLang === 'ar' ? 'العنوان' : 'Adresse'}: ${client.address || '-'} | NIF: ${client.nif || '-'}`;
+  document.getElementById('stmtPrintDateLabel').textContent = `${currentLang === 'ar' ? 'تاريخ التقرير' : 'Date'}: ${todayLocalISO()}`;
+  
+  const curBal = Number(client.balance) || 0;
+  const balTag = document.getElementById('stmtBalanceTag');
+  balTag.textContent = `${currentLang === 'ar' ? 'الرصيد المستحق' : 'Solde dû'}: ${formatCurrency(curBal)}`;
+  balTag.style.background = curBal > 0 ? '#fee2e2' : '#dcfce7';
+  balTag.style.color = curBal > 0 ? '#dc2626' : '#16a34a';
+
+  document.getElementById('stmtTotalInvoiced').textContent = formatCurrency(totalInvoiced);
+  document.getElementById('stmtTotalPaid').textContent = formatCurrency(totalPaid);
+  document.getElementById('stmtRemainingDebt').textContent = formatCurrency(curBal);
+
+  const tbody = document.getElementById('clientStatementTableBody');
+  tbody.innerHTML = rowsHtml || `<tr><td colspan="6" style="text-align:center; padding:1.5rem; color:var(--text-muted);">${currentLang === 'ar' ? 'لا توجد حركات مسجلة لهذا العميل بعد' : 'Aucun mouvement enregistré'}</td></tr>`;
+
+  sound.playBeep();
+  document.getElementById('clientStatementModal').classList.add('active');
 }
 
 function refreshClientsTable(query = '') {
@@ -1983,11 +2096,21 @@ function refreshClientsTable(query = '') {
       <td style="text-align:right; font-weight:800; ${c.balance > 0 ? 'color:#dc2626;' : 'color:#16a34a;'}">
         ${formatCurrency(c.balance || 0)}
       </td>
-      <td style="text-align:center;">
-        ${c.balance > 0 ? `<button class="btn btn-warning btn-sm btn-pay-debt" data-id="${c.id}" data-name="${escapeHtml(c.name)}" data-bal="${c.balance}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> ${currentLang === 'ar' ? 'تسديد' : 'Régler'}</button>` : `<span style="color:#16a34a; font-size:0.75rem;">● ${currentLang === 'ar' ? 'خالص' : 'Soldé'}</span>`}
+      <td style="text-align:center; display:flex; gap:0.4rem; justify-content:center; align-items:center;">
+        <button class="btn btn-outline btn-sm btn-client-stmt" data-id="${c.id}" title="${currentLang === 'ar' ? 'كشف الحساب' : 'Relevé de compte'}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          ${currentLang === 'ar' ? 'كشف' : 'Relevé'}
+        </button>
+        ${c.balance > 0 ? `<button class="btn btn-warning btn-sm btn-pay-debt" data-id="${c.id}" data-name="${escapeHtml(c.name)}" data-bal="${c.balance}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> ${currentLang === 'ar' ? 'تسديد' : 'Régler'}</button>` : `<span style="color:#16a34a; font-size:0.75rem; padding:0.25rem 0.5rem;">● ${currentLang === 'ar' ? 'خالص' : 'Soldé'}</span>`}
       </td>
     `;
     tbody.appendChild(tr);
+  });
+
+  tbody.querySelectorAll('.btn-client-stmt').forEach(b => {
+    b.addEventListener('click', () => {
+      openClientStatement(b.dataset.id);
+    });
   });
 
   tbody.querySelectorAll('.btn-pay-debt').forEach(b => {

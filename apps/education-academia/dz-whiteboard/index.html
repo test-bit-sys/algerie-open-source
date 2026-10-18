@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DZ-Whiteboard Pro — The Algerian Open-Source Interactive Whiteboard</title>
   <link rel="stylesheet" href="src/styles.css">
-  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 </head>
 <body>
   <div class="whiteboard-app" id="whiteboardApp">
@@ -15,11 +15,7 @@
       <div class="header-left">
         <!-- Brand Badge -->
         <div class="brand-badge" title="DZ Open Suite — Interactive Whiteboard">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
+          <img src="assets/logo.svg" alt="DZ-Whiteboard" style="width:22px; height:22px; filter:drop-shadow(0 2px 6px rgba(13,148,136,0.4));">
           <span>DZ-Whiteboard</span>
         </div>
 
@@ -99,6 +95,16 @@
               </button>
               <button class="dropdown-item" id="bgOptBlackboard">
                 <span data-i18n="bgBlackboard">سبورة سوداء داكنة (Blackboard)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Help Menu -->
+          <div class="menu-item-wrap">
+            <button class="menu-btn" data-i18n="mHelp">مساعدة (Help)</button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" id="itemAbout">
+                <span data-i18n="about">حول DZ-Whiteboard Pro...</span>
               </button>
             </div>
           </div>
@@ -378,6 +384,22 @@
 
   <!-- Hidden file picker for opening .dzboard projects -->
   <input type="file" id="fileInputProject" accept=".dzboard,.json" style="display:none;">
+
+  <!-- Modal: About DZ-Whiteboard Pro -->
+  <div class="modal-backdrop" id="aboutModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+    <div style="background:var(--card-bg, #ffffff); color:var(--text, #1e293b); border-radius:12px; max-width:480px; width:92%; padding:24px; box-shadow:0 20px 40px rgba(0,0,0,0.3); text-align:center; border:1px solid var(--border, #cbd5e1);">
+      <img src="assets/logo.svg" alt="DZ-Whiteboard Logo" style="width:72px; height:72px; margin:0 auto 12px; display:block; filter:drop-shadow(0 4px 14px rgba(13,148,136,0.35));">
+      <h2 style="font-size:18px; font-weight:800; color:#0d9488; margin-bottom:6px;">DZ-Whiteboard Pro v2.0</h2>
+      <p style="font-size:13px; color:var(--text-secondary, #64748b); line-height:1.6; margin-bottom:14px;">
+        الصبورة التفاعلية الرقمية الجزائرية المفتوحة المصدر للمدارس، الجامعات والمراكز التعليمية.<br>
+        بديل احترافي لـ OpenBoard و Excalidraw مبني 100% بالتقنيات الأصيلة (Vanilla JS / Canvas) وبدون إنترنت.
+      </p>
+      <div style="font-size:11px; color:var(--text-muted, #94a3b8); margin-bottom:18px;">
+        Algeria Open Source Community • MIT License
+      </div>
+      <button id="btnCloseAboutModal" style="background:#0d9488; color:#ffffff; border:none; padding:8px 24px; border-radius:6px; font-weight:700; cursor:pointer;">إغلاق</button>
+    </div>
+  </div>
 
   <script type="module" src="src/app.js"></script>
 </body>

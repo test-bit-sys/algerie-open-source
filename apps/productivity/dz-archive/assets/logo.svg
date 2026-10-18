@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="archiveBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="bookBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="bookGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="bookRed" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <linearGradient id="strapGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#854d0e"/>
+      <stop offset="100%" stop-color="#713f12"/>
+    </linearGradient>
+    <linearGradient id="goldLock" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <filter id="archiveShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base Badge -->
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="url(#archiveBgGrad)" filter="url(#archiveShadow)"/>
+  <rect x="9.5" y="9.5" width="101" height="101" rx="24.5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+
+  <!-- Stack of 3 Compressed Books -->
+  <!-- Bottom Book (Blue) -->
+  <g filter="url(#archiveShadow)">
+    <rect x="26" y="68" width="68" height="18" rx="4" fill="url(#bookBlue)"/>
+    <rect x="29" y="70" width="6" height="14" rx="2" fill="#1e3a8a"/>
+    <line x1="90" y1="71" x2="90" y2="83" stroke="#f8fafc" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Middle Book (Green) -->
+  <g filter="url(#archiveShadow)">
+    <rect x="24" y="48" width="72" height="18" rx="4" fill="url(#bookGreen)"/>
+    <rect x="27" y="50" width="6" height="14" rx="2" fill="#064e3b"/>
+    <line x1="92" y1="51" x2="92" y2="63" stroke="#f8fafc" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Top Book (Red) -->
+  <g filter="url(#archiveShadow)">
+    <rect x="28" y="28" width="64" height="18" rx="4" fill="url(#bookRed)"/>
+    <rect x="31" y="30" width="6" height="14" rx="2" fill="#7f1d1d"/>
+    <line x1="88" y1="31" x2="88" y2="43" stroke="#f8fafc" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Compression Leather Strap -->
+  <rect x="52" y="22" width="14" height="68" rx="3" fill="url(#strapGrad)" stroke="#581c87" stroke-width="0.5" filter="url(#archiveShadow)"/>
+  <rect x="56" y="24" width="6" height="64" fill="none" stroke="#ca8a04" stroke-width="1" stroke-dasharray="2,2"/>
+
+  <!-- Golden WinRAR Padlock in Center -->
+  <g filter="url(#archiveShadow)">
+    <!-- Shackle -->
+    <path d="M54 58 L54 52 C54 47.5 64 47.5 64 52 L64 58" fill="none" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
+    <!-- Lock Body -->
+    <rect x="49" y="56" width="20" height="18" rx="4" fill="url(#goldLock)"/>
+    <circle cx="59" cy="63" r="2.5" fill="#713f12"/>
+    <polygon points="58,63 60,63 60.5,68 57.5,68" fill="#713f12"/>
+  </g>
+</svg>

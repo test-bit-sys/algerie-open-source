@@ -59,7 +59,8 @@ const I18N = {
     toolLaser: 'مؤشر الليزر (K)',
     toolHand: 'تحريك الرقعة (Space)',
 
-    pageLabel: 'الصفحة'
+    pageLabel: 'الصفحة',
+    about: 'حول DZ-Whiteboard Pro...'
   },
   fr: {
     appTitle: 'DZ-Whiteboard Pro — Tableau Blanc Interactif',
@@ -108,7 +109,8 @@ const I18N = {
     toolLaser: 'Pointeur laser (K)',
     toolHand: 'Déplacer (Space)',
 
-    pageLabel: 'Page'
+    pageLabel: 'Page',
+    about: 'À propos de DZ-Whiteboard Pro...'
   },
   en: {
     appTitle: 'DZ-Whiteboard Pro — Interactive Whiteboard Suite',
@@ -157,7 +159,8 @@ const I18N = {
     toolLaser: 'Laser Pointer (K)',
     toolHand: 'Pan Canvas (Space)',
 
-    pageLabel: 'Page'
+    pageLabel: 'Page',
+    about: 'About DZ-Whiteboard Pro...'
   }
 };
 
@@ -241,6 +244,62 @@ class DZWhiteboardApp {
         this.engine.renderMinimap(this.dom.minimapCanvas);
       }
     });
+
+    // Support dropping external images onto the whiteboard
+    const canvasWrap = this.dom.canvas.parentElement;
+    if (canvasWrap) {
+      canvasWrap.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+      });
+
+      canvasWrap.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith('image/'));
+        if (files.length === 0) return;
+
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const src = ev.target.result;
+          const img = new Image();
+          img.onload = () => {
+            const rect = this.dom.canvas.getBoundingClientRect();
+            const clientX = e.clientX - rect.left;
+            const clientY = e.clientY - rect.top;
+            const worldPos = this.engine.screenToWorld(clientX, clientY);
+
+            let w = img.naturalWidth || 400;
+            let h = img.naturalHeight || 300;
+            const maxDim = 600;
+            if (w > maxDim || h > maxDim) {
+              const ratio = Math.min(maxDim / w, maxDim / h);
+              w = Math.round(w * ratio);
+              h = Math.round(h * ratio);
+            }
+
+            const newEl = {
+              id: 'img_' + Date.now(),
+              type: 'image',
+              x: Math.round(worldPos.x - w / 2),
+              y: Math.round(worldPos.y - h / 2),
+              width: w,
+              height: h,
+              src: src,
+              imgObj: img
+            };
+
+            this.engine.activePage.elements.push(newEl);
+            this.engine.selectElement(newEl.id);
+            this.engine.render();
+            this.saveStateToHistory();
+            this.engine.renderMinimap(this.dom.minimapCanvas);
+          };
+          img.src = src;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
   }
 
   initTools() {
@@ -654,6 +713,17 @@ class DZWhiteboardApp {
     this.dom.langSelect?.addEventListener('change', (e) => this.applyLanguage(e.target.value));
     this.dom.themeToggleBtn?.addEventListener('click', () => {
       this.applyTheme(this.currentTheme === 'dark' ? 'light' : 'dark');
+    });
+
+    // About Dialog
+    document.getElementById('itemAbout')?.addEventListener('click', () => {
+      const modal = document.getElementById('aboutModal');
+      if (modal) modal.style.display = 'flex';
+      this.closeAllMenus();
+    });
+    document.getElementById('btnCloseAboutModal')?.addEventListener('click', () => {
+      const modal = document.getElementById('aboutModal');
+      if (modal) modal.style.display = 'none';
     });
   }
 

@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test tests/"
+    "test": "node --test tests/*.test.js"
   },
   "keywords": [
     "algeria",

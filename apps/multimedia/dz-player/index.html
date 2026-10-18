@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DZ-Player — مشغل الوسائط الجزائري المفتوح المصدر | VLC Desktop Alternative</title>
-  <meta name="description" content="Authentic desktop-grade VLC alternative with hardware acceleration, 10-band equalizer, 300% volume boost, Arabic subtitle Windows-1256 auto-detection, A-B loop, and video effects. 100% offline-first.">
-  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="stylesheet" href="./src/styles.css">
 </head>
 <body>
@@ -18,6 +17,10 @@
 
     <!-- 1. Classic VLC Desktop Menu Bar -->
     <header class="vlc-menu-bar">
+      <div style="display:flex; align-items:center; gap:8px; padding-inline-start:10px; padding-inline-end:6px;">
+        <img src="assets/logo.svg" alt="DZ-Player" style="width:22px; height:22px; filter:drop-shadow(0 2px 6px rgba(249,115,22,0.4));">
+        <strong style="font-size:13px; font-weight:800; color:#ea580c; letter-spacing:-0.2px;">DZ-Player</strong>
+      </div>
       <div class="menu-items">
         <!-- Media Menu -->
         <div class="menu-dropdown-wrap">
@@ -597,18 +600,18 @@
         <button class="btn-icon-small btn-modal-close">&times;</button>
       </div>
       <div class="modal-body">
-        <img src="/assets/logo.svg" alt="DZ Open Suite" style="width:56px; height:56px; margin:0 auto 12px auto; display:block;">
-        <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:4px;">DZ-Player v2.0</h2>
+        <img src="assets/logo.svg" alt="DZ-Player" style="width:68px; height:68px; margin:0 auto 12px auto; display:block; filter:drop-shadow(0 4px 14px rgba(249,115,22,0.4));">
+        <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:4px; color:#ea580c;">DZ-Player v2.0 Enterprise</h2>
         <p style="color:var(--accent-color); font-weight:600; font-size:0.85rem; margin-bottom:12px;">
           البديل الجزائري المفتوح المصدر لبرنامج VLC Media Player
         </p>
         <p style="font-size:0.825rem; color:var(--text-secondary); line-height:1.6; margin-bottom:14px;">
           مشغل وسائط متعددة سطح مكتبي أصيل مصمم بالكامل بلغات الويب النقية (Vanilla JS, Web Audio API, HTML5 Canvas)
           وفق معمارية HeyPuter العالمية. يتضمن معادل VLC الصوتي بـ 10 نطاقات، وتضخيم الصوت حتى 300%،
-          وكشف ذكي لترميز الترجمات العربية القديمة (Windows-1256)، وتكرار A-B، ويعمل 100% بدون إنترنت داخل جهازك.
+          وكشف ذكي لترميز الترجمات العربية القديمة (Windows-1256)، وتكرار A-B، ومحلل ترددات متعدد الأنماط، ويعمل 100% بدون إنترنت داخل جهازك.
         </p>
         <div style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">
-          Algeria Open Source Community | MIT License
+          Algeria Open Source Community • MIT License
         </div>
       </div>
       <div class="modal-footer" style="justify-content:center;">

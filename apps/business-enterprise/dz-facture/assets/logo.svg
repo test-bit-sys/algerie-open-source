@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="factureGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#008744"/>
+      <stop offset="100%" stop-color="#065f46"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base Badge -->
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="url(#factureGrad)" filter="url(#shadow)"/>
+  
+  <!-- Subtle Internal Glow Border -->
+  <rect x="9.5" y="9.5" width="101" height="101" rx="24.5" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+
+  <!-- Document Sheet -->
+  <rect x="28" y="24" width="64" height="72" rx="8" fill="#ffffff" filter="url(#shadow)"/>
+  
+  <!-- Document Folded Header -->
+  <path d="M72 24 L92 44 L72 44 Z" fill="#e2e8f0"/>
+  <path d="M28 32 C28 27.57 31.57 24 36 24 L72 24 L92 44 L92 88 C92 92.43 88.43 96 84 96 L36 96 C31.57 96 28 92.43 28 88 Z" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- National Green/Red Stamp Ribbon -->
+  <circle cx="44" cy="40" r="10" fill="#008744"/>
+  <!-- Red Crescent and Star in Stamp -->
+  <path d="M43 33.5 A 6.5 6.5 0 1 0 49 43.5 A 5.5 5.5 0 1 1 43 33.5 Z" fill="#d93025"/>
+  <polygon points="46,37.5 47,39.5 49,39.5 47.5,41 48,43 46,41.8 44,43 44.5,41 43,39.5 45,39.5" fill="#d93025"/>
+
+  <!-- Invoice Lines -->
+  <rect x="58" y="36" width="22" height="3" rx="1.5" fill="#94a3b8"/>
+  <rect x="58" y="43" width="16" height="2.5" rx="1.25" fill="#cbd5e1"/>
+
+  <rect x="36" y="56" width="48" height="2" rx="1" fill="#e2e8f0"/>
+  <rect x="36" y="63" width="30" height="3" rx="1.5" fill="#0284c7"/>
+  <rect x="74" y="63" width="10" height="3" rx="1.5" fill="#0f172a"/>
+
+  <rect x="36" y="71" width="24" height="3" rx="1.5" fill="#64748b"/>
+  <rect x="74" y="71" width="10" height="3" rx="1.5" fill="#0f172a"/>
+
+  <!-- Barcode Strip at bottom of invoice -->
+  <line x1="36" y1="84" x2="36" y2="90" stroke="#0f172a" stroke-width="2"/>
+  <line x1="40" y1="84" x2="40" y2="90" stroke="#0f172a" stroke-width="1.2"/>
+  <line x1="43" y1="84" x2="43" y2="90" stroke="#0f172a" stroke-width="2.5"/>
+  <line x1="48" y1="84" x2="48" y2="90" stroke="#0f172a" stroke-width="1"/>
+  <line x1="51" y1="84" x2="51" y2="90" stroke="#0f172a" stroke-width="2"/>
+  <line x1="55" y1="84" x2="55" y2="90" stroke="#0f172a" stroke-width="1.5"/>
+
+  <!-- Golden DZD Currency Coin Badge -->
+  <circle cx="82" cy="82" r="14" fill="url(#accentGrad)" filter="url(#shadow)"/>
+  <circle cx="82" cy="82" r="11.5" fill="none" stroke="#fef3c7" stroke-width="1"/>
+  <text x="82" y="86" font-family="-apple-system, system-ui, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">DZ</text>
+</svg>

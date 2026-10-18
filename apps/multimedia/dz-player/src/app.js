@@ -1006,20 +1006,82 @@ class DZPlayerApp {
     if (!this.audio.analyserNode) return;
     const canvas = this.dom.visualizerCanvas;
     const ctx = canvas.getContext('2d');
-    const buffer = this.audio.frequencyBuffer;
+    const freqBuffer = this.audio.frequencyBuffer;
+    const waveBuffer = this.audio.waveformBuffer || new Uint8Array(this.audio.analyserNode.fftSize);
+    this.visualizerMode = this.visualizerMode || 'bars';
+
+    if (!this._visualizerClickBound) {
+      this._visualizerClickBound = true;
+      canvas.addEventListener('click', () => {
+        const modes = ['bars', 'wave', 'radial'];
+        const nextIdx = (modes.indexOf(this.visualizerMode) + 1) % modes.length;
+        this.visualizerMode = modes[nextIdx];
+        const names = { 
+          bars: this.currentLang === 'ar' ? 'أعمدة التردد (Bars)' : 'Barres de fréquences', 
+          wave: this.currentLang === 'ar' ? 'مخطط الإشارة (Waveform)' : 'Oscilloscope', 
+          radial: this.currentLang === 'ar' ? 'المخطط الدائري (Radial)' : 'Spectre circulaire' 
+        };
+        this.showOSD(`نمط المرئيات: ${names[this.visualizerMode]}`);
+      });
+    }
 
     const render = () => {
-      this.audio.analyserNode.getByteFrequencyData(buffer);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const barWidth = (canvas.width / buffer.length) * 2.2;
-      let x = 0;
+      if (this.visualizerMode === 'wave') {
+        this.audio.analyserNode.getByteTimeDomainData(waveBuffer);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#38bdf8';
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = '#0284c7';
+        ctx.beginPath();
 
-      for (let i = 0; i < buffer.length; i++) {
-        const barHeight = (buffer[i] / 255) * canvas.height;
-        ctx.fillStyle = `hsl(${190 + (i / buffer.length) * 60}, 90%, 55%)`;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
-        x += barWidth;
+        const sliceWidth = canvas.width / waveBuffer.length;
+        let x = 0;
+        for (let i = 0; i < waveBuffer.length; i++) {
+          const v = waveBuffer[i] / 128.0;
+          const y = (v * canvas.height) / 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      } else if (this.visualizerMode === 'radial') {
+        this.audio.analyserNode.getByteFrequencyData(freqBuffer);
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const radius = Math.min(cx, cy) * 0.45;
+        const total = 64;
+
+        ctx.lineWidth = 3;
+        for (let i = 0; i < total; i++) {
+          const angle = (i / total) * Math.PI * 2;
+          const val = freqBuffer[i] / 255;
+          const barLen = val * (Math.min(cx, cy) * 0.5);
+          const x1 = cx + Math.cos(angle) * radius;
+          const y1 = cy + Math.sin(angle) * radius;
+          const x2 = cx + Math.cos(angle) * (radius + barLen);
+          const y2 = cy + Math.sin(angle) * (radius + barLen);
+
+          ctx.strokeStyle = `hsl(${25 + val * 60}, 95%, 55%)`;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+      } else {
+        // Default: bars
+        this.audio.analyserNode.getByteFrequencyData(freqBuffer);
+        const barWidth = (canvas.width / freqBuffer.length) * 2.2;
+        let x = 0;
+
+        for (let i = 0; i < freqBuffer.length; i++) {
+          const barHeight = (freqBuffer[i] / 255) * canvas.height;
+          ctx.fillStyle = `hsl(${20 + (i / freqBuffer.length) * 180}, 90%, 55%)`;
+          ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+          x += barWidth;
+        }
       }
 
       this.visualizerId = requestAnimationFrame(render);

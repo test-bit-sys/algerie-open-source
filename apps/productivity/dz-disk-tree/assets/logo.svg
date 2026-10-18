@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="diskBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="treeBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="treeGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <linearGradient id="treeAmber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="treePurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#9333ea"/>
+    </linearGradient>
+    <filter id="diskShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base Badge -->
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="url(#diskBgGrad)" filter="url(#diskShadow)"/>
+  <rect x="9.5" y="9.5" width="101" height="101" rx="24.5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+
+  <!-- Treemap Grid Cluster -->
+  <!-- Big Partition (Left Blue) -->
+  <rect x="24" y="24" width="42" height="72" rx="6" fill="url(#treeBlue)" filter="url(#diskShadow)"/>
+  <rect x="26" y="26" width="38" height="68" rx="4" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+
+  <!-- Top-Right Partition (Green) -->
+  <rect x="70" y="24" width="26" height="34" rx="5" fill="url(#treeGreen)"/>
+  <rect x="71.5" y="25.5" width="23" height="31" rx="3.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+
+  <!-- Middle-Right Partition (Amber) -->
+  <rect x="70" y="62" width="14" height="34" rx="4" fill="url(#treeAmber)"/>
+  <rect x="71" y="63" width="12" height="32" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+
+  <!-- Bottom-Right Partition (Purple) -->
+  <rect x="87" y="62" width="9" height="34" rx="3" fill="url(#treePurple)"/>
+  
+  <!-- Magnifying Scanner Lens Overlay in Center -->
+  <circle cx="56" cy="56" r="16" fill="rgba(15, 23, 42, 0.75)" stroke="#38bdf8" stroke-width="3" filter="url(#diskShadow)"/>
+  <path d="M68 68 L80 80" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>
+  
+  <!-- Mini Folder Tree inside lens -->
+  <path d="M49 52 L54 52 L56 54 L63 54 C64.1 54 65 54.9 65 56 L65 62 C65 63.1 64.1 64 63 64 L49 64 C47.9 64 47 63.1 47 62 L47 54 C47 52.9 47.9 52 49 52 Z" fill="#38bdf8"/>
+</svg>

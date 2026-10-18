@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="wbBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14532d"/>
+      <stop offset="100%" stop-color="#052e16"/>
+    </linearGradient>
+    <linearGradient id="stylusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <filter id="wbShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base Badge -->
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="url(#wbBgGrad)" filter="url(#wbShadow)"/>
+  <rect x="9.5" y="9.5" width="101" height="101" rx="24.5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+
+  <!-- Classroom Easel Legs -->
+  <line x1="36" y1="84" x2="24" y2="104" stroke="#78350f" stroke-width="4" stroke-linecap="round"/>
+  <line x1="84" y1="84" x2="96" y2="104" stroke="#78350f" stroke-width="4" stroke-linecap="round"/>
+  <line x1="60" y1="84" x2="60" y2="106" stroke="#581c87" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Whiteboard Surface Frame -->
+  <rect x="22" y="22" width="76" height="62" rx="6" fill="#1b4332" stroke="#d97706" stroke-width="3" filter="url(#wbShadow)"/>
+  <!-- Subtle Grid inside Board -->
+  <line x1="24" y1="42" x2="96" y2="42" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <line x1="24" y1="62" x2="96" y2="62" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <line x1="48" y1="24" x2="48" y2="82" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <line x1="72" y1="24" x2="72" y2="82" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+  <!-- Mini Colorful Sticky Note on Board -->
+  <rect x="28" y="28" width="18" height="16" rx="2" fill="#fef08a" transform="rotate(-6 28 28)"/>
+
+  <!-- Mathematical Formula / Sine Wave Drawn on Board in Chalk White -->
+  <path d="M30 68 Q 42 46, 54 68 T 78 68" fill="none" stroke="#f8fafc" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Geometric Circle & Triangle in Gold -->
+  <circle cx="78" cy="40" r="9" fill="none" stroke="#f59e0b" stroke-width="2"/>
+
+  <!-- Floating Digital Stylus Pen with Glowing Laser Tip -->
+  <g transform="translate(68, 54) rotate(-35)" filter="url(#wbShadow)">
+    <rect x="0" y="0" width="8" height="38" rx="4" fill="url(#stylusGrad)"/>
+    <polygon points="4,-6 0,0 8,0" fill="#ffffff"/>
+    <circle cx="4" cy="-7" r="3" fill="#ef4444"/>
+    <circle cx="4" cy="-7" r="6" fill="rgba(239, 68, 68, 0.4)"/>
+  </g>
+</svg>

@@ -367,6 +367,10 @@ class DiskTreeApp {
     // Modal closes
     this.dom.propCloseBtn?.addEventListener('click', () => this.dom.propertiesModal.classList.remove('open'));
     this.dom.aboutCloseBtn?.addEventListener('click', () => this.dom.aboutModal.classList.remove('open'));
+    document.getElementById('itemFindDuplicates')?.addEventListener('click', () => this.openDuplicateFinder());
+    document.getElementById('dupCloseBtn')?.addEventListener('click', () => document.getElementById('duplicateModal').classList.remove('open'));
+    document.getElementById('dupCloseBottomBtn')?.addEventListener('click', () => document.getElementById('duplicateModal').classList.remove('open'));
+    document.getElementById('dupExportBtn')?.addEventListener('click', () => this.exportDuplicatesCsv());
   }
 
   resetState() {
@@ -1327,6 +1331,121 @@ class DiskTreeApp {
     };
     dump(this.scanData.tree);
     this.downloadFile(csv, 'text/csv', 'dz_disktree_export.csv');
+  }
+
+  openDuplicateFinder() {
+    const root = this.scanData?.tree;
+    if (!root) {
+      alert(this.currentLang === 'ar' ? 'يرجى إجراء فحص لمجلد أو قرص أولاً!' : 'Veuillez effectuer une analyse d\'abord!');
+      return;
+    }
+
+    const modal = document.getElementById('duplicateModal');
+    const container = document.getElementById('dupResultsContainer');
+    const summaryCount = document.getElementById('dupSummaryCount');
+    const summaryWaste = document.getElementById('dupSummaryWaste');
+
+    // Collect all leaf files from root
+    const allFiles = [];
+    function collectFiles(node) {
+      if (!node) return;
+      if (!node.isDirectory) {
+        if ((node.size || 0) > 1024) {
+          allFiles.push(node);
+        }
+      } else if (node.children && node.children.length) {
+        node.children.forEach(collectFiles);
+      }
+    }
+    collectFiles(root);
+
+    // Group files by size
+    const sizeGroups = new Map();
+    allFiles.forEach(f => {
+      const s = f.size || 0;
+      if (!sizeGroups.has(s)) {
+        sizeGroups.set(s, []);
+      }
+      sizeGroups.get(s).push(f);
+    });
+
+    // Keep only groups with > 1 file
+    this.duplicateGroups = [];
+    let totalWasteBytes = 0;
+    let totalDuplicateFiles = 0;
+
+    for (const [size, files] of sizeGroups.entries()) {
+      if (files.length > 1) {
+        this.duplicateGroups.push({ size, files });
+        totalWasteBytes += size * (files.length - 1);
+        totalDuplicateFiles += files.length;
+      }
+    }
+
+    this.duplicateGroups.sort((a, b) => b.size - a.size);
+
+    summaryCount.textContent = this.currentLang === 'ar' 
+      ? `تم العثور على ${this.duplicateGroups.length} مجموعة ملفات متطابقة (${totalDuplicateFiles} ملف)`
+      : `${this.duplicateGroups.length} groupes de fichiers identiques (${totalDuplicateFiles} fichiers)`;
+    summaryWaste.textContent = this.currentLang === 'ar'
+      ? `المساحة المهدورة المتوقعة: ${this.formatBytes(totalWasteBytes)}`
+      : `Espace gaspillé estimé: ${this.formatBytes(totalWasteBytes)}`;
+
+    if (this.duplicateGroups.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center; padding:32px; color:var(--text-muted);">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px; display:block; color:#16a34a;"><polyline points="20 6 9 17 4 12"/></svg>
+          <div style="font-weight:700; color:var(--text-primary);">${this.currentLang === 'ar' ? 'ممتاز! لم يتم العثور على ملفات مكررة في هذا المسار.' : 'Aucun fichier dupliqué trouvé.'}</div>
+        </div>
+      `;
+    } else {
+      let html = '';
+      this.duplicateGroups.slice(0, 100).forEach((grp, idx) => {
+        html += `
+          <div style="margin-bottom:12px; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:6px; padding:10px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-weight:700; font-size:12px;">
+              <span>#${idx + 1} — ${grp.files.length} ${this.currentLang === 'ar' ? 'نسخ مكررة بحجم' : 'copies de taille'} ${this.formatBytes(grp.size)}</span>
+              <span style="color:#ef4444;">${this.formatBytes(grp.size * (grp.files.length - 1))} ${this.currentLang === 'ar' ? 'مهدر' : 'perdu'}</span>
+            </div>
+            <ul style="list-style:none; padding:0; margin:0; font-size:11px; font-family:monospace; color:var(--text-secondary);">
+              ${grp.files.map(f => `
+                <li style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-top:1px dashed var(--border-color);">
+                  <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:620px;" title="${f.path}">${f.path}</span>
+                  <button class="btn-copy-dup-path btn-tb" data-path="${f.path}" style="padding:2px 8px; font-size:10px;">${this.currentLang === 'ar' ? 'نسخ' : 'Copier'}</button>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+
+      container.querySelectorAll('.btn-copy-dup-path').forEach(btn => {
+        btn.addEventListener('click', () => {
+          navigator.clipboard.writeText(btn.dataset.path);
+          btn.textContent = this.currentLang === 'ar' ? 'تم!' : 'Copié!';
+          setTimeout(() => {
+            btn.textContent = this.currentLang === 'ar' ? 'نسخ' : 'Copier';
+          }, 1500);
+        });
+      });
+    }
+
+    modal.classList.add('open');
+  }
+
+  exportDuplicatesCsv() {
+    if (!this.duplicateGroups || !this.duplicateGroups.length) {
+      alert(this.currentLang === 'ar' ? 'لا توجد بيانات تكرار لتصديرها!' : 'Aucun doublon à exporter!');
+      return;
+    }
+    let csv = 'GroupId,Size,Bytes,FileName,Path\n';
+    this.duplicateGroups.forEach((grp, idx) => {
+      grp.files.forEach(f => {
+        csv += `${idx + 1},"${this.formatBytes(grp.size)}",${grp.size},"${f.name}","${f.path}"\n`;
+      });
+    });
+    this.downloadFile(csv, 'text/csv', 'dz_disktree_duplicates.csv');
   }
 
   exportJson() {

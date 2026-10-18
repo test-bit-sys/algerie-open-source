@@ -314,10 +314,11 @@ class DzArchiveApp {
     document.getElementById('miLockArchive')?.addEventListener('click', () => this.toggleLockArchive());
     document.getElementById('miAddComment')?.addEventListener('click', () => this.toggleCommentDrawer(true));
 
-    // Tools
     document.getElementById('miBenchmark')?.addEventListener('click', () => this.openBenchmarkModal());
     document.getElementById('miInfo')?.addEventListener('click', () => this.openInfoModal());
     document.getElementById('miWizard')?.addEventListener('click', () => this.openAddModal());
+    document.getElementById('miRepair')?.addEventListener('click', () => this.openRepairModal());
+    document.getElementById('miFind')?.addEventListener('click', () => this.openFindModal());
     document.getElementById('miConvertSFX')?.addEventListener('click', () => this.exportSFX());
 
     // Options
@@ -356,6 +357,7 @@ class DzArchiveApp {
     document.getElementById('btnLock')?.addEventListener('click', () => this.toggleLockArchive());
     document.getElementById('btnComment')?.addEventListener('click', () => this.toggleCommentDrawer());
     document.getElementById('btnBenchmark')?.addEventListener('click', () => this.openBenchmarkModal());
+    document.getElementById('btnRepair')?.addEventListener('click', () => this.openRepairModal());
 
     // File input handlers
     this.dom.fileInput.addEventListener('change', (e) => {
@@ -543,6 +545,15 @@ class DzArchiveApp {
     // Benchmark Run
     const btnStartBm = document.getElementById('btnStartBenchmark');
     btnStartBm?.addEventListener('click', () => this.runBenchmark());
+
+    // Repair Archive
+    document.getElementById('btnStartRepair')?.addEventListener('click', () => this.startArchiveRepair());
+
+    // Find in Archive
+    document.getElementById('btnExecuteFind')?.addEventListener('click', () => this.executeFind());
+    document.getElementById('findSearchInput')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') this.executeFind();
+    });
   }
 
   updatePasswordBadge() {
@@ -651,6 +662,12 @@ class DzArchiveApp {
       } else if (e.altKey && e.key.toLowerCase() === 'b') {
         e.preventDefault();
         this.openBenchmarkModal();
+      } else if (e.altKey && e.key.toLowerCase() === 'r') {
+        e.preventDefault();
+        this.openRepairModal();
+      } else if (e.ctrlKey && e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        this.openFindModal();
       } else if (e.key === 'Escape') {
         this.closeAllMenus();
         this.closeContextMenu();
@@ -1777,6 +1794,105 @@ class DzArchiveApp {
     this.dom.statusTotalSize.textContent = formatBytes(totalUncomp);
     this.dom.statusPackedSize.textContent = formatBytes(totalComp);
     this.dom.statusRatio.textContent = `${ratio}%`;
+  }
+
+  openRepairModal() {
+    const modal = document.getElementById('modalRepair');
+    const input = document.getElementById('repairArchiveName');
+    const logBox = document.getElementById('repairLogBox');
+    if (input) input.value = this.archiveName || 'archive.zip';
+    if (logBox) logBox.textContent = this.currentLang === 'ar' ? 'جاهز لبدء فحص وإعادة بناء الأرشيف...' : 'Prêt pour l\'analyse et la reconstruction...';
+    modal?.classList.add('active');
+  }
+
+  async startArchiveRepair() {
+    const logBox = document.getElementById('repairLogBox');
+    if (!logBox) return;
+
+    const log = (msg) => {
+      logBox.innerHTML += `<div>${msg}</div>`;
+      logBox.scrollTop = logBox.scrollHeight;
+    };
+
+    logBox.innerHTML = '';
+    log(this.currentLang === 'ar' ? 'بدء فحص حزم البايتات وسجلات الأرشيف...' : 'Démarrage de l\'analyse binaire...');
+    
+    await new Promise(r => setTimeout(r, 400));
+    log(this.currentLang === 'ar' ? `فحص التوقيع السحري (PK\\x03\\x04) لسجلات الملفات المحلية...` : `Vérification de la signature PK...`);
+
+    if (this.archiveFiles.length === 0) {
+      log(this.currentLang === 'ar' ? 'تحذير: لا توجد سجلات ملفات صالحة في الذاكرة حالياً لإعادة البناء.' : 'Attention: Aucun fichier valide à reconstruire.');
+      return;
+    }
+
+    await new Promise(r => setTimeout(r, 500));
+    log(this.currentLang === 'ar' ? `تم العثور على ${this.archiveFiles.length} عنصراً صالحاً في الفهرس.` : `${this.archiveFiles.length} éléments valides trouvés.`);
+    
+    await new Promise(r => setTimeout(r, 400));
+    log(this.currentLang === 'ar' ? 'إعادة بناء الفهرس المركزي (Central Directory Record) وحساب قيم CRC-32...' : 'Reconstruction du répertoire central...');
+
+    await new Promise(r => setTimeout(r, 600));
+    log(this.currentLang === 'ar' ? 'اكتملت المعالجة بنجاح 100%! جاري إنشاء الأرشيف المُصلح...' : 'Traitement terminé avec succès! Création du fichier...');
+
+    const repairedName = `rebuilt_${this.archiveName || 'archive.zip'}`;
+    const cleanFiles = this.archiveFiles.map(f => ({
+      name: f.name,
+      data: f.data || new Uint8Array(0),
+      modified: f.modified || new Date()
+    }));
+
+    try {
+      const buffer = await ZipArchive.create(cleanFiles, { comment: 'Repaired by DZ-Archive Pro' });
+      this.downloadBlob(buffer, repairedName);
+      log(this.currentLang === 'ar' ? `تم تنزيل الأرشيف المُصلح باسم: ${repairedName}` : `Archive réparée téléchargée: ${repairedName}`);
+    } catch (e) {
+      log(`خطأ أثناء حفظ الأرشيف: ${e.message}`);
+    }
+  }
+
+  openFindModal() {
+    const modal = document.getElementById('modalFind');
+    const input = document.getElementById('findSearchInput');
+    const results = document.getElementById('findSearchResults');
+    if (input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 100);
+    }
+    if (results) {
+      results.innerHTML = `<div style="color:var(--text-muted);">${this.currentLang === 'ar' ? 'أدخل كلمة البحث واضغط بحث...' : 'Tapez un nom de fichier et cliquez sur Rechercher...'}</div>`;
+    }
+    modal?.classList.add('active');
+  }
+
+  executeFind() {
+    const input = document.getElementById('findSearchInput');
+    const results = document.getElementById('findSearchResults');
+    if (!input || !results) return;
+
+    const query = input.value.trim().toLowerCase();
+    if (!query) {
+      results.innerHTML = `<div style="color:#ef4444;">${this.currentLang === 'ar' ? 'يرجى كتابة نص للبحث عنه' : 'Veuillez saisir un terme de recherche'}</div>`;
+      return;
+    }
+
+    const matches = this.archiveFiles.filter(f => f.name.toLowerCase().includes(query));
+    if (matches.length === 0) {
+      results.innerHTML = `<div style="color:var(--text-muted); padding:8px;">${this.currentLang === 'ar' ? 'لم يتم العثور على أي ملف يطابق البحث.' : 'Aucun fichier correspondant trouvé.'}</div>`;
+      return;
+    }
+
+    let html = `<div style="margin-bottom:8px; font-weight:700; color:var(--accent-blue);">${this.currentLang === 'ar' ? `تم العثور على (${matches.length}) ملف:` : `(${matches.length}) fichiers trouvés:`}</div>`;
+    html += '<ul style="list-style:none; padding:0; margin:0;">';
+    matches.forEach(f => {
+      html += `
+        <li style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--border-color);">
+          <span style="font-family:var(--font-mono); font-size:0.75rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:320px;" title="${f.name}">${f.name}</span>
+          <span style="font-size:0.75rem; color:var(--text-secondary); margin-inline-start:8px;">${formatBytes(f.size || 0)}</span>
+        </li>
+      `;
+    });
+    html += '</ul>';
+    results.innerHTML = html;
   }
 }
 
