@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Player — The Algerian Open-Source VLC Alternative</title>
+  <meta name="description" content="Hardware-accelerated multimedia player with 10-band equalizer, 300% volume boost, and smart Arabic subtitle encoding (Windows-1256 / UTF-8 auto-detection). 100% offline-first.">
+  <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+
+  <!-- Topbar Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
+        </svg>
+        <span data-i18n="appTitle">DZ-Player</span>
+      </div>
+      <span class="brand-tag" data-i18n="tagline">VLC Alternative</span>
+    </div>
+
+    <div class="header-actions">
+      <!-- Open Media -->
+      <button class="btn-icon" id="btn-open-file" title="Open Media" data-i18n-title="openFile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+
+      <!-- Load Subtitle -->
+      <button class="btn-icon" id="btn-open-sub" title="Load Subtitle" data-i18n-title="openSub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <line x1="6" y1="15" x2="18" y2="15"></line>
+          <line x1="6" y1="11" x2="10" y2="11"></line>
+        </svg>
+      </button>
+
+      <!-- Equalizer -->
+      <button class="btn-icon" id="btn-eq" title="Equalizer" data-i18n-title="equalizer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+      </button>
+
+      <!-- Video Effects -->
+      <button class="btn-icon" id="btn-effects" title="Video Effects" data-i18n-title="videoEffects">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+
+      <!-- Subtitles -->
+      <button class="btn-icon" id="btn-subtitles" title="Subtitles" data-i18n-title="subtitles">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path>
+          <line x1="8" y1="11" x2="8" y2="11.01"></line>
+          <line x1="12" y1="11" x2="12" y2="11.01"></line>
+          <line x1="16" y1="11" x2="16" y2="11.01"></line>
+        </svg>
+      </button>
+
+      <!-- Playlist -->
+      <button class="btn-icon" id="btn-playlist" title="Playlist" data-i18n-title="playlist">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Theme Switcher -->
+      <button class="btn-icon" id="btn-theme" title="Theme" data-i18n-title="theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+
+      <!-- Language Selector -->
+      <div class="lang-selector">
+        <select id="lang-select" class="pill-btn" style="padding: 4px 8px; font-weight:700;">
+          <option value="ar">العربية (DZ)</option>
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Player Main Container -->
+  <main class="player-container" id="player-container">
+    
+    <!-- Video Stage -->
+    <div class="video-stage" id="video-stage">
+      <video id="main-video" playsinline></video>
+
+      <!-- Subtitle Display -->
+      <div class="subtitle-overlay" id="subtitle-overlay" style="display:none;">
+        <div class="subtitle-text size-medium style-shadow" id="subtitle-text"></div>
+      </div>
+
+      <!-- Empty State / Drop Target -->
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        </div>
+        <h2 class="empty-title" data-i18n="dropTitle">اسحب وأفلت ملفات الفيديو أو الصوت هنا</h2>
+        <p class="empty-subtitle" data-i18n="dropSubtitle">
+          يدعم كافة صيغ الوسائط الشائعة (MP4, MKV, WebM, MP3, FLAC, WAV) مع كشف ذكي لترميز الترجمة العربية (Windows-1256)
+        </p>
+        <button class="btn-primary" id="btn-empty-open">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span data-i18n="openFile">فتح ملف وسائط</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Floating Cinema Controls Bar -->
+    <div class="controls-bar" id="controls-bar">
+      <!-- Timeline -->
+      <div class="timeline-container">
+        <span class="time-display" id="time-current">00:00</span>
+        <div class="progress-track" id="progress-track">
+          <div class="progress-buffered" id="progress-buffered"></div>
+          <div class="progress-fill" id="progress-fill">
+            <div class="progress-scrubber"></div>
+          </div>
+        </div>
+        <span class="time-display" id="time-duration">00:00</span>
+      </div>
+
+      <!-- Controls Buttons Row -->
+      <div class="controls-row">
+        <!-- Left / Playback Group -->
+        <div class="controls-group">
+          <!-- Prev -->
+          <button class="btn-ctrl" id="btn-prev" title="Previous Track">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="19 20 9 12 19 4 19 20"></polygon>
+              <line x1="5" y1="19" x2="5" y2="5"></line>
+            </svg>
+          </button>
+
+          <!-- Play / Pause Master -->
+          <button class="btn-ctrl btn-play-master" id="btn-play" title="Play / Pause (Space)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+            </svg>
+          </button>
+
+          <!-- Next -->
+          <button class="btn-ctrl" id="btn-next" title="Next Track">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 4 15 12 5 20 5 4"></polygon>
+              <line x1="19" y1="5" x2="19" y2="19"></line>
+            </svg>
+          </button>
+
+          <!-- Step Frame -->
+          <button class="btn-ctrl" id="btn-step-frame" title="Step Next Frame (E)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="13 17 18 12 13 7"></polyline>
+              <polyline points="6 17 11 12 6 7"></polyline>
+            </svg>
+          </button>
+
+          <!-- Volume Controls with 300% Boost -->
+          <div class="volume-container">
+            <button class="btn-ctrl" id="btn-mute" title="Mute / Unmute (M)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+            </button>
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="300" value="100" title="Volume & Boost (Up to 300%)">
+            <span class="volume-badge" id="volume-badge">100%</span>
+          </div>
+        </div>
+
+        <!-- Right / Utility Group -->
+        <div class="controls-group">
+          <!-- Snapshot / Frame Capture -->
+          <button class="btn-ctrl" id="btn-snapshot" title="Snapshot Frame (Shift+S)" data-i18n-title="snapshot">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </button>
+
+          <!-- PiP -->
+          <button class="btn-ctrl" id="btn-pip" title="Picture-in-Picture" data-i18n-title="pip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+              <rect x="12" y="9" width="8" height="6" rx="1"></rect>
+            </svg>
+          </button>
+
+          <!-- Fullscreen -->
+          <button class="btn-ctrl" id="btn-fullscreen" title="Fullscreen (F)" data-i18n-title="fullscreen">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Playlist Drawer (Slide-over) -->
+    <aside class="playlist-drawer" id="playlist-drawer">
+      <div class="playlist-header">
+        <h3 class="modal-title" style="font-size:14px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span data-i18n="playlist">قائمة التشغيل</span>
+        </h3>
+        <button class="btn-icon btn-modal-close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <ul class="playlist-list" id="playlist-items"></ul>
+    </aside>
+
+  </main>
+
+  <!-- EQUALIZER MODAL -->
+  <div class="modal-backdrop" id="modal-eq">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="20" y1="21" x2="20" y2="16"></line></svg>
+          <span data-i18n="equalizer">المعادل الصوتي</span> (VLC 10-Band EQ)
+        </h3>
+        <button class="btn-icon btn-modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="modal-body">
+        <!-- Visualizer Canvas -->
+        <canvas class="visualizer-canvas" id="visualizer-canvas" width="600" height="70"></canvas>
+
+        <!-- Presets & Preamp -->
+        <div class="eq-top-bar">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <label style="font-size:12px; font-weight:600;" data-i18n="presets">الإعدادات المسبقة:</label>
+            <select id="eq-presets-select" class="pill-btn"></select>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <label style="font-size:12px; font-weight:600;" data-i18n="preamp">المضخم الأولي:</label>
+            <input type="range" id="eq-preamp-slider" min="-20" max="20" step="0.5" value="0" style="width:100px;">
+            <span id="eq-preamp-val" style="font-size:11px; font-family:monospace; color:var(--accent-color);">0dB</span>
+          </div>
+        </div>
+
+        <!-- 10 Vertical Sliders Grid -->
+        <div class="eq-bands-wrapper" id="eq-bands-wrapper"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO EFFECTS MODAL -->
+  <div class="modal-backdrop" id="modal-effects">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>
+          <span data-i18n="videoEffects">تأثيرات وأبعاد الفيديو</span>
+        </h3>
+        <button class="btn-icon btn-modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="modal-body">
+        <!-- Aspect Ratio -->
+        <div>
+          <label style="font-size:13px; font-weight:700; margin-bottom:8px; display:block;" data-i18n="aspectRatio">نسبة الأبعاد:</label>
+          <div class="pills-group">
+            <button class="pill-btn aspect-pill active" data-ratio="auto">Auto</button>
+            <button class="pill-btn aspect-pill" data-ratio="16:9">16:9 Widescreen</button>
+            <button class="pill-btn aspect-pill" data-ratio="4:3">4:3 Standard</button>
+            <button class="pill-btn aspect-pill" data-ratio="1:1">1:1 Square</button>
+            <button class="pill-btn aspect-pill" data-ratio="21:9">21:9 Cinema</button>
+            <button class="pill-btn aspect-pill" data-ratio="cover">Fill / Stretch</button>
+          </div>
+        </div>
+
+        <!-- Geometry -->
+        <div>
+          <label style="font-size:13px; font-weight:700; margin-bottom:8px; display:block;" data-i18n="geometry">تدوير وانعكاس الصورة:</label>
+          <div class="pills-group">
+            <button class="pill-btn" id="btn-rotate" data-i18n="rotate">تدوير 90°</button>
+            <button class="pill-btn" id="btn-fliph" data-i18n="flipH">انعكاس أفقي</button>
+            <button class="pill-btn" id="btn-reset-effects">إعادة ضبط الكل</button>
+          </div>
+        </div>
+
+        <!-- Color Adjustments -->
+        <div class="effects-grid">
+          <div class="effect-card">
+            <div class="effect-label-row">
+              <span data-i18n="brightness">السطوع</span>
+              <span id="val-brightness" style="font-family:monospace; color:var(--accent-color);">100%</span>
+            </div>
+            <input type="range" class="effect-slider" id="fx-brightness" min="50" max="150" value="100">
+          </div>
+
+          <div class="effect-card">
+            <div class="effect-label-row">
+              <span data-i18n="contrast">التباين</span>
+              <span id="val-contrast" style="font-family:monospace; color:var(--accent-color);">100%</span>
+            </div>
+            <input type="range" class="effect-slider" id="fx-contrast" min="50" max="150" value="100">
+          </div>
+
+          <div class="effect-card">
+            <div class="effect-label-row">
+              <span data-i18n="saturation">التشبع</span>
+              <span id="val-saturation" style="font-family:monospace; color:var(--accent-color);">100%</span>
+            </div>
+            <input type="range" class="effect-slider" id="fx-saturation" min="0" max="200" value="100">
+          </div>
+
+          <div class="effect-card">
+            <div class="effect-label-row">
+              <span data-i18n="hue">درجة اللون</span>
+              <span id="val-hue" style="font-family:monospace; color:var(--accent-color);">0°</span>
+            </div>
+            <input type="range" class="effect-slider" id="fx-hue" min="0" max="360" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBTITLES MODAL -->
+  <div class="modal-backdrop" id="modal-subtitles">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path></svg>
+          <span data-i18n="subtitles">إعدادات ومزامنة الترجمة</span>
+        </h3>
+        <button class="btn-icon btn-modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="modal-body">
+        <!-- Arabic Encoding Resolver -->
+        <div class="effect-card" style="border: 1px solid var(--accent-glow);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+            <label style="font-size:13px; font-weight:700;" data-i18n="encoding">ترميز الخط العربي (حل الرموز المبهمة):</label>
+            <span class="brand-tag" id="detected-encoding-badge">Auto (UTF-8)</span>
+          </div>
+          <select id="sub-encoding-select" class="pill-btn" style="width:100%;">
+            <option value="auto">كشف تلقائي ذكي (Smart Auto-Detect Windows-1256 / UTF-8)</option>
+            <option value="windows-1256">العربية (Windows-1256 / ANSI Arabic)</option>
+            <option value="utf-8">معياري (UTF-8)</option>
+            <option value="iso-8859-6">العربية (ISO-8859-6)</option>
+          </select>
+          <p style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+            يحل المشكلة الشهيرة للترجمات العربية القديمة التي تظهر كرموز غير مفهومة (مثل "ãÑÍÈÇ").
+          </p>
+        </div>
+
+        <!-- Sync Adjustments -->
+        <div class="effect-card">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <label style="font-size:13px; font-weight:700;">مزامنة توقيت الترجمة:</label>
+            <span id="sub-sync-val" style="font-family:monospace; color:var(--accent-color); font-weight:700;">0ms</span>
+          </div>
+          <div class="pills-group">
+            <button class="pill-btn" id="btn-sub-advance" data-i18n="syncAdvance">تقديم +50ms (H)</button>
+            <button class="pill-btn" id="btn-sub-delay" data-i18n="syncDelay">تأخير -50ms (G)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Inputs -->
+  <input type="file" id="file-input" multiple accept="video/*,audio/*" style="display:none;">
+  <input type="file" id="sub-input" accept=".srt,.vtt,.sub,.ass" style="display:none;">
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

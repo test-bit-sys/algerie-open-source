@@ -1,0 +1,26 @@
+{
+  "name": "dz-player",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-Player — The Algerian Open-Source VLC Alternative. Hardware-accelerated multimedia player with 10-band equalizer, 300% audio boost, and intelligent Arabic subtitle encoding (Windows-1256 / UTF-8 auto-detection). Built to the HeyPuter/everything standard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "vlc-alternative",
+    "media-player",
+    "video-player",
+    "audio-player",
+    "arabic-subtitles",
+    "windows-1256",
+    "equalizer",
+    "audio-boost",
+    "algeria-open-source"
+  ],
+  "author": "DZ Open Suite Contributors",
+  "license": "MIT"
+}

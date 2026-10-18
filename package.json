@@ -9,7 +9,9 @@
     "start:dz-facture": "node apps/business-enterprise/dz-facture/server.js",
     "start:disk-tree": "node apps/productivity/dz-disk-tree/server.js",
     "start:archive": "node apps/productivity/dz-archive/server.js",
+    "start:player": "node apps/multimedia/dz-player/server.js",
     "dev:archive": "npx vite apps/productivity/dz-archive",
+    "dev:player": "npx vite apps/multimedia/dz-player",
     "build:archive": "npx vite build apps/productivity/dz-archive"
   },
   "keywords": [
