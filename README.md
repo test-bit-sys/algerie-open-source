@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Architecture: HeyPuter Vanilla JS](https://img.shields.io/badge/Architecture-HeyPuter_Vanilla_JS-1e293b.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E)](#-architectural-principles)
-[![Status: 5 Operational Apps](https://img.shields.io/badge/Status-5_Operational_Apps-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-flagship-operational-applications-11-desktop-alternatives)
+[![Status: 12 Operational Apps](https://img.shields.io/badge/Status-12_Operational_Apps-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-flagship-operational-applications-11-desktop-alternatives)
 [![Tracks: 11 Domains](https://img.shields.io/badge/Tracks-11_Specialized_Domains-0284c7.svg?style=for-the-badge)](#-the-11-strategic-software-tracks--directory)
 [![Privacy: 100% Offline](https://img.shields.io/badge/Privacy-100%25_Offline--First-059669.svg?style=for-the-badge&logo=sqlite&logoColor=white)](#-mission--strategic-vision)
 [![Languages: AR · FR · EN](https://img.shields.io/badge/Languages-العربية_%7C_Français_%7C_English-dc2626.svg?style=for-the-badge)](#-internationalization--bidirectionality)
@@ -27,13 +27,20 @@
 ## 📑 Table of Contents
 
 - [🌟 Mission & Strategic Vision](#-mission--strategic-vision)
-- [🟢 Software Status Matrix (Operational vs Roadmap)](#-software-status-matrix)
+- [🟢 Software Status Matrix (12 Operational Sovereign Apps)](#-software-status-matrix)
 - [🚀 Flagship Operational Applications (1:1 Desktop Alternatives)](#-flagship-operational-applications-11-desktop-alternatives)
   - [💼 1. DZ-Facture & POS (Sage / Odoo Alternative — Port 3000)](#1--dz-facture--pos-sage--odoo-pos-alternative)
   - [🌳 2. DZ-Disk-Tree (WizTree 1:1 Alternative — Port 3001)](#2--dz-disk-tree-wiztree-11-alternative)
   - [📦 3. DZ-Archive (WinRAR 1:1 Alternative — Port 3002)](#3--dz-archive-winrar-11-alternative)
   - [🎬 4. DZ-Player (VLC Media Player 1:1 Alternative — Port 3003)](#4--dz-player-vlc-media-player-11-alternative)
   - [📄 5. DZ-PDF Pro (Adobe Acrobat Pro 1:1 Alternative — Port 3004)](#5--dz-pdf-pro-adobe-acrobat-pro-11-alternative)
+  - [🧑‍🏫 6. DZ-Whiteboard Pro (OpenBoard / Miro 1:1 Alternative — Port 3005)](#6--dz-whiteboard-pro-openboard--miro-11-alternative)
+  - [📝 7. DZ-Writer (Microsoft Word / Google Docs Alternative — Port 3006)](#7--dz-writer-microsoft-word--google-docs-11-alternative)
+  - [📊 8. DZ-Sheets (Microsoft Excel / Google Sheets Alternative — Port 3007)](#8--dz-sheets-microsoft-excel--google-sheets-11-alternative)
+  - [📽️ 9. DZ-Impress (Microsoft PowerPoint / Slides Alternative — Port 3008)](#9--dz-impress-microsoft-powerpoint--slides-11-alternative)
+  - [💻 10. DZ-DevTools (58 Wilayas & Sovereign Developer Studio — Port 3009)](#10--dz-devtools-58-wilayas--developer-studio)
+  - [🎨 11. DZ-Photo (Adobe Photoshop / PhotoCraft Alternative — Port 3010)](#11--dz-photo-adobe-photoshop--photocraft-11-alternative)
+  - [📋 12. DZ-Boards (Trello / Jira / Focalboard Alternative — Port 3011)](#12--dz-boards-trello--jira--focalboard-11-alternative)
 - [🗺️ The 11 Strategic Software Tracks & Complete Matrix](#-the-11-strategic-software-tracks--complete-matrix)
 - [⚙️ Architectural Principles (The HeyPuter Standard)](#️-architectural-principles-the-heyputer-standard)
 - [🏛️ Algerian Legal & Regulatory Compliance](#️-algerian-legal--regulatory-compliance)
@@ -65,13 +72,14 @@
 | **04** | **Multimedia Player** | **VLC Media Player 1:1** | 🟢 **Ready** | `:3003` | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
 | **01** | **PDF Document Suite** | **Adobe Acrobat Pro 1:1** | 🟢 **Ready** | `:3004` | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
 | **10** | **Interactive Whiteboard** | **OpenBoard / Miro 1:1** | 🟢 **Ready** | `:3005` | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
-| **01** | **Office Suite (Word/Sheets/Slides)** | Microsoft 365 / Google Docs | 🟡 *In Design* | — | [`apps/office-suite/`](apps/office-suite/) |
+| **01** | **Document Processor (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **Ready** | `:3006` | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
+| **01** | **Spreadsheet Engine (DZ-Sheets)** | **Microsoft Excel / Google Sheets** | 🟢 **Ready** | `:3007` | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
+| **01** | **Presentation Studio (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **Ready** | `:3008` | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
+| **09** | **58 Wilayas & Dev Studio (DZ-DevTools)** | **SATIM/CIB & Wilayas SDKs** | 🟢 **Ready** | `:3009` | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
+| **05** | **Layered Photo Studio (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **Ready** | `:3010` | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
+| **06** | **Kanban & Project Management (DZ-Boards)**| **Trello / Jira / Focalboard** | 🟢 **Ready** | `:3011` | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
 | **03** | **Finance & SCF Accounting** | PC Compta, DLG, PC Paie | 🟡 *In Design* | — | [`apps/finance-accounting/`](apps/finance-accounting/) |
-| **05** | **Creative & Vector Design** | Adobe Photoshop / Illustrator | 🟡 *In Design* | — | [`apps/creative-tools/`](apps/creative-tools/) |
-| **06** | **Team Collaboration & Chat** | Slack, Trello, Teams | 🟡 *In Design* | — | [`apps/collaboration/`](apps/collaboration/) |
 | **08** | **Engineering & Seismic CAD** | AutoCAD, Robot Structural, ETABS | 🟡 *In Design* | — | [`apps/engineering/`](apps/engineering/) |
-| **09** | **Developer Gateway SDKs** | SATIM, CIB, BaridiMob SDKs | 🟡 *In Design* | — | [`apps/developer-tools/`](apps/developer-tools/) |
-| **10** | **Education & Academia** | Legacy Access School DBs, FET | 🟡 *In Design* | — | [`apps/education-academia/`](apps/education-academia/) |
 | **11** | **Games & Cultural Heritage** | Commercial casual games | 🟡 *In Design* | — | [`apps/games-interactive/`](apps/games-interactive/) |
 
 ---
@@ -191,6 +199,124 @@ npm run start:whiteboard
 
 ---
 
+### 7. 📝 DZ-Writer (Microsoft Word & Google Docs 1:1 Alternative)
+> **Sovereign Administrative Word Processor with Realistic A4 Pagination & Pre-Configured Official Algerian Templates**  
+> *Port: `:3006` • Path: [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/)*
+
+- **🏛️ Ready-to-Use Algerian Ministerial & Administrative Templates**:
+  - **Attestation de Travail (Work Certificate)**: Standard legally compliant HR wording recognized by CNAS social security services.
+  - **Demande Manuscrite (Official Administrative Letter)**: Standard formal letter template for recruitment contests and civil service petitions.
+  - **Note de Service (Internal Service Memo)**: Internal corporate and municipal directives layout.
+  - **CV Algérien (National Curriculum Vitae)**: Modern bilingual format tailored to the Algerian employment landscape.
+- **📄 Comprehensive Formatting Ribbon & Real A4 Simulation**: Margin controls (2.5 cm standard), headers, footers, page numbering, font stylings, tables, and alignment.
+- **🖨️ Sovereign Offline Print-to-PDF**: Print or export crisp, vector-sharp A4 PDF documents with flawless Arabic script shaping.
+- **📊 Real-Time Document Metrics**: Live counter tracking words, characters, paragraphs, and estimated reading time.
+
+```bash
+# Run DZ-Writer on http://localhost:3006
+npm run start:word
+```
+
+---
+
+### 8. 📊 DZ-Sheets (Microsoft Excel & Google Sheets 1:1 Alternative)
+> **High-Speed Spreadsheet Grid Engine with Built-in Algerian Tax, Salary & SCF Accounting Functions**  
+> *Port: `:3007` • Path: [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/)*
+
+- **🇩🇿 Native Algerian Formula Engine**:
+  - `=TAFQIT_AR(A1)`: Currency amount spelled out in Arabic words.
+  - `=TAFQIT_FR(A1)`: Currency amount spelled out in French words.
+  - `=TVA_DZ(A1; 19)`: Computes statutory Algerian VAT (19% standard or 9% reduced).
+  - `=TIMBRE_DZ(A1)`: Computes legal fiscal stamp duty (1%, min 5 DZD, max 10,000 DZD).
+  - `=IRG_DZ(A1)`: Progressive wage tax calculator based on the official Ministry of Finance bareme.
+- **📋 Ready-to-Use National Accounting & Business Templates**:
+  - **Fiche de Paie (Monthly Salary Slip)**: Complete payroll breakdown (Base, Primes, CNAS 9%, IRG, Net à Payer).
+  - **TCR - Compte de Résultat (Income Statement)**: SCF statutory financial statement structure.
+  - **Facture Proforma (Interactive Quotation/Invoice)**: Automatically calculates subtotals, VAT, and spelled-out Tafqit.
+- **📈 Real-Time Chart Generation**: Instant generation of Bar, Line, and Pie charts directly from cell selections, plus CSV export/import.
+
+```bash
+# Run DZ-Sheets on http://localhost:3007
+npm run start:calc
+```
+
+---
+
+### 9. 📽️ DZ-Impress (Microsoft PowerPoint & Google Slides 1:1 Alternative)
+> **16:9 Presentation Studio with Fullscreen Slide Deck Presentation & Virtual Laser Pointer**  
+> *Port: `:3008` • Path: [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/)*
+
+- **🎓 One-Click Algerian Academic & Startup Templates**:
+  - **PFE Soutenance (University Thesis Defense)**: Slide deck structure with committee credentials, problem statement, methodology, results, and defense summary.
+  - **Startup Pitch Deck DZ**: Venture pitch framework aligned with Algerian Startup Accelerators (A-Venture) standards.
+  - **Blank 16:9 Presentation**: Flexible canvas for corporate, municipal, and educational workshops.
+- **🔴 Fullscreen Slideshow with Interactive Laser Pointer (`F5`)**: Fullscreen slide projection with lecture stopwatch and a glowing red virtual laser pointer tracking the cursor.
+- **🎨 Comprehensive Slide Editing**: Rich text boxes, colored callouts, quotes, shapes, slide reordering, and direct export to PDF handouts or PNG images.
+
+```bash
+# Run DZ-Impress on http://localhost:3008
+npm run start:slides
+```
+
+---
+
+### 10. 💻 DZ-DevTools (58 Wilayas & Sovereign Developer Studio)
+> **Sovereign Developer Platform, Banking & Fiscal Validators, and Curated 58 Wilayas Geographic Database**  
+> *Port: `:3009` • Path: [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/)*
+
+- **🗺️ Complete 58 Wilayas & Communes Explorer**: Curated dataset of all 58 Algerian wilayas with Arabic/French names, capitals, postal prefixes, vehicle matricules, and telephone area codes with instant export to `JSON`, `CSV`, `SQL DDL/Inserts`, and `ES Modules`.
+- **💳 Sovereign Banking & Fiscal Validators**:
+  - **Algérie Poste CCP Mod-97 Calculator**: Official postal check-digit calculator.
+  - **20-Digit Postal RIP Generator & Validator**: Full postal account RIP validation.
+  - **Edahabia & CIB Luhn Check**: Luhn validation with national BIN identification.
+  - **Fiscal Identifiers**: NIF (15 digits), NIS (20 digits), and Registre de Commerce (RC) validators.
+- **📡 Telecom Operator & Landline Inspector**: Carrier identification (Mobilis, Djezzy, Ooredoo, Algérie Télécom) with international E.164 formatting.
+- **⚡ Tafqit Developer SDK**: Live playground and copyable code snippets in JavaScript/TypeScript, Python, and PHP.
+
+```bash
+# Run DZ-DevTools on http://localhost:3009
+npm run start:devtools
+```
+
+---
+
+### 11. 🎨 DZ-Photo (Adobe Photoshop & PhotoCraft 1:1 Alternative)
+> **Multi-Layer Raster Graphic Design & Photo Editing Studio with Algerian Filters and Social Media Presets**  
+> *Port: `:3010` • Path: [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/)*
+
+- **🥞 Professional Multi-Layer Stack Engine**: Add, duplicate, delete, reorder, toggle visibility, and fine-tune opacity per layer with real-time composite canvas rendering.
+- **🖌️ Full Creative Toolkit**: Freehand brush, eraser, paint bucket fill, text tool with Arabic font shaping, and eyedropper color picker.
+- **🌅 Algerian & Studio Filters**: Algerian Sahara Warm Sunset filter, Mediterranean Cool Blue, Vintage Sepia, Grayscale, Negative Invert, and instant horizontal/vertical flipping.
+- **📐 Social Media & Campaign Presets**: Instagram/Facebook Square (1080x1080), Stories/Reels (1080x1920), Full HD Banner (1920x1080), and custom canvas resolutions.
+- **💾 Sovereign Project Format (.dzphoto)**: Full multi-layer project persistence in portable JSON format, plus high-res export (PNG, JPEG, WEBP).
+
+```bash
+# Run DZ-Photo on http://localhost:3010
+npm run start:photo
+```
+
+---
+
+### 12. 📋 DZ-Boards (Trello, Jira & Focalboard 1:1 Alternative)
+> **Agile Project Management & Collaborative Kanban Suite with Drag-and-Drop & Algerian Project Blueprints**  
+> *Port: `:3011` • Path: [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/)*
+
+- **🎯 Fluid HTML5 Drag & Drop**: Drag task cards seamlessly between columns with real-time drop targets and instant KPI updates.
+- **🇩🇿 Algerian Project Templates**:
+  - **PFE Master & License Workflow**: Academic milestone planning, literature review, UML architecture, implementation, and thesis review.
+  - **DZ E-Commerce Startup Launch**: Administrative registration (CNRC Code 607001), fiscal NIF/NIS registration, payment gateway integration (SATIM/CIB/Edahabia), and 58 wilayas shipping contracts (Yalidine, ZR Express).
+  - **Agile 2-Week Sprint**: Agile backlog, code review, and QA verification.
+- **☑️ Rich Task Cards & Checklists**: Priority badges (Urgent, High, Medium, Low), due dates, tags, and multi-item subtask checklists with visual completion progress bars.
+- **📊 Real-Time Metrics Dashboard**: Live header indicators tracking total tasks, in-progress tasks, urgent items, and overall completion rate.
+- **💾 Local Persistence & Interoperability**: Automatic `localStorage` saving, `.dzboard` JSON project import/export, and CSV spreadsheet export.
+
+```bash
+# Run DZ-Boards on http://localhost:3011
+npm run start:boards
+```
+
+---
+
 ## 🗺️ The 11 Strategic Software Tracks & Complete Matrix
 
 The DZ Open Suite monorepo is organized into **11 specialized functional domains** addressing all sectors of Algerian civil, administrative, commercial, and educational activity:
@@ -288,17 +414,41 @@ Open **[http://localhost:3000](http://localhost:3000)** to access the central fl
 You can run any application on its dedicated port independently:
 
 ```bash
-# 🌳 DZ-Disk-Tree (WizTree Alternative) on http://localhost:3001
+# 💼 DZ-Facture & POS (Port 3000)
+npm run start:dz-facture
+
+# 🌳 DZ-Disk-Tree (WizTree Alternative - Port 3001)
 npm run start:disk-tree
 
-# 📦 DZ-Archive (WinRAR Alternative) on http://localhost:3002
+# 📦 DZ-Archive (WinRAR Alternative - Port 3002)
 npm run start:archive
 
-# 🎬 DZ-Player (VLC Alternative) on http://localhost:3003
+# 🎬 DZ-Player (VLC Alternative - Port 3003)
 npm run start:player
 
-# 📄 DZ-PDF Pro (Adobe Acrobat Alternative) on http://localhost:3004
+# 📄 DZ-PDF Pro (Adobe Acrobat Alternative - Port 3004)
 npm run start:pdf
+
+# 🧑‍🏫 DZ-Whiteboard Pro (Interactive Whiteboard - Port 3005)
+npm run start:whiteboard
+
+# 📝 DZ-Writer (Word Processor - Port 3006)
+npm run start:word
+
+# 📊 DZ-Sheets (Spreadsheet Engine - Port 3007)
+npm run start:calc
+
+# 📽️ DZ-Impress (Presentation Studio - Port 3008)
+npm run start:slides
+
+# 💻 DZ-DevTools (58 Wilayas & Dev Studio - Port 3009)
+npm run start:devtools
+
+# 🎨 DZ-Photo (Photo & Graphic Studio - Port 3010)
+npm run start:photo
+
+# 📋 DZ-Boards (Kanban & Tasks Platform - Port 3011)
+npm run start:boards
 ```
 
 ---
