@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Whiteboard Pro — The Algerian Open-Source Interactive Whiteboard</title>
+  <link rel="stylesheet" href="src/styles.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+</head>
+<body>
+  <div class="whiteboard-app" id="whiteboardApp">
+
+    <!-- 1. Top Desktop Menu Bar -->
+    <header class="app-header">
+      <div class="header-left">
+        <!-- Brand Badge -->
+        <div class="brand-badge" title="DZ Open Suite — Interactive Whiteboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span>DZ-Whiteboard</span>
+        </div>
+
+        <!-- Menu Bar -->
+        <nav class="menu-bar">
+          <!-- File Menu -->
+          <div class="menu-item-wrap">
+            <button class="menu-btn" data-i18n="mFile">ملف (File)</button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" id="itemNewBoard">
+                <span data-i18n="newBoard">لوحة جديدة فارغة</span>
+                <span class="item-shortcut">Ctrl+N</span>
+              </button>
+              <button class="dropdown-item" id="itemOpenBoard">
+                <span data-i18n="openBoard">فتح مشروع (.dzboard)...</span>
+                <span class="item-shortcut">Ctrl+O</span>
+              </button>
+              <button class="dropdown-item" id="itemSaveBoard">
+                <span data-i18n="saveBoard">حفظ المشروع (.dzboard)</span>
+                <span class="item-shortcut">Ctrl+S</span>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" id="itemExportPng">
+                <span data-i18n="exportPng">تصدير صورة عالية الدقة (PNG)</span>
+              </button>
+              <button class="dropdown-item" id="itemExportSvg">
+                <span data-i18n="exportSvg">تصدير كملف متجه (SVG)</span>
+              </button>
+              <button class="dropdown-item" id="itemExportPdf">
+                <span data-i18n="exportPdf">تصدير شرائح الدرس (PDF)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Edit Menu -->
+          <div class="menu-item-wrap">
+            <button class="menu-btn" data-i18n="mEdit">تحرير (Edit)</button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" id="itemUndo">
+                <span data-i18n="undo">تراجع</span>
+                <span class="item-shortcut">Ctrl+Z</span>
+              </button>
+              <button class="dropdown-item" id="itemRedo">
+                <span data-i18n="redo">إعادة</span>
+                <span class="item-shortcut">Ctrl+Y</span>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" id="itemDeleteSelection">
+                <span data-i18n="deleteSelection">حذف المحدد</span>
+                <span class="item-shortcut">Del</span>
+              </button>
+              <button class="dropdown-item" id="itemClearPage">
+                <span data-i18n="clearPage">مسح كافة عناصر الصفحة</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Background Menu -->
+          <div class="menu-item-wrap">
+            <button class="menu-btn" data-i18n="mBackground">الخلفية (Background)</button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" id="bgOptWhite">
+                <span data-i18n="bgWhite">صبورة بيضاء نقية (Whiteboard)</span>
+              </button>
+              <button class="dropdown-item" id="bgOptGrid">
+                <span data-i18n="bgGrid">ورق شبكي / مربعات هندسية (Grid)</span>
+              </button>
+              <button class="dropdown-item" id="bgOptLines">
+                <span data-i18n="bgLines">ورق مسطر مدرسي (Ruled Lines)</span>
+              </button>
+              <button class="dropdown-item" id="bgOptDots">
+                <span data-i18n="bgDots">شبكة نقاط (Dotted)</span>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" id="bgOptChalkboard">
+                <span data-i18n="bgChalkboard">سبورة خضراء كلاسيكية (Chalkboard)</span>
+              </button>
+              <button class="dropdown-item" id="bgOptBlackboard">
+                <span data-i18n="bgBlackboard">سبورة سوداء داكنة (Blackboard)</span>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Header Right Controls -->
+      <div class="header-right">
+        <!-- Presentation Mode Button -->
+        <button class="btn-present" id="btnPresentation" title="وضع الشرح والعرض الفصلي (F11)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span data-i18n="presentMode">وضع الشرح (F11)</span>
+        </button>
+
+        <!-- Pages Drawer Toggle -->
+        <button class="icon-btn" id="btnTogglePages" title="إدارة الشرائح والصفحات">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </button>
+
+        <!-- Language Selector -->
+        <select id="langSelect" class="header-select">
+          <option value="ar">العربية (DZ)</option>
+          <option value="fr">Français (DZ)</option>
+          <option value="en">English</option>
+        </select>
+
+        <!-- Theme Toggle -->
+        <button class="icon-btn" id="themeToggleBtn" title="تبديل المظهر الداكن / الفاتح">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. Main Interactive Canvas Viewport -->
+    <main class="canvas-container">
+      <canvas id="whiteboardCanvas"></canvas>
+
+      <!-- Inline Text Editor (Overlaid directly on canvas when typing) -->
+      <textarea id="textEditorOverlay" class="text-editor-overlay" placeholder="اكتب النص هنا..."></textarea>
+
+      <!-- Presenter Overlay Bar (Active in Presentation Mode) -->
+      <div class="presenter-bar" id="presenterBar">
+        <button class="icon-btn" id="btnPresentPrevPage" style="color:#fff;" title="الصفحة السابقة">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span id="presenterPageText" style="font-family:var(--font-mono); font-size:0.85rem; font-weight:700;">1 / 1</span>
+        <button class="icon-btn" id="btnPresentNextPage" style="color:#fff;" title="الصفحة التالية">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        <button class="icon-btn" id="btnExitPresent" style="color:#ef4444;" title="إنهاء وضع الشرح">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Contextual Style Shelf (Color swatches & Stroke thickness) -->
+      <div class="style-shelf" id="styleShelf" style="display:none;">
+        <div class="style-group">
+          <div class="color-swatch-list">
+            <div class="color-dot active" data-color="#0f172a" style="background:#0f172a;" title="أسود"></div>
+            <div class="color-dot" data-color="#0284c7" style="background:#0284c7;" title="أزرق"></div>
+            <div class="color-dot" data-color="#008744" style="background:#008744;" title="أخضر"></div>
+            <div class="color-dot" data-color="#d93025" style="background:#d93025;" title="أحمر"></div>
+            <div class="color-dot" data-color="#8b5cf6" style="background:#8b5cf6;" title="بنفسجي"></div>
+            <div class="color-dot" data-color="#ea580c" style="background:#ea580c;" title="برتقالي"></div>
+            <div class="color-dot" data-color="#ffffff" style="background:#ffffff; border:1px solid #cbd5e1;" title="أبيض للسبورة السوداء"></div>
+          </div>
+        </div>
+        <div class="dock-divider"></div>
+        <div class="style-group">
+          <div class="stroke-width-list">
+            <button class="stroke-width-btn" data-width="2" title="رفيع 2px">
+              <div class="stroke-width-bar" style="width:12px; height:2px;"></div>
+            </button>
+            <button class="stroke-width-btn active" data-width="4" title="متوسط 4px">
+              <div class="stroke-width-bar" style="width:12px; height:4px;"></div>
+            </button>
+            <button class="stroke-width-btn" data-width="8" title="عريض 8px">
+              <div class="stroke-width-bar" style="width:12px; height:7px;"></div>
+            </button>
+            <button class="stroke-width-btn" data-width="14" title="فائق 14px">
+              <div class="stroke-width-bar" style="width:12px; height:10px;"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Floating Bottom Toolbar Dock -->
+      <nav class="floating-dock" id="floatingDock">
+        <!-- Select Tool -->
+        <button class="dock-btn" data-tool="select" title="تحديد وتحريك (V)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3l7 18 3-7 7-3L3 3z"></path>
+          </svg>
+          <span class="shortcut-badge">V</span>
+        </button>
+
+        <!-- Pen Tool -->
+        <button class="dock-btn active" data-tool="pen" title="قلم الكتابة الحر (P)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+            <path d="M2 2l7.586 7.586"></path>
+            <circle cx="11" cy="11" r="2"></circle>
+          </svg>
+          <span class="shortcut-badge">P</span>
+        </button>
+
+        <!-- Highlighter Tool -->
+        <button class="dock-btn" data-tool="highlighter" title="قلم التمييز الشفاف (H)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l-6 6v3h3l6-6"></path>
+            <path d="M22 7l-3-3a2 2 0 0 0-2.83 0L7.5 12.67l5.83 5.83L22 9.83A2 2 0 0 0 22 7z"></path>
+          </svg>
+          <span class="shortcut-badge">H</span>
+        </button>
+
+        <!-- Eraser Tool -->
+        <button class="dock-btn" data-tool="eraser" title="الممحاة الذكية (E)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 20H7L3 16C2 15 2 13 3 12L13 2L22 11L20 20Z"></path>
+            <line x1="18" y1="13" x2="11" y2="6"></line>
+          </svg>
+          <span class="shortcut-badge">E</span>
+        </button>
+
+        <div class="dock-divider"></div>
+
+        <!-- Shapes Tool with Flyout -->
+        <div style="position:relative;">
+          <button class="dock-btn" data-tool="shapes-menu" title="الأشكال الهندسية (R)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            </svg>
+            <span class="shortcut-badge">R</span>
+          </button>
+          <div class="dock-flyout" id="shapesFlyout">
+            <button class="flyout-btn shape-choice-btn active" data-shape="rect" title="مستطيل">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"></rect></svg>
+            </button>
+            <button class="flyout-btn shape-choice-btn" data-shape="rounded-rect" title="مستطيل دائري">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"></rect></svg>
+            </button>
+            <button class="flyout-btn shape-choice-btn" data-shape="circle" title="دائرة / بيضاوي">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle></svg>
+            </button>
+            <button class="flyout-btn shape-choice-btn" data-shape="triangle" title="مثلث">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 3 22 21 2 21 12 3"></polygon></svg>
+            </button>
+            <button class="flyout-btn shape-choice-btn" data-shape="diamond" title="معين">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 12 12 22 2 12 12 2"></polygon></svg>
+            </button>
+            <button class="flyout-btn shape-choice-btn" data-shape="star" title="نجمة">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Line / Arrow Tool -->
+        <button class="dock-btn" data-tool="line" title="سهم أو خط مستقيم (A)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+          <span class="shortcut-badge">A</span>
+        </button>
+
+        <!-- Text Tool -->
+        <button class="dock-btn" data-tool="text" title="كتابة نصية (T)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="4 7 4 4 20 4 20 7"></polyline>
+            <line x1="9" y1="20" x2="15" y2="20"></line>
+            <line x1="12" y1="4" x2="12" y2="20"></line>
+          </svg>
+          <span class="shortcut-badge">T</span>
+        </button>
+
+        <!-- Sticky Notes Tool with Colors Flyout -->
+        <div style="position:relative;">
+          <button class="dock-btn" data-tool="sticky-menu" title="ملاحظة لاصقة ملونة (S)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15.5 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3z"></path>
+              <path d="M15 3v6h6"></path>
+            </svg>
+            <span class="shortcut-badge">S</span>
+          </button>
+          <div class="dock-flyout" id="stickyFlyout">
+            <button class="flyout-btn sticky-choice-btn" data-theme="yellow" style="background:#fef08a;" title="أصفر"></button>
+            <button class="flyout-btn sticky-choice-btn" data-theme="green" style="background:#bbf7d0;" title="أخضر"></button>
+            <button class="flyout-btn sticky-choice-btn" data-theme="cyan" style="background:#a5f3fc;" title="سماوي"></button>
+            <button class="flyout-btn sticky-choice-btn" data-theme="pink" style="background:#fbcfe8;" title="وردي"></button>
+            <button class="flyout-btn sticky-choice-btn" data-theme="orange" style="background:#fed7aa;" title="برتقالي"></button>
+            <button class="flyout-btn sticky-choice-btn" data-theme="purple" style="background:#e9d5ff;" title="بنفسجي"></button>
+          </div>
+        </div>
+
+        <div class="dock-divider"></div>
+
+        <!-- Laser Pointer Tool (Ideal for classrooms) -->
+        <button class="dock-btn" data-tool="laser" title="مؤشر الليزر التفاعلي للمحاضرات (K)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 2v3m0 14v3M2 12h3m14 0h3"></path>
+          </svg>
+          <span class="shortcut-badge">K</span>
+        </button>
+
+        <!-- Hand Pan Tool -->
+        <button class="dock-btn" data-tool="hand" title="تحريك رقعة السبورة (Space)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
+            <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
+            <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
+            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>
+          </svg>
+          <span class="shortcut-badge">␣</span>
+        </button>
+      </nav>
+
+      <!-- 4. Floating Zoom Controls -->
+      <div class="zoom-controls">
+        <button class="icon-btn" id="btnZoomOut" title="تصغير">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <span class="zoom-pct" id="zoomPctLabel">100%</span>
+        <button class="icon-btn" id="btnZoomIn" title="تكبير">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <button class="icon-btn" id="btnZoomFit" title="ملاءمة المحتوى للشاشة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        </button>
+        <button class="icon-btn" id="btnZoomReset" title="إعادة ضبط 100%">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+        </button>
+      </div>
+
+      <!-- 5. Floating Minimap Radar -->
+      <div class="minimap-box" id="minimapBox">
+        <canvas id="minimapCanvas" width="160" height="100"></canvas>
+      </div>
+
+      <!-- 6. Pages Slide Deck Sidebar Drawer -->
+      <aside class="pages-drawer" id="pagesDrawer">
+        <div class="drawer-header">
+          <span class="drawer-title" data-i18n="mPages">إدارة شرائح الدرس</span>
+          <button class="icon-btn" id="btnCloseDrawer">&times;</button>
+        </div>
+        <button class="btn-add-page" id="btnAddPage">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span data-i18n="addPage">إضافة شريحة جديدة</span>
+        </button>
+        <div class="drawer-body" id="pagesDrawerBody">
+          <!-- Page thumbnail cards populated dynamically -->
+        </div>
+      </aside>
+
+    </main>
+
+  </div>
+
+  <!-- Hidden file picker for opening .dzboard projects -->
+  <input type="file" id="fileInputProject" accept=".dzboard,.json" style="display:none;">
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

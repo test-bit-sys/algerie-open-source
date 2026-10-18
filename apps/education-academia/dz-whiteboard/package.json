@@ -1,0 +1,27 @@
+{
+  "name": "dz-whiteboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-Whiteboard Pro — The Algerian Open-Source Interactive Whiteboard Suite (OpenBoard, Microsoft Whiteboard & Miro Alternative). 100% offline-first, infinite canvas, classroom presentation tools, and vector export. Built to the HeyPuter/everything standard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "whiteboard",
+    "interactive-whiteboard",
+    "openboard-alternative",
+    "miro-alternative",
+    "excalidraw-alternative",
+    "chalkboard",
+    "infinite-canvas",
+    "education",
+    "classroom",
+    "algeria-open-source"
+  ],
+  "author": "DZ Open Suite Contributors",
+  "license": "MIT"
+}

@@ -64,6 +64,7 @@
 | **07** | **Archive & Compression** | **WinRAR / 7-Zip 1:1** | 🟢 **Ready** | `:3002` | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
 | **04** | **Multimedia Player** | **VLC Media Player 1:1** | 🟢 **Ready** | `:3003` | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
 | **01** | **PDF Document Suite** | **Adobe Acrobat Pro 1:1** | 🟢 **Ready** | `:3004` | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
+| **10** | **Interactive Whiteboard** | **OpenBoard / Miro 1:1** | 🟢 **Ready** | `:3005` | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
 | **01** | **Office Suite (Word/Sheets/Slides)** | Microsoft 365 / Google Docs | 🟡 *In Design* | — | [`apps/office-suite/`](apps/office-suite/) |
 | **03** | **Finance & SCF Accounting** | PC Compta, DLG, PC Paie | 🟡 *In Design* | — | [`apps/finance-accounting/`](apps/finance-accounting/) |
 | **05** | **Creative & Vector Design** | Adobe Photoshop / Illustrator | 🟡 *In Design* | — | [`apps/creative-tools/`](apps/creative-tools/) |
@@ -169,6 +170,23 @@ npm run start:player
 ```bash
 # Run DZ-PDF Pro on http://localhost:3004
 npm run start:pdf
+```
+
+---
+
+### 6. 🧑‍🏫 DZ-Whiteboard Pro (OpenBoard / Miro 1:1 Alternative)
+> **Interactive Digital Whiteboard for Smart Screens, Classrooms, University Lectures & Visual Collaboration**  
+> *Port: `:3005` • Path: [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/)*
+
+- **🎨 Multi-Surface Teaching Backgrounds**: Pure Whiteboard, Graph / Math Grid, Ruled Language Paper, Dotted Matrix, Authentic Classroom Green Chalkboard, and High-Contrast Dark Blackboard with neon inking.
+- **✏️ Comprehensive Classroom Toolkit**: Spline-smoothed freehand calligraphy pen, translucent text highlighter, smart geometric shapes (rectangles, rounded boxes, circles, triangles, diamonds, stars), and directional flowchart arrows.
+- **💡 Interactive Laser Pointer**: Real-time fading laser trail designed for guiding student and audience focus on interactive screens and projectors without permanent canvas marks.
+- **📑 Multi-Page Lecture Slides**: Unlimited pages per lecture document with a slide thumbnail navigation drawer, page duplication, reordering, and clearing.
+- **💾 100% Offline Multi-Format Export**: Immediate high-resolution PNG export, scalable vector graphics (SVG), multi-page printable PDF lecture handouts, and local `.dzboard` project save and load.
+
+```bash
+# Run DZ-Whiteboard on http://localhost:3005
+npm run start:whiteboard
 ```
 
 ---

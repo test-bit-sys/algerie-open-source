@@ -65,6 +65,7 @@
 | **07** | **Gestion d'Archives & Compression** | **WinRAR / 7-Zip 1:1** | 🟢 **Opérationnel** | `:3002` | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
 | **04** | **Lecteur Multimédia & Traitement** | **VLC Media Player 1:1** | 🟢 **Opérationnel** | `:3003` | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
 | **01** | **Studio PDF & Visa Administratif** | **Adobe Acrobat Pro 1:1** | 🟢 **Opérationnel** | `:3004` | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
+| **10** | **Tableau Blanc Interactif & Cours** | **OpenBoard / Miro 1:1** | 🟢 **Opérationnel** | `:3005` | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
 | **01** | **Bureautique (Texte, Tableur, Présentation)** | Microsoft 365 / Google Docs | 🟡 *Planifié* | — | [`apps/office-suite/`](apps/office-suite/) |
 | **03** | **Comptabilité Financière & Paie SCF** | PC Compta, DLG Compta, PC Paie | 🟡 *Planifié* | — | [`apps/finance-accounting/`](apps/finance-accounting/) |
 | **05** | **Création Graphique & Calligraphie** | Adobe Photoshop / Illustrator | 🟡 *Planifié* | — | [`apps/creative-tools/`](apps/creative-tools/) |
@@ -170,6 +171,23 @@ npm run start:player
 ```bash
 # Lancer DZ-PDF Pro sur http://localhost:3004
 npm run start:pdf
+```
+
+---
+
+### 6. 🧑‍🏫 Tableau Blanc Interactif DZ-Whiteboard Pro (Alternative OpenBoard & Miro 1:1)
+> **Tableau Blanc Numérique Interactif pour Écrans Tactiles, Salles de Cours, Conférences & Travail Collaboratif**  
+> *Port: `:3005` • Chemin: [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/)*
+
+- **🎨 Multiples Surfaces Pédagogiques** : Tableau blanc pur, papier quadrillé pour mathématiques et géométrie, papier réglé pour l'écriture et les langues, grille de points, tableau vert d'école authentique (Chalkboard), et tableau noir mat avec encres néon.
+- **✏️ Boîte à Outils Pédagogique Complète** : Stylo calligraphique à lissage par splines, surligneur translucide, formes géométriques intelligentes (rectangles, cercles, triangles, losanges, étoiles) et flèches directionnelles d'organigrammes.
+- **💡 Pointeur Laser Interactif** : Traînée laser luminescente à estompage automatique conçue pour guider l'attention des étudiants sur vidéoprojecteurs et écrans interactifs.
+- **📑 Gestion de Diapositives & Cours Multi-Pages** : Nombre illimité de pages par séance avec tiroir latéral de vignettes, duplication, réorganisation et suppression rapide.
+- **💾 Export Vectoriel & Persistance 100% Hors-Ligne** : Export direct en image HD (PNG), dessin vectoriel (SVG), document de cours PDF multi-pages prêt pour l'impression, et sauvegarde locale `.dzboard`.
+
+```bash
+# Lancer le Tableau Blanc Interactif sur http://localhost:3005
+npm run start:whiteboard
 ```
 
 ---
