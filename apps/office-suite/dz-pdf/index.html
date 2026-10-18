@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-PDF Suite — The Algerian Open-Source Adobe Acrobat Alternative</title>
+  <meta name="description" content="100% offline-first PDF merger, page splitter, rotator, digital signature stamper, and Algerian administrative stamp suite. Built to the HeyPuter/everything standard.">
+  <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+
+  <!-- Topbar Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        <span data-i18n="appTitle">DZ-PDF Suite</span>
+      </div>
+      <span class="brand-tag" data-i18n="tagline">Acrobat Alternative</span>
+    </div>
+
+    <div class="header-actions">
+      <!-- Add Pages / Files -->
+      <button class="btn-primary" id="btn-open-files">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span data-i18n="openFiles">إضافة صفحات / ملفات</span>
+      </button>
+
+      <!-- Export PDF Button -->
+      <button class="btn-primary" id="btn-export-pdf" style="background:#10b981; box-shadow:0 4px 12px rgba(16,185,129,0.25);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span data-i18n="exportPdf">تصدير وحفظ PDF</span>
+      </button>
+
+      <!-- Theme Switcher -->
+      <button class="btn-icon" id="btn-theme" title="Theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+
+      <!-- Language Selector -->
+      <select id="lang-select" class="tab-btn" style="background:var(--bg-tertiary); font-weight:700;">
+        <option value="ar">العربية (DZ)</option>
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Secondary Tools Navbar -->
+  <nav class="tool-navbar">
+    <div class="nav-tabs">
+      <button class="tab-btn active" id="tab-organizer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span data-i18n="organizerTab">تنظيم الصفحات</span>
+      </button>
+
+      <button class="tab-btn" id="tab-stamps">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span data-i18n="stampsTab">الأختام والمصادقة</span>
+      </button>
+
+      <button class="tab-btn" id="tab-signature">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+          <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+          <path d="M2 2l7.586 7.586"></path>
+          <circle cx="11" cy="11" r="2"></circle>
+        </svg>
+        <span data-i18n="signatureTab">التوقيع الرقمي</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Workspace Container -->
+  <main class="workspace-container" id="workspace-container">
+    
+    <!-- Central Pages Grid View -->
+    <section class="pages-view" id="pages-view">
+      <!-- Empty State -->
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+        </div>
+        <h2 style="font-size:18px; font-weight:700;" data-i18n="dropTitle">اسحب وأفلت ملفات PDF أو الصور هنا</h2>
+        <p style="font-size:13px; color:var(--text-secondary); line-height:1.5;" data-i18n="dropSubtitle">
+          تنظيم الصفحات، التدوير، الدمج، وضع الأختام الإدارية الرسمية والتوقيع الرقمي دون اتصال بالإنترنت
+        </p>
+        <button class="btn-primary" id="btn-empty-open">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span data-i18n="openFiles">إضافة صفحات / ملفات</span>
+        </button>
+      </div>
+
+      <!-- Pages Grid -->
+      <div class="pages-grid" id="pages-grid"></div>
+    </section>
+
+    <!-- Side Inspector Panel -->
+    <aside class="inspector-panel" id="inspector-panel">
+      <h3 class="panel-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>خصائص المستند</span>
+      </h3>
+
+      <div class="panel-card">
+        <div class="panel-row">
+          <span class="panel-label" data-i18n="pageCount">إجمالي الصفحات:</span>
+          <span class="panel-val" id="inspector-total-pages">0</span>
+        </div>
+        <div class="panel-row">
+          <span class="panel-label">الصفحة المحددة:</span>
+          <span class="panel-val" id="inspector-selected">-</span>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <label class="panel-label" data-i18n="pageSize">حجم الورق:</label>
+        <select id="select-page-size" class="tab-btn" style="background:var(--bg-primary); width:100%; border:1px solid var(--border-color);">
+          <option value="A4_PORTRAIT">A4 Portrait (210 x 297 mm)</option>
+          <option value="A4_LANDSCAPE">A4 Landscape (297 x 210 mm)</option>
+          <option value="LETTER_PORTRAIT">US Letter (8.5 x 11 in)</option>
+        </select>
+      </div>
+
+      <div class="panel-card">
+        <label class="panel-label" data-i18n="watermarkText">العلامة المائية (Watermark):</label>
+        <input type="text" id="input-watermark" placeholder="مثال: نسـخة للمـراجعة فقـط" style="background:var(--bg-primary); border:1px solid var(--border-color); color:var(--text-primary); padding:8px 12px; border-radius:var(--radius-sm); font-size:12px;">
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- STAMPS MODAL -->
+  <div class="modal-backdrop" id="modal-stamps">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title" style="font-size:15px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>
+          <span data-i18n="stampSelect">الأختام والمصادقات الإدارية الجزائرية</span>
+        </h3>
+        <button class="btn-icon btn-modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12px; color:var(--text-secondary);">
+          أختام إدارية جاهزة طبقاً للمواصفات الرسمية الجزائرية للوثائق والملفات:
+        </p>
+        <div class="stamp-grid" id="stamps-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNATURE MODAL -->
+  <div class="modal-backdrop" id="modal-signature">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title" style="font-size:15px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path></svg>
+          <span data-i18n="signatureTab">التوقيع الرقمي للمستندات</span>
+        </h3>
+        <button class="btn-icon btn-modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="modal-body">
+        <!-- Canvas Pad -->
+        <canvas class="signature-canvas" id="signature-canvas" width="500" height="180"></canvas>
+        
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="btn-icon sig-color-btn active" data-color="#1d4ed8" style="background:#1d4ed8;" title="Blue Ink"></button>
+            <button class="btn-icon sig-color-btn" data-color="#0f172a" style="background:#0f172a;" title="Black Ink"></button>
+            <button class="btn-icon sig-color-btn" data-color="#047857" style="background:#047857;" title="Green Ink"></button>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="tab-btn" id="btn-sig-undo" data-i18n="undoStroke">تراجع</button>
+            <button class="tab-btn" id="btn-sig-clear" data-i18n="clearSignature">مسح</button>
+          </div>
+        </div>
+
+        <!-- Signatory Details -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="font-size:11px; font-weight:700;" data-i18n="signatoryName">اسم الموقّع:</label>
+            <input type="text" id="sig-input-name" placeholder="محمد بن علي" style="width:100%; background:var(--bg-primary); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 10px; border-radius:var(--radius-sm); font-size:12px;">
+          </div>
+          <div>
+            <label style="font-size:11px; font-weight:700;" data-i18n="signatoryRole">الصفة / المنصب:</label>
+            <input type="text" id="sig-input-role" placeholder="المدير العام / Le Gérant" style="width:100%; background:var(--bg-primary); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 10px; border-radius:var(--radius-sm); font-size:12px;">
+          </div>
+          <div style="grid-column: span 2;">
+            <label style="font-size:11px; font-weight:700;" data-i18n="signatoryLocation">مكان التوقيع:</label>
+            <input type="text" id="sig-input-loc" value="Alger" style="width:100%; background:var(--bg-primary); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 10px; border-radius:var(--radius-sm); font-size:12px;">
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btn-sig-apply" style="width:100%; justify-content:center; margin-top:8px;" data-i18n="applySignature">
+          تطبيق التوقيع على الصفحة
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden File Input -->
+  <input type="file" id="file-input" multiple accept="image/*,application/pdf" style="display:none;">
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

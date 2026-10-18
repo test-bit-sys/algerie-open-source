@@ -1,0 +1,25 @@
+{
+  "name": "dz-pdf",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-PDF Suite — The Algerian Open-Source Adobe Acrobat & PDF Toolkit Alternative. 100% offline-first PDF merger, splitter, page organizer, digital signature stamper, and Algerian administrative stamp suite. Built to the HeyPuter/everything standard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "pdf-editor",
+    "pdf-merger",
+    "pdf-splitter",
+    "pdf-signature",
+    "pdf-stamps",
+    "adobe-acrobat-alternative",
+    "offline-pdf",
+    "algeria-open-source"
+  ],
+  "author": "DZ Open Suite Contributors",
+  "license": "MIT"
+}

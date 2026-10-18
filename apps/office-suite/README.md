@@ -17,7 +17,7 @@ Provide lightweight, modern, free, and open-source alternatives to Microsoft 365
 | **`dz-word`** | **DZ-Writer (محرر النصوص)** | Microsoft Word | Mixed Arabic-French text engine without cursor dislocation, official ministerial header templates, administrative memo & certificate formats. |
 | **`dz-calc`** | **DZ-Sheets (الجداول الحسابية)** | Microsoft Excel | High-speed data grid, pre-loaded Algerian fiscal & financial functions (`=TAFQIT_AR()`, `=TVA_DZ()`, `=TIMBRE_DZ()`). |
 | **`dz-slides`** | **DZ-Impress (العروض التقديمية)** | Microsoft PowerPoint | Minimalist presentation slides with pre-built themes for Algerian university defenses (Soutenance PFE) and company pitches. |
-| **`dz-pdf`** | **DZ-PDF Suite (أدوات ملفات PDF)** | Adobe Acrobat Pro | 100% offline PDF merging, page splitting, digital signature stamp, and automated form filling (S12 civil status forms, residence certificates). |
+| **`dz-pdf`** | [**DZ-PDF Suite (أدوات ملفات PDF)**](./dz-pdf/) | Adobe Acrobat Pro | 100% offline PDF merging, page splitting, digital signature stamp, and automated form filling (S12 civil status forms, residence certificates). **[Active App]** |
 
 ---
 
