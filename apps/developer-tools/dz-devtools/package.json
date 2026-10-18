@@ -1,0 +1,27 @@
+{
+  "name": "dz-devtools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-DevTools Pro — The Algerian Sovereign Developer Platform & Algerian Administrative Geography (58 Wilayas & Communes Explorer). Includes Algerian fiscal & banking validators (NIF, NIS, RC, CCP Mod-97, Edahabia/CIB Luhn check), phone carrier identifier, and instant JSON/CSV/SQL/SDK code generator. Built to the HeyPuter/everything standard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "developer-tools",
+    "algerian-wilayas",
+    "algerian-communes",
+    "postal-codes-algeria",
+    "nif-validator",
+    "ccp-mod97-calculator",
+    "edahabia-luhn",
+    "algerian-phone-validator",
+    "offline-first",
+    "algeria-open-source"
+  ],
+  "author": "DZ Open Suite Contributors",
+  "license": "MIT"
+}

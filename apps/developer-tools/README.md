@@ -6,15 +6,21 @@
 ---
 
 ### Mission
-Build unified developer tooling, SDKs, and local environments that streamline development for Algerian tech startups, software houses, and open-source contributors.
+Build unified developer tooling, SDKs, and local environments that streamline development for Algerian tech startups, software houses, and open-source contributors with verified national datasets and fiscal validators.
 
 ---
 
-### Planned Project Blueprints
+### Active Applications in Developer Tools
 
-| Project Identifier | Target Application | Key Features |
-| :--- | :--- | :--- |
-| **`dz-pay-sdk`** | **DZ-Payment Unified SDK** | Universal open-source integration wrapper for Algerian payment gateways (SATIM, CIB, BaridiMob, EDAHABIA) for web and mobile apps. |
-| **`dz-sms-sdk`** | **DZ-SMS & OTP Gateway** | Multi-provider SDK connecting to Algerian SMS aggregators (Mobilis, Djezzy, Ooredoo integrations) for two-factor authentication. |
-| **`dz-geo-sdk`** | **DZ-Geo Library** | Full npm/pypi/cargo package containing 58 Wilayas, 1541 Communes, postal codes, and GPS coordinate polygons. |
-| **`dz-cli`** | **DZ Developer CLI (`dz`)** | Command-line utility to scaffold Algerian-compliant projects (invoices, taxes, models, schemas) with one command. |
+| Project Identifier | Target Application | Key Features | Status |
+| :--- | :--- | :--- | :--- |
+| [**`dz-devtools`**](./dz-devtools/) | [**DZ-DevTools Pro (منصة أدوات المطورين)**](./dz-devtools/) | Complete 58 Wilayas & Communes Explorer, postal codes, telephone area codes, export to JSON/CSV/SQL/JS, NIF/NIS/RC validators, CCP Mod-97 check digit calculator, Edahabia/CIB Luhn check, mobile carrier detector, and Tafqit SDK. (Port 3009) | **Active App** |
+
+---
+
+### Quick Launch Command
+
+```bash
+# Launch DZ-DevTools Pro (Port 3009)
+npm run start:devtools
+```

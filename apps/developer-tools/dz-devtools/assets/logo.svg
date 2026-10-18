@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="shieldGradDev" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="neonGreenDev" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="neonCyanDev" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="goldGradDev" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <linearGradient id="crimsonRedDev" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#b91c1c" />
+    </linearGradient>
+    <filter id="shadowFilterDev" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#020617" flood-opacity="0.6" />
+    </filter>
+    <filter id="glowGreenDev" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Hexagonal Tech Shield -->
+  <polygon points="256,24 456,120 456,360 256,488 56,360 56,120" fill="url(#shieldGradDev)" filter="url(#shadowFilterDev)" stroke="#38bdf8" stroke-width="4" stroke-opacity="0.4"/>
+
+  <!-- Circuit Board Traces and Nodes -->
+  <g stroke="#334155" stroke-width="2.5" fill="none">
+    <path d="M 56 200 L 140 200 L 180 240 L 220 240" />
+    <path d="M 456 200 L 372 200 L 332 240 L 292 240" />
+    <path d="M 256 488 L 256 400 L 216 360" />
+    <path d="M 256 24 L 256 110 L 296 150" />
+    <circle cx="140" cy="200" r="5" fill="#38bdf8" />
+    <circle cx="372" cy="200" r="5" fill="#10b981" />
+    <circle cx="256" cy="400" r="5" fill="#fbbf24" />
+    <circle cx="256" cy="110" r="5" fill="#38bdf8" />
+  </g>
+
+  <!-- Code Bracket Graphics: Left Bracket { -->
+  <g fill="none" stroke="url(#neonGreenDev)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" filter="url(#glowGreenDev)">
+    <path d="M 180 150 Q 150 150 150 200 L 150 230 Q 150 256 120 256 Q 150 256 150 282 L 150 312 Q 150 362 180 362" />
+  </g>
+
+  <!-- Code Bracket Graphics: Right Bracket } -->
+  <g fill="none" stroke="url(#neonCyanDev)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" filter="url(#glowGreenDev)">
+    <path d="M 332 150 Q 362 150 362 200 L 362 230 Q 362 256 392 256 Q 362 256 362 282 L 362 312 Q 362 362 332 362" />
+  </g>
+
+  <!-- Stylized Algeria Map Geolocation Crosshair / Pin in Center -->
+  <g transform="translate(256, 256)">
+    <!-- Radar crosshair rings -->
+    <circle cx="0" cy="0" r="64" fill="none" stroke="#334155" stroke-dasharray="6,6" stroke-width="2"/>
+    <circle cx="0" cy="0" r="44" fill="#0f172a" stroke="url(#neonGreenDev)" stroke-width="3"/>
+    <line x1="-70" y1="0" x2="-44" y2="0" stroke="url(#neonCyanDev)" stroke-width="2"/>
+    <line x1="44" y1="0" x2="70" y2="0" stroke="url(#neonCyanDev)" stroke-width="2"/>
+    <line x1="0" y1="-70" x2="0" y2="-44" stroke="url(#neonCyanDev)" stroke-width="2"/>
+    <line x1="0" y1="44" x2="0" y2="70" stroke="url(#neonCyanDev)" stroke-width="2"/>
+
+    <!-- Terminal Code Prompt Symbol: < / > -->
+    <text x="0" y="9" font-family="'Courier New', monospace" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle">&lt;/&gt;</text>
+  </g>
+
+  <!-- Number 58 Badge (Wilayas of Algeria) at Top-Right -->
+  <g transform="translate(374, 96)">
+    <rect x="-24" y="-18" width="48" height="36" rx="8" fill="#047857" stroke="#ffffff" stroke-width="2" filter="url(#shadowFilterDev)"/>
+    <text x="0" y="7" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="900" fill="#ffffff" text-anchor="middle">58</text>
+  </g>
+
+  <!-- Algerian Crescent & Star Gold Seal at Bottom Center -->
+  <g transform="translate(256, 436) scale(0.64)">
+    <circle cx="0" cy="0" r="38" fill="url(#goldGradDev)" stroke="#ffffff" stroke-width="3" filter="url(#shadowFilterDev)"/>
+    <circle cx="0" cy="0" r="32" fill="#065f46"/>
+    <!-- Crescent -->
+    <path d="M 10 -16 A 18 18 0 1 0 10 16 A 14 14 0 1 1 10 -16 Z" fill="url(#crimsonRedDev)"/>
+    <!-- Star -->
+    <polygon points="12,-5 14,-1 18,-1 15,2 16,6 12,3 8,6 9,2 6,-1 10,-1" fill="url(#crimsonRedDev)"/>
+  </g>
+</svg>

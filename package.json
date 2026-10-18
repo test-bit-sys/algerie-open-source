@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node server.js",
     "start:dz-facture": "node apps/business-enterprise/dz-facture/server.js",
-    "test": "node --check server.js && node --check apps/productivity/dz-disk-tree/server.js && node --check apps/productivity/dz-archive/server.js && node --check apps/multimedia/dz-player/server.js && node --check apps/office-suite/dz-pdf/server.js && node --check apps/education-academia/dz-whiteboard/server.js && node --check apps/office-suite/dz-word/server.js && node --check apps/office-suite/dz-calc/server.js && node --check apps/office-suite/dz-slides/server.js && node --test apps/business-enterprise/dz-facture/tests/*.test.js",
+    "test": "node --check server.js && node --check apps/productivity/dz-disk-tree/server.js && node --check apps/productivity/dz-archive/server.js && node --check apps/multimedia/dz-player/server.js && node --check apps/office-suite/dz-pdf/server.js && node --check apps/education-academia/dz-whiteboard/server.js && node --check apps/office-suite/dz-word/server.js && node --check apps/office-suite/dz-calc/server.js && node --check apps/office-suite/dz-slides/server.js && node --check apps/developer-tools/dz-devtools/server.js && node --test apps/business-enterprise/dz-facture/tests/*.test.js",
     "start:disk-tree": "node apps/productivity/dz-disk-tree/server.js",
     "start:archive": "node apps/productivity/dz-archive/server.js",
     "start:player": "node apps/multimedia/dz-player/server.js",
@@ -19,6 +19,7 @@
     "start:word": "node apps/office-suite/dz-word/server.js",
     "start:calc": "node apps/office-suite/dz-calc/server.js",
     "start:slides": "node apps/office-suite/dz-slides/server.js",
+    "start:devtools": "node apps/developer-tools/dz-devtools/server.js",
     "dev:archive": "npx vite apps/productivity/dz-archive",
     "dev:player": "npx vite apps/multimedia/dz-player",
     "dev:pdf": "npx vite apps/office-suite/dz-pdf",
