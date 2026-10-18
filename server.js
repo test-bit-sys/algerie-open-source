@@ -9,17 +9,21 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { startStaticServer } from './tools/static-server.js';
 
+import fs from 'node:fs';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Default flagship application served at root
 const APP_DIR = path.join(__dirname, 'apps', 'business-enterprise', 'dz-facture');
+// All applications under apps/
+const APPS_DIR = path.join(__dirname, 'apps');
 // Shared workspace assets (banner, logos) exposed at /assets/*
 const ROOT_ASSETS = path.join(__dirname, 'assets');
 
 startStaticServer({
-  name: 'DZ Open Source Suite — Flagship Application Server',
+  name: 'DZ Open Source Suite — Flagship & Ecosystem Server',
   port: process.env.PORT || 3000,
-  allowedRoots: [APP_DIR, ROOT_ASSETS],
+  allowedRoots: [APP_DIR, ROOT_ASSETS, APPS_DIR],
   mapUrl(pathname) {
     if (pathname === '/' || pathname === '') {
       return path.join(APP_DIR, 'index.html');
@@ -30,7 +34,18 @@ startStaticServer({
     }
     // Workspace-level assets (banner, shared logos, …)
     if (pathname.startsWith('/assets/')) {
-      return path.join(ROOT_ASSETS, pathname);
+      return path.join(ROOT_ASSETS, pathname.slice('/assets/'.length));
+    }
+    // Route to any application in apps/ (e.g. /apps/productivity/dz-disk-tree/)
+    if (pathname.startsWith('/apps/')) {
+      const rel = pathname.slice('/apps/'.length);
+      const target = path.join(APPS_DIR, rel);
+      try {
+        if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
+          return path.join(target, 'index.html');
+        }
+      } catch {}
+      return target;
     }
     // Everything else is served from the flagship app directory
     return path.join(APP_DIR, pathname);
