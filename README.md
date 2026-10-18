@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/logo.jpg" alt="DZ Open Suite" width="680">
+<img src="assets/logo.jpg" alt="DZ Open Source" width="680">
 
-# DZ Open Suite
+# DZ Open Source
 ### The Algerian Sovereign Open-Source Software Ecosystem
 **Desktop-Grade Alternatives • 100% Offline-First • Polyglot Native Engines (Rust / Python / C# .NET) • Native Trilingual (AR / FR / EN)**
 

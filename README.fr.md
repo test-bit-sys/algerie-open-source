@@ -3,7 +3,7 @@
 <img src="assets/logo.jpg" alt="Écosystème Logiciel Open Source Algérien" width="680">
 
 # Écosystème Logiciel Open Source Algérien
-## DZ Open Suite
+## DZ Open Source
 ### La Suite Logicielle Nationale de Bureau Souveraine, Libre & 100% Hors-Ligne
 **Alternatives Natives 1:1 • Souveraineté Totale • Moteurs Natifs Polyglottes (Rust / Python / C# .NET) • Trilingue (AR / FR / EN)**
 

@@ -5,7 +5,7 @@
     "node": ">=18"
   },
   "private": true,
-  "description": "DZ Open Suite — The Algerian National Open-Source Software Ecosystem. Modern, 100% offline-first, trilingual (AR/FR/EN) software alternatives for Algeria.",
+  "description": "DZ Open Source — The Algerian National Open-Source Software Ecosystem. Modern, 100% offline-first, trilingual (AR/FR/EN) software alternatives for Algeria.",
   "type": "module",
   "scripts": {
     "start": "node server.js",
