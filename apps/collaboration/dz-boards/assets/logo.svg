@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="boardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+    <linearGradient id="colGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="colGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="colGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="92" height="92" x="4" y="4" rx="22" fill="url(#boardGrad)" filter="url(#shadow)"/>
+  <rect width="90" height="90" x="5" y="5" rx="21" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.4"/>
+
+  <!-- Column 1: Backlog / To Do -->
+  <g transform="translate(14, 18)">
+    <rect width="20" height="64" rx="5" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1"/>
+    <!-- Header bar -->
+    <rect x="3" y="4" width="14" height="4" rx="2" fill="url(#colGrad1)"/>
+    <!-- Task card 1 -->
+    <rect x="3" y="12" width="14" height="18" rx="3" fill="#ffffff" fill-opacity="0.25"/>
+    <rect x="5" y="15" width="10" height="2" rx="1" fill="#ffffff"/>
+    <rect x="5" y="19" width="7" height="2" rx="1" fill="#ffffff" fill-opacity="0.7"/>
+    <!-- Task card 2 -->
+    <rect x="3" y="34" width="14" height="14" rx="3" fill="#ffffff" fill-opacity="0.2"/>
+    <rect x="5" y="37" width="10" height="2" rx="1" fill="#ffffff" fill-opacity="0.9"/>
+  </g>
+
+  <!-- Column 2: In Progress (Active) -->
+  <g transform="translate(40, 18)">
+    <rect width="20" height="64" rx="5" fill="#ffffff" fill-opacity="0.12" stroke="#3b82f6" stroke-opacity="0.4" stroke-width="1.5"/>
+    <!-- Header bar -->
+    <rect x="3" y="4" width="14" height="4" rx="2" fill="url(#colGrad2)"/>
+    <!-- Active Task Card with Algerian Star & Crescent -->
+    <rect x="3" y="12" width="14" height="26" rx="3" fill="#ffffff" fill-opacity="0.95"/>
+    <!-- Crescent & Star on card -->
+    <path d="M10 20 A 3 3 0 1 1 10 26 A 3.6 3.6 0 1 0 10 20 Z" fill="#dc2626"/>
+    <polygon points="12,22.2 12.5,23.5 13.8,23.5 12.8,24.3 13.2,25.6 12,24.8 10.8,25.6 11.2,24.3 10.2,23.5 11.5,23.5" fill="#dc2626"/>
+    <rect x="5" y="30" width="10" height="2" rx="1" fill="#022c22"/>
+    <rect x="5" y="34" width="6" height="2" rx="1" fill="#059669"/>
+    <!-- Task card 2 -->
+    <rect x="3" y="42" width="14" height="16" rx="3" fill="#ffffff" fill-opacity="0.2"/>
+    <rect x="5" y="45" width="10" height="2" rx="1" fill="#ffffff"/>
+  </g>
+
+  <!-- Column 3: Done -->
+  <g transform="translate(66, 18)">
+    <rect width="20" height="64" rx="5" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1"/>
+    <!-- Header bar -->
+    <rect x="3" y="4" width="14" height="4" rx="2" fill="url(#colGrad3)"/>
+    <!-- Task card 1: Done -->
+    <rect x="3" y="12" width="14" height="20" rx="3" fill="#ffffff" fill-opacity="0.2"/>
+    <!-- Checkmark -->
+    <path d="M6 21 L9 24 L14 17" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="5" y="27" width="10" height="2" rx="1" fill="#ffffff" fill-opacity="0.6"/>
+  </g>
+</svg>

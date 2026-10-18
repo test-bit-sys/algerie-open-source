@@ -28,9 +28,9 @@ startStaticServer({
     if (pathname === '/' || pathname === '') {
       return path.join(APP_DIR, 'index.html');
     }
-    // Route favicon.ico to the shared SVG logo
+    // Route favicon.ico to the shared suite logo
     if (pathname === '/favicon.ico') {
-      return path.join(ROOT_ASSETS, 'logo.svg');
+      return path.join(ROOT_ASSETS, 'logo.jpg');
     }
     // Workspace-level assets (banner, shared logos, …)
     if (pathname.startsWith('/assets/')) {

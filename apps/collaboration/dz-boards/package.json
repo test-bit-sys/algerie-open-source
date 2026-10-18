@@ -1,0 +1,22 @@
+{
+  "name": "dz-boards",
+  "version": "1.0.0",
+  "description": "DZ-Boards — Sovereign Algerian Offline Kanban & Task Management Platform (Trello & Jira Alternative)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "kanban",
+    "tasks",
+    "project-management",
+    "trello",
+    "jira",
+    "focalboard",
+    "algeria",
+    "offline-first"
+  ],
+  "author": "Algeria Open Source Initiative",
+  "license": "MIT"
+}
