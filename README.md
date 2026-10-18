@@ -25,6 +25,20 @@
 
 **DZ Open Suite** is an expansive national open-source software ecosystem engineered to design, organize, and build production-grade, privacy-respecting, and 100% free software alternatives to the commercial and pirated tools commonly used across Algeria.
 
+---
+
+## Fully Realized Applications (1:1 Desktop Alternatives)
+
+The following flagship applications have been built and perfected according to the **HeyPuter/everything** standard (Vanilla JS ES Modules, HTML5, Modern CSS, zero external frameworks, 100% offline-first, native trilingual support AR/FR/EN):
+
+| Application | Proprietary Target | Port | Launch Command | Key Production Features |
+| :--- | :--- | :---: | :--- | :--- |
+| **DZ-Disk-Tree** | **WizTree 1:1** | `:3001` | `npm run start:disk-tree` | Synchronized split desktop window (Tree Grid + Cushioned Treemap), interactive column header sorting, arrow keys navigation, printable HTML audit report. |
+| **DZ-Archive** | **WinRAR 1:1** | `:3002` | `npm run start:archive` | WinRAR classic layout & toolbar, 6-tab archive configuration dialog, AES-256-GCM encryption, internal multi-mode viewer (Text/Hex 16-byte/Media), multi-threaded hardware benchmark. |
+| **DZ-Player** | **VLC Media Player 1:1** | `:3003` | `npm run start:player` | Authentic VLC interface, volume boost up to 300%, unified "Adjustments & Effects" modal (Ctrl+E): 10-band equalizer, audio compressor, video geometry/colors, sync controls. |
+| **DZ-PDF Pro** | **Adobe Acrobat Pro 1:1** | `:3004` | `npm run start:pdf` | Acrobat menus & toolbar, authentic Algerian administrative stamps (Official Republic seal, Conforme à l'Original), certified digital signature pad, Bates numbering, page organizer. |
+| **DZ-Facture & POS** | **Sage / Odoo POS** | `:3000` | `npm run start` | Executive Decree 05-468 compliant POS, VAT (19%/9%), fiscal timbre, Arabic Tafqit in DZD, offline-first local database. |
+
 Structured into **11 clear functional domains**, this repository provides an organized, scalable foundation ready to welcome Algerian developers, engineers, designers, accountants, and creators to collaborate effectively.
 
 ---

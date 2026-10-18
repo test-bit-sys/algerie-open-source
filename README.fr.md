@@ -25,6 +25,20 @@
 
 ---
 
+### Applications Réalisées & Prêtes à l'Emploi (1:1 Desktop Alternatives)
+
+Développées selon le standard d'ingénierie **HeyPuter/everything** (Vanilla JS ES Modules, HTML5, CSS moderne, zéro framework externe, 100% hors-ligne, trilingue natif AR/FR/EN) :
+
+| Application | Logiciel Remplacé | Port | Commande de Lancement | Fonctionnalités Clés |
+| :--- | :--- | :---: | :--- | :--- |
+| **DZ-Disk-Tree** | **WizTree 1:1** | `:3001` | `npm run start:disk-tree` | Fenêtre split synchronisée (Arborescence + Cushioned Treemap), tri interactif des colonnes, navigation clavier complète, rapport d'audit imprimable. |
+| **DZ-Archive** | **WinRAR 1:1** | `:3002` | `npm run start:archive` | Interface WinRAR classique, dialogue de compression à 6 onglets, chiffrement AES-256-GCM, visionneuse interne (Text/Hex/Media), benchmark matériel en temps réel. |
+| **DZ-Player** | **VLC Media Player 1:1** | `:3003` | `npm run start:player` | Interface classique VLC, amplification du volume jusqu'à 300%, panneau d'effets unifié (Ctrl+E) : égaliseur 10 bandes, compresseur, géométrie/couleurs vidéo, synchronisation. |
+| **DZ-PDF Pro** | **Adobe Acrobat Pro 1:1** | `:3004` | `npm run start:pdf` | Menus & barre d'outils Acrobat, tampons administratifs algériens officiels (Cachet Rond de la République, Conforme à l'Original), pavé de signature numérique, numérotation Bates, organiseur de pages. |
+| **DZ-Facture & POS** | **Sage / Odoo POS** | `:3000` | `npm run start` | Point de vente conforme au décret 05-468, calcul TVA & Timbre fiscal, tafqit en Dinar Algérien (DZD), base de données locale rapide. |
+
+---
+
 ### Vision et Objectifs
 1. **Éradiquer les logiciels piratés :** Remplacer les logiciels obsolètes ou piratés (Delphi/Access) par des solutions fiables, auditables et pérennes.
 2. **Conformité totale avec les normes algériennes :**
