@@ -1,75 +1,21 @@
-# DZ-Archive (بديل WinRAR المفتوح المصدر)
-### High-Performance Open-Source Archiver, Compression & Benchmark Suite
-#### Built following the [HeyPuter/everything](https://github.com/HeyPuter/everything) architecture standard
-#### Part of DZ Open Suite — The Algerian National Open-Source Software Ecosystem
+<div align="center">
 
-[العربية](README.md#ar) • [Français](README.md#fr) • [English](README.md#en)
+# DZ-Archive
+### High-Performance Open-Source Archiver, Compression & Hardware Benchmark Suite
+**1:1 Desktop Alternative to WinRAR & 7-Zip • 100% Offline-First • AES-256-GCM Encryption**
 
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](../../../LICENSE)
+[![Architecture: HeyPuter Vanilla JS](https://img.shields.io/badge/Architecture-HeyPuter_Vanilla_JS-1e293b.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E)](#technical-architecture)
+[![Port: 3002](https://img.shields.io/badge/Port-3002-0284c7.svg?style=for-the-badge)](#running-dz-archive)
+[![Zero Emojis](https://img.shields.io/badge/UI-Zero_Emojis_%7C_Pure_SVG-dc2626.svg?style=for-the-badge)](#design-system)
 
-<a name="ar"></a>
-## التوثيق باللغة العربية (Arabic Documentation)
+<p align="center">
+  <a href="#ar"><b>العربية</b></a> •
+  <a href="#en"><b>English</b></a> •
+  <a href="#fr"><b>Français</b></a>
+</p>
 
-### نظرة عامة
-**DZ-Archive** هو بديل مفتوح المصدر وعالي الأداء لبرنامج **WinRAR** و 7-Zip. تم بناؤه بالكامل وفق المعيار الهندسي المعتمد في مشروع **HeyPuter/everything**:
-- **جافاسكربت المعيارية النقية (Vanilla JavaScript ES Modules):** بدون أطر عمل ثقيلة (Zero React/Vue bloat).
-- **HTML5 و CSS3 المعاصر:** واجهة أنيقة بالوضع الليلي/النهاري، خالية تماماً 100% من الرموز التعبيرية (Zero Emojis)، وبأيقونات متجهة SVG نقية.
-- **محلي ومستقل 100% (Offline-First):** يعمل بالكامل في المتصفح وسطح المكتب دون الحاجة لأي اتصال بالإنترنت أو خوادم خلفية.
-- **ثلاثي اللغات:** العربية (افتراضي RTL)، الفرنسية، والإنجليزية.
-
----
-
-### نتائج الهندسة العكسية لبرنامج WinRAR عبر مهارة REA
-تم تحليل وفحص الملف التنفيذي `C:\Program Files\WinRAR\WinRAR.exe` عبر أدوات الهندسة العكسية REA لاستخلاص بنيته:
-- **المعمارية:** `PE32+ x86_64`، تشفير وسلامة البيانات عبر `CRC32` و `BLAKE2sp` و `SHA256`.
-- **الميزات الأساسية المستخلصة:**
-  1. ضغط وفك حزم `ZIP` و `TAR` و `GZ` محلياً.
-  2. فحص سلامة الأرشيف (Integrity Test) عبر التحقق الدقيق من توافق بصمات CRC-32 لكل ملف.
-  3. أداة قياس سرعة العتاد والمعالج (WinRAR Hardware Benchmark) التي تقيس معدل الضغط والترميز بـ KB/s وتحسب تقييماً رقمياً للأداء.
-  4. المعاينة السريعة للملفات (Preview) دون الحاجة لاستخراجها إلى القرص أولاً.
-
----
-
-### قدرات وميزات برنامج DZ-Archive
-1. **إنشاء الأرشيفات المضغوطة (Create Archives):**
-   - إنشاء ملفات `.zip` و `.tar` متوافقة قياسياً مع أنظمة Windows و Linux و macOS.
-   - خيارات متعددة لمستوى الضغط (Store بدون ضغط، Normal Deflate).
-2. **استعراض واستخراج الملفات (Extract & Browse):**
-   - فتح واستعراض ملفات ZIP و TAR بسحبها وإفلاتها مباشرة في الواجهة.
-   - استخراج وتنزيل الأرشيف بالكامل أو ملفات محددة.
-3. **معاينة الملفات الفورية (In-Archive File Preview):**
-   - فتح ومعاينة الصور والملفات النصية والأكواد البرمجية مباشرة من داخل الأرشيف بالنقر المزدوج دون فك ضغطها إلى مساحة التخزين.
-4. **أداة قياس أداء المعالج والضغط (WinRAR Benchmark):**
-   - محاكاة دقيقة لاختبار أداء WinRAR؛ تقوم بتوليد كتل بيانات اختبارية وقياس سرعة معالجة وضغط الـ Deflate و CRC-32 وحساب تقييم رقمي بحسب عدد مسارات المعالج (CPU Threads).
-5. **فحص سلامة الأرشيف (Test Archive):**
-   - تدقيق كل سجل وملف في الأرشيف ومطابقته مع الـ CRC-32 المرفق لضمان سلامته من التلف.
-
----
-
-### طريقة التشغيل والتطوير (معيار HeyPuter / Vite)
-```bash
-# الانتقال لمجلد التطبيق
-cd apps/productivity/dz-archive
-
-# تشغيل خادم التطوير عبر Vite
-npm run dev
-```
-
----
-
-<a name="fr"></a>
-## Documentation en Français (French Documentation)
-
-### Vue d'ensemble
-**DZ-Archive** est une alternative libre, moderne et ultra-rapide à **WinRAR** et 7-Zip, développée selon l'architecture de référence de **HeyPuter/everything** (Vanilla JavaScript moderne, CSS natif, 100% hors-ligne, zéro emoji, zéro dépendance réseau).
-
-### Fonctionnalités
-- Création et extraction d'archives standard **ZIP** et **POSIX TAR**.
-- Algorithme de décompression et compression Deflate via Streams natifs.
-- Outil de benchmark matériel WinRAR (test de vitesse de compression processeur en Ko/s avec score).
-- Test d'intégrité de l'archive par validation des sommes de contrôle **CRC-32**.
-- Prévisualisation instantanée des images, textes et code source sans extraction sur disque.
-- Glisser-déposer intuitif, interface trilingue (Arabe, Français, Anglais) et thèmes Sombre/Clair.
+</div>
 
 ---
 
@@ -77,14 +23,73 @@ npm run dev
 ## English Documentation
 
 ### Overview
-**DZ-Archive** is a high-performance open-source alternative to **WinRAR** and 7-Zip, built according to the **HeyPuter/everything** architecture standard:
-- Pure modern Vanilla JavaScript (ES Modules).
-- Zero bloated UI frameworks; lightning-fast execution.
-- 100% offline-first with zero external tracking or network calls.
-- Trilingual UI (Arabic RTL, French LTR, English LTR), dark/light mode, zero emojis.
+**DZ-Archive** is a desktop-grade, zero-dependency, 100% offline-first open-source alternative to **WinRAR** and 7-Zip. Built from scratch following the **HeyPuter/everything** standard, it delivers full archive management, hardware-accelerated AES-256-GCM encryption, internal multi-mode file inspection, and an authentic WinRAR multi-threaded hardware benchmark without any external binaries or cloud dependencies.
 
-### Key Capabilities
-- **ZIP & TAR Engine:** Full support for reading, creating, and modifying PKZIP and POSIX TAR archives.
-- **Hardware Benchmark:** Built-in WinRAR-style compression speed test evaluating multi-threaded CPU throughput in KB/s with performance score.
-- **Archive Integrity Test:** Deep CRC-32 checksum verification across all archive entries.
-- **Instant Preview:** Read and view documents, source code, and images directly from memory without extracting to disk.
+### Key Reverse Engineering (REA) Insights
+Analysis of the WinRAR executable (`WinRAR.exe`) established the structural benchmarks for DZ-Archive:
+- **Archive Format Integrity**: Precise parsing of ZIP Local File Headers, Central Directory Records, and End of Central Directory (EOCD) records with CRC-32 verification.
+- **Hardware Benchmarking**: Simulating multi-threaded buffer compression and computing performance ratings based on active CPU threads.
+- **Internal Inspection**: Providing instant hexadecimal offsets and ASCII representations directly from compressed memory buffers without unpacking to disk.
+
+### Production Features
+- **Iconic WinRAR Desktop Layout**: Classic menu bar (`File`, `Commands`, `Tools`, `Options`, `Help`) and big command toolbar (`Add`, `Extract To`, `Test`, `View`, `Delete`, `Find`, `Wizard`, `Info`, `Lock`, `Comment`, `Benchmark`).
+- **6-Tab Compression Dialog**: Desktop modal replicating WinRAR archive parameters across `General`, `Advanced`, `Files`, `Backup`, `Time`, and `Comment` tabs.
+- **AES-256-GCM Encryption**: Client-side military-grade encryption via the native Web Crypto API with PBKDF2 key derivation and password authentication.
+- **Internal Multi-Mode Viewer**: Double-click any file inside an archive to inspect it immediately via Text view, Hex Dump view (16-byte aligned offsets with hex bytes and printable ASCII), or Media view.
+- **WinRAR Hardware Benchmark**: Real-time compression speed gauge (MB/s) and multi-threaded rating score based on hardware concurrency.
+- **CRC-32 Integrity Verification**: Byte-level verification verifying that compressed streams have not suffered bitrot or corruption.
+
+### Running DZ-Archive
+```bash
+# Launch from repository root
+npm run start:archive
+
+# Or run directly from app directory
+cd apps/productivity/dz-archive
+node server.js
+```
+Open **[http://localhost:3002](http://localhost:3002)** in your browser.
+
+---
+
+<a name="ar"></a>
+## التوثيق باللغة العربية (Arabic Documentation)
+
+### نظرة عامة
+**DZ-Archive** هو بديل مفتوح المصدر وعالي الأداء لبرنامج **WinRAR** و 7-Zip. تم بناؤه بالكامل وفق المعيار الهندسي لمشروع **HeyPuter/everything** بالاعتماد الحصري على JavaScript الصافي الصريح (Vanilla JS ES Modules) دون أي أطر عمل ثقيلة، ويعمل بنسبة 100% دون اتصال بالإنترنت (Offline-First).
+
+### قدرات وخصائص البرنامج المكتملة 1:1
+1. **واجهة WinRAR الأصلية**: شريط قوائم مألوف (`File`, `Commands`, `Tools`, `Options`, `Help`) وشريط الأدوات الأيقوني الكبير (`Add`, `Extract To`, `Test`, `View`, `Delete`, `Find`, `Wizard`, `Info`, `Lock`, `Comment`, `Benchmark`).
+2. **نافذة معلمات الضغط بـ 6 تبويبات**: إعدادات متكاملة تشمل تبويبات (`General`, `Advanced`, `Files`, `Backup`, `Time`, `Comment`).
+3. **تشفير عسكري متقدم AES-256-GCM**: حماية أمنية مشفرة بكلمة مرور عبر **Web Crypto API** مع اشتقاق المفاتيح بواسطة **PBKDF2**.
+4. **عارض ملفات داخلي متعدد الأنماط (Internal Viewer)**: استعراض الملفات فورياً بنقر مزدوج دون استخراجها إلى القرص عبر عارض النصوص، عارض الهكسا (**Hex Dump**) بمحاذاة 16 بايت وعرض ASCII، وعارض الوسائط والصور.
+5. **مقياس كفاءة العتاد والمعالج (Hardware Benchmark)**: فحص سرعة الضغط الآنية بالميغابايت/ثانية واحتساب نقاط تقييم الأداء استناداً إلى مسارات المعالج (CPU Threads).
+6. **فحص سلامة الأرشيف (Test Archive)**: تدقيق كل سجل وملف في الأرشيف ومطابقته مع بصمة **CRC-32** لضمان سلامته من التلف.
+
+### التشغيل المباشر
+```bash
+npm run start:archive
+```
+افتح المتصفح على: **[http://localhost:3002](http://localhost:3002)**
+
+---
+
+<a name="fr"></a>
+## Documentation en Français (French Documentation)
+
+### Vue d'ensemble
+**DZ-Archive** est une alternative libre, moderne et performante à **WinRAR** et 7-Zip. Conçu selon le standard **HeyPuter/everything**, il fonctionne de manière 100% hors-ligne (Offline-First) avec une interface trilingue (Arabe, Français, Anglais), sans aucun emoji et avec des icônes vectorielles SVG épurées.
+
+### Fonctionnalités Clés
+- **Interface Iconique WinRAR** : Barre de menus complète et grande barre d'outils classique.
+- **Dialogue de Compression à 6 Onglets** : Paramétrage avancé via `Général`, `Avancé`, `Fichiers`, `Sauvegarde`, `Temps`, et `Commentaire`.
+- **Chiffrement Robuste AES-256-GCM** : Sécurisation matérielle par mot de passe via l'API Web Crypto avec dérivation PBKDF2.
+- **Visionneuse Interne Multi-Mode** : Visualisation instantanée (Texte brut, Vidage hexadécimal 16 octets + ASCII, Lecteur multimédia).
+- **Benchmark Matériel Intégré** : Évaluation du débit de compression (Mo/s) et indice de performance multi-cœur.
+- **Vérification d'Intégrité CRC-32** : Contrôle d'intégrité octet par octet de chaque entrée d'archive.
+
+### Lancement
+```bash
+npm run start:archive
+```
+Disponible sur : **[http://localhost:3002](http://localhost:3002)**

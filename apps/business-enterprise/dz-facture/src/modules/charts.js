@@ -3,6 +3,8 @@
  * 100% Offline, Zero External Libraries, Lightweight, High Performance.
  */
 
+import { toLocalDateKey } from './dates.js';
+
 export class BusinessCharts {
   /**
    * Renders a responsive 7-Day Revenue SVG Bar & Area Trend Chart
@@ -23,14 +25,14 @@ export class BusinessCharts {
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(now.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
+      const dateStr = toLocalDateKey(d);
       const dayName = dayNames[d.getDay()];
       days.push({ date: dateStr, name: dayName, total: 0 });
     }
 
     // Aggregate invoice sales by day
     invoices.forEach(inv => {
-      const invDate = (inv.docDate || (inv.createdAt ? inv.createdAt.split('T')[0] : '')).substring(0, 10);
+      const invDate = toLocalDateKey(inv.docDate || inv.createdAt);
       const bucket = days.find(d => d.date === invDate);
       if (bucket) {
         bucket.total += Number(inv.totalTTC) || 0;

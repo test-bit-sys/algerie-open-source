@@ -1,9 +1,17 @@
-<p align="center">
-  <img src="assets/logo.jpg" alt="DZ Open Suite Logo" width="520">
-</p>
+<div align="center">
 
-<h1 align="center">Algerian Open Source Software Ecosystem</h1>
-<h3 align="center">DZ Open Suite — Modern, Free & Localized Software for Algeria</h3>
+<img src="assets/logo.jpg" alt="DZ Open Suite" width="640">
+
+# DZ Open Suite
+
+### The Algerian National Open-Source Desktop Software Ecosystem
+**100% Sovereign • Privacy-First • Zero Cloud Dependency • Native Trilingual (AR / FR / EN)**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![Architecture: HeyPuter Vanilla JS](https://img.shields.io/badge/Architecture-HeyPuter_Vanilla_JS-1e293b.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E)](#architectural-principles)
+[![Platforms: Web & Desktop](https://img.shields.io/badge/Platform-Web_%7C_Desktop-0284c7.svg?style=for-the-badge&logo=electron&logoColor=white)](#quick-start)
+[![Languages: AR · FR · EN](https://img.shields.io/badge/Languages-Arabic_%7C_Français_%7C_English-dc2626.svg?style=for-the-badge)](#internationalization)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-7c3aed.svg?style=for-the-badge&logo=github&logoColor=white)](docs/CONTRIBUTING.md)
 
 <p align="center">
   <a href="README.md"><b>English</b></a> •
@@ -11,101 +19,240 @@
   <a href="README.fr.md"><b>Français</b></a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/test-bit-sys/algerie-open-source/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="License: MIT"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Tracks-11_Specialized_Domains-blue.svg?style=for-the-badge" alt="Tracks"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Languages-Arabic_%7C_French_%7C_English-d21034.svg?style=for-the-badge" alt="Trilingual"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Architecture-Offline--First-0ea5e9.svg?style=for-the-badge&logo=sqlite&logoColor=white" alt="Offline-First"></a>
-  <a href="https://github.com/test-bit-sys/algerie-open-source/pulls"><img src="https://img.shields.io/badge/PRs-Welcome-purple.svg?style=for-the-badge&logo=github" alt="PRs Welcome"></a>
-</p>
+</div>
 
 ---
 
-## Vision & Philosophy
+## Table of Contents
 
-**DZ Open Suite** is an expansive national open-source software ecosystem engineered to design, organize, and build production-grade, privacy-respecting, and 100% free software alternatives to the commercial and pirated tools commonly used across Algeria.
+- [Mission & Strategic Vision](#mission--strategic-vision)
+- [Flagship Desktop Applications (1:1 Native Alternatives)](#flagship-desktop-applications-11-native-alternatives)
+  - [1. DZ-Facture & POS (Sage / Odoo Alternative)](#1-dz-facture--pos-port-3000)
+  - [2. DZ-Disk-Tree (WizTree 1:1 Alternative)](#2-dz-disk-tree-port-3001)
+  - [3. DZ-Archive (WinRAR 1:1 Alternative)](#3-dz-archive-port-3002)
+  - [4. DZ-Player (VLC Media Player 1:1 Alternative)](#4-dz-player-port-3003)
+  - [5. DZ-PDF Pro (Adobe Acrobat Pro 1:1 Alternative)](#5-dz-pdf-pro-port-3004)
+- [Architectural Principles](#architectural-principles)
+- [Monorepo Structure (11 Specialized Tracks)](#monorepo-structure-11-specialized-tracks)
+- [Algerian Regulatory & Legal Compliance](#algerian-regulatory--legal-compliance)
+- [Quick Start & Local Deployment](#quick-start--local-deployment)
+- [Contributing & Development Workflow](#contributing--development-workflow)
+- [License & Sovereignty](#license--sovereignty)
 
 ---
 
-## Fully Realized Applications (1:1 Desktop Alternatives)
+## Mission & Strategic Vision
 
-The following flagship applications have been built and perfected according to the **HeyPuter/everything** standard (Vanilla JS ES Modules, HTML5, Modern CSS, zero external frameworks, 100% offline-first, native trilingual support AR/FR/EN):
+**DZ Open Suite** is a nationwide sovereign software initiative engineered to build, standardize, and maintain production-grade, 100% free and open-source desktop alternatives to the proprietary and frequently pirated software tools pervasive throughout Algerian public administrations, enterprises, universities, and small businesses.
 
-| Application | Proprietary Target | Port | Launch Command | Key Production Features |
+### Core Objectives
+1. **Eradicate Pirated & Outdated Legacy Software**: Replace unmaintained legacy solutions (Visual Basic 6, Delphi 7, Microsoft Access 2003) and cracked proprietary utilities with secure, auditable, high-performance web-standard software.
+2. **National Data Sovereignty**: Ensure that financial ledgers, administrative acts, citizen records, and executive deliberations never leak to third-party proprietary clouds. All processing is strictly local (Offline-First).
+3. **Strict Algerian Legal & Fiscal Alignment**: Enforce compliance with Executive Decree 05-468 (Commercial Invoicing), Law 18-05 (Electronic Commerce), SCF accounting standards, VAT rules (19% standard, 9% reduced), Timbre Fiscal, Tafqit in Algerian Dinars (DZD), and official administrative stamping.
+4. **Engineering Excellence (HeyPuter Standard)**: Pure Vanilla JavaScript ES Modules, HTML5, Modern CSS, zero bloated external frameworks (no React/Vue/Angular baggage), zero telemetry, zero emojis, and pure SVG vector graphics.
+
+---
+
+## Flagship Desktop Applications (1:1 Native Alternatives)
+
+| Application | Replaced Proprietary Software | Local Port | Launch Command | Core Capabilities |
 | :--- | :--- | :---: | :--- | :--- |
-| **DZ-Disk-Tree** | **WizTree 1:1** | `:3001` | `npm run start:disk-tree` | Synchronized split desktop window (Tree Grid + Cushioned Treemap), interactive column header sorting, arrow keys navigation, printable HTML audit report. |
-| **DZ-Archive** | **WinRAR 1:1** | `:3002` | `npm run start:archive` | WinRAR classic layout & toolbar, 6-tab archive configuration dialog, AES-256-GCM encryption, internal multi-mode viewer (Text/Hex 16-byte/Media), multi-threaded hardware benchmark. |
-| **DZ-Player** | **VLC Media Player 1:1** | `:3003` | `npm run start:player` | Authentic VLC interface, volume boost up to 300%, unified "Adjustments & Effects" modal (Ctrl+E): 10-band equalizer, audio compressor, video geometry/colors, sync controls. |
-| **DZ-PDF Pro** | **Adobe Acrobat Pro 1:1** | `:3004` | `npm run start:pdf` | Acrobat menus & toolbar, authentic Algerian administrative stamps (Official Republic seal, Conforme à l'Original), certified digital signature pad, Bates numbering, page organizer. |
-| **DZ-Facture & POS** | **Sage / Odoo POS** | `:3000` | `npm run start` | Executive Decree 05-468 compliant POS, VAT (19%/9%), fiscal timbre, Arabic Tafqit in DZD, offline-first local database. |
-
-Structured into **11 clear functional domains**, this repository provides an organized, scalable foundation ready to welcome Algerian developers, engineers, designers, accountants, and creators to collaborate effectively.
+| **DZ-Facture & POS** | **Sage 100 / Odoo POS** | `:3000` | `npm start` | Executive Decree 05-468 invoicing, retail POS cash register, VAT/Timbre engine, DZD Tafqit, 58 Wilayas database. |
+| **DZ-Disk-Tree** | **WizTree 1:1** | `:3001` | `npm run start:disk-tree` | Synchronized tree grid + cushioned treemap, multi-column sorting, keyboard arrow navigation, printable HTML audit reports. |
+| **DZ-Archive** | **WinRAR 1:1** | `:3002` | `npm run start:archive` | WinRAR iconic toolbar, 6-tab archive options dialog, AES-256-GCM encryption, Text/Hex 16-byte/Media preview, hardware benchmark. |
+| **DZ-Player** | **VLC Media Player 1:1** | `:3003` | `npm run start:player` | Authentic VLC interface, volume boost up to 300%, unified effects (Ctrl+E): 10-band EQ, compressor, video geometry, sync delay. |
+| **DZ-PDF Pro** | **Adobe Acrobat Pro 1:1** | `:3004` | `npm run start:pdf` | Acrobat toolbar & menus, official Algerian administrative stamps (Republic circular seal, Conforme à l'Original), certified signature pad, Bates numbering, page organizer. |
 
 ---
 
-## The 11 Core Software Tracks
+### 1. DZ-Facture & POS (Port :3000)
+*Location: [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/)*
+
+The national open-source billing, point-of-sale, and commercial management solution tailored specifically for Algerian businesses.
+- **Regulatory Invoice Layout**: Enforces NIF (15 digits), NIS (20 digits), RC, Article d'Imposition, and bank RIB credentials.
+- **Tafqit Currency Converter**: Converts amounts to written legal Arabic, French, and English Dinars (e.g., *ثمانمائة وإحدى عشر ألف وسبعمائة دينار جزائري لا غير*).
+- **Dual POS / Invoice Mode**: Fast barcode scanning, thermal ticket printing (58mm/80mm), customer receipts, and A4 enterprise invoicing.
+- **Z-Report & Daily Closings**: End-of-day register balancing with cash drawer audits and daily expense accounting.
+
+---
+
+### 2. DZ-Disk-Tree (Port :3001)
+*Location: [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/)*
+
+A 1:1 high-speed desktop alternative to **WizTree** and TreeSize for scanning, auditing, and reclaiming storage space.
+- **Desktop Split Layout**: Live hierarchical multi-column tree grid in the top pane and squarified cushioned treemap in the bottom pane with an interactive draggable splitter.
+- **Bidirectional Selection**: Clicking any node in the tree highlights and zooms the treemap; clicking any visual tile selects the file in the tree grid.
+- **Multi-Column Sorting**: Interactive sorting by Name, % Parent, Allocated Space, File Count, Folder Count, and Last Modified Date with ascending/descending visual carets.
+- **Desktop Arrow Navigation**: Full keyboard navigation (`ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Enter`, `Backspace`).
+- **Executive Audit Report**: Generates an executive printable HTML audit document with embedded canvas treemap snapshot and breakdown tables.
+
+---
+
+### 3. DZ-Archive (Port :3002)
+*Location: [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/)*
+
+A 1:1 desktop alternative to **WinRAR** and 7-Zip designed to pack, inspect, encrypt, and test compressed archives.
+- **Iconic WinRAR Interface**: Full desktop menu bar (`File`, `Commands`, `Tools`, `Options`, `Help`) and big command toolbar (`Add`, `Extract To`, `Test`, `View`, `Delete`, `Find`, `Wizard`, `Info`, `Lock`, `Comment`, `Benchmark`).
+- **6-Tab Compression Dialog**: Desktop modal with `General`, `Advanced`, `Files`, `Backup`, `Time`, and `Comment` configuration tabs.
+- **AES-256-GCM Cryptographic Security**: Hardware-accelerated client-side encryption via Web Crypto API with PBKDF2 key derivation.
+- **Multi-Mode Internal Viewer**: Fast file inspection with Text view, Hex Dump view (16-byte aligned hex offsets + ASCII side-by-side), and Media preview without extracting to disk.
+- **Hardware Compression Benchmark**: Multi-threaded compression speed meter (MB/s) and real-time rating score based on available hardware cores.
+
+---
+
+### 4. DZ-Player (Port :3003)
+*Location: [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/)*
+
+A 1:1 desktop media player alternative to **VLC Media Player** with deep audio-processing capabilities.
+- **Authentic VLC Experience**: Classic VLC top menus, dark high-contrast video viewport, orange cone emblem, and bottom control bar.
+- **300% Volume Super-Boost**: Custom `GainNode` audio graph pipeline capable of clean amplification up to 300% for quiet recordings.
+- **Unified "Adjustments and Effects" Window (Ctrl+E)**:
+  - **10-Band Graphic Equalizer**: Standard center frequencies (60Hz to 16kHz) with presets (Rock, Pop, Classical, Flat, Full Bass, Voice).
+  - **Audio Compressor**: Full dynamic range compression (`DynamicsCompressorNode`) with Threshold, Knee, Ratio, Attack, and Release controls.
+  - **Video Geometry & Colors**: Real-time 90°/180°/270° rotation, horizontal flip, brightness, contrast, saturation, and hue rotation.
+  - **Synchronization**: Sub-millisecond audio and subtitle track synchronization delay/advance controls.
+- **Playback Precision**: A-B repeat looping, frame-by-frame snapshot capture, and network stream playback (HTTP/HTTPS/HLS).
+
+---
+
+### 5. DZ-PDF Pro (Port :3004)
+*Location: [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/)*
+
+A 1:1 desktop alternative to **Adobe Acrobat Pro** for inspecting, annotating, organizing, and signing official PDF documents.
+- **Acrobat Command Palette**: Selection tool (`V`), Hand pan tool (`H`), Freehand pen (`P`), Text highlighter (`U`), Typewriter text tool (`T`), Blackout redaction tool (`R`), and Sticky notes (`N`).
+- **Official Algerian Administrative Stamps**:
+  - **Circular Seal of the Republic**: Dual-ring seal of the People's Democratic Republic of Algeria (*الجمهورية الجزائرية الديمقراطية الشعبية / République Algérienne Démocratique et Populaire*) with national crescent and star, Wilaya, and date.
+  - **Official Administrative Boxes**: *Conforme à l'Original*, *Courrier Arrivé / Reçu le*, *Payé Intégralement*, *Strictement Confidentiel*, *Vu et Approuvé*, *Annulé*, and *Très Urgent*.
+- **Certified Digital Signature Pad**: Velocity-sensitive vector signature pad with multiple ink colors (Diplomatic Blue, Bureau Black, Emerald Green, Violet), signatory metadata (Name, Role, Wilaya, Date), and SHA verification code.
+- **Page Organizer & Sorter**: Thumbnail grid view for drag-and-drop page reordering, individual and batch 90° rotation, page duplication, deletion, and blank page insertion.
+- **Built-in Administrative Templates**: Instant demonstration with authentic Algerian administrative certificates and commercial contracts in DZD.
+
+---
+
+## Architectural Principles
+
+All applications in the DZ Open Suite monorepo strictly observe the **HeyPuter / everything** architectural guidelines:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        DZ Open Suite Monorepo                          │
+├────────────────────────────────────────────────────────────────────────┤
+│  Layer 1: Native Web Platform (HTML5 Canvas 2D · Web Audio · Web Crypto)│
+│  Layer 2: Vanilla ES Modules (Zero Build Step required in production)   │
+│  Layer 3: Local Storage / IndexedDB (100% Offline-First)               │
+│  Layer 4: Bi-directional Design System (RTL Arabic / LTR FR & EN)      │
+│  Layer 5: Zero-Emoji Vector Policy (Strictly SVG icons)               │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Zero External Framework Dependencies**: No React, Angular, Vue, or heavy npm bundles in runtime applications. Native DOM and Vanilla JavaScript ES Modules yield instant boot times and long-term maintainability.
+2. **Offline-First & Local-Storage First**: Complete autonomy from internet access. Applications work indefinitely in disconnected environments (such as remote municipal branches, hospitals, border posts, and industrial zones).
+3. **Native Bi-Directionality & RTL**: Arabic is treated as a primary first-class citizen with natural Right-to-Left (RTL) flow, alongside clean Left-to-Right (LTR) French and English.
+4. **Vector Discipline**: All visual indicators, controls, and branding use pure, mathematical SVG vectors. No emojis are permitted anywhere in production user interfaces or codebases.
+
+---
+
+## Monorepo Structure (11 Specialized Tracks)
 
 ```
 algerie-open-source/
-│
 ├── apps/
-│   ├── office-suite/            # Word Processor, Spreadsheets, Slides, PDF Tools
-│   ├── business-enterprise/      # ERP, Invoicing (05-468), POS, Inventory, CRM
-│   ├── finance-accounting/       # SCF Accounting, G50 Tax Assistant, Payroll (CNAS), CCP Slips
-│   ├── video-montage/            # NLE Video Editor, Arabic Subtitler, Screen Recorder
-│   ├── creative-tools/           # Photo Editing, Vector Graphics, Audio Engineering, Print Shops
-│   ├── collaboration/           # Team Chat, Kanban Boards, WebRTC Video Meetings, Wikis
-│   ├── productivity/            # Citizen Kit Forms, Dual Hijri/Gregorian Calendar, Fast Search
-│   ├── engineering/              # 2D/3D CAD, Seismic RPA 99/2003, Reinforced Concrete (DTR)
-│   ├── developer-tools/          # Unified SATIM/CIB Payment SDK, Algerian SMS OTP, Dev CLI
-│   ├── education-academia/       # School Grading & Bulletins, Intelligent Timetable Generator
-│   └── games-interactive/        # Algerian Cultural Games, Geography Quiz, Godot Starter Kits
-│
-├── assets/                        # High-resolution banners and visual assets
-└── docs/                          # Algerian legal, tax, and architectural standards
-    ├── standards/                    # VAT laws, timbre fiscal, tafqit rules, 58 wilayas
-    ├── architecture/                 # System blueprints and local-first guidelines
-    └── CONTRIBUTING.md               # Multi-language developer onboarding guide
+│   ├── business-enterprise/      # Track 02: Invoicing, Retail POS, Stock, ERP
+│   │   └── dz-facture/           # DZ-Facture & POS (Port 3000)
+│   ├── productivity/             # Track 07: System utilities & citizen tools
+│   │   ├── dz-disk-tree/         # DZ-Disk-Tree WizTree clone (Port 3001)
+│   │   └── dz-archive/           # DZ-Archive WinRAR clone (Port 3002)
+│   ├── multimedia/               # Track 04: Audio/Video players & montage
+│   │   └── dz-player/            # DZ-Player VLC clone (Port 3003)
+│   ├── office-suite/             # Track 01: PDF, Documents, Spreadsheets
+│   │   └── dz-pdf/               # DZ-PDF Pro Acrobat clone (Port 3004)
+│   ├── finance-accounting/       # Track 03: SCF Accounting, G50, CNAS Paie
+│   ├── creative-tools/           # Track 05: Vector graphics, photo editing
+│   ├── collaboration/            # Track 06: Team chat, local kanban boards
+│   ├── engineering/              # Track 08: CAD, Algerian Seismic RPA 99/2003
+│   ├── developer-tools/          # Track 09: SATIM/CIB SDK, 58 Wilayas CLI
+│   ├── education-academia/       # Track 10: School grading, timetables
+│   └── games-interactive/        # Track 11: Cultural games, geography quizzes
+├── assets/                       # High-resolution logos, banners, and stamps
+├── docs/                         # Legal, fiscal, and engineering blueprints
+│   ├── standards/                # VAT laws, timbre fiscal, tafqit rules
+│   ├── architecture/             # System architecture and blueprints
+│   └── CONTRIBUTING.md           # Developer onboarding guidelines
+├── tools/                        # Shared zero-dependency local static servers
+│   └── static-server.js          # Hardened HTTP static server
+├── server.js                     # Root ecosystem portal server
+└── package.json                  # Workspace script orchestration
 ```
 
 ---
 
-## Complete Track Directory & Blueprints
+## Algerian Regulatory & Legal Compliance
 
-| # | Track | Focus & Core Applications | Proprietary Alternative Replaced | Link |
-| :-: | :--- | :--- | :--- | :-: |
-| **01** | **Office Suite** | Word Processor with ministerial templates, Spreadsheets with Algerian formulas, PDF editor, Presentation slides. | Microsoft 365, Google Workspace, Adobe Acrobat | [`office-suite/`](apps/office-suite/) |
-| **02** | **Business & Enterprise** | Retail POS, Commercial Invoicing (Decree 05-468), Modular ERP, Multi-warehouse stock tracking, CRM. | Sage, Delphi POS, Odoo Enterprise, SAP | [`business-enterprise/`](apps/business-enterprise/) |
-| **03** | **Finance & Accounting** | SCF Financial Accounting, G50 automated tax filing assistant, CNAS Payroll (IRG scale), Postal CCP check printers. | PC Compta, DLG Compta, PC Paie | [`finance-accounting/`](apps/finance-accounting/) |
-| **04** | **Video Montage** | Hardware-accelerated video editing (NLE), native right-to-left Arabic subtitling engine, tutorial screen recording. | Adobe Premiere Pro, CapCut PC, Camtasia | [`video-montage/`](apps/video-montage/) |
-| **05** | **Creative Tools** | Raster photo design, calligraphy vector illustration, multi-track audio workstation, print shop prepress tools. | Adobe Photoshop, Illustrator, Audition, Canva | [`creative-tools/`](apps/creative-tools/) |
-| **06** | **Collaboration** | Self-hostable team chat, interactive Kanban project boards, zero-install WebRTC video conferencing, team wiki. | Slack, Microsoft Teams, Trello, Zoom | [`collaboration/`](apps/collaboration/) |
-| **07** | **Productivity** | Administrative citizen kits (residence, declarations), spotlight search with parallel DZD exchange rates, dual calendar. | Proprietary utility kits | [`productivity/`](apps/productivity/) |
-| **08** | **Engineering** | 2D/3D CAD viewer & editor, Algerian seismic calculator (RPA 99/2003), reinforced concrete (DTR), topographic GIS. | AutoCAD, Robot Structural, ETABS | [`engineering/`](apps/engineering/) |
-| **09** | **Developer Tools** | Unified SATIM/CIB/BaridiMob payment gateway SDK, multi-provider SMS OTP gateway, 58 Wilayas SDK, scaffold CLI. | Fragmented vendor libraries | [`developer-tools/`](apps/developer-tools/) |
-| **10** | **Education & Academia** | School grades & report cards, clash-free teacher/classroom timetable generator, university thesis LaTeX templates. | Legacy Access databases, FET | [`education-academia/`](apps/education-academia/) |
-| **11** | **Games & Interactive** | Educational Wilaya quizzes, digital traditional games (Ronda, Dama), historical interactive adventures, Godot asset kits. | Commercial casual games | [`games-interactive/`](apps/games-interactive/) |
+DZ Open Suite is built specifically to address Algerian operational realities:
+
+- **Executive Decree 05-468**: Sets mandatory specifications for commercial invoices, receipts, and electronic point-of-sale registers.
+- **Law 18-05**: Governs electronic commerce, digital contracts, and electronic signatures across the national territory.
+- **Fiscal Regulations**:
+  - Standard VAT rate (Taux Normal): **19%**
+  - Reduced VAT rate (Taux Réduit): **9%**
+  - Fiscal Stamp Duty (Droit de Timbre Fiscal): **1%** on cash transactions (minimum 5 DZD, maximum 10,000 DZD).
+- **Administrative Territorial Distribution**: Full native support for all **58 Wilayas** and **1,541 Communes** with accurate postal codes and administrative dialing codes.
 
 ---
 
-## Foundational Standards
+## Quick Start & Local Deployment
 
-All planned tracks share the core architectural pillars detailed in [`docs/`](docs/):
-* **Local-First & Offline-Capable:** Software must work reliably without an internet connection.
-* **Native Trilingualism:** Arabic (RTL), French (LTR), and English (LTR) across all user interfaces.
-* **Strict Algerian Legal Compliance:** Executive decrees, VAT rates (19% & 9%), and national identification numbers (NIF, NIS, RC, AI).
+### Prerequisites
+- [Node.js](https://nodejs.org/) v18.0.0 or higher.
+- Modern web browser (Chrome, Edge, Firefox, Brave, Safari).
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/test-bit-sys/algerie-open-source.git
+cd algerie-open-source
+```
+
+### 2. Launch the Ecosystem Server (Port 3000)
+```bash
+npm start
+```
+Open [http://localhost:3000](http://localhost:3000) to access the central flagship portal and navigate to any application via `/apps/<track>/<app>/`.
+
+### 3. Launch Dedicated Application Servers
+You can run any application on its dedicated port independently:
+
+```bash
+# DZ-Disk-Tree (WizTree Alternative) on http://localhost:3001
+npm run start:disk-tree
+
+# DZ-Archive (WinRAR Alternative) on http://localhost:3002
+npm run start:archive
+
+# DZ-Player (VLC Alternative) on http://localhost:3003
+npm run start:player
+
+# DZ-PDF Pro (Adobe Acrobat Alternative) on http://localhost:3004
+npm run start:pdf
+```
 
 ---
 
-## How to Contribute
+## Contributing & Development Workflow
 
-Whether you are a frontend engineer, Rust developer, UI/UX designer, accountant, civil engineer, or student:
-1. Browse the track folders in [`apps/`](apps/) and find a project blueprint you'd like to work on.
-2. Review our [Contributing Guide](docs/CONTRIBUTING.md) for branch and code conventions.
-3. Open a Pull Request or start a GitHub Discussion to propose your implementation!
+We welcome contributions from Algerian and international developers, engineers, designers, accountants, and legal professionals:
+
+1. **Fork** the repository and create a feature branch (`git checkout -b feat/your-feature`).
+2. Adhere strictly to the **HeyPuter architectural standard** (Vanilla JS ES Modules, pure SVGs, zero emojis).
+3. Ensure native trilingual support (Arabic RTL default, French, English).
+4. Verify code correctness (`node --check <file>` on all JS modules).
+5. Submit a detailed **Pull Request** explaining your implementation.
+
+Please read our full [Contributing Guide](docs/CONTRIBUTING.md) and [Code of Conduct](docs/CODE_OF_CONDUCT.md).
 
 ---
 
-## License
+## License & Sovereignty
 
-This project is licensed under the **MIT License** — free to use, study, modify, and build upon.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for complete details.
+
+*DZ Open Suite is developed for the Algerian community, engineered with pride, autonomy, and zero external compromises.*

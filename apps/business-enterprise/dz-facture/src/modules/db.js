@@ -142,7 +142,7 @@ export class LocalDB {
 
   // Company Profile
   static getCompany() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.COMPANY) || '{}');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.COMPANY), {});
   }
 
   static saveCompany(profile) {
@@ -151,7 +151,7 @@ export class LocalDB {
 
   // Products
   static getProducts() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.PRODUCTS) || '[]');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.PRODUCTS), []);
   }
 
   static saveProducts(products) {
@@ -202,7 +202,7 @@ export class LocalDB {
 
   // Clients
   static getClients() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.CLIENTS) || '[]');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.CLIENTS), []);
   }
 
   static saveClients(clients) {
@@ -230,7 +230,7 @@ export class LocalDB {
 
   // Debt Payments
   static getPayments() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.PAYMENTS) || '[]');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.PAYMENTS), []);
   }
 
   static addClientPayment(clientId, amount, paymentMethod = 'ESPECES', note = '') {
@@ -260,7 +260,7 @@ export class LocalDB {
 
   // Invoices & Sales
   static getInvoices() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.INVOICES) || '[]');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.INVOICES), []);
   }
 
   static saveInvoices(invoices) {
@@ -277,14 +277,12 @@ export class LocalDB {
     invoices.unshift(newInv);
     this.saveInvoices(invoices);
 
-    // Auto deduct inventory stock
-    if (invoice.items && Array.isArray(invoice.items)) {
-      invoice.items.forEach(item => {
-        if (item.productId) {
-          this.deductStock(item.productId, item.quantity);
-        }
-      });
-    }
+    // NOTE: Stock movement is intentionally EXPLICIT — callers decide:
+    //   • POS sale  → deductStock() per cart item (app.js checkout handler).
+    //   • Refunds   → restoreStock() per returned item.
+    //   • A4 editor → no stock tracking (manual B2B documents).
+    // Previously addInvoice() silently deducted stock as well, which caused
+    // double-deduction on POS sales and zero-effect refunds.
 
     // If sold on credit to an existing client, increase debt balance
     if (invoice.paymentMethod === 'A_TERME' && invoice.clientId) {
@@ -299,9 +297,49 @@ export class LocalDB {
     return newInv;
   }
 
+  /**
+   * Derives the next sequential document number for a given prefix per year,
+   * e.g. FAC-2026-0007 / TKT-2026-0031, by scanning existing invoices.
+   *
+   * Executive Decree 05-468 requires invoice numbers to be sequential per
+   * accounting year without gaps or duplicates. Numbers are only "consumed"
+   * when a document is actually saved, so peeking never creates gaps.
+   */
+  static nextDocNumber(prefix, now = new Date()) {
+    const year = todayLocalISO(now).slice(0, 4);
+    const pattern = new RegExp(`^${prefix}-${year}-(\\d+)$`);
+    let max = 0;
+    this.getInvoices().forEach((inv) => {
+      const match = String(inv.docNumber || '').match(pattern);
+      if (match) max = Math.max(max, parseInt(match[1], 10));
+    });
+    return `${prefix}-${year}-${String(max + 1).padStart(4, '0')}`;
+  }
+
+  /**
+   * Inserts a new invoice, or REPLACES an existing one bearing the same
+   * document number — so re-printing / updating a draft never duplicates
+   * the record or breaks the sequential numbering chain.
+   */
+  static upsertInvoice(invoice) {
+    const invoices = this.getInvoices();
+    const index = invoices.findIndex((i) => i.docNumber && i.docNumber === invoice.docNumber);
+    if (index !== -1) {
+      invoices[index] = {
+        ...invoices[index],
+        ...invoice,
+        id: invoices[index].id,
+        createdAt: invoices[index].createdAt
+      };
+      this.saveInvoices(invoices);
+      return invoices[index];
+    }
+    return this.addInvoice(invoice);
+  }
+
   // Expenses Tracker
   static getExpenses() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.EXPENSES) || '[]');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.EXPENSES), []);
   }
 
   static saveExpenses(expenses) {
@@ -330,7 +368,7 @@ export class LocalDB {
 
   // Daily Z-Report Drawer Closings
   static getClosings() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.CLOSINGS) || '[]');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.CLOSINGS), []);
   }
 
   static saveClosings(closings) {
@@ -351,21 +389,22 @@ export class LocalDB {
 
   // Held Carts (Paniers en attente)
   static getHeldCarts() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.HELD_CARTS) || '[]');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.HELD_CARTS), []);
   }
 
-  static saveHeldCart(cart, label = '') {
-    if (!cart || cart.length === 0) return false;
+  static saveHeldCart(cart, label = '', discountMeta = null) {
+    if (!cart || cart.length === 0) return null;
     const held = this.getHeldCarts();
     const newHeld = {
       id: 'held_' + Date.now(),
       label: label || `سلة رقم ${held.length + 1}`,
       items: cart,
-      savedAt: new Date().toLocaleTimeString('fr-DZ', { hour: '2-digit', minute: '2-digit' })
+      discount: discountMeta ? { ...discountMeta } : null,
+      savedAt: toLocalTimeKey()
     };
     held.unshift(newHeld);
     localStorage.setItem(STORAGE_KEYS.HELD_CARTS, JSON.stringify(held));
-    return held;
+    return newHeld;
   }
 
   static removeHeldCart(id) {
@@ -377,7 +416,7 @@ export class LocalDB {
 
   // Settings
   static getSettings() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS) || '{}');
+    return safeParse(localStorage.getItem(STORAGE_KEYS.SETTINGS), {});
   }
 
   static saveSettings(settings) {
@@ -387,7 +426,7 @@ export class LocalDB {
   // USB Backup & Restore
   static exportBackupJSON() {
     const backup = {
-      version: '1.5.0',
+      version: APP_VERSION,
       system: 'DZ-Facture & POS (Algerie Open Source)',
       exportedAt: new Date().toISOString(),
       company: this.getCompany(),

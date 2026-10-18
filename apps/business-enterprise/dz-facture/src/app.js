@@ -6,7 +6,8 @@
  */
 
 import { LocalDB } from './modules/db.js';
-import { calculateInvoiceTotals, TVA_RATES, PAYMENT_METHODS } from './modules/fiscal.js';
+import { calculateInvoiceTotals, calculateTimbreFiscal, splitTTCByRates, round2, TVA_RATES, PAYMENT_METHODS } from './modules/fiscal.js';
+import { todayLocalISO, toLocalDateKey } from './modules/dates.js';
 import { tafqitDZD } from './modules/tafqit.js';
 import { sound } from './modules/audio.js';
 import { QRCodeSVG } from './modules/qrcode.js';
@@ -19,8 +20,21 @@ let cartDiscountType = 'DZD'; // 'DZD' or 'PERCENT'
 let cartDiscountValue = 0;
 let cameraMediaStream = null;
 
+// Shared UI icon constants (theme & sound toggles)
+const SVG_MOON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+const SVG_SUN = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+const SVG_VOL_ON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+const SVG_VOL_OFF = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+
+/** Persists a single preference (lang / theme / sound) into LocalDB settings. */
+function persistSetting(key, value) {
+  const settings = LocalDB.getSettings();
+  settings[key] = value;
+  LocalDB.saveSettings(settings);
+}
+
 let a4Items = [
-  { description: 'حاسوب محمول مكتبي HP ProBook G9', quantity: 2, unitPriceHT: 85000, tvaRate: 19 },
+  { id: 1, description: 'حاسوب محمول مكتبي HP ProBook G9', quantity: 2, unitPriceHT: 85000, tvaRate: 19 },
   { id: 2, description: 'طابعة فواتير ليزر A4 متعددة المهام', quantity: 1, unitPriceHT: 34000, tvaRate: 19 },
   { id: 3, description: 'حزم ورق طباعة مقاس A4 (صندوق 5 حزم)', quantity: 4, unitPriceHT: 4200, tvaRate: 9 }
 ];
@@ -163,6 +177,8 @@ const I18N = {
     btnPrintZTicket: 'طباعة تقرير Z',
     btnPrintTicket: 'طباعة التذكرة',
     btnGenerateCode: 'توليد',
+    stampInvalidType: 'الملف المرفق ليس صورة صالحة (PNG / JPG فقط)',
+    stampTooLarge: 'حجم صورة الختم كبير جداً (الحد الأقصى 500 كيلوبايت)',
     lblInitialBalance: 'الرصيد الابتدائي أو الديون السابقة (دج)',
     catAll: 'الكل (Tous)',
     catLoyer: 'كراء المحل التجاري (Loyer)',
@@ -334,6 +350,8 @@ const I18N = {
     btnPrintZTicket: 'Imprimer Rapport Z',
     btnPrintTicket: 'Imprimer Ticket',
     btnGenerateCode: 'Générer',
+    stampInvalidType: 'Le fichier sélectionné n\u2019est pas une image valide (PNG / JPG uniquement)',
+    stampTooLarge: 'L\u2019image du cachet est trop volumineuse (max 500 Ko)',
     lblInitialBalance: 'Solde initial ou dette antérieure (DA)',
     catAll: 'Tous (All)',
     catLoyer: 'Loyer commercial',
@@ -505,6 +523,8 @@ const I18N = {
     btnPrintZTicket: 'Print Z-Report',
     btnPrintTicket: 'Print Receipt',
     btnGenerateCode: 'Generate',
+    stampInvalidType: 'The selected file is not a valid image (PNG / JPG only)',
+    stampTooLarge: 'Stamp image is too large (500 KB max)',
     lblInitialBalance: 'Initial Balance or Past Debt (DZD)',
     catAll: 'All Categories',
     catLoyer: 'Store Rent (Loyer)',
@@ -579,9 +599,35 @@ function formatCurrency(amount) {
   }
 }
 
+/** Applies preferences (language / theme / sound) saved from the last session. */
+function restorePersistedSettings() {
+  const settings = LocalDB.getSettings();
+
+  if (settings.lang && I18N[settings.lang]) {
+    currentLang = settings.lang;
+  }
+
+  if (settings.theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.body.setAttribute('data-theme', 'dark');
+    const themeBtn = document.getElementById('themeToggleBtn');
+    if (themeBtn) themeBtn.innerHTML = SVG_SUN;
+  }
+
+  if (settings.soundMuted) {
+    sound.setMuted(true);
+    const soundBtn = document.getElementById('soundToggleBtn');
+    if (soundBtn) {
+      soundBtn.innerHTML = SVG_VOL_OFF;
+      soundBtn.title = currentLang === 'ar' ? 'تشغيل الصوت' : 'Activer le son';
+    }
+  }
+}
+
 // Master DOM Initialization
 document.addEventListener('DOMContentLoaded', () => {
   LocalDB.init();
+  restorePersistedSettings();
 
   initNavigation();
   initLanguageAndTheme();
@@ -661,17 +707,17 @@ function initLanguageAndTheme() {
 
   const themeBtn = document.getElementById('themeToggleBtn');
   themeBtn.addEventListener('click', () => {
-    const moonSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-    const sunSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || document.body.getAttribute('data-theme') === 'dark';
     if (isDark) {
       document.documentElement.removeAttribute('data-theme');
       document.body.removeAttribute('data-theme');
-      themeBtn.innerHTML = moonSvg;
+      themeBtn.innerHTML = SVG_MOON;
+      persistSetting('theme', 'light');
     } else {
       document.documentElement.setAttribute('data-theme', 'dark');
       document.body.setAttribute('data-theme', 'dark');
-      themeBtn.innerHTML = sunSvg;
+      themeBtn.innerHTML = SVG_SUN;
+      persistSetting('theme', 'dark');
     }
     refreshDashboard();
   });
@@ -683,10 +729,9 @@ function initSoundEngine() {
 
   soundBtn.addEventListener('click', () => {
     const isMuted = sound.toggleMute();
-    const volOnSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
-    const volOffSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
-    soundBtn.innerHTML = isMuted ? volOffSvg : volOnSvg;
+    soundBtn.innerHTML = isMuted ? SVG_VOL_OFF : SVG_VOL_ON;
     soundBtn.title = isMuted ? (currentLang === 'ar' ? 'تشغيل الصوت' : 'Activer le son') : (currentLang === 'ar' ? 'كتم الصوت' : 'Couper le son');
+    persistSetting('soundMuted', isMuted);
     showToast(isMuted ? (currentLang === 'ar' ? 'تم كتم الصوت' : 'Son coupé') : (currentLang === 'ar' ? 'تم تفعيل الصوت' : 'Son activé'));
   });
 }
@@ -719,6 +764,7 @@ function initKeyboardShortcuts() {
 
 function applyLanguage(lang) {
   currentLang = lang;
+  persistSetting('lang', lang);
   const html = document.documentElement;
 
   if (lang === 'ar') {
@@ -777,10 +823,9 @@ function refreshDashboard() {
   const products = LocalDB.getProducts();
   const expenses = LocalDB.getExpenses();
 
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = todayLocalISO();
   const todayInvoices = invoices.filter(inv => {
-    const d = (inv.docDate || (inv.createdAt ? inv.createdAt.split('T')[0] : '')).substring(0, 10);
-    return d === todayStr;
+    return toLocalDateKey(inv.docDate || inv.createdAt) === todayStr;
   });
 
   const todaySales = todayInvoices.reduce((sum, inv) => sum + (Number(inv.totalTTC) || 0), 0);
@@ -868,8 +913,8 @@ function refreshDashboard() {
         // Record refund / avoir
         const refundDoc = {
           docType: 'AVOIR',
-          docNumber: `AVR-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`,
-          docDate: new Date().toISOString().split('T')[0],
+          docNumber: LocalDB.nextDocNumber('AVR'),
+          docDate: todayLocalISO(),
           clientName: inv.clientName || t.walkInCustomer,
           paymentMethod: inv.paymentMethod || 'ESPECES',
           items: (inv.items || []).map(it => ({ ...it, totalTTC: -(Number(it.totalTTC) || 0) })),
@@ -907,7 +952,7 @@ function initPOS() {
       const code = searchInput.value.trim();
       if (!code) return;
       const products = LocalDB.getProducts();
-      const found = products.find(p => p.barcode === code || p.id === code || p.name.toLowerCase() === code.toLowerCase());
+      const found = products.find(p => p.barcode === code || p.id === code || (p.name || '').toLowerCase() === code.toLowerCase());
       if (found) {
         addToCart(found);
         searchInput.value = '';
@@ -950,7 +995,7 @@ function initPOS() {
       showToast(currentLang === 'ar' ? 'السلة فارغة حالياً' : 'Le panier est vide', 'warning');
       return;
     }
-    LocalDB.saveHeldCart(cart);
+    LocalDB.saveHeldCart(cart, '', { type: cartDiscountType, value: cartDiscountValue });
     cart = [];
     cartDiscountValue = 0;
     discountInput.value = 0;
@@ -1039,7 +1084,7 @@ function populateSimulatedBarcodes() {
     const btn = document.createElement('button');
     btn.className = 'btn btn-outline btn-sm';
     btn.style.cssText = 'font-size:0.75rem; padding:3px 8px; font-weight:700;';
-    btn.innerHTML = `${escapeHtml(p.name.substring(0, 24))}... <span style="color:var(--primary); font-family:monospace;">(${p.barcode})</span>`;
+    btn.innerHTML = `${escapeHtml((p.name || '').substring(0, 24))}... <span style="color:var(--primary); font-family:monospace;">(${escapeHtml(p.barcode || '')})</span>`;
     btn.addEventListener('click', () => {
       addToCart(p);
       sound.playBeep();
@@ -1090,6 +1135,12 @@ function openHeldCartsModal() {
         const item = held.find(h => h.id === b.dataset.id);
         if (item) {
           cart = item.items;
+          if (item.discount) {
+            cartDiscountType = item.discount.type === 'PERCENT' ? 'PERCENT' : 'DZD';
+            cartDiscountValue = Math.max(0, Number(item.discount.value) || 0);
+            const discountInput = document.getElementById('cartDiscountInput');
+            if (discountInput) discountInput.value = cartDiscountValue;
+          }
           LocalDB.removeHeldCart(item.id);
           renderCart();
           updateHeldCartsBadge();
@@ -1112,8 +1163,13 @@ function openHeldCartsModal() {
   modal.classList.add('active');
 }
 
+/** Reads the currently selected POS payment method (defaults to cash). */
+function getSelectedCheckoutMethod() {
+  return document.getElementById('checkoutPaymentMethod')?.value || 'ESPECES';
+}
+
 function openCheckoutModal() {
-  const totals = calculatePOSCartTotals();
+  const totals = calculatePOSCartTotals(getSelectedCheckoutMethod());
   const modal = document.getElementById('checkoutModal');
   const dueEl = document.getElementById('checkoutDueAmount');
   const receivedInput = document.getElementById('checkoutReceivedAmount');
@@ -1136,7 +1192,7 @@ function initCheckoutCalculator() {
   const changeEl = document.getElementById('checkoutChangeDue');
 
   function updateChange() {
-    const totals = calculatePOSCartTotals();
+    const totals = calculatePOSCartTotals(getSelectedCheckoutMethod());
     const received = Number(receivedInput.value) || 0;
     const change = Math.max(0, received - totals.grandTotalTTC);
     changeEl.textContent = formatCurrency(change);
@@ -1144,9 +1200,18 @@ function initCheckoutCalculator() {
 
   receivedInput.addEventListener('input', updateChange);
 
+  // The 1% stamp duty applies ONLY to cash — when the merchant switches the
+  // payment method, recompute the due amount and suggest the exact total.
+  document.getElementById('checkoutPaymentMethod').addEventListener('change', () => {
+    const totals = calculatePOSCartTotals(getSelectedCheckoutMethod());
+    document.getElementById('checkoutDueAmount').textContent = formatCurrency(totals.grandTotalTTC);
+    receivedInput.value = totals.grandTotalTTC;
+    updateChange();
+  });
+
   document.querySelectorAll('.banknote-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const totals = calculatePOSCartTotals();
+      const totals = calculatePOSCartTotals(getSelectedCheckoutMethod());
       const amt = btn.dataset.amt;
       if (amt === 'exact') {
         receivedInput.value = totals.grandTotalTTC;
@@ -1163,7 +1228,7 @@ function initCheckoutCalculator() {
   });
 
   document.getElementById('btnConfirmPaymentAndTicket').addEventListener('click', () => {
-    const method = document.getElementById('checkoutPaymentMethod').value;
+    const method = getSelectedCheckoutMethod();
     const totals = calculatePOSCartTotals(method);
 
     // Calculate gross profit
@@ -1179,8 +1244,8 @@ function initCheckoutCalculator() {
 
     const newInvoice = {
       docType: 'POS',
-      docNumber: `TKT-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`,
-      docDate: new Date().toISOString().split('T')[0],
+      docNumber: LocalDB.nextDocNumber('TKT'),
+      docDate: todayLocalISO(),
       clientName: I18N[currentLang].walkInCustomer,
       paymentMethod: method,
       items: cart.map(it => ({
@@ -1212,6 +1277,7 @@ function initCheckoutCalculator() {
 
     cart = [];
     cartDiscountValue = 0;
+    cartDiscountType = 'DZD';
     document.getElementById('cartDiscountInput').value = 0;
     renderCart();
     refreshPOSGrid();
@@ -1231,7 +1297,7 @@ function refreshPOSGrid(query = '', category = 'ALL') {
 
   const q = query.trim().toLowerCase();
   const filtered = products.filter(p => {
-    const matchesQuery = p.name.toLowerCase().includes(q) || (p.barcode && p.barcode.includes(q));
+    const matchesQuery = (p.name || '').toLowerCase().includes(q) || (p.barcode || '').includes(q);
     const matchesCat = category === 'ALL' || p.category === category;
     return matchesQuery && matchesCat;
   });
@@ -1288,6 +1354,11 @@ function addToCart(product) {
 function renderCart() {
   const container = document.getElementById('posCartItems');
   const badge = document.getElementById('cartItemsBadge');
+  // Keep the discount toggle label in sync with the active type & language.
+  const discountToggleLabel = document.getElementById('btnDiscountToggle');
+  if (discountToggleLabel) {
+    discountToggleLabel.textContent = cartDiscountType === 'DZD' ? (currentLang === 'ar' ? 'دج' : 'DZD') : '%';
+  }
   if (!container) return;
   container.innerHTML = '';
 
@@ -1355,41 +1426,42 @@ function renderCart() {
   document.getElementById('cartGrandTotal').textContent = formatCurrency(totals.grandTotalTTC);
 }
 
+/**
+ * POS totals — retail (TTC-first) financial model.
+ * The printed shelf prices are authoritative: the customer ALWAYS pays
+ * Σ(sellPrice × qty) − remise (+ timbre fiscal only when paid in cash).
+ * splitTTCByRates() guarantees totalHT + totalTVA === subtotalTTC to the
+ * cent, so the charged amount can never drift from the shelf total.
+ */
 function calculatePOSCartTotals(paymentMethod = 'ESPECES') {
-  let subtotalTTC = 0;
-  const itemsForFiscal = cart.map(it => {
-    const rate = it.tvaRate || 19;
-    const priceHT = it.sellPrice / (1 + rate / 100);
-    subtotalTTC += it.sellPrice * it.quantity;
-    return {
+  const split = splitTTCByRates(
+    cart.map((it) => ({
       quantity: it.quantity,
-      unitPriceHT: priceHT,
-      discountPercent: 0,
-      tvaRate: rate
-    };
-  });
+      unitPriceTTC: it.sellPrice,
+      tvaRate: it.tvaRate || 19
+    }))
+  );
 
-  // Calculate discount
   let totalDiscount = 0;
   if (cartDiscountValue > 0) {
-    if (cartDiscountType === 'PERCENT') {
-      totalDiscount = (subtotalTTC * Math.min(100, cartDiscountValue)) / 100;
-    } else {
-      totalDiscount = Math.min(subtotalTTC, cartDiscountValue);
-    }
+    totalDiscount =
+      cartDiscountType === 'PERCENT'
+        ? round2((split.totalTTC * Math.min(100, cartDiscountValue)) / 100)
+        : Math.min(split.totalTTC, round2(cartDiscountValue));
   }
 
-  const baseTotals = calculateInvoiceTotals({
-    items: itemsForFiscal,
-    paymentMethod: paymentMethod === 'ESPECES' ? PAYMENT_METHODS.ESPECES : PAYMENT_METHODS.VIREMENT
-  });
-
-  const finalGrandTotal = Math.max(0, baseTotals.grandTotalTTC - totalDiscount);
+  const netTTC = round2(split.totalTTC - totalDiscount);
+  const timbreFiscal = paymentMethod === PAYMENT_METHODS.ESPECES ? calculateTimbreFiscal(netTTC) : 0;
 
   return {
-    ...baseTotals,
+    totalHT: split.totalHT,
+    totalTVA: split.totalTVA,
+    tvaBreakdown: split.tvaBreakdown,
+    subtotalTTC: split.totalTTC,
     totalDiscount,
-    grandTotalTTC: finalGrandTotal
+    netTTC,
+    timbreFiscal,
+    grandTotalTTC: round2(netTTC + timbreFiscal)
   };
 }
 
@@ -1443,8 +1515,33 @@ function openTicketPrintModal(inv) {
 }
 
 // 5. FACTURATION A4 CONTROLLER
+/** Maps a document type to its legal sequential-number prefix. */
+function docTypePrefix(docType) {
+  return { FACTURE: 'FAC', PROFORMA: 'PRF', BL: 'BL', AVOIR: 'AVR' }[docType] || 'FAC';
+}
+
+/** Prints ONLY the A4 sheet — marks the pane as print target and restores after. */
+function printA4Sheet() {
+  const pane = document.getElementById('tab-invoices');
+  if (!pane) return;
+  pane.classList.add('print-target');
+
+  const cleanup = () => {
+    pane.classList.remove('print-target');
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+
+  window.print();
+  // Safety net for engines without the afterprint event.
+  setTimeout(cleanup, 3000);
+}
+
 function initFacturationA4() {
-  document.getElementById('a4DocDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('a4DocDate').value = todayLocalISO();
+  document.getElementById('a4DocNumber').value = LocalDB.nextDocNumber(
+    docTypePrefix(document.getElementById('a4DocType').value)
+  );
 
   refreshA4ClientsSelect();
   renderA4ItemsForm();
@@ -1460,10 +1557,32 @@ function initFacturationA4() {
     document.getElementById(id).addEventListener('input', updateA4Calculations);
   });
 
+  // When the document type changes, propose the next legal number for it.
+  document.getElementById('a4DocType').addEventListener('change', (e) => {
+    document.getElementById('a4DocNumber').value = LocalDB.nextDocNumber(docTypePrefix(e.target.value));
+  });
+
   document.getElementById('btnPrintA4').addEventListener('click', () => {
     saveCurrentA4Invoice();
-    window.print();
+    printA4Sheet();
   });
+}
+
+/**
+ * Estimates gross profit for A4 lines by matching each line's description
+ * against the product catalogue: Σ (unit HT − buy price) × qty.
+ * Unmatched manual lines legitimately contribute 0.
+ */
+function computeA4GrossProfit() {
+  const products = LocalDB.getProducts();
+  let grossProfit = 0;
+  a4Items.forEach((it) => {
+    const product = products.find((p) => p.name === it.description);
+    if (product) {
+      grossProfit += ((Number(it.unitPriceHT) || 0) - (Number(product.buyPrice) || 0)) * (Number(it.quantity) || 0);
+    }
+  });
+  return Math.max(0, round2(grossProfit));
 }
 
 function saveCurrentA4Invoice() {
@@ -1493,10 +1612,10 @@ function saveCurrentA4Invoice() {
     totalTVA: totals.totalTVA,
     timbreFiscal: totals.timbreFiscal,
     totalTTC: totals.grandTotalTTC,
-    grossProfit: totals.totalHT * 0.2
+    grossProfit: computeA4GrossProfit()
   };
 
-  LocalDB.addInvoice(inv);
+  LocalDB.upsertInvoice(inv);
   refreshDashboard();
   showToast(currentLang === 'ar' ? 'تم حفظ الفاتورة بنجاح في قاعدة البيانات' : 'Document enregistré avec succès');
 }
@@ -1645,7 +1764,7 @@ function loadInvoiceIntoA4(inv) {
     a4Items = inv.items.map(it => ({
       description: it.description || it.name,
       quantity: it.quantity || 1,
-      unitPriceHT: it.unitPriceHT || (it.sellPrice / 1.19),
+      unitPriceHT: it.unitPriceHT || (it.sellPrice ? round2(it.sellPrice / (1 + (it.tvaRate || 19) / 100)) : 0),
       tvaRate: it.tvaRate || 19
     }));
   }
@@ -1708,7 +1827,7 @@ function refreshProductsTable(query = '') {
   const q = query.trim().toLowerCase();
 
   const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(q) || (p.barcode && p.barcode.includes(q))
+    (p.name || '').toLowerCase().includes(q) || (p.barcode || '').includes(q)
   );
 
   filtered.forEach(p => {
@@ -1844,7 +1963,7 @@ function refreshClientsTable(query = '') {
   const q = query.trim().toLowerCase();
 
   const filtered = clients.filter(c =>
-    c.name.toLowerCase().includes(q) || (c.phone && c.phone.includes(q))
+    (c.name || '').toLowerCase().includes(q) || (c.phone || '').includes(q)
   );
 
   filtered.forEach(c => {
@@ -1877,7 +1996,7 @@ function refreshClientsTable(query = '') {
 
 // 8. EXPENSES CONTROLLER (المصاريف والتشغيل)
 function initExpenses() {
-  document.getElementById('expDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('expDate').value = todayLocalISO();
 
   const form = document.getElementById('expenseForm');
   form?.addEventListener('submit', e => {
@@ -1917,7 +2036,7 @@ function refreshExpensesTable(query = '') {
   const q = query.trim().toLowerCase();
 
   const filtered = expenses.filter(exp =>
-    exp.title.toLowerCase().includes(q) || exp.category.toLowerCase().includes(q)
+    (exp.title || '').toLowerCase().includes(q) || (exp.category || '').toLowerCase().includes(q)
   );
 
   const totalAmount = expenses.reduce((s, it) => s + (Number(it.amount) || 0), 0);
@@ -1998,17 +2117,16 @@ function initClosings() {
 function calculateZReportBreakdown() {
   const invoices = LocalDB.getInvoices();
   const expenses = LocalDB.getExpenses();
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = todayLocalISO();
 
   const todayInvoices = invoices.filter(inv => {
-    const d = (inv.docDate || (inv.createdAt ? inv.createdAt.split('T')[0] : '')).substring(0, 10);
-    return d === todayStr;
+    return toLocalDateKey(inv.docDate || inv.createdAt) === todayStr;
   });
 
   const todayExpenses = expenses.filter(exp => (exp.date || '').substring(0, 10) === todayStr);
 
   const cashSales = todayInvoices.filter(i => (i.paymentMethod || 'ESPECES') === 'ESPECES').reduce((s, i) => s + (Number(i.totalTTC) || 0), 0);
-  const cardSales = todayInvoices.filter(i => i.paymentMethod === 'VIREMENT').reduce((s, i) => s + (Number(i.totalTTC) || 0), 0);
+  const cardSales = todayInvoices.filter(i => i.paymentMethod === 'VIREMENT' || i.paymentMethod === 'CARTE_CIB').reduce((s, i) => s + (Number(i.totalTTC) || 0), 0);
   const chequeSales = todayInvoices.filter(i => i.paymentMethod === 'CHEQUE').reduce((s, i) => s + (Number(i.totalTTC) || 0), 0);
   const creditSales = todayInvoices.filter(i => i.paymentMethod === 'A_TERME').reduce((s, i) => s + (Number(i.totalTTC) || 0), 0);
 
@@ -2022,6 +2140,8 @@ function calculateZReportBreakdown() {
   const variance = actualCash - expectedCash;
 
   // Update UI values
+  const shiftDateEl = document.getElementById('zReportShiftDate');
+  if (shiftDateEl) shiftDateEl.textContent = todayStr;
   document.getElementById('zCashSales').textContent = formatCurrency(cashSales);
   document.getElementById('zCardSales').textContent = formatCurrency(cardSales);
   document.getElementById('zChequeSales').textContent = formatCurrency(chequeSales);
@@ -2142,14 +2262,26 @@ function initSettings() {
   let stampDataUrl = company.stampImage || '';
   document.getElementById('cfgCompanyStampInput')?.addEventListener('change', e => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        stampDataUrl = ev.target.result;
-        showToast(currentLang === 'ar' ? 'تم تحميل صورة الختم بنجاح' : 'Cachet chargé');
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Guard the localStorage quota: only small real images are accepted.
+    if (!file.type.startsWith('image/')) {
+      showToast(I18N[currentLang].stampInvalidType, 'warning');
+      e.target.value = '';
+      return;
     }
+    if (file.size > 500 * 1024) {
+      showToast(I18N[currentLang].stampTooLarge, 'warning');
+      e.target.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = ev => {
+      stampDataUrl = ev.target.result;
+      showToast(currentLang === 'ar' ? 'تم تحميل صورة الختم بنجاح' : 'Cachet chargé');
+    };
+    reader.readAsDataURL(file);
   });
 
   document.getElementById('companyProfileForm').addEventListener('submit', e => {
@@ -2205,6 +2337,22 @@ function initSettings() {
 }
 
 function escapeHtml(str) {
+  // HTML-escapes every dangerous character. Entity literals are assembled
+  // from unicode escapes (& = \u0026) so they can never appear raw in source.
+  if (str === null || str === undefined) return '';
+  const AMP = '\u0026';
+  return String(str)
+    .replace(/\u0026/g, AMP + 'amp;')
+    .replace(/</g, AMP + 'lt;')
+    .replace(/>/g, AMP + 'gt;')
+    .replace(/\u0022/g, AMP + 'quot;')
+    .replace(/\u0027/g, AMP + '#39;')
+    .replace(/`/g, AMP + '#96;');
+}
+
+// Legacy implementation kept ONLY to neutralize the superseded line below;
+// safe to delete together with this wrapper (no longer referenced anywhere).
+function escapeHtmlDeprecatedUnused(str) {
   if (!str) return '';
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
