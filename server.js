@@ -42,6 +42,9 @@ startStaticServer({
       const target = path.join(APPS_DIR, rel);
       try {
         if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
+          if (!pathname.endsWith('/')) {
+            return { redirect: pathname + '/' };
+          }
           return path.join(target, 'index.html');
         }
       } catch {}

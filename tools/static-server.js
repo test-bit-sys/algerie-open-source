@@ -87,6 +87,12 @@ export function createStaticServer({ mapUrl, allowedRoots = [] }) {
         filePath = null;
       }
 
+      if (filePath && typeof filePath === 'object' && filePath.redirect) {
+        res.writeHead(301, { Location: filePath.redirect });
+        res.end();
+        return;
+      }
+
       if (typeof filePath !== 'string' || !roots.some((root) => isPathWithin(filePath, root))) {
         sendText(res, 403, '403 Forbidden');
         return;
