@@ -42,3 +42,15 @@ backups/
 *.backup
 dz_facture_backup_*.json
 
+# Native compilation outputs
+target/
+bin/
+obj/
+*.exe
+*.pdb
+*.dll
+__pycache__/
+*.py[cod]
+*.txt
+
+
