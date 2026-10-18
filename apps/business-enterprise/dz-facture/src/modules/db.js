@@ -4,6 +4,24 @@
  * Daily Expenses, and End-of-Day Z-Report Closings.
  */
 
+import { todayLocalISO, toLocalTimeKey } from './dates.js';
+
+/** Single source of truth for the app version (kept in sync with package.json). */
+export const APP_VERSION = '1.1.0';
+
+/**
+ * Defense against corrupted storage: a malformed JSON value returns the
+ * fallback instead of crashing the whole application at boot.
+ */
+function safeParse(json, fallback) {
+  try {
+    const parsed = JSON.parse(json);
+    return parsed ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 const STORAGE_KEYS = {
   PRODUCTS: 'dz_facture_products',
   CLIENTS: 'dz_facture_clients',
@@ -50,7 +68,7 @@ const DEFAULT_INVOICES = [
     id: 'inv_101',
     docType: 'FACTURE',
     docNumber: 'FAC-2026-0001',
-    docDate: new Date(Date.now() - 86400000 * 2).toISOString().split('T')[0],
+    docDate: todayLocalISO(new Date(Date.now() - 86400000 * 2)),
     clientName: 'مؤسسة السلام للخدمات والترقية',
     clientNif: '003116098765432',
     clientRc: '31/00-9876543B20',
@@ -70,25 +88,25 @@ const DEFAULT_INVOICES = [
     id: 'inv_102',
     docType: 'POS',
     docNumber: 'TKT-2026-0012',
-    docDate: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+    docDate: todayLocalISO(new Date(Date.now() - 86400000)),
     clientName: 'عميل نقدي (Comptoir)',
     paymentMethod: 'ESPECES',
-    totalHT: 27400,
-    totalTVA: 4236,
-    timbreFiscal: 317,
-    totalTTC: 31953,
+    totalHT: 22983.19,
+    totalTVA: 4416.81,
+    timbreFiscal: 274,
+    totalTTC: 27674,
     grossProfit: 6400,
     items: [
-      { description: 'طابعة تذاكر حرارية 80mm USB/Ethernet', quantity: 1, unitPriceHT: 18500, tvaRate: 19, totalHT: 18500, totalTTC: 22015, buyPrice: 14500 },
-      { description: 'قارئ باركود ليزري لاسلكي 2D/QR', quantity: 1, unitPriceHT: 8900, tvaRate: 19, totalHT: 8900, totalTTC: 10591, buyPrice: 6500 }
+      { description: 'طابعة تذاكر حرارية 80mm USB/Ethernet', quantity: 1, unitPriceHT: 15504.20, tvaRate: 19, totalHT: 15504.20, totalTTC: 18500, buyPrice: 14500 },
+      { description: 'قارئ باركود ليزري لاسلكي 2D/QR', quantity: 1, unitPriceHT: 7478.99, tvaRate: 19, totalHT: 7478.99, totalTTC: 8900, buyPrice: 6500 }
     ],
     createdAt: new Date(Date.now() - 86400000).toISOString()
   }
 ];
 
 const DEFAULT_EXPENSES = [
-  { id: 'exp_1', date: new Date().toISOString().split('T')[0], title: 'فاتورة الكهرباء والغاز (سونلغاز)', category: 'فواتير ومرافق', amount: 8500, paymentMethod: 'ESPECES' },
-  { id: 'exp_2', date: new Date().toISOString().split('T')[0], title: 'شراء لوازم تغليف وتعبئة وأكياس', category: 'مستلزمات', amount: 3200, paymentMethod: 'ESPECES' }
+  { id: 'exp_1', date: todayLocalISO(), title: 'فاتورة الكهرباء والغاز (سونلغاز)', category: 'SONELGAZ', amount: 8500, paymentMethod: 'ESPECES' },
+  { id: 'exp_2', date: todayLocalISO(), title: 'شراء لوازم تغليف وتعبئة وأكياس', category: 'FOURNITURES', amount: 3200, paymentMethod: 'ESPECES' }
 ];
 
 export class LocalDB {
