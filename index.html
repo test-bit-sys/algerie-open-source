@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المنظومة الجزائرية للبرمجيات الحرة | DZ Open Suite</title>
+  <meta name="description" content="المنظومة الوطنية الشاملة للبدائل البرمجية المكتبية الحرة والمستقلة 100% دون إنترنت وبدائل متطابقة 1:1 للبرامج التجارية الأكثر استخداماً في الجزائر.">
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070a12;
+      --bg-surface: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #27354f;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --accent-glow: rgba(16, 185, 129, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    header.portal-header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-main {
+      font-weight: 900;
+      font-size: 1.15rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-sub {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-box-wrapper {
+      position: relative;
+      width: 280px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px 8px 36px;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    html[dir="rtl"] .search-input {
+      padding: 8px 36px 8px 14px;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    html[dir="rtl"] .search-icon {
+      right: 12px;
+    }
+
+    html[dir="ltr"] .search-icon {
+      left: 12px;
+    }
+
+    .lang-switcher {
+      display: flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-github {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-github:hover {
+      background: #334155;
+      border-color: #64748b;
+    }
+
+    /* Hero Section */
+    section.hero-section {
+      padding: 48px 24px 32px;
+      text-align: center;
+      background: radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.12), transparent 70%);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #10b981 0%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 760px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+    /* Category Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .filter-tab {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 20px;
+      padding: 7px 16px;
+      font-size: 0.82rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-tab:hover {
+      background: var(--bg-card);
+      color: #fff;
+    }
+
+    .filter-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    /* Apps Grid Section */
+    main.apps-grid-container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 36px 24px 60px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 22px;
+    }
+
+    /* App Card */
+    .app-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .app-card:hover {
+      transform: translateY(-4px);
+      border-color: #64748b;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      background: var(--bg-card-hover);
+    }
+
+    .app-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .app-logo-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .app-logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .app-meta {
+      flex: 1;
+    }
+
+    .app-category-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    .app-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .app-alt-badge {
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: inline-block;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .app-description {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 18px;
+      flex: 1;
+    }
+
+    .app-features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .app-feature-item {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .app-feature-item svg {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .app-card-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-launch-app {
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .btn-launch-app:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+
+    .cmd-hint {
+      font-size: 0.72rem;
+      font-family: monospace;
+      color: #64748b;
+      text-align: center;
+      background: var(--bg-surface);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(51, 65, 85, 0.5);
+    }
+
+    /* Footer */
+    footer.portal-footer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .footer-links a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="portal-header">
+    <a href="#" class="brand-group">
+      <img src="assets/logo.jpg" alt="DZ Open Suite" class="brand-img">
+      <div class="brand-titles">
+        <div class="brand-main">
+          <span>المنظومة الجزائرية للبرمجيات الحرة</span>
+        </div>
+        <div class="brand-sub">DZ OPEN SUITE — SOVEREIGN ECOSYSTEM</div>
+      </div>
+    </a>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <!-- Search Input -->
+      <div class="search-box-wrapper">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="appsSearchInput" class="search-input" placeholder="ابحث في البرمجيات والبدائل...">
+      </div>
+
+      <!-- Language Switcher -->
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="ar">عربي</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <!-- GitHub Link -->
+      <a href="https://github.com/test-bit-sys/algerie-open-source" target="_blank" class="btn-github">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        <span>GitHub</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      <span>12 برمجية مكتبية سيادية جاهزة للتشغيل والتجربة الفورية 100% بدون إنترنت</span>
+    </div>
+    <h1 class="hero-title">
+      جرب البرمجيات الجزائرية مباشرة في <span>المتصفح</span>
+    </h1>
+    <p class="hero-subtitle">
+      المنظومة الوطنية الشاملة للبدائل البرمجية المكتبية الحرة والمستقلة. اضغط على أي برنامج لتجربته فورياً في متصفحك دون الحاجة لتثبيت أي شيء أو إنشاء حسابات.
+    </p>
+
+    <!-- Category Filters -->
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" data-category="all">كافة البرمجيات (12)</button>
+      <button class="filter-tab" data-category="office">حزمة المكتب (Word, Calc, Slides, PDF)</button>
+      <button class="filter-tab" data-category="business">التجارة ونقاط البيع (DZ-Facture POS)</button>
+      <button class="filter-tab" data-category="productivity">أدوات الإنتاجية (WizTree, WinRAR)</button>
+      <button class="filter-tab" data-category="media">الوسائط والتصميم (Photoshop, VLC)</button>
+      <button class="filter-tab" data-category="collaboration">المشاريع والتعليم (Kanban, Miro)</button>
+      <button class="filter-tab" data-category="dev">المطورين و 58 ولاية (DevTools)</button>
+    </div>
+  </section>
+
+  <!-- Grid of 12 Applications -->
+  <main class="apps-grid-container">
+    <div class="apps-grid" id="appsGrid">
+
+      <!-- 1. DZ-Facture & POS -->
+      <div class="app-card" data-category="business" data-keywords="facture invoice pos cashier odoo sage فواتير كاشير مخزون ضرائب">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/business-enterprise/dz-facture/assets/logo.svg" alt="DZ-Facture">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">إدارة الأعمال · المنفذ 3000</span>
+              <h2 class="app-title">DZ-Facture & POS</h2>
+              <span class="app-alt-badge">بديل Sage 100 و Odoo POS</span>
+            </div>
+          </div>
+          <p class="app-description">
+            منظومة الفوترة التجارية والكاشير ونقاط البيع وإدارة المخزون المطابقة لأحكام المرسوم التنفيذي 05-468 مع التفقيط المالي بالدينار وحساب TVA والطابع الجبائي.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>رموز QR حقيقية ISO 18004 وباركود Code128</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تقرير Z اليومي وفواتير A4 وتذاكر 80mm حرارية</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/business-enterprise/dz-facture/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:dz-facture</div>
+        </div>
+      </div>
+
+      <!-- 2. DZ-Word -->
+      <div class="app-card" data-category="office" data-keywords="word docs writer كاتب وورد معالج نصوص مستندات شهادة عمل طلب خطي">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/office-suite/dz-word/assets/logo.svg" alt="DZ-Word">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">حزمة المكتب · المنفذ 3006</span>
+              <h2 class="app-title">DZ-Writer (كاتب الجزائر)</h2>
+              <span class="app-alt-badge">بديل Microsoft Word و Google Docs</span>
+            </div>
+          </div>
+          <p class="app-description">
+            معالج نصوص رسمي ومحرر مستندات مع محاكاة واقعية لصفحات A4 وقوالب إدارية ووزارية جزائرية مدمجة (شهادة عمل، طلب خطي، مذكرة مصلحة، و CV).
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير مباشر لملفات PDF جاهزة للطباعة</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>شريط أدوات تنسيق متكامل وإحصائيات الكلمات الحية</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/office-suite/dz-word/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:word</div>
+        </div>
+      </div>
+
+      <!-- 3. DZ-Calc -->
+      <div class="app-card" data-category="office" data-keywords="calc sheets excel جداول حسابات رواتب ضرائب تفقيد إكسل">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/office-suite/dz-calc/assets/logo.svg" alt="DZ-Calc">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">حزمة المكتب · المنفذ 3007</span>
+              <h2 class="app-title">DZ-Sheets (جداول الجزائر)</h2>
+              <span class="app-alt-badge">بديل Microsoft Excel و Google Sheets</span>
+            </div>
+          </div>
+          <p class="app-description">
+            محرك جداول حسابية فائق السرعة بدوال جبائية جزائرية أصلية (=TAFQIT, =TVA_DZ, =TIMBRE_DZ, =IRG_DZ) ونماذج كشف الرواتب وحسابات النتائج SCF ورسوم بيانية.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>نماذج كشف الراتب (Fiche de Paie) والـ TCR</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>مولد رسوم بيانية تفاعلي فوري وتصدير واستيراد CSV</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/office-suite/dz-calc/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:calc</div>
+        </div>
+      </div>
+
+      <!-- 4. DZ-Slides -->
+      <div class="app-card" data-category="office" data-keywords="slides powerpoint presentation عروض تقديمية باوربوينت ليزر مناقشة تخرج">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/office-suite/dz-slides/assets/logo.svg" alt="DZ-Slides">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">حزمة المكتب · المنفذ 3008</span>
+              <h2 class="app-title">DZ-Impress (عارض الجزائر)</h2>
+              <span class="app-alt-badge">بديل Microsoft PowerPoint و Slides</span>
+            </div>
+          </div>
+          <p class="app-description">
+            استوديو تصميم وتقديم العروض التفاعلية بنسبة 16:9 مع وضع العارض بملء الشاشة، مؤشر ليزر أحمر افتراضي متوهج، وقوالب مناقشة مذكرة PFE و Startup Pitch Deck.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>مؤشر ليزر تفاعلي بملء الشاشة مع مؤقت العرض (F5)</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير فوري للعرض كاملاً إلى PDF أو صور PNG</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/office-suite/dz-slides/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:slides</div>
+        </div>
+      </div>
+
+      <!-- 5. DZ-PDF Pro -->
+      <div class="app-card" data-category="office" data-keywords="pdf acrobat reader ختم توقيع أختام رسمية بي دي اف">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/office-suite/dz-pdf/assets/logo.svg" alt="DZ-PDF">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">المكتب والوثائق · المنفذ 3004</span>
+              <h2 class="app-title">DZ-PDF Pro</h2>
+              <span class="app-alt-badge">بديل Adobe Acrobat Pro 1:1</span>
+            </div>
+          </div>
+          <p class="app-description">
+            استوديو قراءة وتعديل وثائق PDF مع منظومة الأختام الإدارية الرسمية للجمهورية الجزائرية، أداة الحجب الأمني (Redaction)، والتوقيع الرقمي المعتمد.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>أختام رسمية: طبق الأصل، وارد، معتمد، وسري للغاية</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>فرز الصفحات وتدويرها ودمجها بالسحب والإفلات</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/office-suite/dz-pdf/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:pdf</div>
+        </div>
+      </div>
+
+      <!-- 6. DZ-Whiteboard Pro -->
+      <div class="app-card" data-category="collaboration" data-keywords="whiteboard سبورة بيضاء رسم تدريس محاضرات miro openboard">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/education-academia/dz-whiteboard/assets/logo.svg" alt="DZ-Whiteboard">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">التعليم والتدريس · المنفذ 3005</span>
+              <h2 class="app-title">DZ-Whiteboard Pro</h2>
+              <span class="app-alt-badge">بديل OpenBoard و Miro 1:1</span>
+            </div>
+          </div>
+          <p class="app-description">
+            السبورة البيضاء التفاعلية لقاعات التدريس والمحاضرات الجامعية والشاشات الذكية مع أسطح شبكية ومسطرة ومؤشر ليزر توضيحي وأدوات هندسية.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قلم حبر انسيابي، تظليل، ومؤشر ليزر للشرح</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>دروس متعددة الصفحات وتصدير PDF / SVG / PNG</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/education-academia/dz-whiteboard/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:whiteboard</div>
+        </div>
+      </div>
+
+      <!-- 7. DZ-Photo Studio -->
+      <div class="app-card" data-category="media" data-keywords="photo photoshop canva design تصميم فوتوشوب صور رسم طبقات مرشحات">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/creative-tools/dz-photo/assets/logo.svg" alt="DZ-Photo">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">التصميم والوسائط · المنفذ 3010</span>
+              <h2 class="app-title">DZ-Photo Studio</h2>
+              <span class="app-alt-badge">بديل Photoshop و PhotoCraft</span>
+            </div>
+          </div>
+          <p class="app-description">
+            استوديو تصميم ورسم ومعالجة صور نقطية متعدد الطبقات (Layers Stack) مع مرشحات جزائرية حصرية (غروب الصحراء وبحر الجزائر)، وأبعاد السوشيال ميديا.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>محرك طبقات كامل مع تحكم بالشفافية والترتيب</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>حفظ المشاريع بصيغة (.dzphoto) وتصدير PNG/JPG/WEBP</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/creative-tools/dz-photo/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:photo</div>
+        </div>
+      </div>
+
+      <!-- 8. DZ-Boards -->
+      <div class="app-card" data-category="collaboration" data-keywords="boards kanban trello jira مهام كانبان تريلو مشاريع تخطيط تخرج">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/collaboration/dz-boards/assets/logo.svg" alt="DZ-Boards">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">العمل التشاركي · المنفذ 3011</span>
+              <h2 class="app-title">DZ-Boards Pro</h2>
+              <span class="app-alt-badge">بديل Trello و Jira و Focalboard</span>
+            </div>
+          </div>
+          <p class="app-description">
+            منصة إدارة المشاريع والمهام الرشيقة بنظام كانبان بالسحب والإفلات التفاعلي مع نماذج مشاريع جزائرية جاهزة (مذكرة التخرج PFE وإطلاق متجر إلكتروني وطني).
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>سحب وإفلات تفاعلي سلس وبطاقات ذات أولويات وقوائم فرعية</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>شريط إحصائيات ونسبة إنجاز لحظية وتصدير JSON/CSV</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/collaboration/dz-boards/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:boards</div>
+        </div>
+      </div>
+
+      <!-- 9. DZ-DevTools -->
+      <div class="app-card" data-category="dev" data-keywords="devtools developers wilayas ccp rip cib edahabia مطورين ولايات كود بريد">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/developer-tools/dz-devtools/assets/logo.svg" alt="DZ-DevTools">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">أدوات المطورين · المنفذ 3009</span>
+              <h2 class="app-title">DZ-DevTools Pro</h2>
+              <span class="app-alt-badge">المنصة السيادية للمطورين و 58 ولاية</span>
+            </div>
+          </div>
+          <p class="app-description">
+            المنصة الوطنية للمطورين: قاعدة الـ 58 ولاية المصنفة، حاسبة مفتاح CCP ومولد RIP، فحص بطاقات CIB والذهبية، مدقق NIF/NIS/RC، وحزمة Tafqit SDK.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير بيانات 58 ولاية إلى JSON و CSV و SQL و JS</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>فاحص شبكات الهاتف النقال (Mobilis, Djezzy, Ooredoo)</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/developer-tools/dz-devtools/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:devtools</div>
+        </div>
+      </div>
+
+      <!-- 10. DZ-Player -->
+      <div class="app-card" data-category="media" data-keywords="player vlc video audio media مشغل وسائط صوت فيديو ترجمة">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/multimedia/dz-player/assets/logo.svg" alt="DZ-Player">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">الوسائط المتعددة · المنفذ 3003</span>
+              <h2 class="app-title">DZ-Player Pro</h2>
+              <span class="app-alt-badge">بديل VLC Media Player 1:1</span>
+            </div>
+          </div>
+          <p class="app-description">
+            مشغل وسائط متعددة عالي الكفاءة مع تضخيم فائق للصوت حتى 300%، معادل صوتي 10 حزم، فك تشفير الترجمة العربية Windows-1256، وتشغيل البث المباشر.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>معادل صوتي 10 ترددات وضاغط ديناميكي (Compressor)</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>دعم الترجمات العربية بترميز CP-1256 بدون أحرف غريبة</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/multimedia/dz-player/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:player</div>
+        </div>
+      </div>
+
+      <!-- 11. DZ-Archive -->
+      <div class="app-card" data-category="productivity" data-keywords="archive winrar 7zip zip ضغط أرشيف تشفير ملفات">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/productivity/dz-archive/assets/logo.svg" alt="DZ-Archive">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">أدوات النظام · المنفذ 3002</span>
+              <h2 class="app-title">DZ-Archive Pro</h2>
+              <span class="app-alt-badge">بديل WinRAR و 7-Zip 1:1</span>
+            </div>
+          </div>
+          <p class="app-description">
+            أداة أرشفة وضغط وتشفير الملفات بكلمة سر عبر AES-256-GCM، عارض ملفات نصوص وهكسا داخلي، فحص بصمة CRC-32، واختبار كفاءة العتاد والمعالج.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تشفير عسكري AES-256-GCM واشتقاق المفاتيح PBKDF2</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>عارض هكسا (Hex Dump) متقدم واختبار سرعة الضغط</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/productivity/dz-archive/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:archive</div>
+        </div>
+      </div>
+
+      <!-- 12. DZ-DiskTree -->
+      <div class="app-card" data-category="productivity" data-keywords="disk tree wiztree storage مساحة قرص تخزين فحص">
+        <div>
+          <div class="app-card-header">
+            <div class="app-logo-wrap">
+              <img src="apps/productivity/dz-disk-tree/assets/logo.svg" alt="DZ-DiskTree">
+            </div>
+            <div class="app-meta">
+              <span class="app-category-badge">أدوات النظام · المنفذ 3001</span>
+              <h2 class="app-title">DZ-DiskTree Pro</h2>
+              <span class="app-alt-badge">بديل WizTree و TreeSize 1:1</span>
+            </div>
+          </div>
+          <p class="app-description">
+            محلل مساحات الأقراص والتخزين فائق السرعة مع خريطة شجرية مجسمة (Cushioned Treemap)، فرز الأعمدة التفاعلي، تقارير تدقيق قابلة للطباعة، وتصدير CSV.
+          </p>
+          <ul class="app-features-list">
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تحديد ثنائي الاتجاه بين الشجرة والخريطة المساحية</span>
+            </li>
+            <li class="app-feature-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تنقل كامل بأسهم لوحة المفاتيح وتقارير تدقيق رسمية</span>
+            </li>
+          </ul>
+        </div>
+        <div class="app-card-footer">
+          <a href="apps/productivity/dz-disk-tree/" class="btn-launch-app">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>جرب البرنامج الآن (Try Now)</span>
+          </a>
+          <div class="cmd-hint">npm run start:disk-tree</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Portal Footer -->
+  <footer class="portal-footer">
+    <div>🇩🇿 المنظومة الجزائرية للبرمجيات الحرة (DZ Open Suite) — برمجيات وطنية مستقلة مفتوحة المصدر 100% بدون إنترنت</div>
+    <div class="footer-links">
+      <a href="https://github.com/test-bit-sys/algerie-open-source" target="_blank">المستودع الرئيسي على GitHub</a> •
+      <a href="LICENSE">رخصة MIT الحرة</a> •
+      <a href="docs/CONTRIBUTING.md">دليل المساهمة البرمجية</a>
+    </div>
+  </footer>
+
+  <script>
+    // Real-Time Filter & Search
+    const searchInput = document.getElementById('appsSearchInput');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const appCards = document.querySelectorAll('.app-card');
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function applyFilters() {
+      appCards.forEach(card => {
+        const cat = card.getAttribute('data-category');
+        const keywords = (card.getAttribute('data-keywords') + ' ' + card.innerText).toLowerCase();
+
+        const matchCat = (currentCategory === 'all' || cat === currentCategory);
+        const matchSearch = (!searchQuery || keywords.includes(searchQuery));
+
+        card.style.display = (matchCat && matchSearch) ? 'flex' : 'none';
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      applyFilters();
+    });
+
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCategory = tab.getAttribute('data-category');
+        applyFilters();
+      });
+    });
+
+    // Language Toggle
+    const langBtns = document.querySelectorAll('.lang-btn');
+    langBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.getAttribute('data-lang');
+        langBtns.forEach(b => b.classList.toggle('active', b === btn));
+        if (lang === 'ar') {
+          document.documentElement.setAttribute('lang', 'ar');
+          document.documentElement.setAttribute('dir', 'rtl');
+        } else {
+          document.documentElement.setAttribute('lang', lang);
+          document.documentElement.setAttribute('dir', 'ltr');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

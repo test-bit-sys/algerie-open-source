@@ -23,10 +23,10 @@ const ROOT_ASSETS = path.join(__dirname, 'assets');
 startStaticServer({
   name: 'DZ Open Source Suite — Flagship & Ecosystem Server',
   port: process.env.PORT || 3000,
-  allowedRoots: [APP_DIR, ROOT_ASSETS, APPS_DIR],
+  allowedRoots: [__dirname, APP_DIR, ROOT_ASSETS, APPS_DIR],
   mapUrl(pathname) {
-    if (pathname === '/' || pathname === '') {
-      return path.join(APP_DIR, 'index.html');
+    if (pathname === '/' || pathname === '' || pathname === '/index.html') {
+      return path.join(__dirname, 'index.html');
     }
     // Route favicon.ico to the shared suite logo
     if (pathname === '/favicon.ico') {

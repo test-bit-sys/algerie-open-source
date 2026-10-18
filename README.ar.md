@@ -14,12 +14,17 @@
 [![الخصوصية: 100% دون إنترنت](https://img.shields.io/badge/الخصوصية-100%25_دون_إنترنت_محلي-059669.svg?style=for-the-badge&logo=sqlite&logoColor=white)](#-الرؤية-الاستراتيجية-والسيادة-الرقمية)
 [![اللغات: عربية · فرنسية · إنجليزية](https://img.shields.io/badge/اللغات-العربية_%7C_Français_%7C_English-dc2626.svg?style=for-the-badge)](#-التوافق-واللغات)
 [![المساهمات مفتوحة](https://img.shields.io/badge/المساهمات-مفتوحة_للجميع-7c3aed.svg?style=for-the-badge&logo=github&logoColor=white)](docs/CONTRIBUTING.md)
+[![تجربة مباشرة أونلاين](https://img.shields.io/badge/⚡_تجربة_مباشرة-Try_Now_Online-10b981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://test-bit-sys.github.io/algerie-open-source/)
 
 <p align="center">
   <a href="README.ar.md"><b>🇩🇿 العربية</b></a> •
   <a href="README.md"><b>🇬🇧 English</b></a> •
   <a href="README.fr.md"><b>🇫🇷 Français</b></a>
 </p>
+
+> ### ⚡ تجربة مباشرة وفورية لكافة البرمجيات أونلاين (Live Demo / Try Now)
+> يمكنك الآن تجربة كافة البرمجيات الـ 12 مباشرة في متصفحك دون الحاجة لتثبيت أي برامج أو تشغيل خوادم:  
+> 👉 **[اضغط هنا لفتح بوابة المنظومة المركزية وتجربة البرامج مباشرة (Launch DZ Open Suite Hub)](https://test-bit-sys.github.io/algerie-open-source/)** 🚀
 
 </div>
 
@@ -65,23 +70,23 @@
 
 ## 🟢 جدول حالة وتصنيف كافة البرمجيات
 
-| المسار القطاعي | تصنيف ونوع البرنامج | البديل التجاري المستبدل | الحالة الراهنة | المنفذ | رابط الوصول والتشغيل |
-| :---: | :--- | :--- | :---: | :---: | :--- |
-| **02** | **الفوترة ونقاط البيع POS** | **Sage 100 / Odoo POS** | 🟢 **مكتمل وجاهز** | `:3000` | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
-| **07** | **فحص وسائط التخزين والأقراص** | **WizTree / TreeSize 1:1** | 🟢 **مكتمل وجاهز** | `:3001` | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
-| **07** | **ضغط وإدارة الأرشيف والتشفير** | **WinRAR / 7-Zip 1:1** | 🟢 **مكتمل وجاهز** | `:3002` | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
-| **04** | **مشغل الوسائط المتعددة والصوتيات** | **VLC Media Player 1:1** | 🟢 **مكتمل وجاهز** | `:3003` | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
-| **01** | **استوديو وثائق PDF وتوقيعها** | **Adobe Acrobat Pro 1:1** | 🟢 **مكتمل وجاهز** | `:3004` | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
-| **10** | **السبورة البيضاء التفاعلية للتعليم** | **OpenBoard / Miro 1:1** | 🟢 **مكتمل وجاهز** | `:3005` | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
-| **01** | **محرر المستندات والنماذج الوزارية (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **مكتمل وجاهز** | `:3006` | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
-| **01** | **معالج الجداول والحسابات الجبائية (DZ-Sheets)** | **Microsoft Excel / Google Sheets** | 🟢 **مكتمل وجاهز** | `:3007` | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
-| **01** | **استوديو العروض التقديمية ومؤشر الليزر (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **مكتمل وجاهز** | `:3008` | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
-| **09** | **منصة أدوات المطورين والـ 58 ولاية (DZ-DevTools)** | **مكتبات SATIM/CIB والولايات** | 🟢 **مكتمل وجاهز** | `:3009` | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
-| **05** | **استوديو التصميم ومعالجة الصور بالطبقات (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **مكتمل وجاهز** | `:3010` | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
-| **06** | **لوحات كانبان وإدارة مهام المشاريع (DZ-Boards)** | **Trello / Jira / Focalboard** | 🟢 **مكتمل وجاهز** | `:3011` | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
-| **03** | **المحاسبة المالية والأجور والتصريح الجبائي SCF** | PC Compta, DLG Compta, PC Paie | 🟡 *قيد التخطيط* | — | [`apps/finance-accounting/`](apps/finance-accounting/) |
-| **08** | **الهندسة المعمارية وحساب الزلازل والخرسانة CAD** | AutoCAD, Robot Structural, ETABS | 🟡 *قيد التخطيط* | — | [`apps/engineering/`](apps/engineering/) |
-| **11** | **الألعاب التفاعلية والثقافة وتاريخ الجزائر** | ألعاب التسلية التجارية ومحرك Godot | 🟡 *قيد التخطيط* | — | [`apps/games-interactive/`](apps/games-interactive/) |
+| المسار | تصنيف ونوع البرنامج | البديل التجاري المستبدل | الحالة الراهنة | المنفذ | تجربة مباشرة (Try Now) | مسار المجلد المصدري |
+| :---: | :--- | :--- | :---: | :---: | :---: | :--- |
+| **02** | **الفوترة ونقاط البيع POS** | **Sage 100 / Odoo POS** | 🟢 **مكتمل وجاهز** | `:3000` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/) | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
+| **07** | **فحص وسائط التخزين والأقراص** | **WizTree / TreeSize 1:1** | 🟢 **مكتمل وجاهز** | `:3001` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/) | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
+| **07** | **ضغط وإدارة الأرشيف والتشفير** | **WinRAR / 7-Zip 1:1** | 🟢 **مكتمل وجاهز** | `:3002` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/) | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
+| **04** | **مشغل الوسائط المتعددة والصوتيات** | **VLC Media Player 1:1** | 🟢 **مكتمل وجاهز** | `:3003` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/) | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
+| **01** | **استوديو وثائق PDF وتوقيعها** | **Adobe Acrobat Pro 1:1** | 🟢 **مكتمل وجاهز** | `:3004` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/) | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
+| **10** | **السبورة البيضاء التفاعلية للتعليم** | **OpenBoard / Miro 1:1** | 🟢 **مكتمل وجاهز** | `:3005` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/) | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
+| **01** | **محرر المستندات والنماذج الوزارية (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **مكتمل وجاهز** | `:3006` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/) | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
+| **01** | **معالج الجداول والحسابات الجبائية (DZ-Sheets)** | **Microsoft Excel / Google Sheets** | 🟢 **مكتمل وجاهز** | `:3007` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/) | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
+| **01** | **استوديو العروض التقديمية ومؤشر الليزر (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **مكتمل وجاهز** | `:3008` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/) | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
+| **09** | **منصة أدوات المطورين والـ 58 ولاية (DZ-DevTools)** | **مكتبات SATIM/CIB والولايات** | 🟢 **مكتمل وجاهز** | `:3009` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
+| **05** | **استوديو التصميم ومعالجة الصور بالطبقات (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **مكتمل وجاهز** | `:3010` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/) | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
+| **06** | **لوحات كانبان وإدارة مهام المشاريع (DZ-Boards)** | **Trello / Jira / Focalboard** | 🟢 **مكتمل وجاهز** | `:3011` | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
+| **03** | **المحاسبة المالية والأجور والتصريح الجبائي SCF** | PC Compta, DLG Compta, PC Paie | 🟡 *قيد التخطيط* | — | — | [`apps/finance-accounting/`](apps/finance-accounting/) |
+| **08** | **الهندسة المعمارية وحساب الزلازل والخرسانة CAD** | AutoCAD, Robot Structural, ETABS | 🟡 *قيد التخطيط* | — | — | [`apps/engineering/`](apps/engineering/) |
+| **11** | **الألعاب التفاعلية والثقافة وتاريخ الجزائر** | ألعاب التسلية التجارية ومحرك Godot | 🟡 *قيد التخطيط* | — | — | [`apps/games-interactive/`](apps/games-interactive/) |
 
 ---
 
@@ -91,7 +96,7 @@
 
 ### 1. 💼 برمجية الفوترة ونقاط البيع DZ-Facture & POS
 > **الحل الوطني لإدارة المبيعات، الصناديق النقدية، الفوترة التجارية، والمحاسبة اليومية**  
-> *المنفذ: `:3000` • المسار: [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/)*
+> *المنفذ: `:3000` • المسار: [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/)*
 
 - **📜 مطابقة تامة للمرسوم التنفيذي 05-468**: توليد فواتير وسندات بيع قانونية تتضمن الرقم التعريفي الجبائي NIF (15 رقماً)، الرقم الإحصائي NIS (20 رقماً)، السجل التجاري RC، رقم المادة الجبائية، ورقم الحساب البنكي/البريدي RIB/CCP.
 - **💰 محرك الضرائب والرسوم الجزائري**: حساب تلقائي دقيق لضريبة القيمة المضافة TVA (19% عادي، 9% مخفض، و 0% معفى) مع حساب قانوني لرسم الطابع الجبائي (*Droit de Timbre*).
@@ -109,7 +114,7 @@ npm start
 
 ### 2. 🌳 برمجية فحص وسائط التخزين DZ-Disk-Tree
 > **محلل مساحات الأقراص فائق السرعة والخريطة الشجرية المظللة المجسمة (بديل WizTree 1:1)**  
-> *المنفذ: `:3001` • المسار: [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/)*
+> *المنفذ: `:3001` • المسار: [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/)*
 
 - **🖥️ شاشة عرض مزدوجة متزامنة (Split-Window)**: مطابقة تامة لتصميم WizTree الأصلي؛ شبكة شجرية متعددة الأعمدة في الأعلى وخريطة مساحية بارزة ومظللة مجسمة (**Cushioned Treemap Canvas**) في الأسفل مع مقسم سحب مباشر.
 - **⚡ تحديد ثنائي الاتجاه لحظي**: النقر على أي مجلد في الشجرة يسلط الضوء فوراً على كتلته في الخريطة؛ والنقر على أي كتلة مرئية يحدد موقعها مباشرة في الجدول.
@@ -127,7 +132,7 @@ npm run start:disk-tree
 
 ### 3. 📦 برمجية إدارة وضغط الأرشيف DZ-Archive
 > **أداة الأرشفة والضغط والتشفير واختبار كفاءة العتاد المكتبي (بديل WinRAR 1:1)**  
-> *المنفذ: `:3002` • المسار: [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/)*
+> *المنفذ: `:3002` • المسار: [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/)*
 
 - **🗜️ واجهة وقوائم WinRAR الأصلية**: شريط قوائم مألوف (`File`, `Commands`, `Tools`, `Options`, `Help`) وشريط الأدوات الأيقوني الكبير (`Add`, `Extract To`, `Test`, `View`, `Delete`, `Find`, `Wizard`, `Info`, `Lock`, `Comment`, `Benchmark`).
 - **📑 نافذة معلمات الضغط بـ 6 تبويبات**: إعدادات متكاملة تشمل تبويبات (`General`, `Advanced`, `Files`, `Backup`, `Time`, `Comment`).
@@ -145,7 +150,7 @@ npm run start:archive
 
 ### 4. 🎬 مشغل الوسائط المتعددة DZ-Player
 > **مشغل الوسائط المتعددة عالي الأداء مع مضخم صوت 300% واستوديو المؤثرات الموحد (بديل VLC 1:1)**  
-> *المنفذ: `:3003` • المسار: [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/)*
+> *المنفذ: `:3003` • المسار: [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/)*
 
 - **📻 واجهة وقوائم VLC الأصلية**: شريط قوائم علوي كامل (`Media`, `Playback`, `Audio`, `Video`, `Subtitle`, `Tools`, `View`, `Help`)، شاشة عرض داكنة بشعار المخروط، وشريط تحكم سفلي احترافي.
 - **🔊 تضخيم الصوت الفائق حتى 300%**: شريط صوت بمؤشر رقمي حقيقي يتجاوز الحدود التقليدية ليصل إلى **300%** لمعالجة المقاطع الضعيفة عبر عقدة `GainNode`.
@@ -166,7 +171,7 @@ npm run start:player
 
 ### 5. 📄 استوديو معالجة وتوثيق وثائق PDF DZ-PDF Pro
 > **محرر وثائق PDF ومنظومة الأختام الإدارية والتوقيع الرقمي المعتمد (بديل Adobe Acrobat Pro 1:1)**  
-> *المنفذ: `:3004` • المسار: [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/)*
+> *المنفذ: `:3004` • المسار: [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/)*
 
 - **🛠️ شريط أدوات Acrobat المتكامل**: أداة التحديد (`V`)، أداة اليد والتحريك (`H`)، قلم الرسم والتوقيع (`P`)، قلم التظليل الملون (`U`)، إدراج نصوص وكتابة حرة (`T`)، مستطيل الحجب الأمني الأسود (**Redaction Tool** `R`)، والملاحظات اللاصقة (**Sticky Notes** `N`).
 - **🏛️ منظومة الأختام والمصادقات الإدارية الجزائرية الرسمية**:
@@ -185,7 +190,7 @@ npm run start:pdf
 
 ### 6. 🧑‍🏫 السبورة البيضاء التفاعلية DZ-Whiteboard Pro (بديل OpenBoard و Miro 1:1)
 > **السبورة البيضاء الرقمية التفاعلية للشاشات الذكية، قاعات التدريس، المحاضرات الجامعية، والعمل التشاركي**  
-> *المنفذ: `:3005` • المسار: [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/)*
+> *المنفذ: `:3005` • المسار: [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/)*
 
 - **🎨 أنماط السبورة المدرسية المتنوعة**: سبورة بيضاء نقية، ورق شبكي ومربعات للرياضيات والهندسة، ورق مسطر لتدريس اللغات والخط، شبكة نقاط، سبورة مدرسية خضراء كلاسيكية (Chalkboard)، وسبورة سوداء داكنة مع خطوط نيون.
 - **✏️ أدوات شرح وتدريس متكاملة**: قلم حبر انسيابي ناعم بمنحنيات Spline للخط العربي والفرنسي، قلم تمييز وتظليل شفاف (Highlighter)، ممحاة ذكية، أشكال هندسية متعددة (مستطيل، دائرة، مثلث، معين، نجمة)، وأسهم وموصلات للمخططات الانسيابية.
@@ -202,7 +207,7 @@ npm run start:whiteboard
 
 ### 7. 📝 محرر المستندات الإدارية الوطنية DZ-Writer (بديل Microsoft Word و Google Docs 1:1)
 > **معالج النصوص والوثائق الرسمية مع محاكاة صفحات A4 الواقعية والنماذج الإدارية والوزارية الجزائرية الجاهزة**  
-> *المنفذ: `:3006` • المسار: [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/)*
+> *المنفذ: `:3006` • المسار: [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/)*
 
 - **🏛️ قوالب ونماذج إدارية جزائرية رسمية مدمجة بضغطة زر**:
   - **شهادة عمل رسمية (Attestation de Travail)**: بالصيغة القانونية المعتمدة لدى مصالح الموارد البشرية والضمان الاجتماعي CNAS.
@@ -222,7 +227,7 @@ npm run start:word
 
 ### 8. 📊 معالج الجداول والحسابات الجبائية DZ-Sheets (بديل Microsoft Excel و Google Sheets 1:1)
 > **شبكة الجداول الحسابية فائقة السرعة مع دوال الضرائب والرواتب والنظام المحاسبي المالي الجزائري (SCF)**  
-> *المنفذ: `:3007` • المسار: [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/)*
+> *المنفذ: `:3007` • المسار: [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/)*
 
 - **🇩🇿 دوال حسابية جزائرية أصلية مدمجة في محرك الصيغ**:
   - `=TAFQIT_AR(A1)`: التفقيط المالي بالدينار الجزائري بالعربية كتابةً.
@@ -245,7 +250,7 @@ npm run start:calc
 
 ### 9. 📽️ استوديو العروض التقديمية DZ-Impress (بديل Microsoft PowerPoint و Google Slides 1:1)
 > **استوديو تصميم وتقديم العروض التفاعلية بنسبة 16:9 مع مؤشر الليزر التفاعلي ووضع العارض بملء الشاشة**  
-> *المنفذ: `:3008` • المسار: [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/)*
+> *المنفذ: `:3008` • المسار: [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/)*
 
 - **🎓 قوالب عروض وطنية جاهزة بنقرة واحدة**:
   - **قالب مناقشة مذكرة التخرج الجامعية (PFE Soutenance)**: غلاف رسمي بأسماء الأساتذة والمؤطر، خطة العرض، الإشكالية، النتائج، والتوصيات.
@@ -263,7 +268,7 @@ npm run start:slides
 
 ### 10. 💻 منصة أدوات المطورين والـ 58 ولاية DZ-DevTools (الاستوديو الوطني للمطورين)
 > **المنصة السيادية لأدوات المطورين، مدققات الهوية الجبائية والبنكية، وقاعدة بيانات الـ 58 ولاية المصنفة**  
-> *المنفذ: `:3009` • المسار: [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/)*
+> *المنفذ: `:3009` • المسار: [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/)*
 
 - **🗺️ مستكشف الـ 58 ولاية والبلديات الوطنية**: استعراض شامل للبيانات الجغرافية بأسماء عربية وفرنسية، مقرات الولايات، الترقيم البريدي، أرقام تسجيل السيارات (Matricules)، والمفتاح الهاتفي مع تصدير فوري إلى `JSON`, `CSV`, `SQL DDL/Inserts`, و `ES Modules`.
 - **💳 مدققات الهوية البنكية والجبائية الوطنية**:
@@ -283,7 +288,7 @@ npm run start:devtools
 
 ### 11. 🎨 استوديو التصميم ومعالجة الصور بالطبقات DZ-Photo (بديل Photoshop و PhotoCraft 1:1)
 > **استوديو تصميم ورسم وتعديل صور نقطية مكتبي متعدد الطبقات مع مرشحات جزائرية وأبعاد السوشيال ميديا**  
-> *المنفذ: `:3010` • المسار: [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/)*
+> *المنفذ: `:3010` • المسار: [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/)*
 
 - **🥞 محرك طبقات احترافي كامل (Layers Stack Engine)**: إضافة، تكرار، حذف، وترتيب الطبقات لأعلى وأسفل مع تحكم دقيق في الشفافية (Opacity)، إخفاء وإظهار الطبقات، ورسم مركب فائق الأداء.
 - **🖌️ أدوات رسم وتصميم متكاملة**: فرشاة حرة ناعمة، ممحاة ذكية، دلو التعبئة اللحظي، قطارة الألوان (Eyedropper)، وأداة كتابة النصوص بخطوط عربية أصيلة.
@@ -300,7 +305,7 @@ npm run start:photo
 
 ### 12. 📋 لوحات كانبان وإدارة مهام المشاريع DZ-Boards (بديل Trello و Jira و Focalboard 1:1)
 > **منصة إدارة المشاريع الرشيقة والمهام الجماعية بنظام كانبان التفاعلي بالسحب والإفلات وقوالب المشاريع الوطنية**  
-> *المنفذ: `:3011` • المسار: [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/)*
+> *المنفذ: `:3011` • المسار: [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) • [🚀 تجربة البرنامج مباشرة (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/)*
 
 - **🎯 سحب وإفلات تفاعلي سلس (HTML5 Drag & Drop)**: تحريك المهام والبطاقات بين الأعمدة بانسيابية تامة وتحديث فوري للمؤشرات.
 - **🇩🇿 نماذج مشاريع وطنية جاهزة بنقرة واحدة**:

@@ -14,12 +14,17 @@
 [![Confidentialité: 100% Hors-Ligne](https://img.shields.io/badge/Confidentialit%C3%A9-100%25_Hors--Ligne_Local-059669.svg?style=for-the-badge&logo=sqlite&logoColor=white)](#-mission-et-vision-stratégique)
 [![Langues: AR · FR · EN](https://img.shields.io/badge/Langues-Arabe_%7C_Français_%7C_Anglais-dc2626.svg?style=for-the-badge)](#-internationalisation-et-bidirectionnalité)
 [![Contributions Bienvenues](https://img.shields.io/badge/Contributions-Bienvenues-7c3aed.svg?style=for-the-badge&logo=github&logoColor=white)](docs/CONTRIBUTING.md)
+[![Tester en Ligne](https://img.shields.io/badge/⚡_Essai_Direct-Tester_en_Ligne-10b981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://test-bit-sys.github.io/algerie-open-source/)
 
 <p align="center">
   <a href="README.fr.md"><b>🇫🇷 Français</b></a> •
   <a href="README.ar.md"><b>🇩🇿 العربية</b></a> •
   <a href="README.md"><b>🇬🇧 English</b></a>
 </p>
+
+> ### ⚡ Test Direct & Immédiat dans le Navigateur (Try Now / Essai Direct)
+> Vous pouvez tester l'ensemble des 12 applications de bureau directement dans votre navigateur web, sans aucune installation de Node.js ni serveur local :  
+> 👉 **[Cliquez ici pour ouvrir le Portail Central et tester les applications en direct (DZ Open Suite Hub)](https://test-bit-sys.github.io/algerie-open-source/)** 🚀
 
 </div>
 
@@ -65,23 +70,23 @@
 
 ## 🟢 Matrice d'État et de Disponibilité des Logiciels
 
-| Pôle | Catégorie de Logiciel | Cible Propriétaire Remplacée | Statut | Port | Lien Opérationnel |
-| :---: | :--- | :--- | :---: | :---: | :--- |
-| **02** | **Facturation & Caisses POS** | **Sage 100 / Odoo POS** | 🟢 **Opérationnel** | `:3000` | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
-| **07** | **Analyseur d'Espace Disque** | **WizTree / TreeSize 1:1** | 🟢 **Opérationnel** | `:3001` | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
-| **07** | **Gestion d'Archives & Compression** | **WinRAR / 7-Zip 1:1** | 🟢 **Opérationnel** | `:3002` | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
-| **04** | **Lecteur Multimédia & Traitement** | **VLC Media Player 1:1** | 🟢 **Opérationnel** | `:3003` | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
-| **01** | **Studio PDF & Visa Administratif** | **Adobe Acrobat Pro 1:1** | 🟢 **Opérationnel** | `:3004` | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
-| **10** | **Tableau Blanc Interactif & Cours** | **OpenBoard / Miro 1:1** | 🟢 **Opérationnel** | `:3005` | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
-| **01** | **Traitement de Texte (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **Opérationnel** | `:3006` | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
-| **01** | **Moteur Tableur Fiscal (DZ-Sheets)** | **Microsoft Excel / Google Sheets**| 🟢 **Opérationnel** | `:3007` | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
-| **01** | **Studio Présentation (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **Opérationnel** | `:3008` | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
-| **09** | **Studio Développeur 58 Wilayas (DZ-DevTools)** | **SDKs SATIM/CIB & Wilayas** | 🟢 **Opérationnel** | `:3009` | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
-| **05** | **Studio Retouche & Calques (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **Opérationnel** | `:3010` | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
-| **06** | **Gestion Kanban & Tâches (DZ-Boards)**| **Trello / Jira / Focalboard** | 🟢 **Opérationnel** | `:3011` | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
-| **03** | **Comptabilité Financière & Paie SCF** | PC Compta, DLG Compta, PC Paie | 🟡 *Planifié* | — | [`apps/finance-accounting/`](apps/finance-accounting/) |
-| **08** | **Génie Civil & CAO Parasismique** | AutoCAD, Robot Structural, ETABS | 🟡 *Planifié* | — | [`apps/engineering/`](apps/engineering/) |
-| **11** | **Jeux du Patrimoine & Culture** | Jeux grand public commerciaux | 🟡 *Planifié* | — | [`apps/games-interactive/`](apps/games-interactive/) |
+| Pôle | Catégorie de Logiciel | Cible Propriétaire Remplacée | Statut | Port | Essai Direct (Try Now) | Répertoire Source |
+| :---: | :--- | :--- | :---: | :---: | :---: | :--- |
+| **02** | **Facturation & Caisses POS** | **Sage 100 / Odoo POS** | 🟢 **Opérationnel** | `:3000` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/) | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
+| **07** | **Analyseur d'Espace Disque** | **WizTree / TreeSize 1:1** | 🟢 **Opérationnel** | `:3001` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/) | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
+| **07** | **Gestion d'Archives & Compression** | **WinRAR / 7-Zip 1:1** | 🟢 **Opérationnel** | `:3002` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/) | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
+| **04** | **Lecteur Multimédia & Traitement** | **VLC Media Player 1:1** | 🟢 **Opérationnel** | `:3003` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/) | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
+| **01** | **Studio PDF & Visa Administratif** | **Adobe Acrobat Pro 1:1** | 🟢 **Opérationnel** | `:3004` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/) | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
+| **10** | **Tableau Blanc Interactif & Cours** | **OpenBoard / Miro 1:1** | 🟢 **Opérationnel** | `:3005` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/) | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
+| **01** | **Traitement de Texte (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **Opérationnel** | `:3006` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/) | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
+| **01** | **Moteur Tableur Fiscal (DZ-Sheets)** | **Microsoft Excel / Google Sheets**| 🟢 **Opérationnel** | `:3007` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/) | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
+| **01** | **Studio Présentation (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **Opérationnel** | `:3008` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/) | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
+| **09** | **Studio Développeur 58 Wilayas (DZ-DevTools)** | **SDKs SATIM/CIB & Wilayas** | 🟢 **Opérationnel** | `:3009` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
+| **05** | **Studio Retouche & Calques (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **Opérationnel** | `:3010` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/) | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
+| **06** | **Gestion Kanban & Tâches (DZ-Boards)**| **Trello / Jira / Focalboard** | 🟢 **Opérationnel** | `:3011` | [🚀 **Essayer**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
+| **03** | **Comptabilité Financière & Paie SCF** | PC Compta, DLG Compta, PC Paie | 🟡 *Planifié* | — | — | [`apps/finance-accounting/`](apps/finance-accounting/) |
+| **08** | **Génie Civil & CAO Parasismique** | AutoCAD, Robot Structural, ETABS | 🟡 *Planifié* | — | — | [`apps/engineering/`](apps/engineering/) |
+| **11** | **Jeux du Patrimoine & Culture** | Jeux grand public commerciaux | 🟡 *Planifié* | — | — | [`apps/games-interactive/`](apps/games-interactive/) |
 
 ---
 
@@ -91,7 +96,7 @@
 
 ### 1. 💼 DZ-Facture & POS (Alternative Sage / Odoo POS)
 > **Solution Nationale de Facturation Commerciale, Caisses Enregistreuses, Stocks & Moteur Fiscal**  
-> *Port : `:3000` • Répertoire : [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/)*
+> *Port : `:3000` • Répertoire : [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/)*
 
 - **📜 Conformité Rigoureuse au Décret Exécutif 05-468** : Émission de factures réglementaires intégrant NIF (15 chiffres), NIS (20 chiffres), Registre de Commerce (RC), Article d'Imposition et coordonnées bancaires/postales (RIB/CCP).
 - **💰 Moteur Fiscal Algérien** : Calcul automatique de la TVA (19% normal, 9% réduit, 0% exonéré) et du droit de timbre fiscal avec plafonds légaux.
@@ -109,7 +114,7 @@ npm start
 
 ### 2. 🌳 DZ-Disk-Tree (Alternative WizTree 1:1)
 > **Analyseur Haute Vitesse d'Espace Disque & Treemap Cushioned 3D**  
-> *Port : `:3001` • Répertoire : [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/)*
+> *Port : `:3001` • Répertoire : [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/)*
 
 - **🖥️ Affichage Découpé Synchronisé (Split View)** : Arborescence hiérarchique détaillée en haut et Treemap biseauté (**Cushioned Treemap Canvas**) en bas avec séparateur redimensionnable par glisser-déposer.
 - **⚡ Liaison Bidirectionnelle Instantanée** : Sélectionner un dossier dans l'arborescence zoome la carte géométrique ; cliquer sur un bloc sélectionne la ligne correspondante dans la table.
@@ -127,7 +132,7 @@ npm run start:disk-tree
 
 ### 3. 📦 DZ-Archive (Alternative WinRAR 1:1)
 > **Compresseur Haute Performance, Chiffrement AES-256-GCM & Benchmark Matériel**  
-> *Port : `:3002` • Répertoire : [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/)*
+> *Port : `:3002` • Répertoire : [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/)*
 
 - **🗜️ Interface Iconique WinRAR** : Barre de menus complète (`Fichier`, `Commandes`, `Outils`, `Options`, `Aide`) et grande barre d'outils classique (`Ajouter`, `Extraire vers`, `Tester`, `Afficher`, `Supprimer`, `Rechercher`, `Assistant`, `Infos`, `Verrouiller`, `Commentaire`, `Benchmark`).
 - **📑 Dialogue de Compression à 6 Onglets** : Paramétrage avancé via `Général`, `Avancé`, `Fichiers`, `Sauvegarde`, `Temps`, et `Commentaire`.
@@ -145,7 +150,7 @@ npm run start:archive
 
 ### 4. 🎬 DZ-Player (Alternative VLC Media Player 1:1)
 > **Lecteur Multimédia Avancé avec Amplification 300% & Studio d'Effets Unifié**  
-> *Port : `:3003` • Répertoire : [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/)*
+> *Port : `:3003` • Répertoire : [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/)*
 
 - **📻 Expérience VLC Authentique** : Menus supérieurs classiques, viewport vidéo sombre avec cône emblématique et barre de contrôle de lecture.
 - **🔊 Super-Amplification Sonore jusqu'à 300%** : Pipeline audio via `GainNode` permettant de porter le volume à 300% avec jauge numérique en temps réel.
@@ -166,7 +171,7 @@ npm run start:player
 
 ### 5. 📄 DZ-PDF Pro (Alternative Adobe Acrobat Pro 1:1)
 > **Suite de Documents PDF, Tampons Administratifs Officiels & Signatures Numériques**  
-> *Port : `:3004` • Répertoire : [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/)*
+> *Port : `:3004` • Répertoire : [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/)*
 
 - **🛠️ Palette d'Outils Complète Acrobat** : Sélection (`V`), Main (`H`), Stylet (`P`), Surligneur (`U`), Texte (`T`), Masquage/Caviardage (**Redaction Tool** `R`), et Notes adhésives (**Sticky Notes** `N`).
 - **🏛️ Sceau et Tampons Officiels Algériens** :
@@ -185,7 +190,7 @@ npm run start:pdf
 
 ### 6. 🧑‍🏫 Tableau Blanc Interactif DZ-Whiteboard Pro (Alternative OpenBoard & Miro 1:1)
 > **Tableau Blanc Numérique Interactif pour Écrans Tactiles, Salles de Cours, Conférences & Travail Collaboratif**  
-> *Port: `:3005` • Chemin: [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/)*
+> *Port : `:3005` • Répertoire : [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/)*
 
 - **🎨 Multiples Surfaces Pédagogiques** : Tableau blanc pur, papier quadrillé pour mathématiques et géométrie, papier réglé pour l'écriture et les langues, grille de points, tableau vert d'école authentique (Chalkboard), et tableau noir mat avec encres néon.
 - **✏️ Boîte à Outils Pédagogique Complète** : Stylo calligraphique à lissage par splines, surligneur translucide, formes géométriques intelligentes (rectangles, cercles, triangles, losanges, étoiles) et flèches directionnelles d'organigrammes.
@@ -202,7 +207,7 @@ npm run start:whiteboard
 
 ### 7. 📝 DZ-Writer (Alternative Microsoft Word & Google Docs 1:1)
 > **Traitement de Texte Administratif avec Simulation Réelle de Feuilles A4 et Modèles Officiels Algériens**  
-> *Port : `:3006` • Répertoire : [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/)*
+> *Port : `:3006` • Répertoire : [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/)*
 
 - **🏛️ Modèles Administratifs et Ministériels Algériens Prêts à l'Emploi** :
   - **Attestation de Travail** : Formulation juridique standard reconnue par les services des ressources humaines et la CNAS.
@@ -222,7 +227,7 @@ npm run start:word
 
 ### 8. 📊 DZ-Sheets (Alternative Microsoft Excel & Google Sheets 1:1)
 > **Moteur de Tableur Haute Performance avec Fonctions Fiscales, Salariales et Comptabilité SCF Algérienne**  
-> *Port : `:3007` • Répertoire : [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/)*
+> *Port : `:3007` • Répertoire : [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/)*
 
 - **🇩🇿 Moteur de Formules Fiscales Algériennes Intégré** :
   - `=TAFQIT_AR(A1)` : Conversion financière en toutes lettres arabes (Tafqit).
@@ -245,7 +250,7 @@ npm run start:calc
 
 ### 9. 📽️ DZ-Impress (Alternative Microsoft PowerPoint & Slides 1:1)
 > **Studio de Diaporamas 16:9 avec Mode Présentateur Plein Écran et Pointeur Laser Virtuel**  
-> *Port : `:3008` • Répertoire : [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/)*
+> *Port : `:3008` • Répertoire : [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/)*
 
 - **🎓 Modèles Nationaux Académiques et Startups en 1 Clic** :
   - **Soutenance PFE (Mémoire Universitaire)** : Structure académique complète (Page de garde officielle, problématique, méthodologie, résultats et recommandations).
@@ -263,7 +268,7 @@ npm run start:slides
 
 ### 10. 💻 DZ-DevTools (Studio Développeur & 58 Wilayas)
 > **Plateforme Souveraine pour Développeurs, Validateurs d'Identité Fiscale/Bancaire et Données des 58 Wilayas**  
-> *Port : `:3009` • Répertoire : [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/)*
+> *Port : `:3009` • Répertoire : [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/)*
 
 - **🗺️ Explorateur Géographique Complet des 58 Wilayas et Communes** : Base structurée trilingue (Arabe, Français, codes matricules, préfixes postaux, indicatifs téléphoniques) avec export direct en `JSON`, `CSV`, `SQL DDL/Inserts` et `ES Modules`.
 - **💳 Validateurs Bancaires et Fiscaux Nationaux** :
@@ -283,7 +288,7 @@ npm run start:devtools
 
 ### 11. 🎨 DZ-Photo (Alternative Adobe Photoshop & PhotoCraft 1:1)
 > **Studio Graphique et de Retouche Photo Matricielle avec Moteur de Calques, Filtres et Formats Réseaux Sociaux**  
-> *Port : `:3010` • Répertoire : [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/)*
+> *Port : `:3010` • Répertoire : [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/)*
 
 - **🥞 Moteur Professionnel de Pile de Calques (Layers Stack)** : Ajout, duplication, suppression, réordonnancement, visibilité et contrôle de l'opacité avec rendu composite haute vélocité.
 - **🖌️ Boîte à Outils Créative Complète** : Pinceau fluide, gomme intelligente, pot de peinture, pipette d'échantillonnage et insertion de texte avec police arabe adaptée.
@@ -300,7 +305,7 @@ npm run start:photo
 
 ### 12. 📋 DZ-Boards (Alternative Trello, Jira & Focalboard 1:1)
 > **Plateforme Kanban Collaborative et Gestion Agile de Projets avec Glisser-Déposer et Modèles Nationaux**  
-> *Port : `:3011` • Répertoire : [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/)*
+> *Port : `:3011` • Répertoire : [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) • [🚀 Tester en Ligne (Try Now)](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/)*
 
 - **🎯 Glisser-Déposer Fluide (HTML5 Drag & Drop)** : Déplacement instantané des tâches entre colonnes avec zones cibles visuelles et indicateurs de performance actualisés en temps réel.
 - **🇩🇿 Modèles de Projets Nationaux Dédiés** :
