@@ -1,0 +1,26 @@
+{
+  "name": "dz-photo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DZ-Photo (PhotoCraft Studio / مصمم الصور وتعديلها) — The Algerian Sovereign Web Photo & Graphic Design Studio. Alternative to Adobe Photoshop, Photopea, and Canva. Features multi-layer canvas, Algerian social media & print dimension presets, brushes, filters, color adjustment, shape drawing, and PNG/JPEG/WEBP export. Built to the HeyPuter/everything standard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "photo-editor",
+    "photoshop-alternative",
+    "photopea-alternative",
+    "photocraft",
+    "graphic-design",
+    "layers-engine",
+    "image-filters",
+    "offline-first",
+    "algeria-open-source"
+  ],
+  "author": "DZ Open Suite Contributors",
+  "license": "MIT"
+}

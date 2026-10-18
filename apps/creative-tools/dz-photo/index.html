@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Photo Pro — استوديو التصميم وتعديل الصور الجزائري</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-panel: #1e293b;
+      --bg-panel-hover: #334155;
+      --border-color: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --topbar-height: 52px;
+      --sidebar-width: 280px;
+      --toolstrip-width: 56px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation / Ribbon */
+    header.app-topbar {
+      height: var(--topbar-height);
+      background-color: var(--bg-panel);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 50;
+      gap: 12px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+    }
+
+    .brand-name {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-badge {
+      font-size: 0.65rem;
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--accent);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .actions-section {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      background: var(--bg-panel-hover);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action:hover {
+      background: #475569;
+      border-color: #64748b;
+    }
+
+    .btn-action.btn-accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .btn-action.btn-accent:hover {
+      background: var(--accent-hover);
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      inset-inline-start: 0;
+      background-color: var(--bg-panel);
+      min-width: 200px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--bg-panel-hover);
+      color: var(--accent);
+    }
+
+    .lang-switcher {
+      display: flex;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Main Workspace Layout */
+    .workspace {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - var(--topbar-height));
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Toolbar */
+    aside.tool-strip {
+      width: var(--toolstrip-width);
+      background-color: var(--bg-panel);
+      border-inline-end: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0;
+      gap: 6px;
+      z-index: 20;
+    }
+
+    .tool-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tool-btn:hover {
+      background: var(--bg-panel-hover);
+      color: var(--text-main);
+    }
+
+    .tool-btn.active {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tool-divider {
+      width: 30px;
+      height: 1px;
+      background: var(--border-color);
+      margin: 4px 0;
+    }
+
+    .color-swatch-wrapper {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .color-swatch-input {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+    }
+
+    /* Center Viewport */
+    main.viewport {
+      flex: 1;
+      background: #090d16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      padding: 40px;
+      position: relative;
+    }
+
+    .canvas-container {
+      position: relative;
+      background-color: #ffffff;
+      background-image: 
+        linear-gradient(45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #e2e8f0 75%), 
+        linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    #compositeCanvas {
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* Right Sidebar (Layers & Properties) */
+    aside.sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--bg-panel);
+      border-inline-start: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    .panel-block {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .panel-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-select, .form-input {
+      width: 100%;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-select:focus, .form-input:focus {
+      border-color: var(--accent);
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-slider {
+      flex: 1;
+      accent-color: var(--accent);
+    }
+
+    .layers-toolbar {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn-icon-tiny {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: var(--bg-panel-hover);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-icon-tiny:hover {
+      background: #475569;
+      color: var(--accent);
+    }
+
+    .layers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 260px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    .layer-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .layer-item:hover {
+      background: #243048;
+    }
+
+    .layer-item.active {
+      border-color: var(--accent);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .layer-vis-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .layer-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Modals */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-card {
+      position: relative;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      padding: 24px;
+      z-index: 10;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    /* Filter Grid */
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .filter-card-btn {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: var(--text-main);
+      font-size: 0.78rem;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+      text-align: start;
+    }
+
+    .filter-card-btn:hover {
+      border-color: var(--accent);
+      background: rgba(16, 185, 129, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Ribbon Navigation -->
+  <header class="app-topbar">
+    <div class="brand-section">
+      <img src="assets/logo.svg" alt="DZ-Photo" class="brand-logo">
+      <div class="brand-name">
+        <span data-i18n="appTitle">مصمم الصور الجزائري</span>
+        <span class="brand-badge">Sovereign Studio</span>
+      </div>
+    </div>
+
+    <!-- Quick Action Ribbon -->
+    <div class="actions-section">
+      <!-- File Operations -->
+      <button class="btn-action btn-accent" id="btnNewProject" title="مشروع جديد">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        <span data-i18n="newProject">مشروع جديد...</span>
+      </button>
+
+      <button class="btn-action" id="btnOpenImageFile" title="فتح صورة">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+        <span data-i18n="openImage">فتح صورة...</span>
+      </button>
+
+      <button class="btn-action" id="btnSaveProject" title="حفظ المشروع">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        <span data-i18n="saveProject">حفظ (.dzphoto)</span>
+      </button>
+
+      <!-- Export Dropdown -->
+      <div class="dropdown">
+        <button class="btn-action">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>تصدير الصورة</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="dropdown-content">
+          <div class="dropdown-item" id="btnExportPng">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <span data-i18n="exportPng">تصدير PNG عالي الدقة</span>
+          </div>
+          <div class="dropdown-item" id="btnExportJpg">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <span data-i18n="exportJpg">تصدير JPEG مضغوط</span>
+          </div>
+          <div class="dropdown-item" id="btnExportWebp">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span data-i18n="exportWebp">تصدير WEBP للويب</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Undo / Redo -->
+      <button class="btn-action" id="btnUndo" title="تراجع">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+      </button>
+      <button class="btn-action" id="btnRedo" title="إعادة">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+      </button>
+
+      <!-- Language Switcher -->
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="ar">عربي</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <!-- About Modal -->
+      <button class="btn-action" id="btnOpenAbout" title="عن البرنامج">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Workspace Container -->
+  <div class="workspace">
+    <!-- Left Toolbar -->
+    <aside class="tool-strip">
+      <button class="tool-btn active" data-tool="brush" title="فرشاة الرسم (B)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+      </button>
+      <button class="tool-btn" data-tool="eraser" title="الممحاة (E)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"></path><path d="M22 21H7"></path><path d="m5 11 9 9"></path></svg>
+      </button>
+      <button class="tool-btn" data-tool="bucket" title="دلو الطلاء (G)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"></path><path d="m5 2 5 5"></path><path d="M2 13h15"></path><path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"></path></svg>
+      </button>
+      <button class="tool-btn" data-tool="text" title="إدراج نص (T)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+      </button>
+      <button class="tool-btn" data-tool="picker" title="قطارة الألوان (I)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m14 2 4 4-10 10H4v-4L14 2z"></path><line x1="11" y1="5" x2="15" y2="9"></line><circle cx="5" cy="19" r="2"></circle></svg>
+      </button>
+
+      <div class="tool-divider"></div>
+
+      <!-- Color Swatch -->
+      <div class="color-swatch-wrapper" title="لون الفرشاة والنص">
+        <input type="color" id="brushColorPicker" class="color-swatch-input" value="#059669">
+      </div>
+    </aside>
+
+    <!-- Center Canvas Viewport -->
+    <main class="viewport" id="canvasArea">
+      <div class="canvas-container">
+        <canvas id="compositeCanvas" width="900" height="600"></canvas>
+      </div>
+    </main>
+
+    <!-- Right Sidebar (Properties, Filters & Layers) -->
+    <aside class="sidebar">
+      <!-- Brush & Tool Properties -->
+      <div class="panel-block">
+        <div class="panel-header">
+          <span>خصائص الفرشاة</span>
+        </div>
+        <div class="form-group">
+          <div class="form-label">
+            <span>حجم الأداة:</span>
+            <span id="brushSizeValue" style="color: var(--accent); font-weight: 700;">10px</span>
+          </div>
+          <input type="range" id="brushSizeSlider" class="form-slider" min="1" max="100" value="10">
+        </div>
+      </div>
+
+      <!-- Preset Dimensions Quick Setup -->
+      <div class="panel-block">
+        <div class="panel-header">
+          <span data-i18n="dimensions">الأبعاد القياسية</span>
+        </div>
+        <div class="form-group">
+          <select id="presetDimensionsSelect" class="form-select">
+            <option value="900x600">افتراضي استوديو (900x600)</option>
+            <option value="1080x1080">منشور انستغرام / فيسبوك (1080x1080)</option>
+            <option value="1080x1920">ستوري / ريلز عمودي (1080x1920)</option>
+            <option value="1920x1080">فيديو Full HD (1920x1080)</option>
+            <option value="1200x630">غلاف وسائط التواصل (1200x630)</option>
+            <option value="500x500">أيقونة أو شعار (500x500)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Photo Filters & Transformations -->
+      <div class="panel-block">
+        <div class="panel-header">
+          <span data-i18n="filters">المرشحات والتأثيرات</span>
+        </div>
+        <div class="filter-grid">
+          <button class="filter-card-btn" id="btnFilterGrayscale">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20z"></path></svg>
+            <span data-i18n="filterGrayscale">أبيض وأسود</span>
+          </button>
+          <button class="filter-card-btn" id="btnFilterSepia">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            <span data-i18n="filterSepia">سيبيا كلاسيكي</span>
+          </button>
+          <button class="filter-card-btn" id="btnFilterInvert">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <span data-i18n="filterInvert">عكس الألوان</span>
+          </button>
+          <button class="filter-card-btn" id="btnFilterSunset">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line></svg>
+            <span data-i18n="filterSunset">غروب صحراوي</span>
+          </button>
+          <button class="filter-card-btn" id="btnFilterBlue">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M2 12h20"></path><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"></path></svg>
+            <span data-i18n="filterBlue">زرقة البحر</span>
+          </button>
+          <button class="filter-card-btn" id="btnFlipH">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+            <span data-i18n="flipH">انعكاس أفقي</span>
+          </button>
+          <button class="filter-card-btn" id="btnFlipV" style="grid-column: span 2;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 7 19 3 15 7"></polyline><path d="M13 21h2a4 4 0 0 0 4-4V3"></path><polyline points="1 17 5 21 9 17"></polyline><path d="M11 3H9a4 4 0 0 0-4 4v14"></path></svg>
+            <span data-i18n="flipV">انعكاس عمودي</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Layers Management Panel -->
+      <div class="panel-block" style="flex: 1; display: flex; flex-direction: column;">
+        <div class="panel-header">
+          <span data-i18n="layersTitle">الطبقات (Layers)</span>
+          <div class="layers-toolbar">
+            <button class="btn-icon-tiny" id="btnAddLayer" title="إضافة طبقة">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <button class="btn-icon-tiny" id="btnDuplicateLayer" title="تكرار الطبقة">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+            <button class="btn-icon-tiny" id="btnMoveLayerUp" title="رفع الطبقة">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+            <button class="btn-icon-tiny" id="btnMoveLayerDown" title="خفض الطبقة">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <button class="btn-icon-tiny" id="btnDeleteLayer" title="حذف الطبقة">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Layer Opacity -->
+        <div class="form-group">
+          <div class="form-label">
+            <span data-i18n="opacity">شفافية الطبقة:</span>
+          </div>
+          <input type="range" id="layerOpacitySlider" class="form-slider" min="0" max="1" step="0.05" value="1">
+        </div>
+
+        <!-- Layer Stack -->
+        <div class="layers-list" id="layersList">
+          <!-- Dynamically populated by app.js -->
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Hidden File Input -->
+  <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/webp,.dzphoto" style="display: none;">
+
+  <!-- Modal: New Project -->
+  <div class="modal" id="modalNewProject">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        <span data-i18n="newProject">إنشاء مشروع تصميم جديد</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">العرض (بالبكسل):</label>
+        <input type="number" id="newProjWidth" class="form-input" value="1080">
+      </div>
+      <div class="form-group" style="margin-top: 10px;">
+        <label class="form-label">الارتفاع (بالبكسل):</label>
+        <input type="number" id="newProjHeight" class="form-input" value="1080">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action modal-close" data-i18n="close">إلغاء</button>
+        <button class="btn-action btn-accent" id="btnConfirmNewProject">إنشاء لوحة العمل</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: About -->
+  <div class="modal" id="modalAbout">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-title">
+        <img src="assets/logo.svg" alt="DZ-Photo" style="width: 28px; height: 28px;">
+        <span data-i18n="aboutTitle">عن مصمم الصور الجزائري</span>
+      </div>
+      <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 16px;" data-i18n="aboutDesc">
+        استوديو تصميم ورسم وتعديل صور مكتبي حر ومفتوح المصدر 100% جزائري، بديل خفيف ومتكامل لأدوبي فوتوشوب وكانفا وفوتوبيا مع طبقات ومرشحات وأبعاد مخصصة للمحتوى الوطني.
+      </p>
+      <div style="background: var(--bg-dark); border-radius: 8px; padding: 12px; font-size: 0.8rem; color: var(--text-muted); border: 1px solid var(--border-color);">
+        <div style="margin-bottom: 6px;">• <strong>المصدر المفتوح:</strong> مرخص برخصة MIT الحرة</div>
+        <div style="margin-bottom: 6px;">• <strong>الاستقلالية:</strong> يعمل 100% بدون إنترنت وبدون أي مكتبات خارجية</div>
+        <div>• <strong>المعايير:</strong> تنسيق المشاريع (.dzphoto) وتصدير فائق الدقة (PNG/JPG/WEBP)</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action btn-accent modal-close" data-i18n="close">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main ES Module Script -->
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

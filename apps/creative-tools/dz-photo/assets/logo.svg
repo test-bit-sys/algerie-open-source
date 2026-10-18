@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="shieldGradPhoto" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="50%" stop-color="#6d28d9" />
+      <stop offset="100%" stop-color="#4c1d95" />
+    </linearGradient>
+    <linearGradient id="paletteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f1f5f9" />
+    </linearGradient>
+    <linearGradient id="brushGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <linearGradient id="goldGradPhoto" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <linearGradient id="crimsonRedPhoto" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#b91c1c" />
+    </linearGradient>
+    <linearGradient id="neonGreenPhoto" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+    <filter id="shadowFilterPhoto" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#3b0764" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <!-- Circular Outer Shield -->
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="url(#shieldGradPhoto)" filter="url(#shadowFilterPhoto)" stroke="#a78bfa" stroke-width="4" stroke-opacity="0.4"/>
+
+  <!-- Subtle Dynamic Rays / Starburst Grid -->
+  <g opacity="0.08" stroke="#ffffff" stroke-width="2">
+    <circle cx="256" cy="256" r="80" fill="none" />
+    <circle cx="256" cy="256" r="140" fill="none" />
+    <circle cx="256" cy="256" r="200" fill="none" />
+    <line x1="24" y1="256" x2="488" y2="256" />
+    <line x1="256" y1="24" x2="256" y2="488" />
+  </g>
+
+  <!-- Layer Stack Cards in Background (Photoshop Layers representation) -->
+  <g transform="translate(140, 110)" filter="url(#shadowFilterPhoto)">
+    <!-- Bottom layer -->
+    <rect x="50" y="50" width="180" height="130" rx="14" fill="#334155" opacity="0.6"/>
+    <!-- Middle layer -->
+    <rect x="30" y="30" width="180" height="130" rx="14" fill="#1e293b" opacity="0.8"/>
+    <!-- Top layer canvas -->
+    <rect x="10" y="10" width="180" height="130" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+    
+    <!-- Image photo placeholder inside top canvas: mountain & sun in Algerian colors -->
+    <circle cx="50" cy="45" r="14" fill="url(#goldGradPhoto)"/>
+    <path d="M 20 120 L 70 70 L 110 100 L 140 60 L 180 120 Z" fill="url(#neonGreenPhoto)"/>
+  </g>
+
+  <!-- Artist Palette Shape Overlaid -->
+  <g transform="translate(180, 210)" filter="url(#shadowFilterPhoto)">
+    <path d="M 90 20 C 180 20 220 80 210 140 C 200 190 150 200 120 170 C 100 150 70 170 50 180 C 10 190 -10 120 10 70 C 20 40 50 20 90 20 Z" fill="url(#paletteGrad)" stroke="#e2e8f0" stroke-width="3"/>
+    <!-- Thumb hole -->
+    <ellipse cx="140" cy="140" rx="16" ry="12" fill="#6d28d9"/>
+    
+    <!-- Color Swatches / Paint Blobs -->
+    <circle cx="60" cy="60" r="14" fill="#ef4444"/>
+    <circle cx="105" cy="48" r="14" fill="#10b981"/>
+    <circle cx="150" cy="65" r="14" fill="#3b82f6"/>
+    <circle cx="180" cy="100" r="14" fill="#fbbf24"/>
+  </g>
+
+  <!-- Digital Stylus / Paintbrush crossing diagonally -->
+  <g transform="translate(100, 360) rotate(-45)" filter="url(#shadowFilterPhoto)">
+    <!-- Wooden / Golden handle -->
+    <rect x="0" y="-8" width="180" height="16" rx="6" fill="url(#brushGrad)" stroke="#78350f" stroke-width="2"/>
+    <!-- Metal Ferrule -->
+    <rect x="180" y="-10" width="35" height="20" rx="3" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
+    <!-- Bristles tip -->
+    <path d="M 215 -10 C 235 -8 250 -4 260 0 C 250 4 235 8 215 10 Z" fill="#475569"/>
+    <!-- Paint on tip in Algerian Green -->
+    <path d="M 245 -4 C 255 -2 260 0 260 0 C 260 0 255 2 245 4 Z" fill="#10b981"/>
+  </g>
+
+  <!-- "Ph" Graphic Design Badge at top-left -->
+  <g transform="translate(86, 76)">
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#6d28d9" stroke="#ffffff" stroke-width="3" filter="url(#shadowFilterPhoto)"/>
+    <text x="28" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle">Ph</text>
+  </g>
+
+  <!-- Algerian Emblem (Crescent & Star) at bottom-right -->
+  <g transform="translate(370, 390) scale(0.68)">
+    <circle cx="0" cy="0" r="38" fill="url(#goldGradPhoto)" stroke="#ffffff" stroke-width="3" filter="url(#shadowFilterPhoto)"/>
+    <circle cx="0" cy="0" r="32" fill="#065f46"/>
+    <!-- Crescent -->
+    <path d="M 10 -16 A 18 18 0 1 0 10 16 A 14 14 0 1 1 10 -16 Z" fill="url(#crimsonRedPhoto)"/>
+    <!-- Star -->
+    <polygon points="12,-5 14,-1 18,-1 15,2 16,6 12,3 8,6 9,2 6,-1 10,-1" fill="url(#crimsonRedPhoto)"/>
+  </g>
+</svg>
