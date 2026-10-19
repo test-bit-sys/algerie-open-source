@@ -41,9 +41,20 @@ Binary investigation of VLC Media Player (`vlc.exe`, `libvlccore.dll`, and filte
   - **Synchronization**: Sub-millisecond audio and subtitle track synchronization delay/advance controls.
 - **Playback Control**: A-B repeat looping, frame-by-frame snapshot capture, and network stream playback (HTTP/HTTPS/HLS).
 
+- **Algerian Open Media Library**: Built-in 100% offline WebAudio procedural synthesizers for immediate testing:
+  - Kassaman National Anthem (Instrumental Synth with auto-synchronized Arabic lyrics)
+  - Andalusian Classical Nuba (Traditional Maqam Hijaz)
+  - 4K / 60FPS Broadcast Video & Audio Sync Test Pattern with SMPTE bars and 1kHz reference tone
+- **Subtitle Studio & Cues Editor**: In-app subtitle visual customizer (font size, color, background, outline, vertical offset) plus interactive cue search, inline editing, and instant export to `.srt` / `.vtt`.
+- **4-Mode Real-Time Audio Visualizer**: Frequency bars with color gradient, Oscilloscope waveform, Radial circular spectrum, and dual-channel Stereo VU Meter.
+- **Standalone Desktop Launcher**: Run natively via `run-player.bat` in app mode without browser URL bars.
+
 ### Running DZ-Player
 ```bash
-# Launch from repository root
+# 1-Click Desktop App (Windows)
+run-player.bat
+
+# Or launch via npm
 npm run start:player
 
 # Or run directly from app directory
@@ -61,19 +72,30 @@ Open **[http://localhost:3003](http://localhost:3003)** in your browser.
 **DZ-Player** هو مشغل وسائط متعددة عالي الأداء، مفتوح المصدر بنسبة 100% وبديل متطابق لبرنامج **VLC Media Player**. صُمم وفق معايير مشروع **HeyPuter/everything** بالاعتماد الحصري على JavaScript الصافي (Modern ES Modules) وواجهات المتصفح الحديثة (Web Audio API, Canvas 2D) دون أي مكتبات ثقيلة أو اتصال خارجي (Offline-First).
 
 ### قدرات وخصائص البرنامج المكتملة 1:1
-1. **واجهة وقوائم VLC الأصلية**: شريط قوائم علوي كامل (`Media`, `Playback`, `Audio`, `Video`, `Subtitle`, `Tools`, `View`, `Help`)، شاشة عرض داكنة بشعار المخروط، وشريط تحكم سفلي احترافي.
-2. **تضخيم الصوت الفائق حتى 300%**: شريط صوت بمؤشر رقمي حقيقي يتجاوز الحدود التقليدية ليصل إلى **300%** لمعالجة المقاطع الضعيفة عبر عقدة `GainNode`.
+1. **واجهة وقوائم VLC الأصلية**: شريط قوائم علوي كامل (`Media`, `Playback`, `Audio`, `Video`, `Subtitle`, `Tools`, `View`, `Help`)، شاشة عرض داكنة بشعار المخروط، وشريط تحكم سفلي احترافي مع إخفاء تلقائي عند ملء الشاشة.
+2. **تضخيم الصوت الفائق حتى 300%**: شريط صوت بمؤشر رقمي حقيقي يتجاوز الحدود التقليدية ليصل إلى **300%** لمعالجة المقاطع الضعيفة عبر عقدة `GainNode` مع تنبيهات لونية مرئية.
 3. **نافذة المؤثرات والمرشحات الموحدة (Ctrl+E)**:
-   - **معادل صوتي 10 حزم (Graphic Equalizer)**: ترددات قياسية (من 60Hz إلى 16kHz) مع قوالب جاهزة (Rock, Pop, Classical, Flat, Full Bass, Voice).
+   - **معادل صوتي 10 حزم (Graphic Equalizer)**: ترددات قياسية (من 60Hz إلى 16kHz) مع 17 قالباً جاهزاً (Rock, Pop, Classical, Flat, Full Bass, Voice, ...).
+   - **محلل ترددات بـ 4 أنماط**: أعمدة التردد المتدرجة، ومخطط الموجة (Oscilloscope)، والمخطط الدائري، ومقياس VU للاستريو.
    - **ضاغط الصوت الديناميكي (Audio Compressor)**: تنظيم احترافي لعتبة الصوت (Threshold)، النسبة (Ratio)، والحدة (Attack/Release).
-   - **هندسة وألوان الفيديو**: تدوير الفيديو بـ 90°/180°/270°، الانعكاس الأفقي، وضبط السطوع والتباين والتشبع ودرجة اللون.
+   - **هندسة وألوان الفيديو**: تدوير الفيديو بـ 90°/180°/270°، الانعكاس الأفقي والرأسي، ونسب الأبعاد (Auto, 16:9, 4:3, 21:9, Cover, Fill).
    - **تزامن الصوت والترجمة**: معالجة التأخير أو التقديم بالمللي ثانية لضمان التزامن السمعي البصري المثالي.
-4. **حل معضلة ترميز الترجمة العربية**: محرك ذكي يتعرف تلقائياً على بايتات الحروف العربية بترميز `Windows-1256 / CP-1256` أو `UTF-8` ويقوم بفك تشفيرها وإظهارها فوراً بخط عربي واضح مع محاذاة تلقائية لليمين (RTL).
-5. **حلقة التكرار A-B Loop**: إعادة تشغيل مقطع محدد تلقائياً عبر تحديد نقطتي البداية والنهاية.
-6. **التقاط الإطارات (Snapshots)**: حفظ لقطات شاشة نقية للإطار المعروض بدقته الأصلية كصورة PNG.
+4. **حل معضلة ترميز الترجمة العربية واستوديو التحرير**:
+   - كشف تلقائي ذكي لترميز الحواسيب القديمة `Windows-1256 / CP-1256` وتحويلها لخط عربي واضح.
+   - استوديو الترجمة: تخصيص الحجم، واللون، ونمط الخلفية (ظل، صندوق، شريط)، مع جدول تفاعلي للبحث وتعديل وتصدير نصوص SRT وVTT.
+5. **المكتبة النموذجية للوسائط الجزائرية (Offline Media)**:
+   - النشيد الوطني الجزائري (قسماً) بنغمات ونحاسيات توليدية مدمجة مع الأبيات الشعرية.
+   - نوبة أندلسية جزائرية ومقامات العود التراثية.
+   - مقطع اختبار ومزامنة الصوت والصورة بدقة 60fps ونغمة 1000Hz القياسية.
+6. **حلقة التكرار A-B Loop والإشارات المرجعية (Ctrl+B)**: تحديد علامات البداية والنهاية على شريط التمرير مع حفظ اللحظات الهامة.
+7. **التقاط الإطارات (Snapshots)**: حفظ لقطات شاشة نقية للإطار المعروض بدقته الأصلية كصورة PNG مع تطبيق التدوير والتأثيرات.
 
 ### التشغيل المباشر
 ```bash
+# تشغيل نافذة سطح المكتب المستقلة (Windows)
+run-player.bat
+
+# أو عبر npm
 npm run start:player
 ```
 افتح المتصفح على: **[http://localhost:3003](http://localhost:3003)**
@@ -87,18 +109,25 @@ npm run start:player
 **DZ-Player** est une alternative libre, moderne et performante à **VLC Media Player**. Conçu selon le standard **HeyPuter/everything**, il fonctionne de manière 100% hors-ligne (Offline-First) avec une interface trilingue (Arabe, Français, Anglais), sans aucun emoji et avec des icônes vectorielles SVG épurées.
 
 ### Fonctionnalités Clés
-- **Interface Authentique VLC** : Barre de menus complète, viewport sombre avec cône emblématique et barre de contrôle de lecture.
-- **Super-Amplification jusqu'à 300%** : Traitement via `GainNode` permettant de porter le volume sonore à 300%.
+- **Interface Authentique VLC** : Barre de menus complète, viewport sombre avec cône emblématique et barre de contrôle de lecture avec masquage automatique en plein écran.
+- **Super-Amplification jusqu'à 300%** : Traitement via `GainNode` permettant de porter le volume sonore à 300% avec alertes visuelles.
 - **Panneau Unifié des Effets (Ctrl+E)** :
-  - Égaliseur 10 bandes (60Hz à 16kHz) avec profils préconfigurés.
+  - Égaliseur 10 bandes (60Hz à 16kHz) avec 17 profils préconfigurés.
+  - Visualiseur 4 modes : Barres de fréquences, Oscilloscope, Spectre radial et VU-mètre stéréo.
   - Compresseur audio dynamique avec régulation du seuil et du ratio.
   - Géométrie vidéo (rotation 90°/180°/270°, miroir) et étalonnage des couleurs.
   - Synchronisation audio et sous-titres au millième de seconde.
-- **Détection Automatique des Sous-Titres Arabes** : Détection intelligente des encodages `Windows-1256` et `UTF-8`.
-- **Boucle A-B & Snapshots** : Répétition de segment et capture d'image haute définition en un clic.
+- **Bibliothèque Multimédia Algérienne Intégrée** : Synthèse procédurale WebAudio de l'Hymne National Kassaman, Nuba Andalouse, et mire de test vidéo 60fps.
+- **Détection Automatique & Studio des Sous-Titres Arabes** : Détection intelligente des encodages `Windows-1256` et `UTF-8`, éditeur de répliques et export SRT/VTT.
+- **Boucle A-B & Snapshots** : Répétition de segment avec drapeaux de repères et capture d'image haute définition en un clic.
 
 ### Lancement
 ```bash
+# Lanceur bureau 1-clic Windows
+run-player.bat
+
+# Ou via npm
 npm run start:player
 ```
 Disponible sur : **[http://localhost:3003](http://localhost:3003)**
+

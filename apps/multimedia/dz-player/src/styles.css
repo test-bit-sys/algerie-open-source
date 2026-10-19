@@ -827,3 +827,288 @@ body {
   font-family: var(--font-mono);
   font-size: 11px;
 }
+
+/* Timeline Markers & Tooltip */
+.progress-hover-time {
+  position: absolute;
+  top: -24px;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--border-strong);
+  color: var(--accent-color);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 60;
+}
+
+.progress-marker {
+  position: absolute;
+  top: -4px;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 55;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.progress-marker.marker-a {
+  background: var(--accent-amber);
+  color: #000000;
+}
+
+.progress-marker.marker-b {
+  background: var(--accent-emerald);
+  color: #000000;
+}
+
+/* Boosted Volume Indicator */
+.volume-slider::-webkit-slider-thumb {
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.volume-badge.boost-warning {
+  color: #f97316 !important;
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
+}
+
+.volume-badge.boost-danger {
+  color: #ef4444 !important;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.8; }
+  to { opacity: 1; }
+}
+
+/* Subtitle Styling Variants */
+.subtitle-text.size-small { font-size: 16px; }
+.subtitle-text.size-medium { font-size: 22px; }
+.subtitle-text.size-large { font-size: 28px; }
+.subtitle-text.size-huge { font-size: 36px; }
+
+.subtitle-text.bg-shadow {
+  background: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.95), 0 0 2px #000;
+}
+
+.subtitle-text.bg-semi {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(2px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.subtitle-text.bg-box {
+  background: #000000;
+  text-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.subtitle-text.bg-none {
+  background: transparent;
+  text-shadow: none;
+}
+
+/* Demo Media Library Cards Grid */
+.demo-media-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.demo-media-card {
+  background: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: start;
+}
+
+.demo-media-card:hover {
+  border-color: var(--accent-amber);
+  background: var(--bg-elevated);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.demo-card-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  align-self: flex-start;
+  margin-bottom: 8px;
+}
+
+.badge-synth {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-video {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.badge-subtitle {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.demo-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.demo-card-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+/* Subtitle Studio Table */
+.sub-studio-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sub-cues-table-wrap {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-app);
+}
+
+.sub-cues-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.sub-cues-table th {
+  background: var(--bg-elevated);
+  padding: 6px 8px;
+  text-align: start;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sub-cues-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.sub-cue-input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.sub-cue-input:focus {
+  background: var(--bg-surface);
+  border-color: var(--accent-color);
+}
+
+/* Shortcuts Reference Table */
+.shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.shortcuts-table th {
+  background: var(--bg-elevated);
+  padding: 6px 10px;
+  text-align: start;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.shortcuts-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.kbd-badge {
+  display: inline-block;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  color: var(--accent-color);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Fullscreen Autohide Mode */
+.desktop-vlc-window.fullscreen-active .vlc-menu-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  background: rgba(19, 27, 46, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+.desktop-vlc-window.fullscreen-active .vlc-controls-panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  background: rgba(19, 27, 46, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+.desktop-vlc-window.fullscreen-active.controls-hidden .vlc-menu-bar {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.desktop-vlc-window.fullscreen-active.controls-hidden .vlc-controls-panel {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.desktop-vlc-window.fullscreen-active.controls-hidden {
+  cursor: none;
+}

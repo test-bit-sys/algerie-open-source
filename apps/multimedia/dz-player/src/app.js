@@ -8,6 +8,12 @@ import { AudioEngine, VLC_EQ_PRESETS, VLC_EQ_FREQUENCIES } from './audio-engine.
 import { SubtitleEngine } from './subtitle-engine.js';
 import { VideoEffects } from './video-effects.js';
 import { Playlist } from './playlist.js';
+import {
+  generateKassamanAudioBlob,
+  generateAndalusianAudioBlob,
+  generateVideoSyncBlob,
+  getSampleWindows1256SubtitleBytes
+} from './demo-media.js';
 
 class DZPlayerApp {
   constructor() {
@@ -26,10 +32,20 @@ class DZPlayerApp {
     // Playback Speed
     this.playbackSpeed = 1.0;
 
-    // Audio / Subtitle Sync Offsets
+    // Audio Sync Offset
     this.audioDelayMs = 0;
 
-    // DOM Elements
+    // Visualizer Mode ('bars', 'wave', 'radial', 'vu')
+    this.visualizerMode = 'bars';
+    this.visualizerId = null;
+
+    // Fullscreen Inactivity Timer
+    this.fullscreenHideTimer = null;
+
+    // Current File Name
+    this.currentFileName = '';
+
+    // Init App
     this.initDOM();
     this.effects = new VideoEffects(this.dom.video, this.dom.stage);
 
@@ -37,15 +53,19 @@ class DZPlayerApp {
     this.applyLanguage(this.currentLang);
     this.initMenus();
     this.initControls();
+    this.initTimeline();
     this.initEffectsDialog();
-    this.initModals();
+    this.initSubtitleStudio();
+    this.initDemoMedia();
     this.initBookmarks();
     this.initKeyboardShortcuts();
     this.initDragAndDrop();
+    this.initFullscreenBehavior();
   }
 
   initDOM() {
     this.dom = {
+      windowRoot: document.querySelector('.desktop-vlc-window'),
       langSelect: document.getElementById('langSelect'),
       themeToggleBtn: document.getElementById('themeToggleBtn'),
 
@@ -58,11 +78,12 @@ class DZPlayerApp {
       osdBanner: document.getElementById('osd-banner'),
       centerTrackTitle: document.getElementById('centerTrackTitle'),
 
-      // File Inputs
+      // File Inputs & Empty Triggers
       fileInput: document.getElementById('file-input'),
       subInput: document.getElementById('sub-input'),
       btnEmptyOpen: document.getElementById('btn-empty-open'),
       btnEmptyNetwork: document.getElementById('btn-empty-network'),
+      btnEmptyDemo: document.getElementById('btn-empty-demo'),
 
       // Controls Bar
       btnPlay: document.getElementById('btn-play'),
@@ -71,9 +92,14 @@ class DZPlayerApp {
       btnNext: document.getElementById('btn-next'),
       btnAbLoop: document.getElementById('btn-ab-loop'),
       lblPlaybackSpeed: document.getElementById('lblPlaybackSpeed'),
+
+      // Timeline Scrubber
       progressTrack: document.getElementById('progress-track'),
       progressFill: document.getElementById('progress-fill'),
       progressBuffered: document.getElementById('progress-buffered'),
+      progressHoverTime: document.getElementById('progress-hover-time'),
+      markerA: document.getElementById('marker-a'),
+      markerB: document.getElementById('marker-b'),
       timeCurrent: document.getElementById('time-current'),
       timeDuration: document.getElementById('time-duration'),
 
@@ -92,7 +118,7 @@ class DZPlayerApp {
       playlistItems: document.getElementById('playlist-items'),
       btnClosePlaylist: document.getElementById('btnClosePlaylist'),
 
-      // Effects Dialog (Ctrl+E)
+      // Adjustments & Effects Dialog (Ctrl+E)
       modalEffectsDialog: document.getElementById('modal-effects-dialog'),
       btnCloseEffectsDialog: document.getElementById('btnCloseEffectsDialog'),
       vlcTabBtns: document.querySelectorAll('.vlc-tab-btn'),
@@ -118,7 +144,7 @@ class DZPlayerApp {
       btnFlipV: document.getElementById('btn-flipv'),
       btnResetEffects: document.getElementById('btn-reset-effects'),
 
-      // Sync Controls
+      // Sync Controls in Dialog
       valAudioSync: document.getElementById('val-audio-sync'),
       btnAudioSyncMinus50: document.getElementById('btnAudioSyncMinus50'),
       btnAudioSyncPlus50: document.getElementById('btnAudioSyncPlus50'),
@@ -141,7 +167,27 @@ class DZPlayerApp {
       btnCreateBookmark: document.getElementById('btnCreateBookmark'),
       bookmarksListContainer: document.getElementById('bookmarksListContainer'),
       btnClearAllBookmarks: document.getElementById('btnClearAllBookmarks'),
-      modalAbout: document.getElementById('modal-about')
+      modalAbout: document.getElementById('modal-about'),
+      modalDemoMedia: document.getElementById('modal-demo-media'),
+      modalSubtitleStudio: document.getElementById('modal-subtitle-studio'),
+      modalShortcuts: document.getElementById('modal-shortcuts'),
+
+      // Subtitle Studio DOM
+      subStyleSize: document.getElementById('subStyleSize'),
+      subStyleColor: document.getElementById('subStyleColor'),
+      subStyleBg: document.getElementById('subStyleBg'),
+      subStyleOffset: document.getElementById('subStyleOffset'),
+      subStyleOffsetVal: document.getElementById('subStyleOffsetVal'),
+      subSearchInput: document.getElementById('subSearchInput'),
+      subCuesTableBody: document.getElementById('subCuesTableBody'),
+      btnExportSrt: document.getElementById('btnExportSrt'),
+      btnExportVtt: document.getElementById('btnExportVtt'),
+
+      // Demo Media Card Triggers
+      btnDemoKassaman: document.getElementById('btnDemoKassaman'),
+      btnDemoAndalusian: document.getElementById('btnDemoAndalusian'),
+      btnDemoVideoSync: document.getElementById('btnDemoVideoSync'),
+      btnDemoSubtitleCp1256: document.getElementById('btnDemoSubtitleCp1256')
     };
   }
 
@@ -162,6 +208,7 @@ class DZPlayerApp {
 
   showOSD(text) {
     const banner = this.dom.osdBanner;
+    if (!banner) return;
     banner.textContent = text;
     banner.style.display = 'block';
     clearTimeout(this.osdTimer);
@@ -194,6 +241,9 @@ class DZPlayerApp {
     document.getElementById('miOpenMultiple')?.addEventListener('click', () => this.dom.fileInput.click());
     document.getElementById('miOpenNetwork')?.addEventListener('click', () => {
       this.dom.modalNetworkStream.classList.add('active');
+    });
+    document.getElementById('miOpenDemoMedia')?.addEventListener('click', () => {
+      this.dom.modalDemoMedia.classList.add('active');
     });
     document.getElementById('miSavePlaylist')?.addEventListener('click', () => this.savePlaylistM3U());
     document.getElementById('miClearPlaylist')?.addEventListener('click', () => {
@@ -243,12 +293,13 @@ class DZPlayerApp {
 
     // 5. Subtitle Menu
     document.getElementById('miAddSub')?.addEventListener('click', () => this.dom.subInput.click());
+    document.getElementById('miSubtitleStudio')?.addEventListener('click', () => this.openSubtitleStudio());
     document.getElementById('miSubEncAuto')?.addEventListener('click', () => this.changeSubtitleEncoding('auto'));
     document.getElementById('miSubEnc1256')?.addEventListener('click', () => this.changeSubtitleEncoding('windows-1256'));
     document.getElementById('miSubEncUtf8')?.addEventListener('click', () => this.changeSubtitleEncoding('utf-8'));
     document.getElementById('miSubDelay')?.addEventListener('click', () => this.adjustSubtitleSync(-50));
     document.getElementById('miSubAdvance')?.addEventListener('click', () => this.adjustSubtitleSync(50));
-    document.getElementById('miSubSettings')?.addEventListener('click', () => this.openEffectsDialog('sync'));
+    document.getElementById('miSubSettings')?.addEventListener('click', () => this.openSubtitleStudio());
 
     // 6. Tools Menu
     document.getElementById('miEffectsAndFilters')?.addEventListener('click', () => this.openEffectsDialog('audio'));
@@ -263,13 +314,16 @@ class DZPlayerApp {
     });
 
     // 8. Help Menu
+    document.getElementById('miShortcuts')?.addEventListener('click', () => {
+      this.dom.modalShortcuts.classList.add('active');
+    });
     document.getElementById('miAbout')?.addEventListener('click', () => {
       this.dom.modalAbout.classList.add('active');
     });
 
-    // Header controls
-    this.dom.langSelect.addEventListener('change', (e) => this.applyLanguage(e.target.value));
-    this.dom.themeToggleBtn.addEventListener('click', () => {
+    // Header Language & Theme Controls
+    this.dom.langSelect?.addEventListener('change', (e) => this.applyLanguage(e.target.value));
+    this.dom.themeToggleBtn?.addEventListener('click', () => {
       this.applyTheme(this.currentTheme === 'dark' ? 'light' : 'dark');
     });
   }
@@ -289,9 +343,10 @@ class DZPlayerApp {
     // Stop
     this.dom.btnStop.addEventListener('click', () => this.stop());
 
-    // Video events
+    // Video Lifecycle Events
     v.addEventListener('play', () => {
       this.updatePlayIcon(true);
+      this.audio.init(v);
       this.audio.resumeIfNeeded();
       this.startVisualizer();
     });
@@ -312,38 +367,18 @@ class DZPlayerApp {
     // A-B Loop
     this.dom.btnAbLoop.addEventListener('click', () => this.toggleAbLoop());
 
-    // Timeline Scrubbing
-    let isScrubbing = false;
-    const seek = (e) => {
-      const rect = this.dom.progressTrack.getBoundingClientRect();
-      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      if (v.duration) v.currentTime = pos * v.duration;
-    };
-
-    this.dom.progressTrack.addEventListener('mousedown', (e) => {
-      isScrubbing = true;
-      seek(e);
-    });
-    window.addEventListener('mousemove', (e) => {
-      if (isScrubbing) seek(e);
-    });
-    window.addEventListener('mouseup', () => {
-      isScrubbing = false;
-    });
-
     // Volume & 300% Boost
     this.dom.volumeSlider.addEventListener('input', (e) => {
       const val = Number(e.target.value);
       this.audio.init(v);
       this.audio.setVolume(val);
-      this.dom.volumeBadge.textContent = `${val}%`;
-      this.dom.volumeBadge.classList.toggle('boosted', val > 100);
+      this.updateVolumeUI(val);
       this.showOSD(`الصوت: ${val}%`);
     });
 
     this.dom.btnMute.addEventListener('click', () => this.toggleMute());
 
-    // Bottom Action Buttons
+    // Action Buttons
     this.dom.btnEffectsDialog.addEventListener('click', () => this.openEffectsDialog('audio'));
     this.dom.btnPlaylistToggle.addEventListener('click', () => this.togglePlaylist());
     this.dom.btnClosePlaylist.addEventListener('click', () => this.togglePlaylist(false));
@@ -356,8 +391,11 @@ class DZPlayerApp {
     this.dom.btnEmptyNetwork.addEventListener('click', () => {
       this.dom.modalNetworkStream.classList.add('active');
     });
+    this.dom.btnEmptyDemo?.addEventListener('click', () => {
+      this.dom.modalDemoMedia.classList.add('active');
+    });
 
-    // File Input
+    // File Pickers
     this.dom.fileInput.addEventListener('change', (e) => {
       if (e.target.files && e.target.files.length) {
         this.loadFiles(Array.from(e.target.files));
@@ -370,6 +408,74 @@ class DZPlayerApp {
         await this.loadSubtitleFile(e.target.files[0]);
       }
       this.dom.subInput.value = '';
+    });
+
+    // Generic Modal Close Buttons
+    document.querySelectorAll('.btn-modal-close, .close-modal-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const modal = e.target.closest('.modal-backdrop');
+        if (modal) modal.classList.remove('active');
+      });
+    });
+
+    // Network Stream Confirm
+    this.dom.btnConfirmPlayUrl?.addEventListener('click', () => {
+      const url = this.dom.inputNetworkUrl.value.trim();
+      if (!url) return;
+      this.dom.modalNetworkStream.classList.remove('active');
+      this.playUrl(url);
+    });
+  }
+
+  updateVolumeUI(val) {
+    const badge = this.dom.volumeBadge;
+    badge.textContent = `${val}%`;
+    badge.classList.remove('boost-warning', 'boost-danger');
+    if (val > 200) {
+      badge.classList.add('boost-danger');
+    } else if (val > 100) {
+      badge.classList.add('boost-warning');
+    }
+  }
+
+  initTimeline() {
+    const v = this.dom.video;
+    const track = this.dom.progressTrack;
+    const hoverTip = this.dom.progressHoverTime;
+    let isScrubbing = false;
+
+    const seek = (e) => {
+      const rect = track.getBoundingClientRect();
+      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      if (v.duration) v.currentTime = pos * v.duration;
+    };
+
+    track.addEventListener('mousedown', (e) => {
+      isScrubbing = true;
+      seek(e);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isScrubbing) seek(e);
+    });
+
+    window.addEventListener('mouseup', () => {
+      isScrubbing = false;
+    });
+
+    // Hover tooltip
+    track.addEventListener('mousemove', (e) => {
+      if (!v.duration) return;
+      const rect = track.getBoundingClientRect();
+      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const hoverSec = pos * v.duration;
+      hoverTip.textContent = this.formatTime(hoverSec);
+      hoverTip.style.left = `${pos * 100}%`;
+      hoverTip.style.display = 'block';
+    });
+
+    track.addEventListener('mouseleave', () => {
+      hoverTip.style.display = 'none';
     });
   }
 
@@ -471,14 +577,14 @@ class DZPlayerApp {
     Object.keys(VLC_EQ_PRESETS).forEach((key) => {
       const opt = document.createElement('option');
       opt.value = key;
-      opt.textContent = VLC_EQ_PRESETS[key].name;
+      opt.textContent = `${VLC_EQ_PRESETS[key].nameAr || VLC_EQ_PRESETS[key].name} (${VLC_EQ_PRESETS[key].name})`;
       sel.appendChild(opt);
     });
 
     sel.addEventListener('change', (e) => {
       this.audio.applyPreset(e.target.value);
       this.updateEqSliders();
-      this.showOSD(`EQ Preset: ${VLC_EQ_PRESETS[e.target.value].name}`);
+      this.showOSD(`EQ: ${VLC_EQ_PRESETS[e.target.value].name}`);
     });
 
     // Preamp Slider
@@ -490,7 +596,7 @@ class DZPlayerApp {
 
     // EQ Toggle
     this.dom.chkEnableEq.addEventListener('change', (e) => {
-      this.audio.toggleEq(e.target.checked);
+      this.audio.setEqEnabled(e.target.checked);
       this.showOSD(e.target.checked ? 'المعادل الصوتي: مفعل' : 'المعادل الصوتي: معطل');
     });
 
@@ -545,20 +651,310 @@ class DZPlayerApp {
     this.dom.modalEffectsDialog.classList.add('active');
   }
 
-  initModals() {
-    // Network Stream Confirm
-    this.dom.btnConfirmPlayUrl.addEventListener('click', () => {
-      const url = this.dom.inputNetworkUrl.value.trim();
-      if (!url) return;
-      this.dom.modalNetworkStream.classList.remove('active');
-      this.playUrl(url);
+  initSubtitleStudio() {
+    // Style dropdowns
+    this.dom.subStyleSize?.addEventListener('change', (e) => {
+      this.subtitle.fontSize = e.target.value;
+      this.applySubtitleStylesToDOM();
     });
 
-    // Generic Modal Close Buttons
-    document.querySelectorAll('.btn-modal-close, .close-modal-btn').forEach((btn) => {
+    this.dom.subStyleColor?.addEventListener('change', (e) => {
+      this.subtitle.textColor = e.target.value;
+      this.applySubtitleStylesToDOM();
+    });
+
+    this.dom.subStyleBg?.addEventListener('change', (e) => {
+      this.subtitle.bgStyle = e.target.value;
+      this.applySubtitleStylesToDOM();
+    });
+
+    this.dom.subStyleOffset?.addEventListener('input', (e) => {
+      const px = Number(e.target.value);
+      this.subtitle.bottomOffsetPx = px;
+      if (this.dom.subStyleOffsetVal) this.dom.subStyleOffsetVal.textContent = `${px}px`;
+      this.applySubtitleStylesToDOM();
+    });
+
+    // Cue Search Filter
+    this.dom.subSearchInput?.addEventListener('input', (e) => {
+      this.renderSubtitleStudioCues(e.target.value);
+    });
+
+    // Export SRT
+    this.dom.btnExportSrt?.addEventListener('click', () => {
+      const text = this.subtitle.exportSRT();
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${this.currentFileName || 'subtitles'}.srt`;
+      a.click();
+      this.showOSD('تم تصدير ملف SRT بنجاح');
+    });
+
+    // Export VTT
+    this.dom.btnExportVtt?.addEventListener('click', () => {
+      const text = this.subtitle.exportVTT();
+      const blob = new Blob([text], { type: 'text/vtt;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${this.currentFileName || 'subtitles'}.vtt`;
+      a.click();
+      this.showOSD('تم تصدير ملف WebVTT بنجاح');
+    });
+  }
+
+  applySubtitleStylesToDOM() {
+    const el = this.dom.subtitleText;
+    const overlay = this.dom.subtitleOverlay;
+    if (!el || !overlay) return;
+
+    el.className = `subtitle-text size-${this.subtitle.fontSize} bg-${this.subtitle.bgStyle}`;
+    el.style.color = this.subtitle.textColor;
+    overlay.style.bottom = `${this.subtitle.bottomOffsetPx}px`;
+  }
+
+  openSubtitleStudio() {
+    this.renderSubtitleStudioCues();
+    this.dom.modalSubtitleStudio.classList.add('active');
+  }
+
+  renderSubtitleStudioCues(filterQuery = '') {
+    const tbody = this.dom.subCuesTableBody;
+    if (!tbody) return;
+
+    const query = (filterQuery || '').trim().toLowerCase();
+    const cues = query
+      ? this.subtitle.cues.filter((c) => c.text.toLowerCase().includes(query))
+      : this.subtitle.cues;
+
+    if (!cues.length) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">${query ? 'لا توجد نتائج مطابقة للبحث' : 'لم يتم تحميل أي ملف ترجمة بعد'}</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = cues
+      .map(
+        (c) => `
+        <tr data-cue-id="${c.id}">
+          <td style="color:var(--text-muted); font-family:var(--font-mono);">${c.id}</td>
+          <td style="font-family:var(--font-mono); font-size:10px; color:var(--accent-color); white-space:nowrap;">
+            ${this.formatTime(c.start)} → ${this.formatTime(c.end)}
+          </td>
+          <td>
+            <input type="text" class="sub-cue-input" value="${c.text.replace(/"/g, '&quot;')}" data-edit-cue="${c.id}">
+          </td>
+          <td style="text-align:center;">
+            <button class="btn-secondary btn-cue-seek" data-time="${c.start}" style="font-size:10px; padding:2px 6px;">قفز</button>
+          </td>
+        </tr>
+      `
+      )
+      .join('');
+
+    // Seek buttons
+    tbody.querySelectorAll('.btn-cue-seek').forEach((btn) => {
       btn.addEventListener('click', (e) => {
-        const modal = e.target.closest('.modal-backdrop');
-        if (modal) modal.classList.remove('active');
+        const t = parseFloat(e.target.getAttribute('data-time'));
+        this.dom.video.currentTime = t;
+        this.showOSD(`قفز إلى: ${this.formatTime(t)}`);
+      });
+    });
+
+    // Inline edit inputs
+    tbody.querySelectorAll('.sub-cue-input').forEach((input) => {
+      input.addEventListener('change', (e) => {
+        const cueId = parseInt(e.target.getAttribute('data-edit-cue'), 10);
+        this.subtitle.updateCueText(cueId, e.target.value);
+        this.showOSD('تم تحديث سطر الترجمة');
+      });
+    });
+  }
+
+  initDemoMedia() {
+    // 1. Kassaman Anthem Synth
+    this.dom.btnDemoKassaman?.addEventListener('click', async () => {
+      this.dom.modalDemoMedia.classList.remove('active');
+      this.showOSD('جارٍ توليد النشيد الوطني الجزائري (قسماً)...');
+      try {
+        const wavBlob = await generateKassamanAudioBlob();
+        if (wavBlob) {
+          const url = URL.createObjectURL(wavBlob);
+          this.playlist.addItem({
+            name: 'النشيد الوطني الجزائري — قسماً (Kassaman Official Instrumental)',
+            url: url,
+            isAudio: true,
+            size: wavBlob.size,
+            duration: 22
+          });
+          this.currentFileName = 'kassaman_anthem.wav';
+          this.renderPlaylistUI();
+          this.playTrack(this.playlist.items.length - 1);
+
+          // Auto-load matching Algerian Arabic subtitles
+          const sampleSrt = SubtitleEngine.getSampleAlgerianSubtitles();
+          this.subtitle.loadFromText(sampleSrt, 'kassaman_lyrics.srt');
+          this.dom.detectedEncodingBadge.textContent = 'UTF-8';
+          this.dom.subtitleOverlay.style.display = 'flex';
+          this.applySubtitleStylesToDOM();
+          this.showOSD('تم تشغيل النشيد وتحميل كلمات قسماً بالترجمة العربية');
+        }
+      } catch (err) {
+        console.error('Kassaman generation error:', err);
+      }
+    });
+
+    // 2. Andalusian Classical Nuba Synth
+    this.dom.btnDemoAndalusian?.addEventListener('click', async () => {
+      this.dom.modalDemoMedia.classList.remove('active');
+      this.showOSD('جارٍ توليد النوبة الأندلسية الجزائرية...');
+      try {
+        const wavBlob = await generateAndalusianAudioBlob();
+        if (wavBlob) {
+          const url = URL.createObjectURL(wavBlob);
+          this.playlist.addItem({
+            name: 'نوبة أندلسية جزائرية (Andalusian Classical Nuba - WebAudio Synth)',
+            url: url,
+            isAudio: true,
+            size: wavBlob.size,
+            duration: 18
+          });
+          this.currentFileName = 'andalusian_nuba.wav';
+          this.renderPlaylistUI();
+          this.playTrack(this.playlist.items.length - 1);
+          this.showOSD('تم تشغيل المقطوعة التراثية الأندلسية');
+        }
+      } catch (err) {
+        console.error('Andalusian generation error:', err);
+      }
+    });
+
+    // 3. 60FPS Video/Audio Sync Broadcast Test Pattern
+    this.dom.btnDemoVideoSync?.addEventListener('click', async () => {
+      this.dom.modalDemoMedia.classList.remove('active');
+      this.showOSD('جارٍ توليد مقطع اختبار الشاشة والمزامنة 60fps...');
+      try {
+        const videoBlob = await generateVideoSyncBlob();
+        if (videoBlob) {
+          const url = URL.createObjectURL(videoBlob);
+          this.playlist.addItem({
+            name: 'مقطع اختبار الشاشة ومزامنة الصوت 60fps (A/V Sync Broadcast Pattern)',
+            url: url,
+            isVideo: true,
+            size: videoBlob.size,
+            duration: 10
+          });
+          this.currentFileName = 'av_sync_test_60fps.webm';
+          this.renderPlaylistUI();
+          this.playTrack(this.playlist.items.length - 1);
+          this.showOSD('تم تشغيل مقطع اختبار الفيديو والمزامنة');
+        }
+      } catch (err) {
+        console.error('Video sync generation error:', err);
+      }
+    });
+
+    // 4. Windows-1256 Subtitle Mojibake Test
+    this.dom.btnDemoSubtitleCp1256?.addEventListener('click', async () => {
+      this.dom.modalDemoMedia.classList.remove('active');
+      const bytes = getSampleWindows1256SubtitleBytes();
+      const res = await this.subtitle.loadFromBuffer(bytes.buffer, 'sample_windows_1256.srt', 'auto');
+      this.dom.detectedEncodingBadge.textContent = res.encoding;
+      this.dom.subtitleOverlay.style.display = 'flex';
+      this.applySubtitleStylesToDOM();
+      this.showOSD(`تم حل تشفير الترجمة بنجاح! الترميز المكتشف: ${res.encoding}`);
+    });
+  }
+
+  initBookmarks() {
+    this.bookmarks = [];
+    this.loadBookmarks();
+
+    this.dom.btnCreateBookmark?.addEventListener('click', () => this.createBookmark());
+    this.dom.btnClearAllBookmarks?.addEventListener('click', () => this.clearAllBookmarks());
+  }
+
+  openBookmarksModal() {
+    this.loadBookmarks();
+    this.renderBookmarks();
+    this.dom.modalBookmarks.classList.add('active');
+    this.dom.bmTitleInput.value = '';
+    this.dom.bmTitleInput.focus();
+  }
+
+  loadBookmarks() {
+    const key = `dz_player_bm_${this.currentFileName || 'default'}`;
+    try {
+      this.bookmarks = JSON.parse(localStorage.getItem(key) || '[]');
+    } catch {
+      this.bookmarks = [];
+    }
+  }
+
+  saveBookmarks() {
+    const key = `dz_player_bm_${this.currentFileName || 'default'}`;
+    localStorage.setItem(key, JSON.stringify(this.bookmarks));
+  }
+
+  createBookmark() {
+    const curTime = this.dom.video.currentTime || 0;
+    const title = this.dom.bmTitleInput.value.trim() || `علامة عند ${this.formatTime(curTime)}`;
+    this.bookmarks.push({ id: Date.now(), title, time: curTime });
+    this.saveBookmarks();
+    this.renderBookmarks();
+    this.dom.bmTitleInput.value = '';
+    this.showOSD(`تم حفظ الإشارة: ${title}`);
+  }
+
+  deleteBookmark(id) {
+    this.bookmarks = this.bookmarks.filter((b) => b.id !== id);
+    this.saveBookmarks();
+    this.renderBookmarks();
+  }
+
+  clearAllBookmarks() {
+    if (confirm(this.currentLang === 'ar' ? 'هل تريد حذف كافة الإشارات المرجعية؟' : 'Delete all bookmarks?')) {
+      this.bookmarks = [];
+      this.saveBookmarks();
+      this.renderBookmarks();
+    }
+  }
+
+  renderBookmarks() {
+    const c = this.dom.bookmarksListContainer;
+    if (!c) return;
+    if (this.bookmarks.length === 0) {
+      c.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:24px 0;">لا توجد إشارات مرجعية مسجلة لهذا المقطع</div>';
+      return;
+    }
+
+    c.innerHTML = this.bookmarks
+      .map(
+        (b) => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 8px; border-bottom:1px solid var(--border-color);">
+          <div style="cursor:pointer; flex:1;" data-jump="${b.time}" class="bm-jump-item">
+            <strong style="color:var(--accent-amber); margin-inline-end:8px;">[${this.formatTime(b.time)}]</strong>
+            <span>${b.title}</span>
+          </div>
+          <button data-del="${b.id}" class="btn-icon-small bm-del-item" style="color:var(--accent-rose);">&times;</button>
+        </div>
+      `
+      )
+      .join('');
+
+    c.querySelectorAll('.bm-jump-item').forEach((el) => {
+      el.addEventListener('click', () => {
+        const t = parseFloat(el.getAttribute('data-jump'));
+        this.dom.video.currentTime = t;
+        this.dom.modalBookmarks.classList.remove('active');
+        this.showOSD(`قفز إلى: ${this.formatTime(t)}`);
+      });
+    });
+
+    c.querySelectorAll('.bm-del-item').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.getAttribute('data-del'), 10);
+        this.deleteBookmark(id);
       });
     });
   }
@@ -600,13 +996,13 @@ class DZPlayerApp {
       } else if (e.key.toLowerCase() === 'e') {
         e.preventDefault();
         this.stepFrame();
-      } else if (e.key === ']' ) {
+      } else if (e.key === ']') {
         e.preventDefault();
         this.changeSpeed(0.25);
-      } else if (e.key === '[' ) {
+      } else if (e.key === '[') {
         e.preventDefault();
         this.changeSpeed(-0.25);
-      } else if (e.key === '=' ) {
+      } else if (e.key === '=') {
         e.preventDefault();
         this.setSpeed(1.0);
       } else if (e.shiftKey && e.key.toLowerCase() === 's') {
@@ -670,6 +1066,40 @@ class DZPlayerApp {
     });
   }
 
+  initFullscreenBehavior() {
+    const stage = this.dom.stage;
+    const root = this.dom.windowRoot;
+
+    // Double click on video to toggle fullscreen
+    this.dom.video.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      this.toggleFullscreen();
+    });
+
+    // Fullscreen change listener
+    document.addEventListener('fullscreenchange', () => {
+      const isFs = !!document.fullscreenElement;
+      root.classList.toggle('fullscreen-active', isFs);
+      if (!isFs) {
+        root.classList.remove('controls-hidden');
+        clearTimeout(this.fullscreenHideTimer);
+      }
+    });
+
+    // Inactivity autohide
+    window.addEventListener('mousemove', () => {
+      if (document.fullscreenElement) {
+        root.classList.remove('controls-hidden');
+        clearTimeout(this.fullscreenHideTimer);
+        this.fullscreenHideTimer = setTimeout(() => {
+          if (document.fullscreenElement && !this.dom.video.paused) {
+            root.classList.add('controls-hidden');
+          }
+        }, 2500);
+      }
+    });
+  }
+
   // Playback Operations
   togglePlay() {
     const v = this.dom.video;
@@ -678,7 +1108,9 @@ class DZPlayerApp {
       return;
     }
     if (v.paused) {
-      v.play();
+      this.audio.init(v);
+      this.audio.resumeIfNeeded();
+      v.play().catch(() => {});
     } else {
       v.pause();
     }
@@ -719,22 +1151,37 @@ class DZPlayerApp {
 
   toggleAbLoop() {
     const cur = this.dom.video.currentTime;
+    const dur = this.dom.video.duration || 1;
+
     if (!this.abLoop.a) {
       this.abLoop.a = cur;
       this.showOSD(`نقطة البداية A: ${this.formatTime(cur)}`);
       this.dom.btnAbLoop.classList.add('active-loop');
+      if (this.dom.markerA) {
+        this.dom.markerA.style.left = `${(cur / dur) * 100}%`;
+        this.dom.markerA.style.display = 'flex';
+      }
     } else if (!this.abLoop.b) {
       if (cur > this.abLoop.a) {
         this.abLoop.b = cur;
         this.abLoop.active = true;
         this.showOSD(`تكرار A-B مفعّل (${this.formatTime(this.abLoop.a)} -> ${this.formatTime(this.abLoop.b)})`);
+        if (this.dom.markerB) {
+          this.dom.markerB.style.left = `${(cur / dur) * 100}%`;
+          this.dom.markerB.style.display = 'flex';
+        }
       } else {
         this.abLoop.a = cur;
         this.showOSD(`تم تعديل نقطة البداية A: ${this.formatTime(cur)}`);
+        if (this.dom.markerA) {
+          this.dom.markerA.style.left = `${(cur / dur) * 100}%`;
+        }
       }
     } else {
       this.abLoop = { a: null, b: null, active: false };
       this.dom.btnAbLoop.classList.remove('active-loop');
+      if (this.dom.markerA) this.dom.markerA.style.display = 'none';
+      if (this.dom.markerB) this.dom.markerB.style.display = 'none';
       this.showOSD('إلغاء تكرار A-B');
     }
   }
@@ -744,8 +1191,7 @@ class DZPlayerApp {
     this.audio.init(this.dom.video);
     this.audio.setVolume(next);
     this.dom.volumeSlider.value = next;
-    this.dom.volumeBadge.textContent = `${next}%`;
-    this.dom.volumeBadge.classList.toggle('boosted', next > 100);
+    this.updateVolumeUI(next);
     this.showOSD(`الصوت: ${next}%`);
   }
 
@@ -753,7 +1199,7 @@ class DZPlayerApp {
     this.audio.init(this.dom.video);
     const isMuted = this.audio.toggleMute();
     this.dom.volumeSlider.value = isMuted ? 0 : this.audio.volumePercent;
-    this.dom.volumeBadge.textContent = isMuted ? '0%' : `${this.audio.volumePercent}%`;
+    this.updateVolumeUI(isMuted ? 0 : this.audio.volumePercent);
     this.showOSD(isMuted ? 'كتم الصوت (Muted)' : `الصوت: ${this.audio.volumePercent}%`);
   }
 
@@ -773,7 +1219,7 @@ class DZPlayerApp {
   }
 
   takeSnapshot() {
-    const snap = this.effects.captureSnapshot('vlc_snapshot');
+    const snap = this.effects.captureSnapshot('dz_player_snapshot');
     if (snap) this.showOSD('تم حفظ لقطة الشاشة (Snapshot Saved)');
   }
 
@@ -787,9 +1233,9 @@ class DZPlayerApp {
   }
 
   toggleFullscreen() {
-    const stage = this.dom.stage;
+    const root = this.dom.windowRoot;
     if (!document.fullscreenElement) {
-      stage.requestFullscreen?.().catch(() => {});
+      root.requestFullscreen?.().catch(() => {});
     } else {
       document.exitFullscreen?.().catch(() => {});
     }
@@ -824,13 +1270,14 @@ class DZPlayerApp {
     const body = this.dom.mediaInfoBody;
 
     const dur = v.duration ? this.formatTime(v.duration) : '-';
-    const res = v.videoWidth ? `${v.videoWidth} x ${v.videoHeight}` : 'Audio Only';
+    const res = v.videoWidth ? `${v.videoWidth} x ${v.videoHeight}` : 'Audio Stream / Voice';
+    const sampleRate = this.audio.audioCtx ? `${this.audio.audioCtx.sampleRate} Hz` : '44100 Hz';
 
     body.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
         <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding:4px 0;">
           <span style="color:var(--text-secondary);">Title / Name:</span>
-          <span class="cell-mono" style="font-weight:700;">${cur ? cur.name : 'Stream / Direct'}</span>
+          <span class="cell-mono" style="font-weight:700;">${cur ? cur.name : 'Direct Stream'}</span>
         </div>
         <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding:4px 0;">
           <span style="color:var(--text-secondary);">Duration:</span>
@@ -839,6 +1286,10 @@ class DZPlayerApp {
         <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding:4px 0;">
           <span style="color:var(--text-secondary);">Resolution:</span>
           <span class="cell-mono">${res}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding:4px 0;">
+          <span style="color:var(--text-secondary);">Audio Sample Rate:</span>
+          <span class="cell-mono">${sampleRate}</span>
         </div>
         <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding:4px 0;">
           <span style="color:var(--text-secondary);">Playback Speed:</span>
@@ -860,15 +1311,7 @@ class DZPlayerApp {
 
   // Files & Playlist Loading
   loadFiles(fileArray) {
-    fileArray.forEach((f) => {
-      const url = URL.createObjectURL(f);
-      this.playlist.addItem({
-        name: f.name,
-        url: url,
-        type: f.type
-      });
-    });
-
+    this.playlist.addFiles(fileArray);
     this.renderPlaylistUI();
     if (!this.dom.video.src && this.playlist.items.length) {
       this.playTrack(0);
@@ -890,8 +1333,13 @@ class DZPlayerApp {
     if (!item) return;
 
     this.playlist.currentIndex = index;
+    this.currentFileName = item.name;
     const v = this.dom.video;
+
     v.src = item.url;
+    this.audio.init(v);
+    this.audio.resumeIfNeeded();
+
     v.play().catch(() => {});
 
     this.dom.emptyState.classList.add('hidden');
@@ -915,6 +1363,7 @@ class DZPlayerApp {
     const res = await this.subtitle.loadFromBuffer(buf, file.name);
     this.dom.detectedEncodingBadge.textContent = res.encoding;
     this.dom.subtitleOverlay.style.display = 'flex';
+    this.applySubtitleStylesToDOM();
     this.showOSD(`تم تحميل الترجمة (${res.cuesCount} سطراً - ${res.encoding})`);
   }
 
@@ -931,25 +1380,39 @@ class DZPlayerApp {
       const li = document.createElement('li');
       li.className = `playlist-item ${idx === this.playlist.currentIndex ? 'active' : ''}`;
       li.innerHTML = `
-        <span style="overflow:hidden; text-overflow:ellipsis; max-width:240px;">${item.name}</span>
-        <span style="font-size:10px; color:var(--text-muted);">${idx + 1}</span>
+        <span style="overflow:hidden; text-overflow:ellipsis; max-width:210px; white-space:nowrap;">${item.name}</span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:10px; color:var(--text-muted);">${item.sizeFormatted || ''}</span>
+          <button class="btn-icon-small btn-del-playlist-item" data-index="${idx}" style="color:var(--text-muted); font-size:14px;">&times;</button>
+        </div>
       `;
-      li.addEventListener('click', () => this.playTrack(idx));
+      li.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-del-playlist-item')) return;
+        this.playTrack(idx);
+      });
       ul.appendChild(li);
+    });
+
+    // Delete item listener
+    ul.querySelectorAll('.btn-del-playlist-item').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.getAttribute('data-index'), 10);
+        this.playlist.remove(idx);
+        this.renderPlaylistUI();
+      });
     });
   }
 
   savePlaylistM3U() {
     if (!this.playlist.items.length) return;
-    let m3u = '#EXTM3U\n';
-    this.playlist.items.forEach((item) => {
-      m3u += `#EXTINF:-1,${item.name}\n${item.url}\n`;
-    });
+    const m3u = this.playlist.exportM3U();
     const blob = new Blob([m3u], { type: 'audio/x-mpegurl' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'playlist.m3u';
     a.click();
+    this.showOSD('تم حفظ قائمة التشغيل بصيغة M3U');
   }
 
   // Event callbacks
@@ -972,6 +1435,7 @@ class DZPlayerApp {
     if (cue) {
       this.dom.subtitleText.innerHTML = cue.text.replace(/\n/g, '<br>');
       this.dom.subtitleOverlay.style.display = 'flex';
+      this.dom.subtitleText.dir = cue.isRtl ? 'rtl' : 'ltr';
     } else {
       this.dom.subtitleOverlay.style.display = 'none';
     }
@@ -1001,25 +1465,25 @@ class DZPlayerApp {
     return `${String(remM).padStart(2, '0')}:${String(remS).padStart(2, '0')}`;
   }
 
-  // Audio Visualizer
+  // Multi-Mode Audio Visualizer
   startVisualizer() {
     if (!this.audio.analyserNode) return;
     const canvas = this.dom.visualizerCanvas;
     const ctx = canvas.getContext('2d');
     const freqBuffer = this.audio.frequencyBuffer;
     const waveBuffer = this.audio.waveformBuffer || new Uint8Array(this.audio.analyserNode.fftSize);
-    this.visualizerMode = this.visualizerMode || 'bars';
 
     if (!this._visualizerClickBound) {
       this._visualizerClickBound = true;
       canvas.addEventListener('click', () => {
-        const modes = ['bars', 'wave', 'radial'];
+        const modes = ['bars', 'wave', 'radial', 'vu'];
         const nextIdx = (modes.indexOf(this.visualizerMode) + 1) % modes.length;
         this.visualizerMode = modes[nextIdx];
-        const names = { 
-          bars: this.currentLang === 'ar' ? 'أعمدة التردد (Bars)' : 'Barres de fréquences', 
-          wave: this.currentLang === 'ar' ? 'مخطط الإشارة (Waveform)' : 'Oscilloscope', 
-          radial: this.currentLang === 'ar' ? 'المخطط الدائري (Radial)' : 'Spectre circulaire' 
+        const names = {
+          bars: this.currentLang === 'ar' ? 'أعمدة التردد (Frequency Bars)' : 'Barres de fréquences',
+          wave: this.currentLang === 'ar' ? 'مخطط الإشارة (Oscilloscope)' : 'Oscilloscope',
+          radial: this.currentLang === 'ar' ? 'المخطط الدائري (Radial Spectrum)' : 'Spectre circulaire',
+          vu: this.currentLang === 'ar' ? 'مقياس الصوت المزدوج (Stereo VU Meter)' : 'VU-mètre stéréo'
         };
         this.showOSD(`نمط المرئيات: ${names[this.visualizerMode]}`);
       });
@@ -1070,6 +1534,38 @@ class DZPlayerApp {
           ctx.lineTo(x2, y2);
           ctx.stroke();
         }
+      } else if (this.visualizerMode === 'vu') {
+        // Stereo Left / Right VU Meter
+        const levels = this.audio.getVuLevels();
+        const barH = 16;
+        const pad = 12;
+
+        // Channel Labels
+        ctx.font = '700 10px monospace';
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText('L', pad, pad + 12);
+        ctx.fillText('R', pad, pad + barH + 16);
+
+        // Left Meter
+        const maxW = canvas.width - pad * 2 - 24;
+        const leftW = levels.left * maxW;
+        const rightW = levels.right * maxW;
+
+        const gradL = ctx.createLinearGradient(pad + 20, 0, pad + 20 + maxW, 0);
+        gradL.addColorStop(0, '#10b981');
+        gradL.addColorStop(0.7, '#facc15');
+        gradL.addColorStop(0.9, '#ef4444');
+
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(pad + 20, pad, maxW, barH);
+        ctx.fillStyle = gradL;
+        ctx.fillRect(pad + 20, pad, leftW, barH);
+
+        // Right Meter
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(pad + 20, pad + barH + 6, maxW, barH);
+        ctx.fillStyle = gradL;
+        ctx.fillRect(pad + 20, pad + barH + 6, rightW, barH);
       } else {
         // Default: bars
         this.audio.analyserNode.getByteFrequencyData(freqBuffer);
@@ -1092,102 +1588,6 @@ class DZPlayerApp {
 
   stopVisualizer() {
     if (this.visualizerId) cancelAnimationFrame(this.visualizerId);
-  }
-
-  adjustAudioDelay(delta) {
-    this.audioDelayMs = (this.audioDelayMs || 0) + delta;
-    if (this.dom.valAudioSync) this.dom.valAudioSync.textContent = `${this.audioDelayMs > 0 ? '+' : ''}${this.audioDelayMs} ms`;
-    this.showOSD(`تأخير الصوت: ${this.audioDelayMs > 0 ? '+' : ''}${this.audioDelayMs} ms`);
-  }
-
-  initBookmarks() {
-    this.bookmarks = [];
-    this.loadBookmarks();
-
-    this.dom.btnCreateBookmark?.addEventListener('click', () => this.createBookmark());
-    this.dom.btnClearAllBookmarks?.addEventListener('click', () => this.clearAllBookmarks());
-  }
-
-  openBookmarksModal() {
-    this.loadBookmarks();
-    this.renderBookmarks();
-    this.dom.modalBookmarks.classList.add('active');
-    this.dom.bmTitleInput.value = '';
-    this.dom.bmTitleInput.focus();
-  }
-
-  loadBookmarks() {
-    const key = `dz_player_bm_${this.currentFileName || 'default'}`;
-    try {
-      this.bookmarks = JSON.parse(localStorage.getItem(key) || '[]');
-    } catch {
-      this.bookmarks = [];
-    }
-  }
-
-  saveBookmarks() {
-    const key = `dz_player_bm_${this.currentFileName || 'default'}`;
-    localStorage.setItem(key, JSON.stringify(this.bookmarks));
-  }
-
-  createBookmark() {
-    const curTime = this.dom.video.currentTime || 0;
-    const title = this.dom.bmTitleInput.value.trim() || `علامة عند ${this.formatTime(curTime)}`;
-    this.bookmarks.push({ id: Date.now(), title, time: curTime });
-    this.saveBookmarks();
-    this.renderBookmarks();
-    this.dom.bmTitleInput.value = '';
-    this.showOSD(`تم حفظ الإشارة: ${title}`);
-  }
-
-  deleteBookmark(id) {
-    this.bookmarks = this.bookmarks.filter(b => b.id !== id);
-    this.saveBookmarks();
-    this.renderBookmarks();
-  }
-
-  clearAllBookmarks() {
-    if (confirm(this.currentLang === 'ar' ? 'هل تريد حذف كافة الإشارات المرجعية؟' : 'Delete all bookmarks?')) {
-      this.bookmarks = [];
-      this.saveBookmarks();
-      this.renderBookmarks();
-    }
-  }
-
-  renderBookmarks() {
-    const c = this.dom.bookmarksListContainer;
-    if (!c) return;
-    if (this.bookmarks.length === 0) {
-      c.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:24px 0;">لا توجد إشارات مرجعية مسجلة لهذا المقطع</div>';
-      return;
-    }
-
-    c.innerHTML = this.bookmarks.map(b => `
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 8px; border-bottom:1px solid var(--border-color);">
-        <div style="cursor:pointer; flex:1;" data-jump="${b.time}" class="bm-jump-item">
-          <strong style="color:var(--accent-orange); margin-inline-end:8px;">[${this.formatTime(b.time)}]</strong>
-          <span>${b.title}</span>
-        </div>
-        <button data-del="${b.id}" class="btn-icon-small bm-del-item" style="color:var(--accent-rose);">&times;</button>
-      </div>
-    `).join('');
-
-    c.querySelectorAll('.bm-jump-item').forEach(el => {
-      el.addEventListener('click', () => {
-        const t = parseFloat(el.getAttribute('data-jump'));
-        this.dom.video.currentTime = t;
-        this.dom.modalBookmarks.classList.remove('active');
-        this.showOSD(`قفز إلى: ${this.formatTime(t)}`);
-      });
-    });
-
-    c.querySelectorAll('.bm-del-item').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = parseInt(btn.getAttribute('data-del'));
-        this.deleteBookmark(id);
-      });
-    });
   }
 }
 

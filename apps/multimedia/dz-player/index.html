@@ -29,6 +29,7 @@
             <button class="dropdown-item" id="miOpenFile">فتح ملف... (Ctrl+O)</button>
             <button class="dropdown-item" id="miOpenMultiple">فتح ملفات متعددة...</button>
             <button class="dropdown-item" id="miOpenNetwork">فتح تدفق شبكي... (Ctrl+N)</button>
+            <button class="dropdown-item" id="miOpenDemoMedia" style="color:var(--accent-amber); font-weight:700;">المكتبة النموذجية الجزائرية (Demo Media)...</button>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" id="miSavePlaylist">حفظ قائمة التشغيل إلى ملف...</button>
             <button class="dropdown-item" id="miClearPlaylist">مسح قائمة التشغيل</button>
@@ -99,6 +100,7 @@
           <button class="menu-btn" id="mSubtitle">ترجمة (Subtitle)</button>
           <div class="dropdown-menu" id="mSubtitleMenu">
             <button class="dropdown-item" id="miAddSub">إضافة ملف ترجمة... (Add Subtitle)</button>
+            <button class="dropdown-item" id="miSubtitleStudio" style="color:var(--accent-color); font-weight:700;">استوديو وتحرير الترجمة (Subtitle Studio)...</button>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" id="miSubEncAuto">ترميز تلقائي ذكي (Smart Windows-1256 / UTF-8)</button>
             <button class="dropdown-item" id="miSubEnc1256">ترميز عربي قديم (Windows-1256)</button>
@@ -135,6 +137,7 @@
         <div class="menu-dropdown-wrap">
           <button class="menu-btn" id="mHelp">مساعدة (Help)</button>
           <div class="dropdown-menu" id="mHelpMenu">
+            <button class="dropdown-item" id="miShortcuts">اختصارات لوحة المفاتيح (Shortcuts)...</button>
             <button class="dropdown-item" id="miAbout">حول DZ-Player (About)...</button>
           </div>
         </div>
@@ -189,7 +192,7 @@
           <p class="empty-subtitle" data-i18n="dropSubtitle">
             مشغل وسائط عالي الأداء مع معادل صوتي بـ 10 نطاقات، وتضخيم صوتي حتى 300%، وحل ترميز الترجمات العربية (Windows-1256).
           </p>
-          <div style="display:flex; gap:10px; margin-top:14px;">
+          <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:14px;">
             <button class="btn-primary" id="btn-empty-open">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
@@ -203,6 +206,12 @@
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
               </svg>
               <span>تدفق شبكي (URL Stream)</span>
+            </button>
+            <button class="btn-secondary" id="btn-empty-demo" style="border-color:var(--accent-amber); color:var(--accent-amber); font-weight:700;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>المكتبة النموذجية الجزائرية (Demo Media)</span>
             </button>
           </div>
         </div>
@@ -233,10 +242,13 @@
       <div class="timeline-row">
         <span class="time-label" id="time-current">00:00</span>
         <div class="progress-track" id="progress-track">
+          <div class="progress-hover-time" id="progress-hover-time" style="display:none;">00:00</div>
           <div class="progress-buffered" id="progress-buffered"></div>
           <div class="progress-fill" id="progress-fill">
             <div class="progress-scrubber"></div>
           </div>
+          <div class="progress-marker marker-a" id="marker-a" style="display:none;">A</div>
+          <div class="progress-marker marker-b" id="marker-b" style="display:none;">B</div>
         </div>
         <span class="time-label" id="time-duration">00:00</span>
       </div>
@@ -615,6 +627,205 @@
         </div>
       </div>
       <div class="modal-footer" style="justify-content:center;">
+        <button class="btn-primary close-modal-btn">موافق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Algerian Demo Media Library -->
+  <div class="modal-backdrop" id="modal-demo-media">
+    <div class="modal-dialog" style="max-width:620px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent-amber);">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <h3 style="margin:0;">المكتبة النموذجية للوسائط الجزائرية (Algerian Demo Library)</h3>
+        </div>
+        <button class="btn-icon-small btn-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:11px; color:var(--text-secondary); margin-bottom:14px; line-height:1.5;">
+          عينات وسائط صوتية وبصرية توليدية جاهزة 100% دون إنترنت لاختبار المعادل الصوتي (EQ)، وتضخيم 300%، وتأثيرات الفيديو، وكاشف ترميز الترجمة العربية.
+        </p>
+        <div class="demo-media-grid">
+          <!-- Card 1: Kassaman Anthem -->
+          <div class="demo-media-card" id="btnDemoKassaman">
+            <div>
+              <span class="demo-card-badge badge-synth">نغمات ونحاسيات توليدية (WebAudio Synth)</span>
+              <h4 class="demo-card-title">النشيد الوطني الجزائري — قسماً</h4>
+              <p class="demo-card-desc">مقطع موسيقي رسمي توليدي مع إدراج تلقائي لترجمة الأبيات الشعرية لمفدي زكريا.</p>
+            </div>
+            <button class="btn-primary" style="align-self:flex-start; font-size:11px; padding:4px 10px;">تشغيل النشيد (Play)</button>
+          </div>
+
+          <!-- Card 2: Andalusian Nuba -->
+          <div class="demo-media-card" id="btnDemoAndalusian">
+            <div>
+              <span class="demo-card-badge badge-synth">تراث جزائري أصيل (Maqam Hijaz)</span>
+              <h4 class="demo-card-title">نوبة أندلسية جزائرية</h4>
+              <p class="demo-card-desc">معزوفة تراثية على مقامات الأندلسي والعود لاختبار ترددات المعادل ووضوح الصوت.</p>
+            </div>
+            <button class="btn-secondary" style="align-self:flex-start; font-size:11px; padding:4px 10px;">تشغيل المعزوفة</button>
+          </div>
+
+          <!-- Card 3: 60FPS Video/Audio Sync -->
+          <div class="demo-media-card" id="btnDemoVideoSync">
+            <div>
+              <span class="demo-card-badge badge-video">فيديو فائق الدقة 60fps (A/V Sync)</span>
+              <h4 class="demo-card-title">مقطع اختبار الشاشة ومزامنة الصوت</h4>
+              <p class="demo-card-desc">ألوان SMPTE القياسية، عداد إطارات دقيق، وكرة متزامنة مع نغمة 1000Hz لمعايرة التأخير.</p>
+            </div>
+            <button class="btn-secondary" style="align-self:flex-start; font-size:11px; padding:4px 10px;">توليد واختبار الفيديو</button>
+          </div>
+
+          <!-- Card 4: Subtitle Encoding Test -->
+          <div class="demo-media-card" id="btnDemoSubtitleCp1256">
+            <div>
+              <span class="demo-card-badge badge-subtitle">حل الرموز المبهمة (Mojibake Fix)</span>
+              <h4 class="demo-card-title">عينة ترجمة عربي Windows-1256</h4>
+              <p class="demo-card-desc">ملف ترجمة مشفر بترميز الحواسيب القديمة لاختبار الكشف التلقائي الفوري والتصحيح.</p>
+            </div>
+            <button class="btn-secondary" style="align-self:flex-start; font-size:11px; padding:4px 10px;">تحميل واختبار الترجمة</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary close-modal-btn">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 7: Subtitle Studio & Styling -->
+  <div class="modal-backdrop" id="modal-subtitle-studio">
+    <div class="modal-dialog" style="max-width:680px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent-color);">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h8v2H6zm10 0h2v2h-2zm-6-4h8v2h-8z"/>
+          </svg>
+          <h3 style="margin:0;">استوديو وتحرير الترجمة (Subtitle Studio & Styling)</h3>
+        </div>
+        <button class="btn-icon-small btn-modal-close">&times;</button>
+      </div>
+      <div class="modal-body sub-studio-container">
+        <!-- Styling Controls Bar -->
+        <div class="vlc-sub-panel">
+          <div style="font-size:11px; font-weight:700; margin-bottom:8px; color:var(--accent-color);">مظهر وعرض الترجمة على الشاشة (Appearance):</div>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; font-size:11px;">
+            <div>
+              <label style="margin-inline-end:4px; color:var(--text-secondary);">حجم الخط:</label>
+              <select id="subStyleSize" class="vlc-select">
+                <option value="small">صغير (16px)</option>
+                <option value="medium" selected>متوسط (22px)</option>
+                <option value="large">كبير (28px)</option>
+                <option value="huge">ضخم (36px)</option>
+              </select>
+            </div>
+            <div>
+              <label style="margin-inline-end:4px; color:var(--text-secondary);">لون النص:</label>
+              <select id="subStyleColor" class="vlc-select">
+                <option value="#ffffff" selected>أبيض كلاسيكي</option>
+                <option value="#facc15">أصفر سينمائي</option>
+                <option value="#38bdf8">أزرق سماوي</option>
+                <option value="#4ade80">أخضر مريح</option>
+              </select>
+            </div>
+            <div>
+              <label style="margin-inline-end:4px; color:var(--text-secondary);">الخلفية / الظل:</label>
+              <select id="subStyleBg" class="vlc-select">
+                <option value="shadow" selected>ظل بارز (Shadow)</option>
+                <option value="semi">صندوق شبه شفاف</option>
+                <option value="box">صندوق أسود كامل</option>
+                <option value="none">نص فقط بدون ظل</option>
+              </select>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <label style="color:var(--text-secondary);">الهامش السفلي:</label>
+              <input type="range" id="subStyleOffset" min="20" max="140" value="50" style="width:70px;">
+              <span id="subStyleOffsetVal" class="cell-mono" style="color:var(--accent-color);">50px</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cue List Inspector & Search -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <input type="text" id="subSearchInput" class="vlc-input" placeholder="بحث في نصوص الترجمة..." style="max-width:260px; font-size:11px;">
+          <div style="display:flex; gap:6px;">
+            <button id="btnExportSrt" class="btn-secondary" style="font-size:11px;">تصدير SRT</button>
+            <button id="btnExportVtt" class="btn-secondary" style="font-size:11px;">تصدير VTT</button>
+          </div>
+        </div>
+
+        <div class="sub-cues-table-wrap">
+          <table class="sub-cues-table">
+            <thead>
+              <tr>
+                <th style="width:40px;">#</th>
+                <th style="width:110px;">التوقيت</th>
+                <th>نص الترجمة (قابل للتعديل)</th>
+                <th style="width:70px; text-align:center;">إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="subCuesTableBody">
+              <tr>
+                <td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">لم يتم تحميل أي ملف ترجمة بعد</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary close-modal-btn">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 8: Keyboard Shortcuts Reference -->
+  <div class="modal-backdrop" id="modal-shortcuts">
+    <div class="modal-dialog" style="max-width:540px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"></path>
+          </svg>
+          <h3 style="margin:0;">اختصارات لوحة المفاتيح القياسية (Keyboard Shortcuts)</h3>
+        </div>
+        <button class="btn-icon-small btn-modal-close">&times;</button>
+      </div>
+      <div class="modal-body" style="max-height:380px; overflow-y:auto; padding:0;">
+        <table class="shortcuts-table">
+          <thead>
+            <tr>
+              <th>المفتاح</th>
+              <th>الوظيفة والعملية</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="kbd-badge">Space</span></td><td>تشغيل / إيقاف مؤقت (Play / Pause)</td></tr>
+            <tr><td><span class="kbd-badge">S</span></td><td>إيقاف التشغيل التام (Stop)</td></tr>
+            <tr><td><span class="kbd-badge">F</span></td><td>تبديل وضع ملء الشاشة (Fullscreen)</td></tr>
+            <tr><td><span class="kbd-badge">M</span></td><td>كتم / إلغاء كتم الصوت (Mute)</td></tr>
+            <tr><td><span class="kbd-badge">P</span> / <span class="kbd-badge">N</span></td><td>المقطع السابق / التالي في القائمة</td></tr>
+            <tr><td><span class="kbd-badge">Right</span> / <span class="kbd-badge">Left</span></td><td>تقديم / تأخير 10 ثوان</td></tr>
+            <tr><td><span class="kbd-badge">Up</span> / <span class="kbd-badge">Down</span></td><td>رفع / خفض الصوت 5% (حتى 300%)</td></tr>
+            <tr><td><span class="kbd-badge">E</span></td><td>القفز إطاراً واحداً للأمام (Next Frame)</td></tr>
+            <tr><td><span class="kbd-badge">]</span> / <span class="kbd-badge">[</span></td><td>تسريع / إبطاء سرعة التشغيل</td></tr>
+            <tr><td><span class="kbd-badge">=</span></td><td>إعادة سرعة التشغيل إلى 1.00x</td></tr>
+            <tr><td><span class="kbd-badge">Shift + S</span></td><td>التقاط صورة بدقة الفيديو الأصلية (Snapshot)</td></tr>
+            <tr><td><span class="kbd-badge">G</span> / <span class="kbd-badge">H</span></td><td>تأخير / تقديم مسار الترجمة 50ms</td></tr>
+            <tr><td><span class="kbd-badge">J</span> / <span class="kbd-badge">K</span></td><td>تأخير / تقديم مسار الصوت 50ms</td></tr>
+            <tr><td><span class="kbd-badge">Ctrl + E</span></td><td>فتح نافذة المعادل الصوتي والمؤثرات</td></tr>
+            <tr><td><span class="kbd-badge">Ctrl + L</span></td><td>فتح / إغلاق قائمة التشغيل (Playlist)</td></tr>
+            <tr><td><span class="kbd-badge">Ctrl + B</span></td><td>مدير الإشارات المرجعية (Bookmarks)</td></tr>
+            <tr><td><span class="kbd-badge">Ctrl + I</span></td><td>معلومات الوسائط والترميز (Media Info)</td></tr>
+            <tr><td><span class="kbd-badge">Ctrl + O</span></td><td>فتح ملف محلي من الحاسوب</td></tr>
+            <tr><td><span class="kbd-badge">Ctrl + N</span></td><td>فتح تدفق شبكي (Network Stream)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
         <button class="btn-primary close-modal-btn">موافق</button>
       </div>
     </div>
