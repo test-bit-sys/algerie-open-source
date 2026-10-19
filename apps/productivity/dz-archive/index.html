@@ -233,6 +233,36 @@
       </button>
     </nav>
 
+    <!-- 2.5 Classic Desktop Drives & Quick Locations Bar -->
+    <div class="desktop-quick-bar">
+      <div class="quick-bar-group">
+        <span class="quick-bar-label">الأقراص (Drives):</span>
+        <div id="quickDrivesBar" class="drives-chip-list">
+          <button class="drive-chip-btn" data-path="C:\"><strong>C:</strong> <span>النظام</span></button>
+        </div>
+      </div>
+      <div class="quick-sep"></div>
+      <div class="quick-bar-group">
+        <span class="quick-bar-label">المواقع:</span>
+        <button class="quick-chip-btn" id="qbPcRoot" title="جهاز الكمبيوتر">جهاز الكمبيوتر</button>
+        <button class="quick-chip-btn" id="qbDesktop" title="سطح المكتب">سطح المكتب</button>
+        <button class="quick-chip-btn" id="qbDownloads" title="التنزيلات">التنزيلات</button>
+        <button class="quick-chip-btn" id="qbDocuments" title="المستندات">المستندات</button>
+        <button class="quick-chip-btn" id="qbProject" title="مجلد المشروع">المشروع</button>
+      </div>
+      <div class="quick-sep"></div>
+      <div class="quick-bar-actions">
+        <button class="quick-action-btn" id="qbBrowseFolder" title="اختيار مجلد من نظام ويندوز">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+          <span>تصفح مجلد بالويندوز...</span>
+        </button>
+        <button class="quick-action-btn" id="qbBrowseArchive" title="اختيار ملف أرشيف من القرص">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2zm0-4h-4V6h4v2z"/></svg>
+          <span>فتح أرشيف من القرص...</span>
+        </button>
+      </div>
+    </div>
+
     <!-- 3. Address & Search Bar -->
     <div class="address-bar">
       <!-- Up Folder Button -->
@@ -373,14 +403,113 @@
 
   <!-- Right Click Context Menu -->
   <div id="contextMenu" class="desktop-context-menu" style="display:none;">
-    <button class="ctx-item" id="ctxView">معاينة الملف (View)</button>
-    <button class="ctx-item" id="ctxExtract">استخراج الملف المحدد (Extract)</button>
-    <button class="ctx-item" id="ctxCopyName">نسخ الاسم (Copy Name)</button>
+    <button class="ctx-item" id="ctxOpenDefault">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-inline-end:6px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>تشغيل / فتح الملف (Open)</span>
+    </button>
+    <button class="ctx-item" id="ctxReveal">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-inline-end:6px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <span>إظهار في مستكشف ويندوز (Explorer)</span>
+    </button>
     <div class="ctx-divider"></div>
-    <button class="ctx-item" id="ctxDelete" style="color:var(--accent-rose);">حذف من الأرشيف (Delete)</button>
+    <button class="ctx-item" id="ctxExtract">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-inline-end:6px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      <span>استخراج إلى مجلد... (Extract To)</span>
+    </button>
+    <button class="ctx-item" id="ctxAddToArchive">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-inline-end:6px;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      <span>إضافة إلى أرشيف مضغوط (Add to Archive)</span>
+    </button>
+    <button class="ctx-item" id="ctxView">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-inline-end:6px;"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      <span>معاينة المحتوى (Internal Viewer)</span>
+    </button>
+    <button class="ctx-item" id="ctxCopyName">نسخ الاسم / المسار (Copy Path)</button>
+    <div class="ctx-divider"></div>
+    <button class="ctx-item" id="ctxDelete" style="color:var(--accent-rose);">حذف من الجهاز / الأرشيف (Delete)</button>
   </div>
 
   <!-- ================= MODALS ================= -->
+
+  <!-- Modal 0: WinRAR Extraction Dialog (Alt+E) -->
+  <div id="modalExtract" class="modal-backdrop">
+    <div class="modal-dialog modal-winrar-params" style="max-width:560px;">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+          <h3 id="modalExtractTitle">مسار وخيارات الاستخراج (Extraction path and options)</h3>
+        </div>
+        <button class="btn-close-modal close-modal-btn">&times;</button>
+      </div>
+
+      <div class="dialog-tabs-bar">
+        <button class="dialog-tab-btn active" data-tab="extractGeneral">عام (General)</button>
+        <button class="dialog-tab-btn" data-tab="extractAdvanced">خيارات متقدمة (Advanced)</button>
+      </div>
+
+      <div class="dialog-tabs-content">
+        <!-- Tab 1: General -->
+        <div class="dialog-pane active" id="paneExtractGeneral">
+          <div class="param-row">
+            <label class="param-label">مسار الوجهة للاستخراج على القرص (Destination path):</label>
+            <div class="input-with-button">
+              <input type="text" id="inputExtractDest" class="dialog-input" spellcheck="false" placeholder="C:\Users\...">
+              <button class="btn-dialog-small" id="btnBrowseExtractDest">استعراض...</button>
+            </div>
+          </div>
+
+          <div class="param-row" style="margin-top:12px;">
+            <label class="param-sublabel">وجهات سريعة:</label>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;" id="extractQuickDestContainer">
+              <button type="button" class="btn-dialog-small quick-dest-btn" data-dest="desktop">سطح المكتب</button>
+              <button type="button" class="btn-dialog-small quick-dest-btn" data-dest="downloads">التنزيلات</button>
+              <button type="button" class="btn-dialog-small quick-dest-btn" data-dest="documents">المستندات</button>
+              <button type="button" class="btn-dialog-small quick-dest-btn" data-dest="current">مجلد الأرشيف الحالي</button>
+            </div>
+          </div>
+
+          <!-- Update / Overwrite Mode -->
+          <fieldset class="param-group-box" style="margin-top:14px;">
+            <legend>طريقة الاستبدال (Overwrite mode)</legend>
+            <label class="radio-label">
+              <input type="radio" name="extractOverwrite" value="ask" checked>
+              <span>السؤال قبل الاستبدال (Ask before overwrite)</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="extractOverwrite" value="always">
+              <span>استبدال الملفات الموجودة تلقائياً (Overwrite without prompt)</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="extractOverwrite" value="skip">
+              <span>تخطي الملفات الموجودة مسبقاً (Skip existing files)</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <!-- Tab 2: Advanced -->
+        <div class="dialog-pane" id="paneExtractAdvanced">
+          <fieldset class="param-group-box">
+            <legend>خيارات متقدمة إضافية</legend>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chkOpenDestAfterExtract" checked>
+              <span>فتح مجلد الوجهة في مستكشف ويندوز تلقائياً بعد اكتمال الاستخراج</span>
+            </label>
+            <label class="checkbox-label" style="margin-top:8px;">
+              <input type="checkbox" id="chkExtractKeepBroken">
+              <span>الاحتفاظ بالملفات التالفة المستخرجة (Keep broken files)</span>
+            </label>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btnConfirmExtract" class="btn btn-primary">استخراج الآن (Extract)</button>
+        <button class="btn btn-secondary close-modal-btn">إلغاء (Cancel)</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal 1: WinRAR 6-Tab "Archive name and parameters" Dialog -->
   <div id="modalAdd" class="modal-backdrop">

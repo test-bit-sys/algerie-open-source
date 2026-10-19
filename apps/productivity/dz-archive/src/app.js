@@ -127,6 +127,17 @@ class DzArchiveApp {
     this.currentLang = localStorage.getItem('dz_archive_lang') || 'ar';
     this.currentTheme = localStorage.getItem('dz_archive_theme') || 'dark';
 
+    // Desktop Dual-Mode: 'pc' (real filesystem browser) vs 'archive' (inside archive)
+    this.mode = 'pc';
+    this.currentPcPath = '';
+    this.parentPcPath = null;
+    this.pcItems = [];
+    this.selectedPcPaths = new Set();
+    this.currentArchivePath = '';
+    this.pendingExtractPath = '';
+    this.contextTarget = null;
+    this.drives = [];
+
     this.archiveName = 'archive.zip';
     this.archiveFormat = 'zip'; // 'zip' or 'tar'
     this.archiveFiles = []; // [{ name, size, compressedSize, data, crc32, modified, isDirectory, localOffset }]
@@ -160,6 +171,7 @@ class DzArchiveApp {
     this.initContextMenu();
     this.initDragAndDrop();
     this.initKeyboardShortcuts();
+    this.initDesktopSystem();
     this.updateUI();
   }
 
@@ -169,6 +181,16 @@ class DzArchiveApp {
       themeToggleBtn: document.getElementById('themeToggleBtn'),
       fileInput: document.getElementById('hiddenFileInput'),
       archiveInput: document.getElementById('hiddenArchiveInput'),
+
+      // Quick Desktop System Bar
+      quickDrivesBar: document.getElementById('quickDrivesBar'),
+      qbPcRoot: document.getElementById('qbPcRoot'),
+      qbDesktop: document.getElementById('qbDesktop'),
+      qbDownloads: document.getElementById('qbDownloads'),
+      qbDocuments: document.getElementById('qbDocuments'),
+      qbProject: document.getElementById('qbProject'),
+      qbBrowseFolder: document.getElementById('qbBrowseFolder'),
+      qbBrowseArchive: document.getElementById('qbBrowseArchive'),
 
       // Address Bar
       btnUpFolder: document.getElementById('btnUpFolder'),
@@ -200,12 +222,21 @@ class DzArchiveApp {
 
       // Context Menu
       contextMenu: document.getElementById('contextMenu'),
+      ctxOpenDefault: document.getElementById('ctxOpenDefault'),
+      ctxReveal: document.getElementById('ctxReveal'),
+      ctxAddToArchive: document.getElementById('ctxAddToArchive'),
       ctxView: document.getElementById('ctxView'),
       ctxExtract: document.getElementById('ctxExtract'),
       ctxCopyName: document.getElementById('ctxCopyName'),
       ctxDelete: document.getElementById('ctxDelete'),
 
       // Modals
+      modalExtract: document.getElementById('modalExtract'),
+      inputExtractDest: document.getElementById('inputExtractDest'),
+      btnBrowseExtractDest: document.getElementById('btnBrowseExtractDest'),
+      btnConfirmExtract: document.getElementById('btnConfirmExtract'),
+      chkOpenDestAfterExtract: document.getElementById('chkOpenDestAfterExtract'),
+
       modalAdd: document.getElementById('modalAdd'),
       inputArchiveName: document.getElementById('inputArchiveName'),
       selectCompMethod: document.getElementById('selectCompMethod'),
@@ -291,8 +322,15 @@ class DzArchiveApp {
     });
 
     // Menu Actions
-    document.getElementById('miOpenArchive')?.addEventListener('click', () => this.dom.archiveInput.click());
-    document.getElementById('miSaveCopy')?.addEventListener('click', () => this.extractArchive());
+    document.getElementById('miOpenArchive')?.addEventListener('click', async () => {
+      const res = await fetch('/api/fs/browse-archive').then(r => r.json()).catch(() => ({ ok: false }));
+      if (res.ok && res.path) {
+        this.openArchiveFromPath(res.path);
+      } else if (!res.cancelled) {
+        this.dom.archiveInput.click();
+      }
+    });
+    document.getElementById('miSaveCopy')?.addEventListener('click', () => this.openExtractionModal());
     document.getElementById('miSetDefaultPassword')?.addEventListener('click', () => this.openPasswordModal());
     document.getElementById('miClearPassword')?.addEventListener('click', () => {
       this.currentPassword = null;
@@ -306,7 +344,7 @@ class DzArchiveApp {
 
     // Commands
     document.getElementById('miAdd')?.addEventListener('click', () => this.openAddModal());
-    document.getElementById('miExtract')?.addEventListener('click', () => this.extractArchive());
+    document.getElementById('miExtract')?.addEventListener('click', () => this.openExtractionModal());
     document.getElementById('miTest')?.addEventListener('click', () => this.testArchiveIntegrity());
     document.getElementById('miView')?.addEventListener('click', () => this.previewSelectedFile());
     document.getElementById('miDelete')?.addEventListener('click', () => this.deleteSelected());
@@ -347,7 +385,7 @@ class DzArchiveApp {
 
   initToolbar() {
     document.getElementById('btnAdd')?.addEventListener('click', () => this.openAddModal());
-    document.getElementById('btnExtract')?.addEventListener('click', () => this.extractArchive());
+    document.getElementById('btnExtract')?.addEventListener('click', () => this.openExtractionModal());
     document.getElementById('btnTest')?.addEventListener('click', () => this.testArchiveIntegrity());
     document.getElementById('btnView')?.addEventListener('click', () => this.previewSelectedFile());
     document.getElementById('btnDelete')?.addEventListener('click', () => this.deleteSelected());
@@ -497,8 +535,47 @@ class DzArchiveApp {
       this.dom.inputPasswordConfirm.type = t;
     });
 
+    // Browse destination archive path in Add modal
+    document.getElementById('btnBrowseSave')?.addEventListener('click', async () => {
+      const res = await fetch('/api/fs/browse-folder').then(r => r.json()).catch(() => ({ ok: false }));
+      if (res.ok && res.path) {
+        const curName = this.dom.inputArchiveName.value.split(/[\\/]/).pop() || 'archive.zip';
+        this.dom.inputArchiveName.value = `${res.path}\\${curName}`;
+      }
+    });
+
+    // Extraction Dialog Handlers
+    this.dom.btnBrowseExtractDest?.addEventListener('click', async () => {
+      const res = await fetch('/api/fs/browse-folder').then(r => r.json()).catch(() => ({ ok: false }));
+      if (res.ok && res.path) {
+        this.dom.inputExtractDest.value = res.path;
+      }
+    });
+
+    this.dom.btnConfirmExtract?.addEventListener('click', () => this.confirmExtract());
+
+    document.querySelectorAll('.quick-dest-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const type = btn.getAttribute('data-dest');
+        if (type === 'current') {
+          this.dom.inputExtractDest.value = this.currentPcPath || 'C:\\';
+        } else {
+          const qf = await fetch('/api/fs/quick-folders').then(r => r.json()).catch(() => ({ ok: false }));
+          if (qf.ok && qf.folders) {
+            const match = qf.folders.find(f => f.id === type);
+            if (match) this.dom.inputExtractDest.value = match.path;
+          }
+        }
+      });
+    });
+
     // Confirm Create Archive in Add modal
     this.dom.btnConfirmCreateArchive.addEventListener('click', async () => {
+      if (this.mode === 'pc') {
+        await this.executePcAddArchive();
+        return;
+      }
+
       const name = this.dom.inputArchiveName.value.trim() || 'dz-archive.zip';
       this.archiveName = name;
       const formatRadio = document.querySelector('input[name="archiveFormat"]:checked');
@@ -569,17 +646,58 @@ class DzArchiveApp {
   }
 
   openAddModal() {
-    this.dom.inputArchiveName.value = this.archiveName;
-    this.dom.dialogCommentText.value = this.archiveComment;
+    if (this.mode === 'pc') {
+      if (this.selectedPcPaths.size === 0) {
+        alert('الرجاء تحديد ملف أو مجلد واحد على الأقل على جهازك لضغطه.');
+        return;
+      }
+      const firstPath = Array.from(this.selectedPcPaths)[0];
+      const firstName = firstPath.split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
+      this.dom.inputArchiveName.value = `${this.currentPcPath}\\${firstName}.zip`;
+    } else {
+      this.dom.inputArchiveName.value = this.archiveName;
+      this.dom.dialogCommentText.value = this.archiveComment;
+    }
     this.dom.modalAdd.classList.add('active');
   }
 
   initContextMenu() {
+    this.dom.ctxOpenDefault?.addEventListener('click', async () => {
+      const target = this.contextTarget;
+      if (target && target.path) {
+        await fetch('/api/fs/open', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: target.path })
+        });
+      }
+    });
+
+    this.dom.ctxReveal?.addEventListener('click', async () => {
+      const target = this.contextTarget;
+      if (target && target.path) {
+        await fetch('/api/fs/reveal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: target.path })
+        });
+      }
+    });
+
+    this.dom.ctxAddToArchive?.addEventListener('click', () => {
+      this.openAddModal();
+    });
+
     this.dom.ctxView.addEventListener('click', () => this.previewSelectedFile());
-    this.dom.ctxExtract.addEventListener('click', () => this.extractArchive());
+    this.dom.ctxExtract.addEventListener('click', () => this.openExtractionModal());
     this.dom.ctxCopyName.addEventListener('click', () => {
-      const selected = Array.from(this.selectedFiles)[0];
-      if (selected) navigator.clipboard.writeText(selected.split('/').pop());
+      const target = this.contextTarget;
+      if (target) {
+        navigator.clipboard.writeText(target.path || target.name);
+      } else {
+        const selected = Array.from(this.selectedFiles)[0];
+        if (selected) navigator.clipboard.writeText(selected.split('/').pop());
+      }
     });
     this.dom.ctxDelete.addEventListener('click', () => this.deleteSelected());
   }
@@ -674,6 +792,238 @@ class DzArchiveApp {
         document.querySelectorAll('.modal-backdrop').forEach((m) => m.classList.remove('active'));
       }
     });
+  }
+
+  async initDesktopSystem() {
+    try {
+      // 1. Fetch drives
+      const drivesRes = await fetch('/api/fs/drives').then(r => r.json()).catch(() => ({ ok: false }));
+      if (drivesRes.ok && drivesRes.drives) {
+        this.drives = drivesRes.drives;
+        this.renderDrivesBar(drivesRes.drives);
+      }
+
+      // 2. Wire quick locations
+      this.dom.qbPcRoot?.addEventListener('click', () => {
+        if (this.drives && this.drives[0]) {
+          this.loadPcDirectory(this.drives[0].path);
+        } else {
+          this.loadPcDirectory('C:\\');
+        }
+      });
+
+      const qfRes = await fetch('/api/fs/quick-folders').then(r => r.json()).catch(() => ({ ok: false }));
+      if (qfRes.ok && qfRes.folders) {
+        const fMap = {};
+        qfRes.folders.forEach(f => fMap[f.id] = f.path);
+        if (fMap.desktop) this.dom.qbDesktop?.addEventListener('click', () => this.loadPcDirectory(fMap.desktop));
+        if (fMap.downloads) this.dom.qbDownloads?.addEventListener('click', () => this.loadPcDirectory(fMap.downloads));
+        if (fMap.documents) this.dom.qbDocuments?.addEventListener('click', () => this.loadPcDirectory(fMap.documents));
+        if (fMap.project) this.dom.qbProject?.addEventListener('click', () => this.loadPcDirectory(fMap.project));
+      }
+
+      // 3. Wire native browse buttons
+      this.dom.qbBrowseFolder?.addEventListener('click', async () => {
+        const res = await fetch('/api/fs/browse-folder').then(r => r.json()).catch(() => ({ ok: false }));
+        if (res.ok && res.path) {
+          this.loadPcDirectory(res.path);
+        }
+      });
+
+      this.dom.qbBrowseArchive?.addEventListener('click', async () => {
+        const res = await fetch('/api/fs/browse-archive').then(r => r.json()).catch(() => ({ ok: false }));
+        if (res.ok && res.path) {
+          this.openArchiveFromPath(res.path);
+        }
+      });
+
+      // 4. Initial load: default to project root or home
+      await this.loadPcDirectory('');
+    } catch (err) {
+      console.warn('Desktop system initialization fallback:', err);
+    }
+  }
+
+  renderDrivesBar(drives) {
+    if (!this.dom.quickDrivesBar) return;
+    this.dom.quickDrivesBar.innerHTML = '';
+    drives.forEach(d => {
+      const btn = document.createElement('button');
+      btn.className = 'drive-chip-btn';
+      btn.setAttribute('data-path', d.path);
+      const freeGB = d.free ? `${(d.free / (1024**3)).toFixed(0)} GB` : '';
+      btn.innerHTML = `<strong>${d.letter}</strong> <span>${freeGB ? freeGB + ' متاح' : d.name}</span>`;
+      btn.addEventListener('click', () => {
+        this.loadPcDirectory(d.path);
+      });
+      this.dom.quickDrivesBar.appendChild(btn);
+    });
+  }
+
+  async loadPcDirectory(dirPath) {
+    try {
+      this.mode = 'pc';
+      const url = dirPath ? `/api/fs/list?path=${encodeURIComponent(dirPath)}` : '/api/fs/list';
+      const res = await fetch(url).then(r => r.json());
+      if (res.ok) {
+        this.currentPcPath = res.currentPath;
+        this.parentPcPath = res.parentPath;
+        this.pcItems = res.items || [];
+        this.selectedPcPaths.clear();
+        this.updateUI();
+
+        // Update active state in drives bar
+        document.querySelectorAll('.drive-chip-btn').forEach(btn => {
+          const p = btn.getAttribute('data-path');
+          btn.classList.toggle('active', !!(p && this.currentPcPath.toLowerCase().startsWith(p.toLowerCase())));
+        });
+      } else {
+        alert(`تعذر فتح المجلد: ${res.error}`);
+      }
+    } catch (err) {
+      console.error('Failed to load PC directory:', err);
+    }
+  }
+
+  async openArchiveFromPath(filePath) {
+    try {
+      const res = await fetch(`/api/archive/read-file?path=${encodeURIComponent(filePath)}`);
+      if (!res.ok) throw new Error('Could not read archive file from disk');
+      const buffer = await res.arrayBuffer();
+
+      this.mode = 'archive';
+      this.currentArchivePath = filePath;
+      this.archiveName = filePath.split(/[\\/]/).pop();
+      const ext = (this.archiveName.split('.').pop() || '').toLowerCase();
+      this.archiveFormat = (ext === 'tar' || ext === 'gz' || ext === 'tgz') ? 'tar' : 'zip';
+
+      if (this.archiveFormat === 'tar') {
+        const parsed = TarArchive.parse(buffer);
+        this.archiveFiles = parsed.entries;
+        this.rawParsedArchive = null;
+        this.archiveComment = '';
+      } else {
+        const parsed = await ZipArchive.parse(buffer);
+        this.archiveFiles = parsed.entries;
+        this.rawParsedArchive = parsed;
+        this.archiveComment = parsed.comment || '';
+      }
+
+      this.currentPrefix = '';
+      this.selectedFiles.clear();
+      this.dom.commentTextArea.value = this.archiveComment;
+      this.updateUI();
+    } catch (err) {
+      alert(`فشل فتح ملف الأرشيف من القرص: ${err.message}`);
+    }
+  }
+
+  openExtractionModal() {
+    let defaultDest = '';
+    if (this.mode === 'archive') {
+      const baseName = (this.archiveName || 'archive').replace(/\.[^.]+$/, '');
+      const parentDir = this.currentArchivePath
+        ? this.currentArchivePath.substring(0, this.currentArchivePath.lastIndexOf(this.currentArchivePath.includes('\\') ? '\\' : '/'))
+        : (this.currentPcPath || 'C:\\');
+      defaultDest = `${parentDir}\\${baseName}`;
+    } else {
+      // In PC mode: check if an archive is selected
+      const selectedItem = this.pcItems.find(i => this.selectedPcPaths.has(i.path) && i.isArchive);
+      if (selectedItem) {
+        const baseName = selectedItem.name.replace(/\.[^.]+$/, '');
+        defaultDest = `${this.currentPcPath}\\${baseName}`;
+        this.pendingExtractPath = selectedItem.path;
+      } else {
+        alert('الرجاء اختيار ملف أرشيف (.zip / .tar / .rar) لاستخراجه أولاً.');
+        return;
+      }
+    }
+
+    this.dom.inputExtractDest.value = defaultDest;
+    this.dom.modalExtract.classList.add('active');
+  }
+
+  async confirmExtract() {
+    const dest = this.dom.inputExtractDest.value.trim();
+    if (!dest) {
+      alert('الرجاء تحديد مسار وجهة الاستخراج.');
+      return;
+    }
+
+    const archivePath = this.mode === 'archive' ? this.currentArchivePath : this.pendingExtractPath;
+    this.dom.modalExtract.classList.remove('active');
+
+    if (archivePath) {
+      try {
+        const btn = document.getElementById('btnExtract');
+        if (btn) btn.classList.add('loading');
+
+        const res = await fetch('/api/archive/extract-to-folder', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            archivePath,
+            destinationFolder: dest
+          })
+        }).then(r => r.json());
+
+        if (btn) btn.classList.remove('loading');
+
+        if (res.ok) {
+          if (this.dom.chkOpenDestAfterExtract?.checked) {
+            await fetch('/api/fs/reveal', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ path: dest })
+            });
+          }
+          alert(`تم استخراج الأرشيف بنجاح إلى:\n${dest}`);
+          if (this.mode === 'pc') {
+            await this.loadPcDirectory(this.currentPcPath);
+          }
+        } else {
+          alert(`فشل الاستخراج: ${res.error}`);
+        }
+      } catch (err) {
+        alert(`خطأ أثناء عملية الاستخراج: ${err.message}`);
+      }
+    } else {
+      await this.extractArchive();
+    }
+  }
+
+  async executePcAddArchive() {
+    const outputArchivePath = this.dom.inputArchiveName.value.trim();
+    if (!outputArchivePath) {
+      alert('الرجاء كتابة مسار واسم الأرشيف الجديد.');
+      return;
+    }
+    const formatRadio = document.querySelector('input[name="archiveFormat"]:checked');
+    const format = formatRadio ? formatRadio.value : 'zip';
+    const sourcePaths = Array.from(this.selectedPcPaths);
+
+    this.dom.modalAdd.classList.remove('active');
+
+    try {
+      const res = await fetch('/api/archive/compress-files', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sourcePaths,
+          outputArchivePath,
+          format
+        })
+      }).then(r => r.json());
+
+      if (res.ok) {
+        alert(`تم إنشاء الأرشيف المضغوط بنجاح على القرص:\n${outputArchivePath}`);
+        await this.loadPcDirectory(this.currentPcPath);
+      } else {
+        alert(`فشل إنشاء الأرشيف: ${res.error}`);
+      }
+    } catch (err) {
+      alert(`خطأ أثناء عملية الضغط: ${err.message}`);
+    }
   }
 
   async loadArchiveFile(file) {
@@ -839,6 +1189,34 @@ class DzArchiveApp {
   }
 
   async previewSelectedFile() {
+    if (this.mode === 'pc') {
+      if (this.selectedPcPaths.size === 0) return;
+      const selectedPath = Array.from(this.selectedPcPaths)[0];
+      const item = this.pcItems.find(i => i.path === selectedPath);
+      if (!item || item.isDirectory) return;
+
+      try {
+        const res = await fetch(`/api/archive/read-file?path=${encodeURIComponent(selectedPath)}`);
+        if (!res.ok) throw new Error('Could not read file from disk');
+        const buffer = await res.arrayBuffer();
+        this.currentViewerEntry = { name: item.name };
+        this.currentViewerData = new Uint8Array(buffer);
+
+        this.dom.previewModalTitle.textContent = `معاينة: ${item.name}`;
+        const ext = (item.extension || '').toLowerCase().replace(/^\./, '');
+        const isImage = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp'].includes(ext);
+        this.currentViewerMode = isImage ? 'media' : 'text';
+        this.dom.viewerTabs.forEach((tab) => {
+          tab.classList.toggle('active', tab.getAttribute('data-mode') === this.currentViewerMode);
+        });
+        this.renderViewerContent();
+        this.dom.modalPreview.classList.add('active');
+      } catch (err) {
+        alert(`تعذرت معاينة الملف من القرص: ${err.message}`);
+      }
+      return;
+    }
+
     if (this.selectedFiles.size === 0) return;
     const selectedName = Array.from(this.selectedFiles)[0];
     const entry = this.archiveFiles.find((f) => f.name === selectedName);
@@ -1052,6 +1430,15 @@ class DzArchiveApp {
   }
 
   deleteSelected() {
+    if (this.mode === 'pc') {
+      if (this.selectedPcPaths.size === 0) return;
+      if (confirm(`هل أنت متأكد من إلغاء تحديد ${this.selectedPcPaths.size} عنصر؟`)) {
+        this.selectedPcPaths.clear();
+        this.updateUI();
+      }
+      return;
+    }
+
     if (this.isLocked) {
       alert('الأرشيف مقفل ضد أي تعديل.');
       return;
@@ -1490,12 +1877,20 @@ class DzArchiveApp {
   }
 
   selectAll() {
-    this.archiveFiles.forEach((f) => this.selectedFiles.add(f.name));
+    if (this.mode === 'pc') {
+      this.pcItems.forEach(i => this.selectedPcPaths.add(i.path));
+    } else {
+      this.archiveFiles.forEach((f) => this.selectedFiles.add(f.name));
+    }
     this.updateUI();
   }
 
   deselectAll() {
-    this.selectedFiles.clear();
+    if (this.mode === 'pc') {
+      this.selectedPcPaths.clear();
+    } else {
+      this.selectedFiles.clear();
+    }
     this.updateUI();
   }
 
@@ -1512,16 +1907,32 @@ class DzArchiveApp {
     this.dom.statusLockBadge.style.display = 'none';
     this.dom.commentTextArea.value = '';
     this.toggleCommentDrawer(false);
-    this.updateUI();
+
+    // Return to PC mode
+    this.mode = 'pc';
+    this.loadPcDirectory(this.currentPcPath || '');
   }
 
   goUpFolder() {
-    if (!this.currentPrefix) return;
-    const parts = this.currentPrefix.replace(/\/$/, '').split('/');
-    parts.pop();
-    this.currentPrefix = parts.length > 0 ? parts.join('/') + '/' : '';
-    this.selectedFiles.clear();
-    this.updateUI();
+    if (this.mode === 'pc') {
+      if (this.parentPcPath) {
+        this.loadPcDirectory(this.parentPcPath);
+      }
+      return;
+    }
+
+    // Inside Archive mode
+    if (this.currentPrefix) {
+      const parts = this.currentPrefix.replace(/\/$/, '').split('/');
+      parts.pop();
+      this.currentPrefix = parts.length > 0 ? parts.join('/') + '/' : '';
+      this.selectedFiles.clear();
+      this.updateUI();
+    } else {
+      // Exit archive to parent PC directory
+      this.mode = 'pc';
+      this.loadPcDirectory(this.currentPcPath || 'C:\\');
+    }
   }
 
   updateUI() {
@@ -1530,11 +1941,15 @@ class DzArchiveApp {
     this.renderTable();
     this.updateStatusBar();
 
-    const hasFiles = this.archiveFiles.length > 0;
-    const hasSelection = this.selectedFiles.size > 0;
+    const hasSelection = this.mode === 'pc' ? this.selectedPcPaths.size > 0 : this.selectedFiles.size > 0;
+    const isArchiveSelectedInPc = this.mode === 'pc' && Array.from(this.selectedPcPaths).some(p => {
+      const item = this.pcItems.find(i => i.path === p);
+      return item && item.isArchive;
+    });
 
-    document.getElementById('btnExtract').disabled = !hasFiles;
-    document.getElementById('btnTest').disabled = !hasFiles;
+    document.getElementById('btnAdd').disabled = false;
+    document.getElementById('btnExtract').disabled = !(this.mode === 'archive' || isArchiveSelectedInPc);
+    document.getElementById('btnTest').disabled = this.mode !== 'archive';
     document.getElementById('btnView').disabled = !hasSelection;
     document.getElementById('btnDelete').disabled = !hasSelection;
   }
@@ -1543,6 +1958,40 @@ class DzArchiveApp {
     const container = this.dom.treeSidebarContent;
     container.innerHTML = '';
 
+    if (this.mode === 'pc') {
+      const rootItem = document.createElement('div');
+      rootItem.className = 'tree-node-item selected';
+      rootItem.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent-blue);">
+          <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
+        </svg>
+        <span>هذا الكمبيوتر (This PC)</span>
+      `;
+      rootItem.addEventListener('click', () => {
+        if (this.drives && this.drives[0]) this.loadPcDirectory(this.drives[0].path);
+      });
+      container.appendChild(rootItem);
+
+      if (this.drives && this.drives.length > 0) {
+        this.drives.forEach(d => {
+          const driveItem = document.createElement('div');
+          const isAct = !!(this.currentPcPath && this.currentPcPath.toLowerCase().startsWith(d.path.toLowerCase()));
+          driveItem.className = `tree-node-item ${isAct ? 'selected' : ''}`;
+          driveItem.style.paddingInlineStart = '20px';
+          driveItem.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent-amber);">
+              <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+            </svg>
+            <span>${d.name}</span>
+          `;
+          driveItem.addEventListener('click', () => this.loadPcDirectory(d.path));
+          container.appendChild(driveItem);
+        });
+      }
+      return;
+    }
+
+    // Inside Archive Mode
     const rootItem = document.createElement('div');
     rootItem.className = `tree-node-item ${this.currentPrefix === '' ? 'selected' : ''}`;
     rootItem.innerHTML = `
@@ -1557,7 +2006,6 @@ class DzArchiveApp {
     });
     container.appendChild(rootItem);
 
-    // Extract unique directories
     const dirSet = new Set();
     this.archiveFiles.forEach((f) => {
       const parts = f.name.split('/');
@@ -1596,6 +2044,65 @@ class DzArchiveApp {
     const box = this.dom.breadcrumbs;
     box.innerHTML = '';
 
+    if (this.mode === 'pc') {
+      const rootCrumb = document.createElement('span');
+      rootCrumb.className = 'crumb-link';
+      rootCrumb.textContent = 'جهاز الكمبيوتر (PC)';
+      rootCrumb.addEventListener('click', () => {
+        if (this.drives && this.drives[0]) {
+          this.loadPcDirectory(this.drives[0].path);
+        } else {
+          this.loadPcDirectory('C:\\');
+        }
+      });
+      box.appendChild(rootCrumb);
+
+      if (this.currentPcPath) {
+        const sep = this.currentPcPath.includes('\\') ? '\\' : '/';
+        const segments = this.currentPcPath.split(/[\\/]/).filter(Boolean);
+        let accumulated = this.currentPcPath.startsWith('/') ? '/' : '';
+
+        segments.forEach((seg, idx) => {
+          const sepSpan = document.createElement('span');
+          sepSpan.className = 'crumb-sep';
+          sepSpan.textContent = '>';
+          box.appendChild(sepSpan);
+
+          if (idx === 0 && this.currentPcPath.includes(':')) {
+            accumulated = `${seg}\\`;
+          } else {
+            accumulated += (accumulated.endsWith('\\') || accumulated.endsWith('/') ? '' : sep) + seg;
+          }
+
+          const link = document.createElement('span');
+          const isLast = idx === segments.length - 1;
+          link.className = `crumb-link ${isLast ? 'active' : ''}`;
+          link.textContent = seg;
+          const target = accumulated;
+          link.addEventListener('click', () => {
+            this.loadPcDirectory(target);
+          });
+          box.appendChild(link);
+        });
+      }
+      return;
+    }
+
+    // Inside Archive mode
+    const pcCrumb = document.createElement('span');
+    pcCrumb.className = 'crumb-link';
+    pcCrumb.textContent = 'جهاز الكمبيوتر';
+    pcCrumb.addEventListener('click', () => {
+      this.mode = 'pc';
+      this.loadPcDirectory(this.currentPcPath || 'C:\\');
+    });
+    box.appendChild(pcCrumb);
+
+    const sepSpan = document.createElement('span');
+    sepSpan.className = 'crumb-sep';
+    sepSpan.textContent = '>';
+    box.appendChild(sepSpan);
+
     const rootCrumb = document.createElement('span');
     rootCrumb.className = `crumb-link ${this.currentPrefix === '' ? 'active' : ''}`;
     rootCrumb.textContent = this.archiveName || 'archive.zip';
@@ -1610,10 +2117,10 @@ class DzArchiveApp {
       let accPath = '';
       parts.forEach((p, idx) => {
         accPath += p + '/';
-        const sep = document.createElement('span');
-        sep.className = 'crumb-sep';
-        sep.textContent = '>';
-        box.appendChild(sep);
+        const s = document.createElement('span');
+        s.className = 'crumb-sep';
+        s.textContent = '>';
+        box.appendChild(s);
 
         const link = document.createElement('span');
         link.className = `crumb-link ${idx === parts.length - 1 ? 'active' : ''}`;
@@ -1677,7 +2184,111 @@ class DzArchiveApp {
     const dict = I18N[this.currentLang] || I18N.ar;
     const query = this.dom.searchBox.value.trim().toLowerCase();
 
-    // Direct items within current prefix
+    if (this.mode === 'pc') {
+      let items = this.pcItems;
+      if (query) {
+        items = items.filter(i => i.name.toLowerCase().includes(query));
+      }
+
+      if (items.length === 0) {
+        tbody.innerHTML = `
+          <tr class="empty-row">
+            <td colspan="7" class="empty-state">المجلد فارغ لا يحتوي على ملفات.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      items.forEach((item) => {
+        const tr = document.createElement('tr');
+        tr.className = 'file-row-pc';
+        const isSelected = this.selectedPcPaths.has(item.path);
+        if (isSelected) tr.classList.add('selected');
+
+        const sizeStr = item.isDirectory ? '-' : formatBytes(item.size || 0);
+        const packedStr = item.isDirectory ? '-' : (item.isArchive ? formatBytes(item.size) : '-');
+        const ratioStr = item.isArchive ? 'Archived' : '-';
+        const typeStr = item.isDirectory
+          ? 'مجلد (Folder)'
+          : (item.isArchive ? `أرشيف مضغوط (${(item.extension || '').toUpperCase().slice(1)})` : `${(item.extension || '').toUpperCase().slice(1) || 'File'} File`);
+        const modStr = item.modified ? new Date(item.modified).toLocaleDateString() : '-';
+        const iconColor = item.isDirectory ? 'var(--accent-amber)' : (item.isArchive ? 'var(--accent-emerald)' : 'var(--accent-blue)');
+
+        tr.innerHTML = `
+          <td class="col-name">
+            <div class="file-name-cell">
+              <input type="checkbox" class="file-check" ${isSelected ? 'checked' : ''}>
+              <svg class="file-icon" viewBox="0 0 24 24" fill="currentColor" style="color:${iconColor};">
+                ${item.isDirectory
+                  ? '<path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>'
+                  : (item.isArchive
+                    ? '<path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2zm0-4h-4V6h4v2z"/>'
+                    : '<path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>'
+                  )
+                }
+              </svg>
+              <span style="font-weight:600; max-width:320px; overflow:hidden; text-overflow:ellipsis;">
+                ${item.name}
+              </span>
+            </div>
+          </td>
+          <td class="col-size cell-mono">${sizeStr}</td>
+          <td class="col-packed cell-mono">${packedStr}</td>
+          <td class="col-ratio cell-mono" style="color:var(--accent-emerald); font-weight:700;">${ratioStr}</td>
+          <td class="col-type">${typeStr}</td>
+          <td class="col-modified cell-mono" style="color:var(--text-muted);">${modStr}</td>
+          <td class="col-crc cell-mono" style="font-size:10px;">-</td>
+        `;
+
+        const chk = tr.querySelector('.file-check');
+        chk.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (chk.checked) {
+            this.selectedPcPaths.add(item.path);
+          } else {
+            this.selectedPcPaths.delete(item.path);
+          }
+          this.updateUI();
+        });
+
+        tr.addEventListener('click', () => {
+          if (this.selectedPcPaths.has(item.path)) {
+            this.selectedPcPaths.delete(item.path);
+          } else {
+            this.selectedPcPaths.add(item.path);
+          }
+          this.updateUI();
+        });
+
+        tr.addEventListener('dblclick', () => {
+          if (item.isDirectory) {
+            this.loadPcDirectory(item.path);
+          } else if (item.isArchive) {
+            this.openArchiveFromPath(item.path);
+          } else {
+            fetch('/api/fs/open', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ path: item.path })
+            });
+          }
+        });
+
+        tr.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          this.contextTarget = item;
+          this.selectedPcPaths.clear();
+          this.selectedPcPaths.add(item.path);
+          this.updateUI();
+          this.openContextMenu(e.clientX, e.clientY);
+        });
+
+        tbody.appendChild(tr);
+      });
+      return;
+    }
+
+    // Inside Archive mode
     const visibleFiles = this.archiveFiles.filter((f) => {
       if (query) return f.name.toLowerCase().includes(query);
       return f.name.startsWith(this.currentPrefix);
@@ -1732,7 +2343,6 @@ class DzArchiveApp {
         <td class="col-crc cell-mono" style="font-size:10px;">${crcStr}</td>
       `;
 
-      // Checkbox click
       const chk = tr.querySelector('.file-check');
       chk.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1744,7 +2354,6 @@ class DzArchiveApp {
         this.updateUI();
       });
 
-      // Row click selection
       tr.addEventListener('click', () => {
         if (this.selectedFiles.has(file.name)) {
           this.selectedFiles.delete(file.name);
@@ -1754,7 +2363,6 @@ class DzArchiveApp {
         this.updateUI();
       });
 
-      // Double-click
       tr.addEventListener('dblclick', () => {
         if (file.isDirectory) {
           this.currentPrefix = file.name;
@@ -1766,9 +2374,9 @@ class DzArchiveApp {
         }
       });
 
-      // Context menu
       tr.addEventListener('contextmenu', (e) => {
         e.preventDefault();
+        this.contextTarget = file;
         this.selectedFiles.clear();
         this.selectedFiles.add(file.name);
         this.updateUI();
@@ -1780,6 +2388,22 @@ class DzArchiveApp {
   }
 
   updateStatusBar() {
+    if (this.mode === 'pc') {
+      let selectedBytes = 0;
+      this.pcItems.forEach(i => {
+        if (this.selectedPcPaths.has(i.path)) selectedBytes += (i.size || 0);
+      });
+      let totalBytes = 0;
+      this.pcItems.forEach(i => totalBytes += (i.size || 0));
+
+      this.dom.statusSelected.textContent = this.selectedPcPaths.size;
+      this.dom.statusTotalFiles.textContent = this.pcItems.length;
+      this.dom.statusTotalSize.textContent = formatBytes(totalBytes);
+      this.dom.statusPackedSize.textContent = formatBytes(selectedBytes);
+      this.dom.statusRatio.textContent = 'PC DISK';
+      return;
+    }
+
     let totalUncomp = 0;
     let totalComp = 0;
     this.archiveFiles.forEach((f) => {
