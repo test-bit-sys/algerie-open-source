@@ -4,7 +4,7 @@
  * trilingual enterprise UI (AR/FR/EN), dark/light theme, 100% offline-first.
  */
 
-import { PDFEngine, PAGE_SIZES, ALGERIAN_STAMPS, StampRenderer } from './pdf-engine.js';
+import { PDFEngine, PAGE_SIZES, ALGERIAN_STAMPS, ALGERIAN_WILAYAS, StampRenderer } from './pdf-engine.js';
 import { SignaturePad } from './signature-pad.js';
 import { AlgerianTemplates } from './templates.js';
 
@@ -13,13 +13,21 @@ const I18N = {
     appTitle: 'DZ-PDF Pro — بديل Adobe Acrobat المفتوح المصدر',
     menuFile: 'ملف',
     mOpenFile: 'فتح ملفات أو صور...',
-    mSampleCert: 'نموذج: شهادة إدارية رسمية جزائرية',
-    mSampleInvoice: 'نموذج: فاتورة وعقد تجاري رسمي (DZD)',
+    mMergeFiles: 'دمج ملفات PDF وصور متعددة...',
+    mSplitFile: 'تقسيم واستخراج صفحات...',
     mBlankPage: 'إدراج صفحة بيضاء جديدة',
     mSavePdf: 'حفظ وتصدير PDF مجمع',
     mExportImages: 'تصدير الصفحة كصورة عالية الدقة',
     mPrint: 'طباعة المستند...',
     mDocProps: 'خصائص المستند',
+    menuTemplates: 'نماذج رسمية',
+    tplCert: '1. شهادة إدارية رسمية مطابقة',
+    tplInvoice: '2. فاتورة وعقد تجاري رسمي (DZD)',
+    tplHonor: '3. تصريح شرفي رسمي جزائري',
+    tplWork: '4. شهادة عمل وممارسة مهنية CNAS',
+    tplRequest: '5. استمارة طلب خطي إداري',
+    tplPaySlip: '6. كشف راتب ومستحقات (Fiche de Paie)',
+    tplBrowseAll: 'استعراض مكتبة النماذج بالكامل...',
     menuEdit: 'تحرير',
     mUndo: 'تراجع',
     mClearAnn: 'مسح تأشيرات الصفحة الحالية',
@@ -39,17 +47,21 @@ const I18N = {
     mToolStamps: 'الأختام والمصادقات الإدارية الجزائرية',
     mToolSign: 'لوحة التوقيع الرقمي المعتمد',
     mToolWatermark: 'إدارة العلامة المائية والترقيم الجبائي',
+    mToolSplit: 'تقسيم واستخراج صفحات المستند',
     menuHelp: 'مساعدة',
     mShortcuts: 'اختصارات لوحة المفاتيح',
     mAbout: 'حول استوديو DZ-PDF Pro',
     tbOpen: 'فتح',
     tbSave: 'تصدير PDF',
+    tbSplit: 'تقسيم',
     modeEditor: 'محرر الصفحة',
     modeOrganizer: 'تنظيم الصفحات',
     tbStamp: 'أختام رسمية',
     tbSign: 'توقيع',
+    tbTemplates: 'نماذج وثائق',
     panelThumbnails: 'مصغرات الصفحات',
     panelComments: 'التعليقات والتأشيرات',
+    panelTemplates: 'نماذج وثائق الجزائر',
     panelProperties: 'خصائص المستند',
     propName: 'اسم الملف:',
     propPages: 'عدد الصفحات:',
@@ -59,13 +71,12 @@ const I18N = {
     emptyTitle: 'استوديو وثائق PDF الجزائري — البديل المكتبي الاحترافي',
     emptyDesc: 'قم بسحب وإفلات ملفات PDF أو الصور لتنظيم الصفحات، التدوير، إضافة التوقيع الرقمي المعتمد، والأختام الإدارية الرسمية.',
     openFiles: 'فتح ملفات أو صور',
-    loadSampleCert: 'فتح نموذج شهادة إدارية جزائرية',
-    loadSampleInvoice: 'فتح نموذج عقد وفاتورة تجارية',
+    loadTemplateBtn: 'استعراض نماذج الوثائق الجزائرية (7 نماذج)',
     organizerTip: 'اسحب وأفلت لإعادة الترتيب، أو اضغط على أزرار التدوير والحذف',
     insertBlank: 'إدراج صفحة بيضاء',
     rotateAll: 'تدوير الكل 90°',
     stampsModalTitle: 'الأختام والمصادقات الإدارية الرسمية الجزائرية',
-    stampWilaya: 'الولاية / الجهة الإدارية:',
+    stampWilaya: 'الولاية / الجهة الإدارية (58 ولاية):',
     stampRef: 'رقم القيد / المرجع الإداري:',
     signatureModalTitle: 'لوحة التوقيع الرقمي المعتمد للمستندات',
     sigGuide: 'ارسم توقيعك هنا بالفأرة أو القلم اللمسي',
@@ -87,13 +98,21 @@ const I18N = {
     appTitle: 'DZ-PDF Pro — Alternative Open Source à Adobe Acrobat',
     menuFile: 'Fichier',
     mOpenFile: 'Ouvrir des fichiers ou images...',
-    mSampleCert: 'Modèle: Attestation administrative algérienne',
-    mSampleInvoice: 'Modèle: Facture et contrat commercial officiel (DZD)',
+    mMergeFiles: 'Fusionner des fichiers PDF & images...',
+    mSplitFile: 'Scinder et extraire des pages...',
     mBlankPage: 'Insérer une page blanche',
     mSavePdf: 'Enregistrer & Exporter PDF',
     mExportImages: 'Exporter la page en image HD',
     mPrint: 'Imprimer le document...',
     mDocProps: 'Propriétés du document',
+    menuTemplates: 'Modèles officiels',
+    tplCert: '1. Attestation administrative conforme',
+    tplInvoice: '2. Facture & contrat commercial (DZD)',
+    tplHonor: '3. Déclaration sur l’honneur',
+    tplWork: '4. Attestation de travail CNAS',
+    tplRequest: '5. Demande administrative officielle',
+    tplPaySlip: '6. Fiche de paie / Bulletin',
+    tplBrowseAll: 'Parcourir tous les modèles...',
     menuEdit: 'Édition',
     mUndo: 'Annuler',
     mClearAnn: 'Effacer annotations de la page',
@@ -113,17 +132,21 @@ const I18N = {
     mToolStamps: 'Tampons administratifs officiels',
     mToolSign: 'Signature numérique certifiée',
     mToolWatermark: 'Gestion filigrane et numérotation',
+    mToolSplit: 'Scinder et extraire des pages',
     menuHelp: 'Aide',
     mShortcuts: 'Raccourcis clavier',
     mAbout: 'À propos de DZ-PDF Pro',
     tbOpen: 'Ouvrir',
     tbSave: 'Exporter PDF',
+    tbSplit: 'Scinder',
     modeEditor: 'Éditeur de Page',
     modeOrganizer: 'Organiser Pages',
     tbStamp: 'Tampons',
     tbSign: 'Signer',
+    tbTemplates: 'Modèles',
     panelThumbnails: 'Vignettes des pages',
     panelComments: 'Commentaires & Annotations',
+    panelTemplates: 'Modèles de documents algériens',
     panelProperties: 'Propriétés du document',
     propName: 'Nom du fichier:',
     propPages: 'Nombre de pages:',
@@ -133,13 +156,12 @@ const I18N = {
     emptyTitle: 'Studio de Documents PDF Algérien — Édition Pro',
     emptyDesc: 'Glissez et déposez des fichiers PDF ou images pour organiser les pages, pivoter, apposer des signatures numériques et tampons officiels.',
     openFiles: 'Ouvrir fichiers ou images',
-    loadSampleCert: 'Charger modèle attestation officielle',
-    loadSampleInvoice: 'Charger modèle facture & contrat DZD',
+    loadTemplateBtn: 'Parcourir les modèles algériens (7 modèles)',
     organizerTip: 'Glissez-déposez pour réorganiser, pivotez ou supprimez',
     insertBlank: 'Insérer page blanche',
     rotateAll: 'Pivoter tout 90°',
     stampsModalTitle: 'Tampons et Visas Administratifs Algériens',
-    stampWilaya: 'Wilaya / Entité administrative:',
+    stampWilaya: 'Wilaya / Entité administrative (58 wilayas):',
     stampRef: 'Réf / Numéro d’enregistrement:',
     signatureModalTitle: 'Module de Signature Numérique Certifiée',
     sigGuide: 'Tracez votre signature avec la souris ou le stylet',
@@ -161,13 +183,21 @@ const I18N = {
     appTitle: 'DZ-PDF Pro — Open Source Adobe Acrobat Alternative',
     menuFile: 'File',
     mOpenFile: 'Open files or images...',
-    mSampleCert: 'Template: Official Algerian Administrative Attestation',
-    mSampleInvoice: 'Template: Commercial Invoice & Contract (DZD)',
+    mMergeFiles: 'Merge PDFs & images...',
+    mSplitFile: 'Split and extract pages...',
     mBlankPage: 'Insert Blank Page',
     mSavePdf: 'Save & Compile PDF',
     mExportImages: 'Export Page as HD Image',
     mPrint: 'Print Document...',
     mDocProps: 'Document Properties',
+    menuTemplates: 'Official Templates',
+    tplCert: '1. Administrative Certificate',
+    tplInvoice: '2. Commercial Invoice & Contract (DZD)',
+    tplHonor: '3. Declaration on Honor',
+    tplWork: '4. Employment Certificate CNAS',
+    tplRequest: '5. Official Administrative Request',
+    tplPaySlip: '6. Salary Slip / Pay Sheet',
+    tplBrowseAll: 'Browse All Templates...',
     menuEdit: 'Edit',
     mUndo: 'Undo',
     mClearAnn: 'Clear Annotations on Current Page',
@@ -187,17 +217,21 @@ const I18N = {
     mToolStamps: 'Official Algerian Administrative Stamps',
     mToolSign: 'Certified Digital Signature Pad',
     mToolWatermark: 'Watermark & Bates Numbering',
+    mToolSplit: 'Split & Extract Document Pages',
     menuHelp: 'Help',
     mShortcuts: 'Keyboard Shortcuts',
     mAbout: 'About DZ-PDF Pro',
     tbOpen: 'Open',
     tbSave: 'Export PDF',
+    tbSplit: 'Split',
     modeEditor: 'Page Editor',
     modeOrganizer: 'Organize Pages',
     tbStamp: 'Official Stamps',
     tbSign: 'Sign',
+    tbTemplates: 'Templates',
     panelThumbnails: 'Page Thumbnails',
     panelComments: 'Comments & Annotations',
+    panelTemplates: 'Algerian Document Templates',
     panelProperties: 'Document Properties',
     propName: 'File Name:',
     propPages: 'Page Count:',
@@ -207,13 +241,12 @@ const I18N = {
     emptyTitle: 'Algerian PDF Document Studio — Desktop Pro Edition',
     emptyDesc: 'Drag & drop PDF files or images to organize pages, rotate, apply certified digital signatures, and official administrative stamps.',
     openFiles: 'Open Files or Images',
-    loadSampleCert: 'Load Official Administrative Attestation',
-    loadSampleInvoice: 'Load Commercial Invoice & Contract',
+    loadTemplateBtn: 'Browse Algerian Document Templates (7 Templates)',
     organizerTip: 'Drag and drop to reorder, rotate or delete pages',
     insertBlank: 'Insert Blank Page',
     rotateAll: 'Rotate All 90°',
     stampsModalTitle: 'Official Algerian Administrative Stamps & Seals',
-    stampWilaya: 'Wilaya / Administrative Entity:',
+    stampWilaya: 'Wilaya / Administrative Entity (58 Wilayas):',
     stampRef: 'Reference / Filing Number:',
     signatureModalTitle: 'Certified Digital Signature Module',
     sigGuide: 'Draw your signature here using mouse or touch pen',
@@ -248,15 +281,13 @@ class DZPdfProApp {
     // Tool Settings
     this.penColor = '#dc2626';
     this.penWidth = 3;
-    this.highlighterColor = 'rgba(250, 204, 21, 0.4)'; // Yellow
+    this.highlighterColor = 'rgba(250, 204, 21, 0.4)';
     this.highlighterWidth = 24;
     this.textFontSize = 18;
     this.textColor = '#0f172a';
 
     // Viewport scale & pan
     this.zoomLevel = 1.0;
-    this.panX = 0;
-    this.panY = 0;
     this.isPanning = false;
     this.panStartX = 0;
     this.panStartY = 0;
@@ -266,14 +297,23 @@ class DZPdfProApp {
     this.currentStrokePoints = [];
     this.redactStart = null;
 
-    // Watermark & Security Settings
+    // Watermark, Bates & Header/Footer Settings
     this.watermarkText = '';
     this.watermarkOpacity = 0.25;
     this.watermarkAngle = 45;
     this.includePageNumbers = true;
+    this.headerText = '';
+    this.footerText = '';
 
     // Signature Pad
     this.sigPad = null;
+    this.activeStampFilter = 'all';
+
+    // Drag and Drop organizer state
+    this.draggedCardIndex = null;
+
+    // Merge files queue
+    this.mergeQueue = [];
 
     // DOM Elements
     this.viewport = document.getElementById('canvas-viewport');
@@ -288,16 +328,27 @@ class DZPdfProApp {
   init() {
     this.setupLanguage(this.currentLang);
     this.setupTheme(this.theme);
+    this.populateWilayasDropdown();
     this.bindAcrobatMenus();
     this.bindToolbar();
     this.bindSidebar();
     this.bindCanvasInteractions();
     this.bindKeyboardShortcuts();
     this.initSignaturePad();
+    this.initTemplatesModals();
     this.renderStampsPicker();
 
-    // Load initial sample official Algerian administrative certificate for instant wow!
-    this.loadSampleCertificate();
+    // Load initial sample official Algerian administrative certificate
+    this.loadTemplate('cert_admin');
+  }
+
+  populateWilayasDropdown() {
+    const sel = document.getElementById('select-stamp-wilaya');
+    if (!sel) return;
+    sel.innerHTML = ALGERIAN_WILAYAS.map(
+      (w) => `<option value="ولاية ${w.nameAr}">${w.code} - ولاية ${w.nameAr} (${w.nameFr})</option>`
+    ).join('');
+    sel.value = 'ولاية الجزائر العاصمة';
   }
 
   setupLanguage(lang) {
@@ -343,6 +394,76 @@ class DZPdfProApp {
     if (canvas) {
       this.sigPad = new SignaturePad(canvas);
     }
+
+    // Bind Signature Mode Tabs (Draw, Type, Upload)
+    document.querySelectorAll('.sig-mode-tab').forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        document.querySelectorAll('.sig-mode-tab').forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        const mode = tab.getAttribute('data-mode');
+        this.setSigPadMode(mode);
+      });
+    });
+
+    // Typed Signature input
+    const typeInput = document.getElementById('sig-typed-input');
+    typeInput?.addEventListener('input', (e) => {
+      this.sigPad?.setTypedText(e.target.value);
+    });
+
+    // File input for image upload
+    const sigFileInput = document.getElementById('sig-file-input');
+    sigFileInput?.addEventListener('change', async (e) => {
+      if (e.target.files.length) {
+        const file = e.target.files[0];
+        const dataUrl = await new Promise((res) => {
+          const r = new FileReader();
+          r.onload = (ev) => res(ev.target.result);
+          r.readAsDataURL(file);
+        });
+        const img = await PDFEngine.loadImage(dataUrl);
+        this.sigPad?.setUploadedImage(img);
+        sigFileInput.value = '';
+      }
+    });
+  }
+
+  setSigPadMode(mode) {
+    if (!this.sigPad) return;
+    this.sigPad.setMode(mode);
+
+    const typeRow = document.getElementById('sig-type-row');
+    const guideText = document.getElementById('sig-guide-text');
+    const canvas = document.getElementById('signature-canvas');
+
+    if (mode === 'type') {
+      if (typeRow) typeRow.style.display = 'block';
+      if (guideText) guideText.style.display = 'none';
+      const typeInput = document.getElementById('sig-typed-input');
+      if (typeInput) {
+        typeInput.focus();
+        if (!typeInput.value) {
+          typeInput.value = document.getElementById('sig-input-name')?.value || 'Mohamed BENALI';
+        }
+        this.sigPad.setTypedText(typeInput.value);
+      }
+    } else if (mode === 'upload') {
+      if (typeRow) typeRow.style.display = 'none';
+      if (guideText) {
+        guideText.style.display = 'block';
+        guideText.textContent = 'انقر لرفع صورة التوقيع أو الختم الشفاف';
+      }
+      canvas.onclick = () => document.getElementById('sig-file-input')?.click();
+      document.getElementById('sig-file-input')?.click();
+    } else {
+      // Draw mode
+      if (typeRow) typeRow.style.display = 'none';
+      if (guideText) {
+        guideText.style.display = 'block';
+        guideText.textContent = 'ارسم توقيعك هنا بالفأرة أو القلم اللمسي';
+      }
+      canvas.onclick = null;
+    }
   }
 
   /* ---------------- MENU BAR & SHORTCUTS ---------------- */
@@ -368,13 +489,13 @@ class DZPdfProApp {
     document.getElementById('tb-open')?.addEventListener('click', () => fileInput.click());
     document.getElementById('btn-empty-open')?.addEventListener('click', () => fileInput.click());
 
-    document.getElementById('m-sample-cert')?.addEventListener('click', () => this.loadSampleCertificate());
-    document.getElementById('btn-empty-cert')?.addEventListener('click', () => this.loadSampleCertificate());
-
-    document.getElementById('m-sample-invoice')?.addEventListener('click', () => this.loadSampleInvoice());
-    document.getElementById('btn-empty-invoice')?.addEventListener('click', () => this.loadSampleInvoice());
+    document.getElementById('m-merge-files')?.addEventListener('click', () => this.openMergeModal());
+    document.getElementById('m-split-file')?.addEventListener('click', () => this.openSplitModal());
+    document.getElementById('tb-split')?.addEventListener('click', () => this.openSplitModal());
+    document.getElementById('m-tool-split')?.addEventListener('click', () => this.openSplitModal());
 
     document.getElementById('m-blank-page')?.addEventListener('click', () => this.insertBlankPage());
+    document.getElementById('btn-empty-blank')?.addEventListener('click', () => this.insertBlankPage());
     document.getElementById('btn-sidebar-add-blank')?.addEventListener('click', () => this.insertBlankPage());
     document.getElementById('btn-organizer-add-blank')?.addEventListener('click', () => this.insertBlankPage());
 
@@ -388,6 +509,18 @@ class DZPdfProApp {
     document.getElementById('m-doc-props')?.addEventListener('click', () => {
       document.getElementById('dock-tab-props')?.click();
     });
+
+    // Templates Menu Actions
+    document.getElementById('m-tpl-cert')?.addEventListener('click', () => this.loadTemplate('cert_admin'));
+    document.getElementById('m-tpl-invoice')?.addEventListener('click', () => this.loadTemplate('inv_commercial'));
+    document.getElementById('m-tpl-honor')?.addEventListener('click', () => this.loadTemplate('honor_declaration'));
+    document.getElementById('m-tpl-work')?.addEventListener('click', () => this.loadTemplate('work_cert'));
+    document.getElementById('m-tpl-request')?.addEventListener('click', () => this.loadTemplate('admin_request'));
+    document.getElementById('m-tpl-payslip')?.addEventListener('click', () => this.loadTemplate('pay_slip'));
+    document.getElementById('m-tpl-browse')?.addEventListener('click', () => this.openTemplatesModal());
+    document.getElementById('btn-empty-templates')?.addEventListener('click', () => this.openTemplatesModal());
+    document.getElementById('btn-organizer-add-template')?.addEventListener('click', () => this.openTemplatesModal());
+    document.getElementById('tool-templates')?.addEventListener('click', () => this.openTemplatesModal());
 
     // Edit Menu Actions
     document.getElementById('m-undo')?.addEventListener('click', () => this.undoCurrentPageAnnotation());
@@ -450,7 +583,7 @@ class DZPdfProApp {
       }
     });
 
-    // Drag and Drop
+    // Drag and Drop files onto window
     window.addEventListener('dragover', (e) => e.preventDefault());
     window.addEventListener('drop', async (e) => {
       e.preventDefault();
@@ -468,6 +601,8 @@ class DZPdfProApp {
       this.watermarkText = document.getElementById('input-modal-watermark')?.value.trim() || '';
       this.watermarkOpacity = parseFloat(document.getElementById('input-wm-opacity')?.value || '0.25');
       this.watermarkAngle = parseInt(document.getElementById('select-wm-angle')?.value || '45');
+      this.headerText = document.getElementById('input-doc-header')?.value.trim() || '';
+      this.footerText = document.getElementById('input-doc-footer')?.value.trim() || '';
       this.includePageNumbers = document.getElementById('check-page-numbers')?.checked ?? true;
       this.renderCurrentPage();
       this.showToast('Watermark & Bates numbering updated');
@@ -490,6 +625,16 @@ class DZPdfProApp {
     });
 
     document.getElementById('btn-sig-apply')?.addEventListener('click', () => this.applySignatureToActivePage());
+
+    // Split & Merge Actions
+    document.getElementById('btn-do-split')?.addEventListener('click', () => this.executeSplit());
+    document.getElementById('btn-merge-add-files')?.addEventListener('click', () => {
+      document.getElementById('file-input')?.click();
+    });
+    document.getElementById('btn-do-merge')?.addEventListener('click', () => {
+      document.getElementById('modal-merge')?.classList.remove('open');
+      this.showToast('All documents combined into active session');
+    });
   }
 
   bindToolbar() {
@@ -608,7 +753,6 @@ class DZPdfProApp {
         e.preventDefault();
         this.deleteCurrentPage();
       } else if (!isCtrl) {
-        // Single key tool shortcuts
         const k = e.key.toLowerCase();
         if (k === 'v') this.triggerToolSelect('select');
         else if (k === 'h') this.triggerToolSelect('pan');
@@ -802,38 +946,25 @@ class DZPdfProApp {
     }
   }
 
-  /* ---------------- DOCUMENT LOADING & PAGES ---------------- */
+  /* ---------------- DOCUMENT LOADING & TEMPLATES ---------------- */
 
-  async loadSampleCertificate() {
-    this.showToast('Loading official Algerian administrative template...');
-    const pageData = AlgerianTemplates.createAdministrativeCertificate();
-    this.pages = [
-      {
-        id: 'p_cert_' + Date.now(),
-        name: pageData.name,
-        dataUrl: pageData.dataUrl,
-        rotation: 0,
-        annotations: []
-      }
-    ];
-    this.currentPageIndex = 0;
-    this.updateDocumentState();
-  }
+  loadTemplate(templateId) {
+    const tplList = AlgerianTemplates.getTemplatesList();
+    const item = tplList.find((t) => t.id === templateId) || tplList[0];
+    const pageData = item.action();
 
-  async loadSampleInvoice() {
-    this.showToast('Loading official commercial invoice & contract...');
-    const pageData = AlgerianTemplates.createCommercialContract();
-    this.pages = [
-      {
-        id: 'p_inv_' + Date.now(),
-        name: pageData.name,
-        dataUrl: pageData.dataUrl,
-        rotation: 0,
-        annotations: []
-      }
-    ];
-    this.currentPageIndex = 0;
+    this.pages.push({
+      id: 'p_tpl_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+      name: pageData.name,
+      dataUrl: pageData.dataUrl,
+      rotation: 0,
+      annotations: []
+    });
+
+    this.currentPageIndex = this.pages.length - 1;
     this.updateDocumentState();
+    this.showToast(`تم تحميل نموذج: ${item.titleAr}`);
+    document.querySelectorAll('.modal-backdrop').forEach((m) => m.classList.remove('open'));
   }
 
   insertBlankPage() {
@@ -867,7 +998,6 @@ class DZPdfProApp {
           annotations: []
         });
       } else if (file.name.endsWith('.pdf') || file.type === 'application/pdf') {
-        // Real blank/page placeholder for imported PDF file
         const blank = AlgerianTemplates.createBlankPage(this.pages.length + 1);
         this.pages.push({
           id: 'p_pdf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
@@ -907,6 +1037,9 @@ class DZPdfProApp {
     if (propDocName && this.pages.length > 0) {
       propDocName.textContent = this.pages[0].name;
     }
+
+    const splitTotalEl = document.getElementById('split-doc-total-pages');
+    if (splitTotalEl) splitTotalEl.textContent = String(this.pages.length);
 
     this.renderSidebarThumbnails();
     this.renderSidebarComments();
@@ -1024,11 +1157,24 @@ class DZPdfProApp {
     }
     ctx.restore();
 
-    // Draw Annotations onto Base Canvas
+    // Draw Annotations onto Base Canvas (non-DOM annotations: pen, highlight, redact, text, measure, note)
     if (page.annotations) {
       for (const ann of page.annotations) {
-        PDFEngine.renderAnnotation(ctx, ann, this.baseCanvas.width, this.baseCanvas.height);
+        if (ann.type !== 'image') {
+          PDFEngine.renderAnnotation(ctx, ann, this.baseCanvas.width, this.baseCanvas.height);
+        }
       }
+    }
+
+    // Draw Header Text
+    if (this.headerText) {
+      ctx.save();
+      ctx.fillStyle = '#64748b';
+      ctx.font = '14px "Segoe UI", Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.direction = 'rtl';
+      ctx.fillText(this.headerText, this.baseCanvas.width / 2, 35);
+      ctx.restore();
     }
 
     // Draw Watermark preview
@@ -1039,6 +1185,7 @@ class DZPdfProApp {
       ctx.font = 'bold 64px "Segoe UI", Arial, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
+      ctx.direction = 'rtl';
       const cx = this.baseCanvas.width / 2;
       const cy = this.baseCanvas.height / 2;
       ctx.translate(cx, cy);
@@ -1047,13 +1194,19 @@ class DZPdfProApp {
       ctx.restore();
     }
 
-    // Draw Bates Number
-    if (this.includePageNumbers) {
+    // Draw Bates / Footer
+    const bottomText = [
+      this.includePageNumbers ? `Page ${this.currentPageIndex + 1} of ${this.pages.length}` : '',
+      this.footerText
+    ].filter(Boolean).join(' • ');
+
+    if (bottomText) {
       ctx.save();
       ctx.fillStyle = '#64748b';
       ctx.font = '14px "Segoe UI", Arial, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`Page ${this.currentPageIndex + 1} of ${this.pages.length}`, this.baseCanvas.width / 2, this.baseCanvas.height - 25);
+      ctx.direction = 'rtl';
+      ctx.fillText(bottomText, this.baseCanvas.width / 2, this.baseCanvas.height - 25);
       ctx.restore();
     }
 
@@ -1061,10 +1214,117 @@ class DZPdfProApp {
     const octx = this.overlayCanvas.getContext('2d');
     octx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
 
+    // Sync interactive DOM overlay
+    this.renderDomOverlayItems();
+
     this.applyZoomTransform();
   }
 
-  /* ---------------- LIVE DRAWING, REDACTION & ANNOTATIONS ---------------- */
+  /* ---------------- INTERACTIVE DOM OVERLAY (STAMPS, SIGNATURES) ---------------- */
+
+  renderDomOverlayItems() {
+    if (!this.domOverlay) return;
+    this.domOverlay.innerHTML = '';
+    const page = this.pages[this.currentPageIndex];
+    if (!page || !Array.isArray(page.annotations)) return;
+
+    page.annotations.forEach((ann, idx) => {
+      if (ann.type === 'image' && ann.imageElement) {
+        const item = document.createElement('div');
+        item.className = 'dom-placed-item';
+        item.style.left = `${ann.x * 100}%`;
+        item.style.top = `${ann.y * 100}%`;
+        item.style.width = `${ann.w * 100}%`;
+        item.style.height = `${ann.h * 100}%`;
+        item.dataset.index = idx;
+
+        const img = document.createElement('img');
+        img.src = ann.imageElement.src;
+        item.appendChild(img);
+
+        // Delete button
+        const delBtn = document.createElement('button');
+        delBtn.className = 'remove-btn';
+        delBtn.innerHTML = '×';
+        delBtn.title = 'حذف هذا الختم/التوقيع';
+        delBtn.onclick = (e) => {
+          e.stopPropagation();
+          page.annotations.splice(idx, 1);
+          this.renderCurrentPage();
+          this.renderSidebarComments();
+          this.showToast('Item removed');
+        };
+        item.appendChild(delBtn);
+
+        // Resize handle
+        const resizeHandle = document.createElement('div');
+        resizeHandle.className = 'resize-handle bottom-right';
+        item.appendChild(resizeHandle);
+
+        this.attachDragAndResize(item, ann);
+        this.domOverlay.appendChild(item);
+      }
+    });
+  }
+
+  attachDragAndResize(itemEl, ann) {
+    let isDragging = false;
+    let isResizing = false;
+    let startX, startY;
+    let initialNormX, initialNormY, initialNormW, initialNormH;
+
+    const overlayRect = () => this.overlayCanvas.getBoundingClientRect();
+
+    itemEl.addEventListener('mousedown', (e) => {
+      if (e.target.classList.contains('remove-btn')) return;
+
+      if (e.target.classList.contains('resize-handle')) {
+        isResizing = true;
+      } else {
+        isDragging = true;
+      }
+
+      startX = e.clientX;
+      startY = e.clientY;
+      initialNormX = ann.x;
+      initialNormY = ann.y;
+      initialNormW = ann.w;
+      initialNormH = ann.h;
+
+      itemEl.classList.add('selected');
+
+      const onMouseMove = (moveEv) => {
+        const rect = overlayRect();
+        const deltaNormX = (moveEv.clientX - startX) / rect.width;
+        const deltaNormY = (moveEv.clientY - startY) / rect.height;
+
+        if (isDragging) {
+          ann.x = Math.max(0, Math.min(1 - ann.w, initialNormX + deltaNormX));
+          ann.y = Math.max(0, Math.min(1 - ann.h, initialNormY + deltaNormY));
+          itemEl.style.left = `${ann.x * 100}%`;
+          itemEl.style.top = `${ann.y * 100}%`;
+        } else if (isResizing) {
+          ann.w = Math.max(0.05, Math.min(1 - ann.x, initialNormW + deltaNormX));
+          ann.h = Math.max(0.03, Math.min(1 - ann.y, initialNormH + deltaNormY));
+          itemEl.style.width = `${ann.w * 100}%`;
+          itemEl.style.height = `${ann.h * 100}%`;
+        }
+      };
+
+      const onMouseUp = () => {
+        isDragging = false;
+        isResizing = false;
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        this.renderCurrentPage();
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    });
+  }
+
+  /* ---------------- LIVE DRAWING, REDACTION & MEASUREMENTS ---------------- */
 
   bindCanvasInteractions() {
     const overlay = this.overlayCanvas;
@@ -1103,7 +1363,7 @@ class DZPdfProApp {
       }
     });
 
-    // Pen & Highlight & Redaction Drawing on Overlay
+    // Drawing on Overlay
     overlay.addEventListener('mousedown', (e) => {
       if (this.activeTool === 'pen' || this.activeTool === 'highlighter') {
         this.isDrawing = true;
@@ -1130,7 +1390,6 @@ class DZPdfProApp {
         const pt = getNormCoords(e);
         this.currentStrokePoints.push(pt);
 
-        // Preview live stroke on overlay
         octx.clearRect(0, 0, overlay.width, overlay.height);
         octx.beginPath();
         octx.strokeStyle = this.activeTool === 'pen' ? this.penColor : this.highlighterColor;
@@ -1341,10 +1600,18 @@ class DZPdfProApp {
     const grid = document.getElementById('stamps-picker-grid');
     if (!grid) return;
 
-    const wilaya = document.getElementById('select-stamp-wilaya')?.value || 'ولاية الجزائر';
-    const ref = document.getElementById('input-stamp-ref')?.value || 'N° 1084/2026';
+    const wilaya = document.getElementById('select-stamp-wilaya')?.value || 'ولاية الجزائر العاصمة';
+    const ref = document.getElementById('input-stamp-ref')?.value || 'N° 1428 / REG / 2026';
 
-    grid.innerHTML = Object.entries(ALGERIAN_STAMPS)
+    const entries = Object.entries(ALGERIAN_STAMPS).filter(([_, stamp]) => {
+      if (this.activeStampFilter === 'all') return true;
+      if (this.activeStampFilter === 'circular') return stamp.type === 'circular';
+      if (this.activeStampFilter === 'oval') return stamp.type === 'oval';
+      if (this.activeStampFilter === 'rectangular') return stamp.type === 'rectangular';
+      return true;
+    });
+
+    grid.innerHTML = entries
       .map(([key, stamp]) => {
         const stampDataUrl = StampRenderer.renderStamp(key, { wilaya, ref });
         return `
@@ -1364,27 +1631,48 @@ class DZPdfProApp {
       this.applyStampToActivePage(key);
       document.getElementById('modal-stamps')?.classList.remove('open');
     };
+
+    // Filter tabs
+    document.querySelectorAll('.stamp-filter-tab').forEach((tab) => {
+      tab.onclick = (e) => {
+        document.querySelectorAll('.stamp-filter-tab').forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        this.activeStampFilter = tab.getAttribute('data-filter');
+        this.renderStampsPicker();
+      };
+    });
+
+    document.getElementById('select-stamp-wilaya')?.addEventListener('change', () => this.renderStampsPicker());
+    document.getElementById('input-stamp-ref')?.addEventListener('input', () => this.renderStampsPicker());
   }
 
   async applyStampToActivePage(stampKey) {
     const page = this.pages[this.currentPageIndex];
     if (!page) return;
 
-    const wilaya = document.getElementById('select-stamp-wilaya')?.value || 'ولاية الجزائر';
-    const ref = document.getElementById('input-stamp-ref')?.value || 'N° 1084/2026';
+    const wilaya = document.getElementById('select-stamp-wilaya')?.value || 'ولاية الجزائر العاصمة';
+    const ref = document.getElementById('input-stamp-ref')?.value || 'N° 1428 / REG / 2026';
     const stampDataUrl = StampRenderer.renderStamp(stampKey, { wilaya, ref });
 
     const img = await PDFEngine.loadImage(stampDataUrl);
     if (!page.annotations) page.annotations = [];
 
-    // Place at bottom right or upper right
     const stamp = ALGERIAN_STAMPS[stampKey];
     const isRound = stamp?.type === 'circular';
+    const isOval = stamp?.type === 'oval';
 
-    const normW = isRound ? 0.22 : 0.28;
-    const normH = isRound ? 0.16 : 0.09;
-    const normX = 0.95 - normW;
-    const normY = 0.88 - normH;
+    const normW = isRound ? 0.22 : (isOval ? 0.26 : 0.28);
+    const normH = isRound ? 0.16 : (isOval ? 0.13 : 0.09);
+
+    let normY = 0.50;
+    if (this.viewport && this.paperWrapper) {
+      const wrapRect = this.paperWrapper.getBoundingClientRect();
+      const vpRect = this.viewport.getBoundingClientRect();
+      const visibleCenterY = (vpRect.top + vpRect.bottom) / 2;
+      const relY = (visibleCenterY - wrapRect.top) / wrapRect.height;
+      normY = Math.max(0.08, Math.min(0.85, relY - normH / 2));
+    }
+    const normX = 0.55;
 
     page.annotations.push({
       type: 'image',
@@ -1399,7 +1687,8 @@ class DZPdfProApp {
 
     this.renderCurrentPage();
     this.renderSidebarComments();
-    this.showToast(`Stamp '${stamp?.titleAr}' applied`);
+    this.renderSidebarThumbnails();
+    this.showToast(`تم تطبيق ختم: ${stamp?.titleAr}`);
   }
 
   /* ---------------- DIGITAL SIGNATURE SUITE ---------------- */
@@ -1432,10 +1721,18 @@ class DZPdfProApp {
     const img = await PDFEngine.loadImage(sigDataUrl);
     if (!page.annotations) page.annotations = [];
 
-    const normW = sigStyle === 'badge' ? 0.32 : 0.22;
-    const normH = sigStyle === 'badge' ? 0.12 : 0.08;
-    const normX = 0.08; // Place on bottom left in Arabic documents
-    const normY = 0.84;
+    const normW = sigStyle === 'badge' ? 0.34 : 0.24;
+    const normH = sigStyle === 'badge' ? 0.13 : 0.08;
+
+    let normY = 0.50;
+    if (this.viewport && this.paperWrapper) {
+      const wrapRect = this.paperWrapper.getBoundingClientRect();
+      const vpRect = this.viewport.getBoundingClientRect();
+      const visibleCenterY = (vpRect.top + vpRect.bottom) / 2;
+      const relY = (visibleCenterY - wrapRect.top) / wrapRect.height;
+      normY = Math.max(0.08, Math.min(0.85, relY - normH / 2));
+    }
+    const normX = 0.15;
 
     page.annotations.push({
       type: 'image',
@@ -1450,14 +1747,87 @@ class DZPdfProApp {
 
     this.renderCurrentPage();
     this.renderSidebarComments();
+    this.renderSidebarThumbnails();
     document.getElementById('modal-signature')?.classList.remove('open');
-    this.showToast('Digital signature stamped on page');
+    this.showToast('تم تثبيت التوقيع الرقمي بنجاح');
+  }
+
+  /* ---------------- TEMPLATES LIBRARY MODALS ---------------- */
+
+  initTemplatesModals() {
+    const list = AlgerianTemplates.getTemplatesList();
+
+    // 1. Sidebar Templates List
+    const sideListEl = document.getElementById('templates-sidebar-list');
+    if (sideListEl) {
+      sideListEl.innerHTML = list
+        .map(
+          (t) => `
+            <div class="template-side-card" data-tid="${t.id}">
+              <span class="template-side-title">${t.titleAr}</span>
+              <span class="template-side-desc">${t.descAr}</span>
+            </div>
+          `
+        )
+        .join('');
+
+      sideListEl.querySelectorAll('.template-side-card').forEach((card) => {
+        card.onclick = () => {
+          const tid = card.getAttribute('data-tid');
+          this.loadTemplate(tid);
+        };
+      });
+    }
+
+    // 2. Templates Modal Grid
+    const modalGridEl = document.getElementById('templates-modal-grid');
+    if (modalGridEl) {
+      modalGridEl.innerHTML = list
+        .map(
+          (t) => `
+            <div class="template-card-modal" data-tid="${t.id}">
+              <div class="template-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              </div>
+              <span class="template-card-title">${t.titleAr}</span>
+              <span class="template-card-desc">${t.descAr}</span>
+            </div>
+          `
+        )
+        .join('');
+
+      modalGridEl.querySelectorAll('.template-card-modal').forEach((card) => {
+        card.onclick = () => {
+          const tid = card.getAttribute('data-tid');
+          this.loadTemplate(tid);
+          document.getElementById('modal-templates-lib')?.classList.remove('open');
+        };
+      });
+    }
+  }
+
+  openTemplatesModal() {
+    document.getElementById('modal-templates-lib')?.classList.add('open');
   }
 
   openWatermarkModal() {
     const input = document.getElementById('input-modal-watermark');
     if (input) input.value = this.watermarkText;
+    const headerInput = document.getElementById('input-doc-header');
+    if (headerInput) headerInput.value = this.headerText;
+    const footerInput = document.getElementById('input-doc-footer');
+    if (footerInput) footerInput.value = this.footerText;
     document.getElementById('modal-watermark')?.classList.add('open');
+  }
+
+  openSplitModal() {
+    const totalEl = document.getElementById('split-doc-total-pages');
+    if (totalEl) totalEl.textContent = String(this.pages.length);
+    document.getElementById('modal-split')?.classList.add('open');
+  }
+
+  openMergeModal() {
+    document.getElementById('modal-merge')?.classList.add('open');
   }
 
   /* ---------------- SIDEBAR DOCK CONTENT ---------------- */
@@ -1502,7 +1872,6 @@ class DZPdfProApp {
         page.annotations.forEach((ann, aIdx) => {
           totalCount++;
           let title = '';
-          let icon = '';
 
           if (ann.type === 'pen') {
             title = 'رسم خطي بقلم التوقيع';
@@ -1516,6 +1885,8 @@ class DZPdfProApp {
             title = `ملاحظة: "${ann.note.substring(0, 20)}..."`;
           } else if (ann.type === 'image') {
             title = ann.title || 'ختم / توقيع معتمد';
+          } else if (ann.type === 'measure') {
+            title = `قياس مخطط: ${ann.distStr}`;
           }
 
           items.push(`
@@ -1555,21 +1926,27 @@ class DZPdfProApp {
         const rot = p.rotation || 0;
         const isActive = idx === this.currentPageIndex;
         return `
-          <div class="organizer-card ${isActive ? 'active' : ''}" data-index="${idx}">
+          <div class="organizer-card ${isActive ? 'active' : ''}" draggable="true" data-index="${idx}">
             <div class="organizer-preview">
               <img src="${p.dataUrl}" style="transform: rotate(${rot}deg);" alt="Page ${idx + 1}">
             </div>
             <div class="organizer-card-actions">
               <span style="font-size:12px; font-weight:700;">${idx + 1}</span>
-              <div style="display:flex; gap:4px;">
+              <div style="display:flex; gap:3px;">
+                <button class="btn-card-action btn-org-left" data-index="${idx}" title="Move Earlier" ${idx === 0 ? 'disabled' : ''}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="btn-card-action btn-org-right" data-index="${idx}" title="Move Later" ${idx === this.pages.length - 1 ? 'disabled' : ''}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
                 <button class="btn-card-action btn-org-rotate" data-index="${idx}" title="Rotate 90°">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
                 </button>
                 <button class="btn-card-action btn-org-dup" data-index="${idx}" title="Duplicate">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 </button>
                 <button class="btn-card-action danger btn-org-del" data-index="${idx}" title="Delete">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </button>
               </div>
             </div>
@@ -1578,12 +1955,78 @@ class DZPdfProApp {
       })
       .join('');
 
+    // Click on organizer card to open in editor
     grid.querySelectorAll('.organizer-card').forEach((card) => {
       card.addEventListener('click', (e) => {
         if (e.target.closest('.btn-card-action')) return;
         const idx = parseInt(card.getAttribute('data-index'));
         this.goToPage(idx);
         this.setViewMode('editor');
+      });
+
+      // Drag and Drop reordering
+      card.addEventListener('dragstart', (e) => {
+        this.draggedCardIndex = parseInt(card.getAttribute('data-index'));
+        e.dataTransfer.effectAllowed = 'move';
+        card.style.opacity = '0.5';
+      });
+
+      card.addEventListener('dragend', () => {
+        card.style.opacity = '1';
+        grid.querySelectorAll('.organizer-card').forEach((c) => c.classList.remove('drag-over'));
+      });
+
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        card.classList.add('drag-over');
+      });
+
+      card.addEventListener('dragleave', () => {
+        card.classList.remove('drag-over');
+      });
+
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        card.classList.remove('drag-over');
+        const targetIdx = parseInt(card.getAttribute('data-index'));
+        if (this.draggedCardIndex !== null && this.draggedCardIndex !== targetIdx) {
+          const [moved] = this.pages.splice(this.draggedCardIndex, 1);
+          this.pages.splice(targetIdx, 0, moved);
+          this.currentPageIndex = targetIdx;
+          this.updateDocumentState();
+          this.renderOrganizerGrid();
+          this.showToast('Page reordered');
+        }
+      });
+    });
+
+    // Action buttons on cards
+    grid.querySelectorAll('.btn-org-left').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.getAttribute('data-index'));
+        if (idx > 0) {
+          const temp = this.pages[idx];
+          this.pages[idx] = this.pages[idx - 1];
+          this.pages[idx - 1] = temp;
+          this.renderOrganizerGrid();
+          this.renderSidebarThumbnails();
+        }
+      });
+    });
+
+    grid.querySelectorAll('.btn-org-right').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.getAttribute('data-index'));
+        if (idx < this.pages.length - 1) {
+          const temp = this.pages[idx];
+          this.pages[idx] = this.pages[idx + 1];
+          this.pages[idx + 1] = temp;
+          this.renderOrganizerGrid();
+          this.renderSidebarThumbnails();
+        }
       });
     });
 
@@ -1624,6 +2067,65 @@ class DZPdfProApp {
     });
   }
 
+  /* ---------------- SPLIT & EXTRACT ---------------- */
+
+  async executeSplit() {
+    const rangeStr = document.getElementById('input-split-range')?.value.trim();
+    if (!rangeStr) {
+      this.showToast('Please specify a page range (e.g. 1-2 or 1,3)');
+      return;
+    }
+
+    const indicesToExtract = new Set();
+    const parts = rangeStr.split(',');
+
+    for (const part of parts) {
+      const p = part.trim();
+      if (p.includes('-')) {
+        const [start, end] = p.split('-').map((n) => parseInt(n.trim()));
+        if (!isNaN(start) && !isNaN(end)) {
+          for (let i = Math.min(start, end); i <= Math.max(start, end); i++) {
+            if (i >= 1 && i <= this.pages.length) indicesToExtract.add(i - 1);
+          }
+        }
+      } else {
+        const num = parseInt(p);
+        if (!isNaN(num) && num >= 1 && num <= this.pages.length) {
+          indicesToExtract.add(num - 1);
+        }
+      }
+    }
+
+    if (indicesToExtract.size === 0) {
+      this.showToast('No valid pages found in range');
+      return;
+    }
+
+    const selectedPages = Array.from(indicesToExtract)
+      .sort((a, b) => a - b)
+      .map((idx) => this.pages[idx]);
+
+    this.showToast(`Extracting ${selectedPages.length} pages to new PDF...`);
+
+    try {
+      const pdfBytes = await PDFEngine.compileDocument(selectedPages, {
+        pageSize: PAGE_SIZES.A4_PORTRAIT,
+        watermarkText: this.watermarkText,
+        watermarkOpacity: this.watermarkOpacity,
+        includePageNumbers: this.includePageNumbers,
+        headerText: this.headerText,
+        footerText: this.footerText
+      });
+
+      PDFEngine.downloadPDF(pdfBytes, `extracted_pages_${rangeStr.replace(/[^0-9-]/g, '_')}.pdf`);
+      document.getElementById('modal-split')?.classList.remove('open');
+      this.showToast('Extracted PDF downloaded!');
+    } catch (err) {
+      console.error('[DZ-PDF] Split error:', err);
+      this.showToast('Failed to extract pages');
+    }
+  }
+
   /* ---------------- EXPORT & PRINT ---------------- */
 
   async exportCompiledPDF() {
@@ -1640,7 +2142,9 @@ class DZPdfProApp {
         watermarkText: this.watermarkText,
         watermarkOpacity: this.watermarkOpacity,
         watermarkAngle: this.watermarkAngle,
-        includePageNumbers: this.includePageNumbers
+        includePageNumbers: this.includePageNumbers,
+        headerText: this.headerText,
+        footerText: this.footerText
       });
 
       PDFEngine.downloadPDF(pdfBytes, 'document_officiel_dz.pdf');

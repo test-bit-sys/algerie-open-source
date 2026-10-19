@@ -15,6 +15,67 @@ export const PAGE_SIZES = {
   LETTER_LANDSCAPE: { width: 792.00, height: 612.00, name: 'US Letter Landscape' }
 };
 
+export const ALGERIAN_WILAYAS = [
+  { code: '01', nameAr: 'أدرار', nameFr: 'Adrar' },
+  { code: '02', nameAr: 'الشلف', nameFr: 'Chlef' },
+  { code: '03', nameAr: 'الأغواط', nameFr: 'Laghouat' },
+  { code: '04', nameAr: 'أم البواقي', nameFr: 'Oum El Bouaghi' },
+  { code: '05', nameAr: 'باتنة', nameFr: 'Batna' },
+  { code: '06', nameAr: 'بجاية', nameFr: 'Béjaïa' },
+  { code: '07', nameAr: 'بسكرة', nameFr: 'Biskra' },
+  { code: '08', nameAr: 'بشار', nameFr: 'Béchar' },
+  { code: '09', nameAr: 'البليدة', nameFr: 'Blida' },
+  { code: '10', nameAr: 'البويرة', nameFr: 'Bouira' },
+  { code: '11', nameAr: 'تمنراست', nameFr: 'Tamanrasset' },
+  { code: '12', nameAr: 'تبسة', nameFr: 'Tébessa' },
+  { code: '13', nameAr: 'تلمسان', nameFr: 'Tlemcen' },
+  { code: '14', nameAr: 'تيارت', nameFr: 'Tiaret' },
+  { code: '15', nameAr: 'تيزي وزو', nameFr: 'Tizi Ouzou' },
+  { code: '16', nameAr: 'الجزائر العاصمة', nameFr: 'Alger' },
+  { code: '17', nameAr: 'الجلفة', nameFr: 'Djelfa' },
+  { code: '18', nameAr: 'جيجل', nameFr: 'Jijel' },
+  { code: '19', nameAr: 'سطيف', nameFr: 'Sétif' },
+  { code: '20', nameAr: 'سعيدة', nameFr: 'Saïda' },
+  { code: '21', nameAr: 'سكيكدة', nameFr: 'Skikda' },
+  { code: '22', nameAr: 'سيدي بلعباس', nameFr: 'Sidi Bel Abbès' },
+  { code: '23', nameAr: 'عنابة', nameFr: 'Annaba' },
+  { code: '24', nameAr: 'قالمة', nameFr: 'Guelma' },
+  { code: '25', nameAr: 'قسنطينة', nameFr: 'Constantine' },
+  { code: '26', nameAr: 'المدية', nameFr: 'Médéa' },
+  { code: '27', nameAr: 'مستغانم', nameFr: 'Mostaganem' },
+  { code: '28', nameAr: 'المسيلة', nameFr: 'M’Sila' },
+  { code: '29', nameAr: 'معسكر', nameFr: 'Mascara' },
+  { code: '30', nameAr: 'ورقلة', nameFr: 'Ouargla' },
+  { code: '31', nameAr: 'وهران', nameFr: 'Oran' },
+  { code: '32', nameAr: 'البيض', nameFr: 'El Bayadh' },
+  { code: '33', nameAr: 'إليزي', nameFr: 'Illizi' },
+  { code: '34', nameAr: 'برج بوعريريج', nameFr: 'Bordj Bou Arreridj' },
+  { code: '35', nameAr: 'بومرداس', nameFr: 'Boumerdès' },
+  { code: '36', nameAr: 'الطارف', nameFr: 'El Tarf' },
+  { code: '37', nameAr: 'تندوف', nameFr: 'Tindouf' },
+  { code: '38', nameAr: 'تيسمسيلت', nameFr: 'Tissemsilt' },
+  { code: '39', nameAr: 'الوادي', nameFr: 'El Oued' },
+  { code: '40', nameAr: 'خنشلة', nameFr: 'Khenchela' },
+  { code: '41', nameAr: 'سوق أهراس', nameFr: 'Souk Ahras' },
+  { code: '42', nameAr: 'تيبازة', nameFr: 'Tipaza' },
+  { code: '43', nameAr: 'ميلة', nameFr: 'Mila' },
+  { code: '44', nameAr: 'عين الدفلى', nameFr: 'Aïn Defla' },
+  { code: '45', nameAr: 'النعامة', nameFr: 'Naâma' },
+  { code: '46', nameAr: 'عين تموشنت', nameFr: 'Aïn Témouchent' },
+  { code: '47', nameAr: 'غرداية', nameFr: 'Ghardaïa' },
+  { code: '48', nameAr: 'غليزان', nameFr: 'Relizane' },
+  { code: '49', nameAr: 'تيميمون', nameFr: 'Timimoun' },
+  { code: '50', nameAr: 'برج باجي مختار', nameFr: 'Bordj Badji Mokhtar' },
+  { code: '51', nameAr: 'أولاد جلال', nameFr: 'Ouled Djellal' },
+  { code: '52', nameAr: 'بني عباس', nameFr: 'Béni Abbès' },
+  { code: '53', nameAr: 'عين صالح', nameFr: 'In Salah' },
+  { code: '54', nameAr: 'عين قزام', nameFr: 'In Guezzam' },
+  { code: '55', nameAr: 'تقرت', nameFr: 'Touggourt' },
+  { code: '56', nameAr: 'جانت', nameFr: 'Djanet' },
+  { code: '57', nameAr: 'المغير', nameFr: 'El M’Ghair' },
+  { code: '58', nameAr: 'المنيعة', nameFr: 'El Menia' }
+];
+
 export const ALGERIAN_STAMPS = {
   ROUND_OFFICIAL: {
     id: 'round_official',
@@ -23,6 +84,14 @@ export const ALGERIAN_STAMPS = {
     titleFr: 'Cachet Rond Officiel de la République',
     color: '#047857', // Emerald
     borderColor: '#047857'
+  },
+  OVAL_COMPANY: {
+    id: 'oval_company',
+    type: 'oval',
+    titleAr: 'ختم تجاري بيضاوي للشركات',
+    titleFr: 'Cachet Ovale Société Commerciale SARL',
+    color: '#1d4ed8', // Blue
+    borderColor: '#1d4ed8'
   },
   CONFORME: {
     id: 'conforme',
@@ -37,7 +106,7 @@ export const ALGERIAN_STAMPS = {
     type: 'rectangular',
     titleAr: 'وارد ومسجل بتاريخ',
     titleFr: 'Courrier Arrivé / Reçu le',
-    color: '#1d4ed8', // Blue
+    color: '#1d4ed8',
     borderColor: '#1d4ed8'
   },
   CONFIDENTIEL: {
@@ -45,15 +114,39 @@ export const ALGERIAN_STAMPS = {
     type: 'rectangular',
     titleAr: 'سري للغاية ومحمي',
     titleFr: 'Strictement Confidentiel',
-    color: '#dc2626', // Red
+    color: '#dc2626',
     borderColor: '#dc2626'
+  },
+  FINANCE_VISA: {
+    id: 'finance_visa',
+    type: 'rectangular',
+    titleAr: 'تأشيرة المراقبة المالية',
+    titleFr: 'Visa du Contrôle Financier',
+    color: '#0891b2', // Cyan
+    borderColor: '#0891b2'
+  },
+  HR_SERVICE: {
+    id: 'hr_service',
+    type: 'rectangular',
+    titleAr: 'مصلحة تسيير الموارد البشرية',
+    titleFr: 'Service des Ressources Humaines',
+    color: '#7c3aed', // Purple
+    borderColor: '#7c3aed'
+  },
+  TAX_OFFICE: {
+    id: 'tax_office',
+    type: 'rectangular',
+    titleAr: 'قباضة الضرائب والخزينة',
+    titleFr: 'Recette des Impôts / Trésor',
+    color: '#b45309', // Amber / Bronze
+    borderColor: '#b45309'
   },
   PAYE: {
     id: 'paye',
     type: 'rectangular',
     titleAr: 'مدفوع بالكامل',
     titleFr: 'Payé Intégralement',
-    color: '#0284c7', // Sky Blue
+    color: '#0284c7',
     borderColor: '#0284c7'
   },
   APPROUVE: {
@@ -61,7 +154,7 @@ export const ALGERIAN_STAMPS = {
     type: 'rectangular',
     titleAr: 'تمت المصادقة والتأشير',
     titleFr: 'Vu et Approuvé',
-    color: '#16a34a', // Green
+    color: '#16a34a',
     borderColor: '#16a34a'
   },
   ANNULE: {
@@ -69,7 +162,7 @@ export const ALGERIAN_STAMPS = {
     type: 'rectangular',
     titleAr: 'ملغى و لاغٍ تماماً',
     titleFr: 'Annulé et Non Avenu',
-    color: '#e11d48', // Rose Red
+    color: '#e11d48',
     borderColor: '#e11d48'
   },
   URGENT: {
@@ -77,7 +170,7 @@ export const ALGERIAN_STAMPS = {
     type: 'rectangular',
     titleAr: 'عـاجـل جـداً',
     titleFr: 'Très Urgent',
-    color: '#ea580c', // Orange
+    color: '#ea580c',
     borderColor: '#ea580c'
   }
 };
@@ -86,105 +179,161 @@ export class StampRenderer {
   /**
    * Renders an Algerian stamp onto a canvas element and returns a high-res data URL.
    */
-  static renderStamp(stampKey, { wilaya = 'ولاية الجزائر', dateStr = '', ref = 'N° 1084/2026' } = {}) {
+  static renderStamp(stampKey, { wilaya = 'ولاية الجزائر', dateStr = '', ref = 'N° 1084/2026', customColor = null } = {}) {
     const stamp = ALGERIAN_STAMPS[stampKey] || ALGERIAN_STAMPS.ROUND_OFFICIAL;
     const date = dateStr || new Date().toLocaleDateString('ar-DZ');
+    const color = customColor || stamp.color || '#047857';
 
     if (stamp.type === 'circular') {
-      return this.renderCircularStamp(stamp, wilaya, date);
+      return this.renderCircularStamp(stamp, wilaya, date, color);
+    } else if (stamp.type === 'oval') {
+      return this.renderOvalStamp(stamp, wilaya, date, ref, color);
     }
-    return this.renderRectangularStamp(stamp, date, ref);
+    return this.renderRectangularStamp(stamp, date, ref, color);
   }
 
-  static renderCircularStamp(stamp, wilaya, date) {
+  static renderCircularStamp(stamp, wilaya, date, color) {
     const canvas = document.createElement('canvas');
-    canvas.width = 300;
-    canvas.height = 300;
+    canvas.width = 320;
+    canvas.height = 320;
     const ctx = canvas.getContext('2d');
-    const cx = 150;
-    const cy = 150;
-    const color = stamp.color || '#047857';
+    const cx = 160;
+    const cy = 160;
 
     // Outer double ring
     ctx.strokeStyle = color;
     ctx.lineWidth = 4;
     ctx.beginPath();
-    ctx.arc(cx, cy, 140, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 150, 0, Math.PI * 2);
     ctx.stroke();
 
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.arc(cx, cy, 132, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 142, 0, Math.PI * 2);
     ctx.stroke();
 
     // Inner ring
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(cx, cy, 95, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 102, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Curved Top Text: الجمهورية الجزائرية الديمقراطية الشعبية
+    // Outer Circular Latin Text: ★ RÉPUBLIQUE ALGÉRIENNE DÉMOCRATIQUE ET POPULAIRE ★
     ctx.save();
     ctx.fillStyle = color;
-    ctx.font = 'bold 15px "Segoe UI", Arial, sans-serif';
+    ctx.font = 'bold 9.5px "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    const topText = 'الجمهورية الجزائرية الديمقراطية الشعبية';
+    const topText = '★ RÉPUBLIQUE ALGÉRIENNE DÉMOCRATIQUE ET POPULAIRE ★';
     const angleStep = Math.PI / (topText.length + 3);
     const startAngle = -Math.PI / 2 - (angleStep * (topText.length - 1)) / 2;
 
     for (let i = 0; i < topText.length; i++) {
       const angle = startAngle + i * angleStep;
       ctx.save();
-      ctx.translate(cx + Math.cos(angle) * 114, cy + Math.sin(angle) * 114);
+      ctx.translate(cx + Math.cos(angle) * 124, cy + Math.sin(angle) * 124);
       ctx.rotate(angle + Math.PI / 2);
       ctx.fillText(topText[i], 0, 0);
       ctx.restore();
     }
 
-    // Curved Bottom Text: RÉPUBLIQUE ALGÉRIENNE
-    const bottomText = 'RÉPUBLIQUE ALGÉRIENNE';
-    const bAngleStep = Math.PI / (bottomText.length + 5);
+    // Bottom Circular Latin Text: ★ SERVICE DU VISA ET DE L'AUTHENTIFICATION ★
+    const bottomText = "★ VISA ET AUTHENTIFICATION OFFICIELLE ★";
+    const bAngleStep = Math.PI / (bottomText.length + 4);
     const bStartAngle = Math.PI / 2 - (bAngleStep * (bottomText.length - 1)) / 2;
 
-    ctx.font = 'bold 12px "Segoe UI", Arial, sans-serif';
     for (let i = 0; i < bottomText.length; i++) {
       const angle = bStartAngle + i * bAngleStep;
       ctx.save();
-      ctx.translate(cx + Math.cos(angle) * 114, cy + Math.sin(angle) * 114);
+      ctx.translate(cx + Math.cos(angle) * 124, cy + Math.sin(angle) * 124);
       ctx.rotate(angle - Math.PI / 2);
       ctx.fillText(bottomText[i], 0, 0);
       ctx.restore();
     }
     ctx.restore();
 
-    // Center contents: Star & Crescent, Wilaya, Date
+    // Center contents: Republic Arabic calligraphy, Star & Crescent, Wilaya, Service, Date
+    ctx.save();
     ctx.fillStyle = color;
-    ctx.font = 'bold 18px "Segoe UI", Arial, sans-serif';
+    ctx.direction = 'rtl';
     ctx.textAlign = 'center';
-    ctx.fillText('★ ☪ ★', cx, cy - 35);
 
+    // Horizontal cursive connected Arabic Republic banner
+    ctx.font = 'bold 13px "Segoe UI", Arial, sans-serif';
+    ctx.fillText('الجمهورية الجزائرية', cx, cy - 56);
+    ctx.fillText('الديمقراطية الشعبية', cx, cy - 38);
+
+    // Star & Crescent
     ctx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
-    ctx.fillText(wilaya, cx, cy - 5);
+    ctx.fillText('★ ☪ ★', cx, cy - 16);
 
-    ctx.font = '13px "Segoe UI", Arial, sans-serif';
-    ctx.fillText('مصلحة التوثيق والمصادقة', cx, cy + 22);
+    // Wilaya
+    ctx.font = 'bold 15px "Segoe UI", Arial, sans-serif';
+    ctx.fillText(wilaya, cx, cy + 6);
 
-    ctx.font = 'bold 12px monospace';
+    // Service
+    ctx.font = '12px "Segoe UI", Arial, sans-serif';
+    ctx.fillText('مصلحة التوثيق والمصادقة', cx, cy + 26);
+
+    // Date
+    ctx.direction = 'ltr';
+    ctx.font = 'bold 11px monospace';
     ctx.fillText(date, cx, cy + 46);
+    ctx.restore();
 
     return canvas.toDataURL('image/png');
   }
 
-  static renderRectangularStamp(stamp, date, ref) {
+  static renderOvalStamp(stamp, wilaya, date, ref, color) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 360;
+    canvas.height = 220;
+    const ctx = canvas.getContext('2d');
+    const cx = 180;
+    const cy = 110;
+
+    // Outer double ellipse
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, 170, 98, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, 162, 90, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Inner ellipse
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, 125, 62, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Center text
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
+    ctx.fillText(stamp.titleAr, cx, cy - 18);
+
+    ctx.font = 'bold 12px "Segoe UI", Arial, sans-serif';
+    ctx.fillText(stamp.titleFr, cx, cy + 5);
+
+    ctx.font = 'bold 11px monospace';
+    ctx.fillText(`${wilaya} • ${date}`, cx, cy + 28);
+    ctx.fillText(`Réf: ${ref}`, cx, cy + 46);
+
+    return canvas.toDataURL('image/png');
+  }
+
+  static renderRectangularStamp(stamp, date, ref, color) {
     const canvas = document.createElement('canvas');
     canvas.width = 340;
     canvas.height = 140;
     const ctx = canvas.getContext('2d');
-    const color = stamp.color || '#047857';
 
-    // Double rectangular border with rounded corners
+    // Double rectangular border
     ctx.strokeStyle = color;
     ctx.lineWidth = 3.5;
     ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
@@ -195,10 +344,12 @@ export class StampRenderer {
     // Titles
     ctx.fillStyle = color;
     ctx.textAlign = 'center';
+    ctx.direction = 'rtl';
     ctx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
     ctx.fillText(stamp.titleAr, canvas.width / 2, 42);
 
-    ctx.font = 'bold 14px "Segoe UI", Arial, sans-serif';
+    ctx.direction = 'ltr';
+    ctx.font = 'bold 13px "Segoe UI", Arial, sans-serif';
     ctx.fillText(stamp.titleFr, canvas.width / 2, 68);
 
     // Separator line
@@ -209,10 +360,12 @@ export class StampRenderer {
     ctx.stroke();
 
     // Meta row (Date & Ref)
+    ctx.direction = 'rtl';
     ctx.font = '12px "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'right';
     ctx.fillText(`التاريخ: ${date}`, canvas.width - 30, 108);
 
+    ctx.direction = 'ltr';
     ctx.textAlign = 'left';
     ctx.fillText(`الرقم: ${ref}`, 30, 108);
 
@@ -312,12 +465,14 @@ export class PDFEngine {
   static async compileDocument(pages, options = {}) {
     const {
       pageSize = PAGE_SIZES.A4_PORTRAIT,
-      margin = 24,
+      margin = 20,
       watermarkText = '',
       watermarkOpacity = 0.25,
       watermarkAngle = 45,
       includePageNumbers = true,
-      pageNumberFormat = 'Page {current} of {total}'
+      pageNumberFormat = 'Page {current} of {total}',
+      headerText = '',
+      footerText = ''
     } = options;
 
     const writer = new PDFWriter();
@@ -343,7 +498,9 @@ export class PDFEngine {
         watermarkText,
         watermarkOpacity,
         watermarkAngle,
-        pageNumberStr: includePageNumbers ? pageNumberFormat.replace('{current}', i + 1).replace('{total}', pages.length) : ''
+        pageNumberStr: includePageNumbers ? pageNumberFormat.replace('{current}', i + 1).replace('{total}', pages.length) : '',
+        headerText,
+        footerText
       });
 
       const { jpegBytes, width, height } = await this.canvasToJPEGBytes(flattenedCanvas);
@@ -372,14 +529,7 @@ export class PDFEngine {
       const drawX = margin + (printableWidth - drawW) / 2;
       const drawY = margin + (printableHeight - drawH) / 2;
 
-      // Stream commands
       let streamCommands = `q\n`;
-      // Optional page rotation
-      const rot = page.rotation || 0;
-      if (rot !== 0) {
-        // Handled directly inside flattened canvas for highest fidelity
-      }
-
       streamCommands += `${drawW.toFixed(2)} 0 0 ${drawH.toFixed(2)} ${drawX.toFixed(2)} ${drawY.toFixed(2)} cm\n`;
       streamCommands += `/Im${i + 1} Do\n`;
       streamCommands += `Q\n`;
@@ -415,7 +565,14 @@ export class PDFEngine {
    * annotations, text boxes, stamps, and signatures.
    */
   static async flattenPageToCanvas(page, options = {}) {
-    const { watermarkText = '', watermarkOpacity = 0.25, watermarkAngle = 45, pageNumberStr = '' } = options;
+    const {
+      watermarkText = '',
+      watermarkOpacity = 0.25,
+      watermarkAngle = 45,
+      pageNumberStr = '',
+      headerText = '',
+      footerText = ''
+    } = options;
 
     let baseImg = null;
     if (page.dataUrl) {
@@ -465,14 +622,26 @@ export class PDFEngine {
       }
     }
 
+    // Draw Header Text
+    if (headerText) {
+      ctx.save();
+      ctx.fillStyle = '#64748b';
+      ctx.font = '14px "Segoe UI", Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.direction = 'rtl';
+      ctx.fillText(headerText, canvas.width / 2, 35);
+      ctx.restore();
+    }
+
     // Draw Watermark
     if (watermarkText) {
       ctx.save();
       ctx.globalAlpha = Math.min(Math.max(watermarkOpacity, 0.05), 1);
       ctx.fillStyle = '#94a3b8';
-      ctx.font = 'bold 58px "Segoe UI", Arial, sans-serif';
+      ctx.font = 'bold 64px "Segoe UI", Arial, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
+      ctx.direction = 'rtl';
 
       const cx = canvas.width / 2;
       const cy = canvas.height / 2;
@@ -482,13 +651,15 @@ export class PDFEngine {
       ctx.restore();
     }
 
-    // Draw Page Number
-    if (pageNumberStr) {
+    // Draw Footer / Bates Page Number
+    const bottomText = [pageNumberStr, footerText].filter(Boolean).join(' • ');
+    if (bottomText) {
       ctx.save();
       ctx.fillStyle = '#64748b';
       ctx.font = '14px "Segoe UI", Arial, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(pageNumberStr, canvas.width / 2, canvas.height - 25);
+      ctx.direction = 'rtl';
+      ctx.fillText(bottomText, canvas.width / 2, canvas.height - 25);
       ctx.restore();
     }
 
@@ -501,16 +672,19 @@ export class PDFEngine {
   static renderAnnotation(ctx, ann, canvasW, canvasH) {
     ctx.save();
 
-    if (ann.type === 'pen' || ann.type === 'highlight') {
-      if (!ann.points || ann.points.length < 2) return;
+    if (ann.type === 'pen' || ann.type === 'highlighter') {
+      if (!ann.points || ann.points.length < 2) {
+        ctx.restore();
+        return;
+      }
       ctx.beginPath();
-      ctx.strokeStyle = ann.color || (ann.type === 'highlight' ? 'rgba(250, 204, 21, 0.4)' : '#dc2626');
-      ctx.lineWidth = ann.width || (ann.type === 'highlight' ? 24 : 3);
+      ctx.strokeStyle = ann.color || (ann.type === 'highlighter' ? 'rgba(250, 204, 21, 0.4)' : '#dc2626');
+      ctx.lineWidth = ann.width || (ann.type === 'highlighter' ? 24 : 3);
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
 
-      if (ann.type === 'highlight') {
-        ctx.globalAlpha = 0.4;
+      if (ann.type === 'highlighter') {
+        ctx.globalAlpha = 0.45;
       }
 
       ctx.moveTo(ann.points[0].x * canvasW, ann.points[0].y * canvasH);
@@ -534,6 +708,7 @@ export class PDFEngine {
       // Text annotation
       ctx.fillStyle = ann.color || '#0f172a';
       ctx.font = `${ann.bold ? 'bold ' : ''}${ann.fontSize || 18}px "Segoe UI", Arial, sans-serif`;
+      ctx.direction = 'rtl';
       ctx.textAlign = ann.align || 'right';
       ctx.fillText(ann.text, ann.x * canvasW, ann.y * canvasH);
     } else if (ann.type === 'image' && ann.imageElement) {
@@ -544,24 +719,26 @@ export class PDFEngine {
       const h = ann.h * canvasH;
       ctx.drawImage(ann.imageElement, x, y, w, h);
     } else if (ann.type === 'note') {
-      // Sticky note icon
+      // Sticky note icon & pill
       const x = ann.x * canvasW;
       const y = ann.y * canvasH;
+
       ctx.fillStyle = '#f59e0b'; // Amber note
       ctx.beginPath();
       ctx.arc(x, y, 16, 0, Math.PI * 2);
       ctx.fill();
+
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
+      ctx.fillText('N', x, y);
     } else if (ann.type === 'measure') {
       const x1 = ann.start.x * canvasW;
       const y1 = ann.start.y * canvasH;
       const x2 = ann.end.x * canvasW;
       const y2 = ann.end.y * canvasH;
 
-      ctx.save();
       ctx.strokeStyle = '#0284c7';
       ctx.lineWidth = 2.5;
       ctx.setLineDash([6, 4]);
@@ -594,9 +771,13 @@ export class PDFEngine {
       const textW = ctx.measureText(text).width;
 
       ctx.fillStyle = '#0f172a';
-      ctx.beginPath();
-      ctx.roundRect ? ctx.roundRect(midX - textW / 2 - 8, midY - 12, textW + 16, 24, 4) : ctx.rect(midX - textW / 2 - 8, midY - 12, textW + 16, 24);
-      ctx.fill();
+      if (ctx.roundRect) {
+        ctx.beginPath();
+        ctx.roundRect(midX - textW / 2 - 8, midY - 12, textW + 16, 24, 4);
+        ctx.fill();
+      } else {
+        ctx.fillRect(midX - textW / 2 - 8, midY - 12, textW + 16, 24);
+      }
       ctx.strokeStyle = '#38bdf8';
       ctx.lineWidth = 1;
       ctx.stroke();
@@ -605,7 +786,6 @@ export class PDFEngine {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(text, midX, midY);
-      ctx.restore();
     }
 
     ctx.restore();
