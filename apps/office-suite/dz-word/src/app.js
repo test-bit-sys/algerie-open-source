@@ -3,10 +3,10 @@
  * 100% Offline-First, Zero-Dependency, Sovereign Algerian Word Processor
  */
 
-const TEMPLATES = (typeof window !== 'undefined' && window.DZ_WORD_TEMPLATES) ? window.DZ_WORD_TEMPLATES : [];
-const generateDocxBlob = (typeof window !== 'undefined' && window.generateDocxBlob) ? window.generateDocxBlob : null;
+(function () {
+  'use strict';
 
-class DZWordApp {
+  class DZWordApp {
   constructor() {
     this.currentLang = 'ar';
     this.zoomLevel = 100;
@@ -322,6 +322,62 @@ class DZWordApp {
       }
     });
 
+    // Quick Access Print
+    document.getElementById('qaPrintBtn')?.addEventListener('click', () => {
+      this.printDocument();
+    });
+
+    // Line Spacing dropdown
+    const lineSpacingSelect = document.getElementById('lineSpacingSelect');
+    if (lineSpacingSelect) {
+      lineSpacingSelect.addEventListener('change', (e) => {
+        this.setLineSpacing(e.target.value);
+      });
+    }
+
+    // Table Picker Dropdown Toggle
+    const tableToggle = document.getElementById('btnTablePickerToggle');
+    const tableDropdown = document.getElementById('tableDropdown');
+    if (tableToggle && tableDropdown) {
+      tableToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = tableDropdown.style.display === 'block';
+        tableDropdown.style.display = isOpen ? 'none' : 'block';
+      });
+      document.addEventListener('click', (e) => {
+        if (!tableToggle.contains(e.target) && !tableDropdown.contains(e.target)) {
+          tableDropdown.style.display = 'none';
+        }
+      });
+    }
+
+    // Watermark buttons
+    document.querySelectorAll('[data-watermark]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wm = btn.getAttribute('data-watermark');
+        this.setWatermark(wm);
+      });
+    });
+
+    // Window controls
+    document.querySelectorAll('.win-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('close')) {
+          if (confirm('هل ترغب في فتح مستند جديد وإعادة الضبط؟')) {
+            this.newDocument();
+          }
+        } else if (btn.title.includes('استعادة') || btn.title.includes('تكبير')) {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen?.().catch(() => {});
+          } else {
+            document.exitFullscreen?.().catch(() => {});
+          }
+        } else {
+          document.querySelector('.word-ribbon')?.classList.toggle('collapsed');
+        }
+      });
+    });
+
     // Close Modals
     document.querySelectorAll('.dialog-close, [data-close-modal]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -508,7 +564,11 @@ class DZWordApp {
 
         cell.addEventListener('click', () => {
           this.insertTable(r, c);
-          document.getElementById('tableDropdown')?.classList.remove('open');
+          const td = document.getElementById('tableDropdown');
+          if (td) {
+            td.classList.remove('open');
+            td.style.display = 'none';
+          }
         });
 
         container.appendChild(cell);
@@ -874,8 +934,9 @@ class DZWordApp {
   // 12. IMPORT & EXPORT
   // ==========================================================================
   exportDocx() {
-    if (typeof generateDocxBlob === 'function') {
-      const blob = generateDocxBlob(this.editor.innerHTML, {
+    const docxGen = typeof window !== 'undefined' ? window.generateDocxBlob : null;
+    if (typeof docxGen === 'function') {
+      const blob = docxGen(this.editor.innerHTML, {
         title: this.docTitle,
         direction: this.editor.getAttribute('dir') || 'rtl',
         orientation: this.pageOrientation
@@ -1079,9 +1140,20 @@ class DZWordApp {
   }
 }
 
-if (typeof window !== 'undefined') {
-  window.DZWordApp = DZWordApp;
-  window.addEventListener('DOMContentLoaded', () => {
-    window.dzWordApp = new DZWordApp();
-  });
-}
+  if (typeof window !== 'undefined') {
+    window.DZWordApp = DZWordApp;
+
+    const initDzWord = () => {
+      if (!window.dzWordApp) {
+        window.dzWordApp = new DZWordApp();
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initDzWord);
+    } else {
+      initDzWord();
+    }
+  }
+})();
+

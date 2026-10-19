@@ -312,6 +312,10 @@ body {
   z-index: 90;
 }
 
+.word-ribbon.collapsed .ribbon-body {
+  display: none;
+}
+
 /* Tabs Bar */
 .ribbon-tabs {
   display: flex;

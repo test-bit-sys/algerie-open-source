@@ -5,8 +5,11 @@
  * 100% offline, zero external dependencies.
  */
 
-// CRC-32 Lookup Table for standard ZIP files
-const CRC_TABLE = new Uint32Array(256);
+(function () {
+  'use strict';
+
+  // CRC-32 Lookup Table for standard ZIP files
+  const CRC_TABLE = new Uint32Array(256);
 for (let i = 0; i < 256; i++) {
   let c = i;
   for (let k = 0; k < 8; k++) {
@@ -456,9 +459,11 @@ function generateDocxBlob(htmlContent, options = {}) {
   return zip.buildBlob();
 }
 
-if (typeof window !== 'undefined') {
-  window.generateDocxBlob = generateDocxBlob;
-}
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { generateDocxBlob };
-}
+  if (typeof window !== 'undefined') {
+    window.generateDocxBlob = generateDocxBlob;
+  }
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { generateDocxBlob };
+  }
+})();
+

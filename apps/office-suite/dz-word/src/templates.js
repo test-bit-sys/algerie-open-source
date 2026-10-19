@@ -4,7 +4,10 @@
  * complying with Algerian administrative decrees and formatting standards.
  */
 
-const TEMPLATES = [
+(function () {
+  'use strict';
+
+  const TEMPLATES = [
   {
     id: 'attestation-travail',
     nameAr: 'شهادة عمل وخبرة مهنية',
@@ -379,6 +382,8 @@ const TEMPLATES = [
   }
 ];
 
-if (typeof window !== 'undefined') {
-  window.DZ_WORD_TEMPLATES = TEMPLATES;
-}
+  if (typeof window !== 'undefined') {
+    window.DZ_WORD_TEMPLATES = TEMPLATES;
+  }
+})();
+
