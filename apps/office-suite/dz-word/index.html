@@ -3,998 +3,792 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DZ-Writer Pro — كاتب الجزائر | معالج النصوص والمستندات الوطنية</title>
+  <title>مستند 1 — Word (كاتب الجزائر)</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --primary: #1e40af;
-      --primary-hover: #1d4ed8;
-      --primary-light: #eff6ff;
-      --accent: #047857;
-      --accent-hover: #065f46;
-      --surface: #ffffff;
-      --bg: #f1f5f9;
-      --border: #cbd5e1;
-      --border-dark: #94a3b8;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --page-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Top Application Header */
-    .app-header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 16px;
-      gap: 16px;
-      user-select: none;
-      z-index: 50;
-    }
-
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .app-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: block;
-      box-shadow: 0 2px 6px rgba(30, 64, 175, 0.25);
-    }
-
-    .doc-meta {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .doc-title-input {
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      border: 1px solid transparent;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: transparent;
-      outline: none;
-      transition: all 0.15s ease;
-      min-width: 220px;
-    }
-
-    .doc-title-input:hover {
-      border-color: var(--border);
-      background: #f8fafc;
-    }
-
-    .doc-title-input:focus {
-      border-color: var(--primary);
-      background: #ffffff;
-      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.15);
-    }
-
-    .top-menu-bar {
-      display: flex;
-      gap: 2px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .menu-dropdown {
-      position: relative;
-    }
-
-    .menu-btn {
-      background: transparent;
-      border: none;
-      padding: 4px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      transition: background 0.15s;
-    }
-
-    .menu-btn:hover {
-      background: #e2e8f0;
-    }
-
-    .menu-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      box-shadow: var(--shadow-lg);
-      min-width: 200px;
-      padding: 4px 0;
-      z-index: 100;
-    }
-
-    [dir="ltr"] .menu-content {
-      right: auto;
-      left: 0;
-    }
-
-    .menu-dropdown:hover .menu-content {
-      display: block;
-    }
-
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 14px;
-      font-size: 13px;
-      color: var(--text);
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      width: 100%;
-      text-align: inherit;
-      font-family: inherit;
-      transition: background 0.1s;
-    }
-
-    .menu-item:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    .menu-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 4px 0;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      border: 1px solid var(--border);
-      background: #ffffff;
-      color: var(--text);
-    }
-
-    .btn:hover {
-      background: #f8fafc;
-      border-color: var(--border-dark);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-    }
-
-    .btn-accent {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #ffffff;
-    }
-
-    .btn-accent:hover {
-      background: var(--accent-hover);
-    }
-
-    /* Ribbon / Formatting Toolbar */
-    .ribbon-toolbar {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
-      padding: 6px 16px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      user-select: none;
-      z-index: 40;
-    }
-
-    .tool-group {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      padding-inline-end: 8px;
-      border-inline-end: 1px solid var(--border);
-    }
-
-    .tool-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      padding: 6px;
-      cursor: pointer;
-      color: var(--text);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s ease;
-      min-width: 30px;
-      height: 30px;
-    }
-
-    .tool-btn:hover {
-      background: #e2e8f0;
-      border-color: var(--border);
-    }
-
-    .tool-btn.active {
-      background: var(--primary-light);
-      border-color: #bfdbfe;
-      color: var(--primary);
-    }
-
-    .tool-select {
-      font-family: inherit;
-      font-size: 13px;
-      padding: 4px 8px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: #ffffff;
-      color: var(--text);
-      cursor: pointer;
-      height: 30px;
-      outline: none;
-    }
-
-    .tool-select:hover {
-      border-color: var(--border-dark);
-    }
-
-    .tool-select:focus {
-      border-color: var(--primary);
-    }
-
-    .color-picker-wrap {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .color-picker-wrap input[type="color"] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-    /* Document Workspace */
-    .workspace-area {
-      flex: 1;
-      overflow: auto;
-      background: #e2e8f0;
-      display: flex;
-      justify-content: center;
-      padding: 30px 15px;
-      position: relative;
-    }
-
-    .page-container {
-      transition: transform 0.15s ease;
-    }
-
-    .document-page {
-      width: 816px; /* Standard 96 DPI A4 width */
-      min-height: 1056px; /* Standard A4 height */
-      background: #ffffff;
-      box-shadow: var(--page-shadow);
-      padding: 75px 65px;
-      outline: none;
-      font-family: 'Amiri', 'Cairo', serif;
-      font-size: 12pt;
-      line-height: 1.8;
-      color: #0f172a;
-      box-sizing: border-box;
-      border-radius: 2px;
-      position: relative;
-    }
-
-    .document-page[dir="rtl"] {
-      text-align: right;
-    }
-
-    .document-page[dir="ltr"] {
-      text-align: left;
-    }
-
-    /* Status Bar */
-    .status-bar {
-      background: #ffffff;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 4px 16px;
-      font-size: 12px;
-      color: var(--text-muted);
-      user-select: none;
-      z-index: 50;
-    }
-
-    .status-left, .status-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .stat-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .zoom-control {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .zoom-slider {
-      width: 90px;
-      cursor: pointer;
-    }
-
-    .lang-switcher {
-      display: flex;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .lang-btn {
-      padding: 2px 8px;
-      border: none;
-      background: transparent;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: all 0.15s;
-    }
-
-    .lang-btn:hover {
-      background: #f1f5f9;
-      color: var(--text);
-    }
-
-    .lang-btn.active {
-      background: var(--primary);
-      color: #ffffff;
-    }
-
-    /* Modals */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-backdrop {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.5);
-      backdrop-filter: blur(3px);
-    }
-
-    .modal-card {
-      position: relative;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-      width: 90%;
-      max-width: 620px;
-      max-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      z-index: 10;
-      overflow: hidden;
-      animation: modalFadeIn 0.2s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .modal-header {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .modal-header h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .modal-close {
-      background: transparent;
-      border: none;
-      font-size: 20px;
-      color: var(--text-muted);
-      cursor: pointer;
-      line-height: 1;
-      padding: 4px;
-    }
-
-    .modal-close:hover {
-      color: var(--text);
-    }
-
-    .modal-body {
-      padding: 20px;
-      overflow-y: auto;
-      font-size: 14px;
-      color: var(--text);
-    }
-
-    .modal-footer {
-      padding: 12px 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      background: #f8fafc;
-    }
-
-    /* Template Cards */
-    .templates-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    .template-card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      background: #ffffff;
-    }
-
-    .template-card:hover {
-      border-color: var(--primary);
-      background: var(--primary-light);
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .template-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
-      background: #e0e7ff;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .template-info h4 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .template-badge {
-      display: inline-block;
-      font-size: 11px;
-      background: #e2e8f0;
-      color: #475569;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 600;
-    }
-
-    /* Form Fields in Modals */
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .form-control:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.15);
-    }
-
-    /* Print Styles: strictly print the page clean */
-    @media print {
-      body {
-        background: transparent;
-        overflow: visible;
-      }
-      .app-header, .ribbon-toolbar, .status-bar, .modal {
-        display: none !important;
-      }
-      .workspace-area {
-        padding: 0;
-        background: transparent;
-        overflow: visible;
-      }
-      .page-container {
-        transform: none !important;
-      }
-      .document-page {
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        min-height: auto;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
 
-  <!-- Top Application Header -->
-  <header class="app-header">
-    <div class="brand-section">
-      <img src="assets/logo.svg" alt="DZ-Word Logo" class="app-logo">
-      <div class="doc-meta">
-        <input type="text" id="docTitleInput" class="doc-title-input" value="مستند بدون عنوان" spellcheck="false">
-        <div class="top-menu-bar">
-          <!-- File Menu -->
-          <div class="menu-dropdown">
-            <button class="menu-btn" data-i18n="file">ملف</button>
-            <div class="menu-content">
-              <button class="menu-item" id="btnNewDoc">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
-                <span data-i18n="newDoc">مستند جديد</span>
-              </button>
-              <button class="menu-item" id="btnOpenDocFile">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-                <span data-i18n="openDoc">فتح مستند...</span>
-              </button>
-              <button class="menu-item" id="btnSaveDoc">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                <span data-i18n="saveDoc">حفظ المستند (Ctrl+S)</span>
-              </button>
-              <div class="menu-divider"></div>
-              <button class="menu-item" id="btnExportHtml">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                <span data-i18n="exportHtml">تصدير كـ HTML</span>
-              </button>
-              <button class="menu-item" id="btnExportMd">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="7 15 7 9 10 12 13 9 13 15"></polyline><polyline points="17 9 17 15"></polyline></svg>
-                <span data-i18n="exportMd">تصدير كـ Markdown</span>
-              </button>
-              <button class="menu-item" id="btnExportTxt">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                <span data-i18n="exportTxt">تصدير كنص عادي (TXT)</span>
-              </button>
-              <div class="menu-divider"></div>
-              <button class="menu-item" id="btnPrintPdf">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                <span data-i18n="printPdf">طباعة / حفظ كـ PDF</span>
-              </button>
-            </div>
-          </div>
+  <!-- ======================================================================
+       1. Microsoft Word Title Bar
+       ====================================================================== -->
+  <header class="word-titlebar">
+    <div class="titlebar-left">
+      <div class="word-app-icon" title="DZ-Word / كاتب الجزائر">
+        <svg viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8" fill="none" stroke="#185abd" stroke-width="2"></polyline>
+          <line x1="8" y1="13" x2="16" y2="13" stroke="#185abd" stroke-width="2"></line>
+          <line x1="8" y1="17" x2="16" y2="17" stroke="#185abd" stroke-width="2"></line>
+        </svg>
+      </div>
 
-          <!-- Edit Menu -->
-          <div class="menu-dropdown">
-            <button class="menu-btn" data-i18n="edit">تعديل</button>
-            <div class="menu-content">
-              <button class="menu-item" data-cmd="undo">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-                <span data-i18n="undo">تراجع</span>
-              </button>
-              <button class="menu-item" data-cmd="redo">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                <span data-i18n="redo">إعادة</span>
-              </button>
-              <div class="menu-divider"></div>
-              <button class="menu-item" data-cmd="selectAll">
-                <span data-i18n="selectAll">تحديد الكل</span>
-              </button>
-              <button class="menu-item" id="btnOpenFindReplace">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <span data-i18n="findReplace">بحث واستبدال</span>
-              </button>
-            </div>
-          </div>
+      <!-- Quick Access Toolbar -->
+      <div class="quick-access-tools">
+        <button class="qa-btn" id="qaSaveBtn" title="حفظ المستند كـ Word (Ctrl+S)" data-cmd="save">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        </button>
+        <button class="qa-btn" id="qaUndoBtn" title="تراجع (Ctrl+Z)" data-cmd="undo">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        </button>
+        <button class="qa-btn" id="qaRedoBtn" title="إعادة (Ctrl+Y)" data-cmd="redo">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+        </button>
+        <button class="qa-btn" id="qaPrintBtn" title="طباعة فورية / PDF (Ctrl+P)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        </button>
+      </div>
 
-          <!-- Insert Menu -->
-          <div class="menu-dropdown">
-            <button class="menu-btn" data-i18n="insert">إدراج</button>
-            <div class="menu-content">
-              <button class="menu-item" id="btnInsertTableModal">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="12" y1="3" x2="12" y2="21"></line></svg>
-                <span data-i18n="insertTable">إدراج جدول</span>
-              </button>
-              <button class="menu-item" onclick="document.getElementById('imageFileInput').click()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                <span data-i18n="insertImage">إدراج صورة</span>
-              </button>
-              <button class="menu-item" id="btnInsertAlgeriaHeader">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
-                <span data-i18n="insertAlgeriaHeader">ترويسة الجمهورية الجزائرية</span>
-              </button>
-              <button class="menu-item" data-cmd="insertHorizontalRule">
-                <span data-i18n="insertHr">خط فاصل أفقي</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Templates Menu -->
-          <button class="menu-btn" id="btnOpenTemplates" style="color: var(--accent); font-weight: 700;">
-            <span data-i18n="templates">النماذج الرسمية</span>
-          </button>
-
-          <!-- Help Menu -->
-          <div class="menu-dropdown">
-            <button class="menu-btn" data-i18n="help">مساعدة</button>
-            <div class="menu-content">
-              <button class="menu-item" id="btnOpenAbout">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                <span data-i18n="aboutTitle">عن كاتب الجزائر</span>
-              </button>
-            </div>
-          </div>
-        </div>
+      <!-- AutoSave Switch -->
+      <div class="autosave-pill" id="autoSaveTogglePill" title="تبديل الحفظ التلقائي">
+        <div class="autosave-toggle"></div>
+        <span id="autoSaveLabel">الحفظ التلقائي: تشغيل</span>
       </div>
     </div>
 
-    <!-- Header Actions (Print, Templates, Language) -->
-    <div class="header-actions">
-      <button class="btn btn-accent" onclick="document.getElementById('modalTemplates').classList.add('active')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-        <span data-i18n="templates">النماذج الجاهزة</span>
-      </button>
-      <button class="btn btn-primary" onclick="window.print()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-        <span data-i18n="printPdf">طباعة / PDF</span>
-      </button>
+    <!-- Center Document Name & Search -->
+    <div class="titlebar-center">
+      <div class="doc-name-container">
+        <input type="text" id="docTitleInput" class="doc-name-input" value="مستند 1 - Word" title="انقر لتعديل اسم المستند">
+        <span class="doc-saved-status">• تم الحفظ محلياً</span>
+      </div>
+
+      <div class="word-search-box" title="البحث في المستند والأدوات (Alt+Q)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="titleSearchInput" placeholder="بحث في المستند والأوامر (Alt+Q)...">
+      </div>
+    </div>
+
+    <!-- Right Window Controls -->
+    <div class="titlebar-right">
+      <div class="titlebar-sovereign-tag" title="منظومة جزائرية حرة 100% بدون إنترنت">
+        <span>🇩🇿 كاتب الجزائر</span>
+      </div>
+      <div class="window-controls">
+        <button class="win-btn" title="تصغير"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        <button class="win-btn" title="استعادة"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg></button>
+        <button class="win-btn close" title="إغلاق"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
     </div>
   </header>
 
-  <!-- Ribbon Formatting Toolbar -->
-  <div class="ribbon-toolbar">
-    <!-- Undo / Redo -->
-    <div class="tool-group">
-      <button class="tool-btn" data-cmd="undo" title="تراجع (Ctrl+Z)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-      </button>
-      <button class="tool-btn" data-cmd="redo" title="إعادة (Ctrl+Y)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-      </button>
+  <!-- ======================================================================
+       2. Microsoft Word Ribbon Bar
+       ====================================================================== -->
+  <nav class="word-ribbon">
+    <!-- Tabs Header -->
+    <div class="ribbon-tabs">
+      <button class="tab-btn tab-file" data-tab="file">ملف</button>
+      <button class="tab-btn active" data-tab="home">الشريط الرئيسي</button>
+      <button class="tab-btn" data-tab="insert">إدراج</button>
+      <button class="tab-btn" data-tab="draw">رسم</button>
+      <button class="tab-btn" data-tab="layout">تخطيط</button>
+      <button class="tab-btn" data-tab="references">مراجع ونماذج</button>
+      <button class="tab-btn" data-tab="review">مراجعة</button>
+      <button class="tab-btn" data-tab="view">عرض</button>
+      <button class="tab-btn" data-tab="help">تعليمات</button>
     </div>
 
-    <!-- Font Family & Size -->
-    <div class="tool-group">
-      <select id="fontFamilySelect" class="tool-select" style="min-width: 110px;">
-        <option value="'Amiri', serif" selected>Amiri (أميري)</option>
-        <option value="'Cairo', sans-serif">Cairo (القاهرة)</option>
-        <option value="'Tajawal', sans-serif">Tajawal (تجوال)</option>
-        <option value="'Inter', sans-serif">Inter (لاتيني)</option>
-        <option value="Arial, sans-serif">Arial</option>
-        <option value="'Times New Roman', serif">Times New Roman</option>
-        <option value="'Courier New', monospace">Courier New</option>
-      </select>
+    <!-- Ribbon Panes Body -->
+    <div class="ribbon-body">
 
-      <select id="fontSizeSelect" class="tool-select" style="min-width: 60px;">
-        <option value="1">10 pt</option>
-        <option value="2">11 pt</option>
-        <option value="3" selected>12 pt</option>
-        <option value="4">14 pt</option>
-        <option value="5">18 pt</option>
-        <option value="6">24 pt</option>
-        <option value="7">36 pt</option>
-      </select>
-    </div>
+      <!-- ==================== HOME TAB ==================== -->
+      <div class="ribbon-tab-pane active" id="tabPane_home">
+        <!-- Clipboard Group -->
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <button class="ribbon-btn-large" id="btnBigPaste" data-cmd="paste" title="لصق المحتوى (Ctrl+V)">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+              <span>لصق</span>
+            </button>
+            <div class="group-tools-col">
+              <button class="ribbon-btn-text" data-cmd="cut" title="قص (Ctrl+X)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                <span>قص</span>
+              </button>
+              <button class="ribbon-btn-text" data-cmd="copy" title="نسخ (Ctrl+C)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>نسخ</span>
+              </button>
+              <button class="ribbon-btn-text" id="btnFormatPainter" title="نسخ التنسيق (Format Painter)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18.37 2.63L14 7l3 3 4.37-4.37a2.12 2.12 0 1 0-3-3z"></path><path d="M9 12l-7 7v4h4l7-7"></path><path d="M14 7l3 3"></path></svg>
+                <span>نسخ التنسيق</span>
+              </button>
+            </div>
+          </div>
+          <div class="group-label">الحافظة</div>
+        </div>
 
-    <!-- Basic Styles: Bold, Italic, Underline, Strike -->
-    <div class="tool-group">
-      <button class="tool-btn" data-cmd="bold" title="عريض (Ctrl+B)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
-      </button>
-      <button class="tool-btn" data-cmd="italic" title="مائل (Ctrl+I)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="4" x2="10" y2="4"></line><line x1="14" y1="20" x2="5" y2="20"></line><line x1="15" y1="4" x2="9" y2="20"></line></svg>
-      </button>
-      <button class="tool-btn" data-cmd="underline" title="تسطير (Ctrl+U)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>
-      </button>
-      <button class="tool-btn" data-cmd="strikeThrough" title="يتوسطه خط">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4H9a3 3 0 0 0-2.83 4"></path><path d="M14 12v.01"></path><path d="M7 20h8a3 3 0 0 0 3-3c0-1.3-.8-2.4-2-2.8"></path><line x1="4" y1="12" x2="20" y2="12"></line></svg>
-      </button>
-    </div>
+        <!-- Font Group -->
+        <div class="ribbon-group">
+          <div class="group-tools-col">
+            <!-- Font row 1: Family, Size, Grow, Shrink, Case, Clear -->
+            <div class="group-tools-row">
+              <select class="ribbon-select" id="fontFamilySelect" style="width: 140px;" title="نوع الخط">
+                <option value="'Amiri', serif" selected>Amiri (أميري)</option>
+                <option value="'Cairo', sans-serif">Cairo (القاهرة)</option>
+                <option value="'Tajawal', sans-serif">Tajawal (تجوال)</option>
+                <option value="Calibri, sans-serif">Calibri</option>
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="'Courier New', monospace">Courier New</option>
+              </select>
 
-    <!-- Colors: Text & Highlight -->
-    <div class="tool-group">
-      <div class="color-picker-wrap tool-btn" title="لون النص">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 20 12 4 20 20"></polyline><line x1="6" y1="16" x2="18" y2="16"></line></svg>
-        <input type="color" id="textColorPicker" value="#0f172a">
+              <select class="ribbon-select" id="fontSizeSelect" style="width: 55px;" title="حجم الخط (نقطة)">
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12" selected>12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+                <option value="20">20</option>
+                <option value="24">24</option>
+                <option value="28">28</option>
+                <option value="36">36</option>
+                <option value="48">48</option>
+                <option value="72">72</option>
+              </select>
+
+              <button class="ribbon-btn" id="btnGrowFont" title="تكبير الخط"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><text x="3" y="18" font-size="16" font-weight="bold">A</text><polyline points="15 7 19 3 23 7"></polyline></svg></button>
+              <button class="ribbon-btn" id="btnShrinkFont" title="تصغير الخط"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><text x="3" y="18" font-size="13" font-weight="bold">A</text><polyline points="15 15 19 19 23 15"></polyline></svg></button>
+              <button class="ribbon-btn" id="btnClearFormat" title="مسح كافة التنسيقات"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 7l16-4"></path><path d="M10 11l-6 6a2 2 0 0 0 3 3l6-6"></path><path d="M14 7l7 7"></path></svg></button>
+            </div>
+
+            <!-- Font row 2: B, I, U, Strike, Sub, Super, TextColor, HiliteColor -->
+            <div class="group-tools-row">
+              <button class="ribbon-btn" data-cmd="bold" title="غامق (Ctrl+B)"><strong>B</strong></button>
+              <button class="ribbon-btn" data-cmd="italic" title="مائل (Ctrl+I)"><em>I</em></button>
+              <button class="ribbon-btn" data-cmd="underline" title="تسطير (Ctrl+U)"><span style="text-decoration: underline;">U</span></button>
+              <button class="ribbon-btn" data-cmd="strikethrough" title="يتوسطه خط"><span style="text-decoration: line-through;">ab</span></button>
+              <button class="ribbon-btn" data-cmd="subscript" title="منخفض">x₂</button>
+              <button class="ribbon-btn" data-cmd="superscript" title="مرتفع">x²</button>
+
+              <!-- Highlight Color Picker -->
+              <div class="color-tool-btn" title="لون تمييز النص (قلم التظليل)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l4 4-8 8H4v-4l8-8z"></path><path d="M18 14v4h4"></path></svg>
+                <div class="color-indicator-bar" id="hiliteColorBar" style="background-color: #facc15;"></div>
+                <input type="color" id="hiliteColorInput" value="#facc15">
+              </div>
+
+              <!-- Font Color Picker -->
+              <div class="color-tool-btn" title="لون الخط">
+                <span style="font-weight: 800; font-size: 13px;">A</span>
+                <div class="color-indicator-bar" id="textColorBar" style="background-color: #185abd;"></div>
+                <input type="color" id="textColorInput" value="#185abd">
+              </div>
+            </div>
+          </div>
+          <div class="group-label">خط</div>
+        </div>
+
+        <!-- Paragraph Group -->
+        <div class="ribbon-group">
+          <div class="group-tools-col">
+            <!-- Row 1: Bullets, Numbers, Multilevel, Decrease/Increase Indent, Sort, Marks -->
+            <div class="group-tools-row">
+              <button class="ribbon-btn" data-cmd="insertUnorderedList" title="تعداد نقطي">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="4" cy="6" r="1.5" fill="currentColor"></circle><circle cx="4" cy="12" r="1.5" fill="currentColor"></circle><circle cx="4" cy="18" r="1.5" fill="currentColor"></circle></svg>
+              </button>
+              <button class="ribbon-btn" data-cmd="insertOrderedList" title="ترقيم">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"></line><line x1="10" y1="12" x2="21" y2="12"></line><line x1="10" y1="18" x2="21" y2="18"></line><text x="2" y="8" font-size="8">1</text><text x="2" y="14" font-size="8">2</text><text x="2" y="20" font-size="8">3</text></svg>
+              </button>
+              <button class="ribbon-btn" data-cmd="outdent" title="إنقاص المسافة البادئة">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><line x1="18" y1="18" x2="18" y2="6"></line></svg>
+              </button>
+              <button class="ribbon-btn" data-cmd="indent" title="زيادة المسافة البادئة">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><line x1="6" y1="18" x2="6" y2="6"></line></svg>
+              </button>
+              <button class="ribbon-btn" id="btnDirRtl" title="اتجاه من اليمين لليسار (RTL)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 12H3"></path><path d="M7 8l-4 4 4 4"></path><path d="M21 4v16"></path></svg>
+              </button>
+              <button class="ribbon-btn" id="btnDirLtr" title="اتجاه من اليسار لليمين (LTR)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M7 12h14"></path><path d="M17 8l4 4-4 4"></path><path d="M3 4v16"></path></svg>
+              </button>
+              <button class="ribbon-btn" id="btnToggleMarks" title="إظهار/إخفاء علامات الفقرات (¶)">
+                <strong>¶</strong>
+              </button>
+            </div>
+
+            <!-- Row 2: Align Left, Center, Right, Justify, Line Spacing, Shading -->
+            <div class="group-tools-row">
+              <button class="ribbon-btn" data-cmd="justifyRight" title="محاذاة لليمين (Ctrl+R)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="9" y2="12"></line><line x1="21" y1="18" x2="5" y2="18"></line></svg>
+              </button>
+              <button class="ribbon-btn" data-cmd="justifyCenter" title="توسيط (Ctrl+E)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg>
+              </button>
+              <button class="ribbon-btn" data-cmd="justifyLeft" title="محاذاة لليسار (Ctrl+L)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="15" y1="12" x2="3" y2="12"></line><line x1="19" y1="18" x2="3" y2="18"></line></svg>
+              </button>
+              <button class="ribbon-btn" data-cmd="justifyFull" title="ضبط كلي (Justify)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+              </button>
+
+              <!-- Line spacing select -->
+              <select class="ribbon-select" id="lineSpacingSelect" title="تباعد الأسطر والفقرات" style="width: 58px;" onchange="window.dzWordApp.setLineSpacing(this.value)">
+                <option value="1.0">1.0</option>
+                <option value="1.15">1.15</option>
+                <option value="1.5">1.5</option>
+                <option value="1.8" selected>1.8</option>
+                <option value="2.0">2.0</option>
+                <option value="2.5">2.5</option>
+                <option value="3.0">3.0</option>
+              </select>
+
+              <!-- Shading Color Picker -->
+              <div class="color-tool-btn" title="تظليل الفقرة / لون التعبئة">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 11l-8-8-8.5 8.5a2.12 2.12 0 0 0 0 3l5 5a2.12 2.12 0 0 0 3 0L19 11z"></path><path d="M5 21h14"></path></svg>
+                <div class="color-indicator-bar" style="background-color: #f1f5f9;"></div>
+                <input type="color" id="btnShadingInput" value="#f8fafc">
+              </div>
+            </div>
+          </div>
+          <div class="group-label">فقرة</div>
+        </div>
+
+        <!-- Styles Gallery Group -->
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <div class="styles-gallery" id="stylesGallery">
+              <!-- Dynamically populated style cards -->
+            </div>
+          </div>
+          <div class="group-label">الأنماط السريعة</div>
+        </div>
+
+        <!-- Editing Group -->
+        <div class="ribbon-group">
+          <div class="group-tools-col">
+            <button class="ribbon-btn-text" id="btnToggleNavPane" title="بحث وتصفح المستند (Ctrl+F)">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <span>بحث</span>
+            </button>
+            <button class="ribbon-btn-text" onclick="window.dzWordApp.openFindReplaceModal()" title="استبدال (Ctrl+H)">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 3h5v5"></path><path d="M4 20L21 3"></path><path d="M21 16v5h-5"></path><path d="M15 15l6 6"></path><path d="M4 4l5 5"></path></svg>
+              <span>استبدال</span>
+            </button>
+            <button class="ribbon-btn-text" data-cmd="selectAll" title="تحديد الكل (Ctrl+A)">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"></rect></svg>
+              <span>تحديد</span>
+            </button>
+          </div>
+          <div class="group-label">تحرير</div>
+        </div>
       </div>
-      <div class="color-picker-wrap tool-btn" title="لون التمييز (خلفية)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11-6 6v3h3l6-6"></path><path d="m22 2-3 3-3-3 3-3z"></path><path d="m14 10 3 3"></path></svg>
-        <input type="color" id="hiliteColorPicker" value="#fef08a">
+
+      <!-- ==================== INSERT TAB ==================== -->
+      <div class="ribbon-tab-pane" id="tabPane_insert">
+        <!-- Pages Group -->
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <button class="ribbon-btn-large" onclick="window.dzWordApp.insertPageBreak()" title="إدراج فاصل صفحات">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v6h16V8z"></path><path d="M4 14v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"></path><line x1="2" y1="12" x2="22" y2="12" stroke-dasharray="2 2"></line></svg>
+              <span>فاصل صفحات</span>
+            </button>
+          </div>
+          <div class="group-label">صفحات</div>
+        </div>
+
+        <!-- Tables Group -->
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <div style="position: relative;">
+              <button class="ribbon-btn-large" id="btnTablePickerToggle" onclick="document.getElementById('tableDropdown').classList.toggle('open')" title="إدراج جدول سريع">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                <span>جدول ▼</span>
+              </button>
+
+              <div id="tableDropdown" style="display: none; position: absolute; top: 100%; right: 0; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 10px; z-index: 1000;">
+                <div id="tableGridSizeLabel" style="font-size: 11px; font-weight: bold; margin-bottom: 6px; text-align: center;">إدراج جدول</div>
+                <div class="table-grid-picker" id="tableGridPicker"></div>
+              </div>
+            </div>
+          </div>
+          <div class="group-label">جداول</div>
+        </div>
+
+        <!-- Illustrations Group -->
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <button class="ribbon-btn-large" onclick="document.getElementById('imageFileInput').click()" title="إدراج صورة من الجهاز">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <span>صور</span>
+            </button>
+            <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+
+            <button class="ribbon-btn-large" onclick="window.dzWordApp.insertAlgerianHeader()" title="إدراج ترويسة الجمهورية الجزائرية الرسمية">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              <span>ترويسة رسمية</span>
+            </button>
+
+            <button class="ribbon-btn-large" onclick="window.dzWordApp.insertOfficialSeal()" title="إدراج ختم الجمهورية">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+              <span>ختم رسمي</span>
+            </button>
+          </div>
+          <div class="group-label">رسومات ووثائق</div>
+        </div>
+
+        <!-- Symbols Group -->
+        <div class="ribbon-group">
+          <div class="group-tools-col">
+            <button class="ribbon-btn-text" onclick="window.dzWordApp.executeFormat('insertHTML', '<strong>د.ج</strong>')" title="إدراج رمز الدينار الجزائري">
+              <span>د.ج (DZD)</span>
+            </button>
+            <button class="ribbon-btn-text" onclick="window.dzWordApp.executeFormat('insertText', '✓')" title="إدراج علامة صح">
+              <span>✓ (صح)</span>
+            </button>
+            <button class="ribbon-btn-text" onclick="window.dzWordApp.executeFormat('insertText', '© 2026')" title="رمز الحقوق المحفوظة">
+              <span>© (حقوق)</span>
+            </button>
+          </div>
+          <div class="group-label">رموز خاصة</div>
+        </div>
       </div>
-      <button class="tool-btn" data-cmd="removeFormat" title="مسح التنسيق">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-    </div>
 
-    <!-- Alignments -->
-    <div class="tool-group">
-      <button class="tool-btn" data-cmd="justifyRight" title="محاذاة لليمين">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
-      </button>
-      <button class="tool-btn" data-cmd="justifyCenter" title="محاذاة للوسط">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="10" x2="6" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg>
-      </button>
-      <button class="tool-btn" data-cmd="justifyLeft" title="محاذاة لليسار">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg>
-      </button>
-      <button class="tool-btn" data-cmd="justifyFull" title="ضبط النص">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
-      </button>
-    </div>
+      <!-- ==================== DRAW TAB ==================== -->
+      <div class="ribbon-tab-pane" id="tabPane_draw">
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <button class="ribbon-btn-large" title="قلم حبر جاف">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg>
+              <span>قلم حبر</span>
+            </button>
+            <button class="ribbon-btn-large" title="قلم تمييز ملون">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2l4 4-8 8H4v-4l8-8z"></path></svg>
+              <span>قلم فسفوري</span>
+            </button>
+          </div>
+          <div class="group-label">أدوات الرسم</div>
+        </div>
+      </div>
 
-    <!-- Direction (RTL / LTR) -->
-    <div class="tool-group">
-      <button class="tool-btn active" id="btnDirRtl" title="اتجاه من اليمين لليسار (العربية)">
-        <span style="font-weight: 800; font-size: 13px;">ع</span>
-      </button>
-      <button class="tool-btn" id="btnDirLtr" title="اتجاه من اليسار لليمين (Latin)">
-        <span style="font-weight: 800; font-size: 13px;">En</span>
-      </button>
-    </div>
+      <!-- ==================== LAYOUT TAB ==================== -->
+      <div class="ribbon-tab-pane" id="tabPane_layout">
+        <!-- Page Setup -->
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <!-- Margins -->
+            <div class="group-tools-col">
+              <button class="ribbon-btn-text" id="btnMarginNormal" title="هوامش عادية (2.54 سم)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><rect x="6" y="6" width="12" height="12"></rect></svg>
+                <span>هوامش عادية (2.54 سم)</span>
+              </button>
+              <button class="ribbon-btn-text" id="btnMarginNarrow" title="هوامش ضيقة (1.27 سم)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><rect x="4.5" y="4.5" width="15" height="15"></rect></svg>
+                <span>هوامش ضيقة (1.27 سم)</span>
+              </button>
+              <button class="ribbon-btn-text" id="btnMarginWide" title="هوامش عريضة">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><rect x="8" y="8" width="8" height="8"></rect></svg>
+                <span>هوامش عريضة</span>
+              </button>
+            </div>
 
-    <!-- Lists & Indent -->
-    <div class="tool-group">
-      <button class="tool-btn" data-cmd="insertUnorderedList" title="قائمة نقطية">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-      </button>
-      <button class="tool-btn" data-cmd="insertOrderedList" title="قائمة رقمية">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"></line><line x1="10" y1="12" x2="21" y2="12"></line><line x1="10" y1="18" x2="21" y2="18"></line><path d="M4 6h1v4"></path><path d="M4 10h2"></path><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path></svg>
-      </button>
-      <button class="tool-btn" data-cmd="indent" title="زيادة المسافة البادئة">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 8 17 12 13 16"></polyline><line x1="3" y1="12" x2="17" y2="12"></line></svg>
-      </button>
-      <button class="tool-btn" data-cmd="outdent" title="إنقاص المسافة البادئة">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 8 3 12 7 16"></polyline><line x1="21" y1="12" x2="3" y2="12"></line></svg>
-      </button>
-    </div>
+            <!-- Orientation -->
+            <div class="group-tools-col">
+              <button class="ribbon-btn-text active" id="btnOrientationPortrait" title="اتجاه عمودي (Portrait)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect></svg>
+                <span>عمودي</span>
+              </button>
+              <button class="ribbon-btn-text" id="btnOrientationLandscape" title="اتجاه أفقي (Landscape)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect></svg>
+                <span>أفقي</span>
+              </button>
+            </div>
+          </div>
+          <div class="group-label">إعداد الصفحة</div>
+        </div>
+      </div>
 
-    <!-- Quick Inserts (Table, Image, Algeria Header) -->
-    <div class="tool-group">
-      <button class="tool-btn" onclick="document.getElementById('modalTable').classList.add('active')" title="إدراج جدول">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="12" y1="3" x2="12" y2="21"></line></svg>
-      </button>
-      <button class="tool-btn" onclick="document.getElementById('imageFileInput').click()" title="إدراج صورة">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-      </button>
+      <!-- ==================== REFERENCES & TEMPLATES TAB ==================== -->
+      <div class="ribbon-tab-pane" id="tabPane_references">
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <button class="ribbon-btn-large" onclick="window.dzWordApp.openBackstage(); document.querySelector('[data-pane=new]').click();" title="استعراض النماذج الإدارية والرسمية">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>النماذج الإدارية (7)</span>
+            </button>
+          </div>
+          <div class="group-label">نماذج جزائرية رسمية</div>
+        </div>
+      </div>
+
+      <!-- ==================== REVIEW TAB ==================== -->
+      <div class="ribbon-tab-pane" id="tabPane_review">
+        <!-- Proofing -->
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <button class="ribbon-btn-large" onclick="window.dzWordApp.openWordCountDialog()" title="عدد الكلمات والإحصائيات">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+              <span>إحصاء الكلمات</span>
+            </button>
+          </div>
+          <div class="group-label">تدقيق وإحصاء</div>
+        </div>
+
+        <!-- Watermark -->
+        <div class="ribbon-group">
+          <div class="group-tools-col">
+            <button class="ribbon-btn-text" data-watermark="مسودة" title="علامة مائية: مسودة">مسودة (DRAFT)</button>
+            <button class="ribbon-btn-text" data-watermark="سري للغاية" title="علامة مائية: سري للغاية">سري للغاية</button>
+            <button class="ribbon-btn-text" data-watermark="نسخة أصلية" title="علامة مائية: نسخة أصلية">نسخة أصلية</button>
+            <button class="ribbon-btn-text" data-watermark="" title="إزالة العلامة المائية">إزالة العلامة</button>
+          </div>
+          <div class="group-label">علامة مائية</div>
+        </div>
+      </div>
+
+      <!-- ==================== VIEW TAB ==================== -->
+      <div class="ribbon-tab-pane" id="tabPane_view">
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <button class="ribbon-btn-large active" id="btnViewPrint" title="تخطيط الطباعة A4">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              <span>تخطيط الطباعة</span>
+            </button>
+            <button class="ribbon-btn-large" id="btnViewRead" title="وضع القراءة (شاشة كاملة)">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+              <span>وضع القراءة</span>
+            </button>
+            <button class="ribbon-btn-large" id="btnViewWeb" title="تخطيط الويب">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>تخطيط الويب</span>
+            </button>
+          </div>
+          <div class="group-label">طرق العرض</div>
+        </div>
+
+        <div class="ribbon-group">
+          <div class="group-tools-col">
+            <button class="ribbon-btn-text" onclick="window.dzWordApp.setZoom(100)">100%</button>
+            <button class="ribbon-btn-text" onclick="window.dzWordApp.setZoom(125)">125%</button>
+            <button class="ribbon-btn-text" onclick="window.dzWordApp.setZoom(75)">75%</button>
+          </div>
+          <div class="group-label">تكبير / تصغير</div>
+        </div>
+      </div>
+
+      <!-- ==================== HELP TAB ==================== -->
+      <div class="ribbon-tab-pane" id="tabPane_help">
+        <div class="ribbon-group">
+          <div class="group-tools">
+            <button class="ribbon-btn-large" onclick="document.getElementById('modalAbout').classList.add('active')" title="عن برنامج كاتب الجزائر">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span>عن البرنامج</span>
+            </button>
+          </div>
+          <div class="group-label">مساعدة</div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ======================================================================
+       3. Microsoft Word Horizontal Ruler
+       ====================================================================== -->
+  <div class="ruler-horizontal-container">
+    <div class="ruler-corner"></div>
+    <div class="ruler-horizontal" id="rulerHorizontal">
+      <!-- Centimeter ticks rendered dynamically -->
     </div>
   </div>
 
-  <!-- Hidden File Inputs -->
-  <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
-  <input type="file" id="docFileInput" accept=".dzdoc,.html,.htm,.txt,.md" style="display: none;">
-
-  <!-- Main Document Workspace Area -->
-  <main class="workspace-area">
-    <div class="page-container">
-      <div id="documentEditor" class="document-page" contenteditable="true" dir="rtl" spellcheck="false">
-        <!-- Default content loaded via app.js -->
+  <!-- ======================================================================
+       4. Document Workspace & A4 Pages Canvas
+       ====================================================================== -->
+  <main class="workspace-wrapper">
+    <!-- Side Navigation Pane -->
+    <aside class="navigation-pane" id="navigationPane">
+      <div class="nav-header">
+        <span>التنقل والبحث (Navigation)</span>
+        <button class="dialog-close" id="btnCloseNavPane">×</button>
       </div>
-    </div>
+      <div class="nav-search-bar">
+        <input type="text" id="navSearchInput" class="nav-search-input" placeholder="بحث في المستند...">
+      </div>
+      <div class="nav-results-list" id="navResultsList">
+        <!-- Results or headings list -->
+      </div>
+    </aside>
+
+    <!-- Pages Canvas -->
+    <section class="pages-canvas">
+      <div class="document-sheet-container">
+        <!-- A4 Page Sheet -->
+        <article class="word-page" id="documentEditor" contenteditable="true" spellcheck="false" dir="rtl">
+          <div style="text-align: center; border-bottom: 2px solid #0f2d72; padding-bottom: 15px; margin-bottom: 25px;">
+            <h3 style="margin: 0; color: #1e3a8a; font-size: 16pt; font-family: 'Amiri', serif;">الجمهورية الجزائرية الديمقراطية الشعبية</h3>
+            <p style="margin: 5px 0; color: #475569; font-size: 11pt;">République Algérienne Démocratique et Populaire</p>
+            <p style="margin: 4px 0; font-weight: bold; color: #047857; font-size: 12pt;">مؤسسة / شركة: [اسم المؤسسة أو الشركة هنا]</p>
+            <p style="margin: 2px 0; font-size: 9.5pt; color: #64748b;">رقم السجل التجاري / التعريف الإحصائي (NIS): [0000000000000000]</p>
+          </div>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <h1 style="margin: 0; font-size: 24pt; color: #0f172a; text-decoration: underline; text-underline-offset: 8px;">شـــهــــادة عـــمــــل</h1>
+            <p style="margin: 8px 0; font-size: 12pt; color: #64748b; font-family: sans-serif;">ATTESTATION DE TRAVAIL</p>
+          </div>
+
+          <div style="line-height: 2.2; font-size: 13pt; margin: 30px 20px;">
+            <p>
+              يشهد المدير العام لـ <strong>[اسم المؤسسة أو الهيئة المشغلة]</strong>، الكائن مقرها الاجتماعي بـ <strong>[العنوان الكامل، الولاية]</strong>:
+            </p>
+            <p>
+              بأن السيد(ة): <strong>[الاسم واللقب الكامل]</strong><br>
+              المولود(ة) بتاريخ: <strong>[01 جانفي 1990]</strong> بـ <strong>[البلدية، الولاية]</strong><br>
+              الحامل(ة) لبطاقة التعريف الوطنية رقم: <strong>[000000000]</strong> الصادرة بتاريخ: <strong>[01/01/2020]</strong> عن دائرة: <strong>[اسم الدائرة]</strong><br>
+            </p>
+            <p>
+              يعمل (تعمل) لدى مؤسستنا في منصب: <strong>[المسمى الوظيفي، مثال: مهندس برمجيات ونظم معلومات]</strong><br>
+              بموجب عقد عمل من نوع: <strong>[عقد غير محدد المدة CDI]</strong><br>
+              وذلك منذ تاريخ: <strong>[01 سبتمبر 2021]</strong> إلى غاية يومنا هذا.
+            </p>
+            <p>
+              سُلمت له هذه الشهادة بناءً على طلبه(ها) لاستعمالها والإدلاء بها في حدود ما يسمح به القانون والتشريع المعمول به.
+            </p>
+          </div>
+
+          <div style="margin-top: 60px; display: flex; justify-content: space-between; align-items: flex-start; padding: 0 30px;">
+            <div style="text-align: center; color: #64748b; font-size: 11pt;">
+              <p>حرر بـ: <strong>[الجزائر العاصمة]</strong></p>
+              <p>بتاريخ: <strong>[اليوم / الشهر / 2026]</strong></p>
+            </div>
+            <div style="text-align: center;">
+              <p style="font-weight: bold; font-size: 12pt; margin-bottom: 50px;">خاتم وتوقيع المدير العام</p>
+              <p style="color: #94a3b8; font-size: 10pt;">(ختم المؤسسة الرسمي)</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
   </main>
 
-  <!-- Bottom Live Status Bar -->
-  <footer class="status-bar">
-    <div class="status-left">
-      <div class="stat-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-        <span id="statPages">1 صفحة</span>
+  <!-- ======================================================================
+       5. Floating Mini-Toolbar on Selection
+       ====================================================================== -->
+  <div class="floating-mini-toolbar" id="floatingMiniToolbar">
+    <button class="ribbon-btn" data-cmd="bold"><strong>B</strong></button>
+    <button class="ribbon-btn" data-cmd="italic"><em>I</em></button>
+    <button class="ribbon-btn" data-cmd="underline"><u>U</u></button>
+    <button class="ribbon-btn" data-cmd="justifyRight"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px;"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="9" y2="12"></line><line x1="21" y1="18" x2="5" y2="18"></line></svg></button>
+    <button class="ribbon-btn" data-cmd="justifyCenter"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px;"><line x1="18" y1="6" x2="6" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg></button>
+  </div>
+
+  <!-- ======================================================================
+       6. Custom Right-Click Context Menu
+       ====================================================================== -->
+  <div class="word-context-menu" id="wordContextMenu">
+    <div class="ctx-item" data-cmd="cut"><span>قص (Ctrl+X)</span></div>
+    <div class="ctx-item" data-cmd="copy"><span>نسخ (Ctrl+C)</span></div>
+    <div class="ctx-item" data-cmd="paste"><span>لصق (Ctrl+V)</span></div>
+    <div class="ctx-divider"></div>
+    <div class="ctx-item" data-cmd="bold"><span>غامق</span></div>
+    <div class="ctx-item" data-cmd="italic"><span>مائل</span></div>
+    <div class="ctx-item" data-cmd="underline"><span>تسطير</span></div>
+    <div class="ctx-divider"></div>
+    <div class="ctx-item" onclick="window.dzWordApp.openWordCountDialog()"><span>إحصاء الكلمات...</span></div>
+  </div>
+
+  <!-- ======================================================================
+       7. Microsoft Word Status Bar
+       ====================================================================== -->
+  <footer class="word-statusbar">
+    <div class="status-group">
+      <div class="status-item" id="statusPageCountLabel">الصفحة 1 من 1</div>
+      <div class="status-item" id="statusWordCount">
+        <span id="statusWordCountLabel">0 كلمة</span>
       </div>
-      <div class="stat-badge">
-        <span id="statWords">0 كلمة</span>
-      </div>
-      <div class="stat-badge">
-        <span id="statChars">0 حرف</span>
-      </div>
-      <div class="stat-badge">
-        <span id="statReadingTime">~1 دقيقة</span>
-      </div>
+      <div class="status-item" title="لغة التدقيق">العربية (الجزائر)</div>
+      <div class="status-item" id="statusSavedIndicator">✓ تم الحفظ محلياً</div>
     </div>
 
-    <div class="status-right">
-      <!-- Zoom Slider -->
-      <div class="zoom-control">
-        <span id="zoomValue">100%</span>
-        <input type="range" id="zoomSlider" class="zoom-slider" min="50" max="175" value="100" step="5">
-      </div>
+    <div class="status-group">
+      <!-- View mode shortcuts -->
+      <div class="status-item" onclick="window.dzWordApp.setViewMode('read')" title="وضع القراءة">📖</div>
+      <div class="status-item" onclick="window.dzWordApp.setViewMode('print')" title="تخطيط الطباعة">📄</div>
+      <div class="status-item" onclick="window.dzWordApp.setViewMode('web')" title="تخطيط الويب">🌐</div>
 
-      <!-- Language Switcher -->
-      <div class="lang-switcher">
-        <button class="lang-btn active" data-lang="ar">عربي</button>
-        <button class="lang-btn" data-lang="fr">FR</button>
-        <button class="lang-btn" data-lang="en">EN</button>
+      <!-- Zoom bar -->
+      <div class="zoom-controls">
+        <button class="qa-btn" id="btnZoomOut" style="width:20px;height:20px;">-</button>
+        <input type="range" class="zoom-slider-bar" id="zoomSliderBar" min="50" max="200" value="100">
+        <button class="qa-btn" id="btnZoomIn" style="width:20px;height:20px;">+</button>
+        <span class="status-item" id="zoomValueLabel" style="min-width: 42px;">100%</span>
       </div>
     </div>
   </footer>
 
-  <!-- Modal: Templates Gallery -->
-  <div id="modalTemplates" class="modal">
-    <div class="modal-backdrop"></div>
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 data-i18n="templatesTitle">النماذج الإدارية والرسمية الجاهزة</h3>
-        <button class="modal-close">&times;</button>
+  <!-- ======================================================================
+       8. Full-Screen Word Backstage View (ملف - File)
+       ====================================================================== -->
+  <div class="word-backstage" id="wordBackstage">
+    <!-- Backstage Sidebar -->
+    <div class="backstage-sidebar">
+      <button class="backstage-back-btn" id="btnBackstageBack" title="الرجوع إلى المستند">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" style="width:18px;height:18px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>رجوع</span>
+      </button>
+
+      <button class="backstage-nav-btn active" data-pane="info">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <span>معلومات</span>
+      </button>
+
+      <button class="backstage-nav-btn" data-pane="new" id="btnBackstageNew">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        <span>جديد (القوالب)</span>
+      </button>
+
+      <button class="backstage-nav-btn" data-pane="open" id="btnBackstageOpen">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+        <span>فتح ملف...</span>
+      </button>
+
+      <button class="backstage-nav-btn" id="btnBackstageSave">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        <span>حفظ (.docx)</span>
+      </button>
+
+      <button class="backstage-nav-btn" id="btnBackstagePrint">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        <span>طباعة / PDF</span>
+      </button>
+
+      <button class="backstage-nav-btn" data-pane="export">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>تصدير</span>
+      </button>
+    </div>
+
+    <!-- Hidden file opener -->
+    <input type="file" id="openFileInput" accept=".docx,.dzdoc,.html,.txt,.md" style="display: none;">
+
+    <!-- Backstage Content Area -->
+    <div class="backstage-content">
+      <!-- Info Pane -->
+      <div class="backstage-pane active" id="backstagePane_info">
+        <h2 class="backstage-title">معلومات المستند</h2>
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 24px; max-width: 600px;">
+          <table class="stats-table">
+            <tr><td>اسم الملف:</td><td id="infoDocName">مستند 1 - Word</td></tr>
+            <tr><td>الكلمات:</td><td id="infoDocWords">0</td></tr>
+            <tr><td>الأحرف:</td><td id="infoDocChars">0</td></tr>
+            <tr><td>آخر تعديل:</td><td id="infoDocDate">-</td></tr>
+            <tr><td>المنظومة:</td><td>DZ-Word 100% Offline Sovereign Edition</td></tr>
+          </table>
+        </div>
       </div>
-      <div class="modal-body">
-        <div id="templatesList" class="templates-grid">
-          <!-- Populated dynamically via app.js -->
+
+      <!-- New / Templates Pane -->
+      <div class="backstage-pane" id="backstagePane_new">
+        <h2 class="backstage-title">النماذج الرسمية الجاهزة (DZ-Word Templates)</h2>
+        <div class="templates-grid" id="backstageTemplatesGrid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Export Pane -->
+      <div class="backstage-pane" id="backstagePane_export">
+        <h2 class="backstage-title">تصدير المستند بصيغ متعددة</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; max-width: 900px;">
+          <div class="template-tile" id="btnExportDocx">
+            <div class="template-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+            <h4>Microsoft Word (.docx)</h4>
+            <span>ملف وورد رسمي متوافق 100% مع أوفيس</span>
+          </div>
+
+          <div class="template-tile" id="btnExportPdf">
+            <div class="template-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg></div>
+            <h4>وثيقة PDF جاهزة</h4>
+            <span>طباعة أو حفظ مباشر كملف PDF عالي الدقة</span>
+          </div>
+
+          <div class="template-tile" id="btnExportHtml">
+            <div class="template-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
+            <h4>صفحة ويب HTML</h4>
+            <span>صفحة ويب متكاملة مع التنسيقات</span>
+          </div>
+
+          <div class="template-tile" id="btnExportMd">
+            <div class="template-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M7 15V9l3 4 3-4v6"></path><path d="M17 12l2 2 2-2"></path></svg></div>
+            <h4>Markdown (.md)</h4>
+            <span>نص مهيكل للمطورين والأنظمة</span>
+          </div>
+
+          <div class="template-tile" id="btnExportTxt">
+            <div class="template-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg></div>
+            <h4>نص عادي (.txt)</h4>
+            <span>نص نقي بدون تنسيقات</span>
+          </div>
+
+          <div class="template-tile" id="btnExportDzdoc">
+            <div class="template-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
+            <h4>مستند كاتب الجزائر (.dzdoc)</h4>
+            <span>حفظ كامل بخصائص المنظومة</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal: Insert Table -->
-  <div id="modalTable" class="modal">
-    <div class="modal-backdrop"></div>
-    <div class="modal-card" style="max-width: 380px;">
-      <div class="modal-header">
-        <h3 data-i18n="insertTable">إدراج جدول</h3>
-        <button class="modal-close">&times;</button>
+  <!-- ======================================================================
+       9. Microsoft Word Official Dialogs
+       ====================================================================== -->
+  <!-- Word Count Dialog -->
+  <div class="modal-overlay" id="modalWordCount">
+    <div class="word-dialog">
+      <div class="dialog-header">
+        <h3>إحصاء الكلمات (Word Count)</h3>
+        <button class="dialog-close">×</button>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label data-i18n="rows">الصفوف:</label>
-          <input type="number" id="tableRowsInput" class="form-control" value="3" min="1" max="50">
-        </div>
-        <div class="form-group">
-          <label data-i18n="cols">الأعمدة:</label>
-          <input type="number" id="tableColsInput" class="form-control" value="3" min="1" max="20">
-        </div>
+      <div class="dialog-body">
+        <table class="stats-table">
+          <tr><td>الصفحات:</td><td id="dlgPagesCount">1</td></tr>
+          <tr><td>الكلمات:</td><td id="dlgWordsCount">0</td></tr>
+          <tr><td>الأحرف (دون مسافات):</td><td id="dlgCharsNoSpaces">0</td></tr>
+          <tr><td>الأحرف (مع مسافات):</td><td id="dlgCharsWithSpaces">0</td></tr>
+          <tr><td>الفقرات:</td><td id="dlgParagraphsCount">1</td></tr>
+          <tr><td>الأسطر:</td><td id="dlgLinesCount">1</td></tr>
+        </table>
       </div>
-      <div class="modal-footer">
-        <button class="btn modal-close" data-i18n="close">إلغاء</button>
-        <button class="btn btn-primary" id="btnConfirmInsertTable" data-i18n="insert">إدراج</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Find & Replace -->
-  <div id="modalFindReplace" class="modal">
-    <div class="modal-backdrop"></div>
-    <div class="modal-card" style="max-width: 440px;">
-      <div class="modal-header">
-        <h3 data-i18n="searchTitle">البحث والاستبدال</h3>
-        <button class="modal-close">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label data-i18n="searchPlaceholder">كلمة البحث:</label>
-          <input type="text" id="findInput" class="form-control" placeholder="اكتب النص المراد البحث عنه...">
-        </div>
-        <div class="form-group">
-          <label data-i18n="replacePlaceholder">استبدال بـ:</label>
-          <input type="text" id="replaceInput" class="form-control" placeholder="النص الجديد...">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" id="btnFindNext" data-i18n="findNext">بحث عن التالي</button>
-        <button class="btn" id="btnReplace" data-i18n="replace">استبدال</button>
-        <button class="btn" id="btnReplaceAll" data-i18n="replaceAll">استبدال الكل</button>
+      <div class="dialog-footer">
+        <button class="btn-dialog primary" data-close-modal>إغلاق</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal: About DZ-Word -->
-  <div id="modalAbout" class="modal">
-    <div class="modal-backdrop"></div>
-    <div class="modal-card" style="max-width: 480px; text-align: center;">
-      <div class="modal-header">
-        <h3 data-i18n="aboutTitle">عن كاتب الجزائر (DZ-Word)</h3>
-        <button class="modal-close">&times;</button>
+  <!-- About Dialog -->
+  <div class="modal-overlay" id="modalAbout">
+    <div class="word-dialog">
+      <div class="dialog-header">
+        <h3>عن كاتب الجزائر (DZ-Word Pro)</h3>
+        <button class="dialog-close">×</button>
       </div>
-      <div class="modal-body" style="padding: 24px;">
-        <img src="assets/logo.svg" alt="DZ-Word Logo" style="width: 80px; height: 80px; margin-bottom: 16px;">
-        <h2 style="font-size: 20px; color: var(--primary); margin-bottom: 8px;">كاتب الجزائر — DZ-Writer Pro</h2>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">الإصدار 1.0.0 • الإصدار السيادي المفتوح المصدر</p>
-        <p style="line-height: 1.8; color: var(--text); font-size: 13.5px;" data-i18n="aboutDesc">
-          معالج نصوص مكتبي حر ومفتوح المصدر 100% جزائري، بديل قوي لمايكروسوفت وورد وغوغل دوكس، مع دعم متكامل للغتين العربية والفرنسية والنماذج الإدارية الوطنية.
+      <div class="dialog-body" style="text-align: center;">
+        <div style="width: 64px; height: 64px; margin: 0 auto 15px; background: #185abd; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:36px;height:36px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>
+        </div>
+        <h2 style="font-size: 18px; color: #185abd; margin-bottom: 6px;">DZ-Word Sovereign Document Studio</h2>
+        <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">الإصدار 2.0.0 — منظومة جزائرية حرة 100% مفتوحة المصدر</p>
+        <p style="line-height: 1.8; color: #334155; font-size: 13px;">
+          معالج نصوص مكتبي حقيقي يعمل بالكامل دون إنترنت، بديل سيادي لمايكروسوفت وورد وغوغل دوكس، مع دعم أصلي كامل للتصدير بصيغة DOCX، وتنسيق المستندات الرسمية والنماذج الإدارية الوطنية.
         </p>
       </div>
-      <div class="modal-footer" style="justify-content: center;">
-        <button class="btn btn-primary modal-close" data-i18n="close">إغلاق</button>
+      <div class="dialog-footer">
+        <button class="btn-dialog primary" data-close-modal>موافق</button>
       </div>
     </div>
   </div>
 
-  <!-- Application Logic -->
-  <script type="module" src="src/app.js"></script>
+  <script src="src/docx-engine.js"></script>
+  <script src="src/templates.js"></script>
+  <script src="src/app.js"></script>
 </body>
 </html>
