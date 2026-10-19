@@ -169,6 +169,28 @@
       </div>
     </div>
 
+    <!-- Quick Shortcuts Bar -->
+    <div class="quick-shortcuts-bar" id="quickShortcutsBar">
+      <span class="shortcuts-label">أقراص ومسارات سريعة:</span>
+      <div class="shortcuts-chips" id="shortcutsChipsContainer">
+        <!-- Injected dynamically via app.js -->
+      </div>
+    </div>
+
+    <!-- Live Scanning Progress Ticker -->
+    <div class="scan-live-ticker" id="scanLiveTicker" style="display:none;">
+      <div class="ticker-left">
+        <div class="live-pulse"></div>
+        <span class="ticker-text" id="tickerCurrentPath">C:\...</span>
+      </div>
+      <div class="ticker-metrics">
+        <span class="metric-pill" id="tickerFilesCount">0 ملف</span>
+        <span class="metric-pill" id="tickerFoldersCount">0 مجلد</span>
+        <span class="metric-pill" id="tickerTotalSize">0 B</span>
+        <span class="metric-pill speed" id="tickerSpeed">0 ملف/ثانية</span>
+      </div>
+    </div>
+
     <!-- 3. Main Split Screen Workspace (Top Table + Bottom Treemap) -->
     <main class="workspace-split" id="workspaceSplit">
 
@@ -198,6 +220,21 @@
                 <rect x="3" y="14" width="7" height="7"></rect>
               </svg>
               <span>أنواع الملفات (File Types)</span>
+            </button>
+            <button class="pane-tab-btn" data-tab="duplicates">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+              </svg>
+              <span>الملفات المكررة (Duplicates)</span>
+              <span class="tab-badge" id="badgeDuplicates" style="display:none;">0</span>
+            </button>
+            <button class="pane-tab-btn" data-tab="cleaner">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+              </svg>
+              <span>تنظيف القرص (Disk Cleaner)</span>
+              <span class="tab-badge success" id="badgeCleaner" style="display:none;">0 MB</span>
             </button>
           </div>
 
@@ -281,6 +318,53 @@
             </table>
           </div>
         </div>
+
+        <!-- Tab 4: Duplicate Files Finder -->
+        <div class="tab-pane-content" id="tabContentDuplicates">
+          <div class="duplicate-header-bar">
+            <div class="dup-stat-badge">
+              <span class="label">المساحة المهدرة المتوقعة:</span>
+              <span class="val highlight" id="dupTotalWasted">0 B</span>
+            </div>
+            <div class="dup-stat-badge">
+              <span class="label">مجموعات الملفات المكررة:</span>
+              <span class="val" id="dupTotalClusters">0</span>
+            </div>
+            <button class="btn-tb-small" id="btnExportDuplicatesCsv">تصدير قائمة التكرار (CSV)</button>
+          </div>
+          <div class="table-scroll-wrap" style="flex:1;">
+            <div id="duplicatesListContainer" class="duplicates-list-wrap">
+              <div class="empty-row text-center text-muted" style="padding:40px; text-align:center;">
+                لم يتم العثور على ملفات مكررة حتى الآن — ابدأ فحص القرص أو المجلد لعرض التكرارات
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Smart PC Disk Cleaner -->
+        <div class="tab-pane-content" id="tabContentCleaner">
+          <div class="cleaner-header-bar">
+            <div class="cleaner-stat-hero">
+              <div class="hero-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path>
+                </svg>
+              </div>
+              <div>
+                <div style="font-size:15px; font-weight:800; color:var(--accent-green);" id="cleanerReclaimable">0 B مساحة قابلة للاسترجاع بأمان</div>
+                <div style="font-size:11.5px; color:var(--text-secondary);">ملفات مؤقتة ومخلفات تثبيت غير ضرورية يمكن إزالتها فوراً لتفريغ المساحة</div>
+              </div>
+            </div>
+            <button class="btn-scan" id="btnExecuteCleanBatch" style="padding:7px 18px; font-weight:700; background:var(--accent-green); border-color:var(--accent-green);">
+              تنظيف العناصر المحددة فوراً
+            </button>
+          </div>
+          <div class="cleaner-categories-wrap" id="cleanerCategoriesWrap">
+            <div class="empty-row text-center text-muted" style="padding:40px; text-align:center;">
+              قم بفحص أحد الأقراص لاكتشاف ملفات النظام المؤقتة ومخلفات التنزيلات القابلة للتنظيف
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- SPLITTER HANDLE: Draggable Divider Bar -->
@@ -351,11 +435,24 @@
 
   <!-- Context Menu (Desktop Right Click) -->
   <div class="context-menu" id="contextMenu" style="display:none;">
+    <div class="context-item" id="ctxOpenExplorer">
+      <span>📁 فتح في مستكشف ويندوز (Reveal in Explorer)</span>
+    </div>
+    <div class="context-item" id="ctxOpenFile">
+      <span>🚀 تشغيل / فتح الملف (Open with Default App)</span>
+    </div>
+    <div class="context-item" id="ctxOpenTerminal">
+      <span>💻 فتح موجه الأوامر هنا (Open Terminal Here)</span>
+    </div>
+    <div class="context-divider"></div>
     <div class="context-item" id="ctxCopyPath">نسخ المسار الكامل (Copy Path)</div>
     <div class="context-item" id="ctxCopyName">نسخ الاسم (Copy Name)</div>
     <div class="context-divider"></div>
     <div class="context-item" id="ctxZoomTreemap">تكبير المخطط لهذا المجلد</div>
     <div class="context-item" id="ctxFilterExt">تصفية حسب هذا الامتداد</div>
+    <div class="context-divider"></div>
+    <div class="context-item text-danger" id="ctxDeleteRecycle">🗑️ حذف إلى سلة المحذوفات (Send to Recycle Bin)</div>
+    <div class="context-item text-danger" id="ctxDeletePermanent">⚠️ حذف نهائي (Delete Permanently)</div>
     <div class="context-divider"></div>
     <div class="context-item" id="ctxProperties">خصائص (Properties)...</div>
   </div>

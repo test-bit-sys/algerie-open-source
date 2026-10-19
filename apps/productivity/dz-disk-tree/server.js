@@ -1,6 +1,8 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
+import { exec, execFile } from 'child_process';
 import { fileURLToPath } from 'url';
 import { DiskScanner } from './src/scanner.js';
 
@@ -42,10 +44,11 @@ function getSystemDrives() {
           }
         } catch {}
 
+        let name = letter === 'C' ? 'System Disk (C:)' : `Local Disk (${letter}:)`;
         drives.push({
           letter: `${letter}:`,
           path: root,
-          name: `Local Disk (${letter}:)`,
+          name: name,
           ...spaceInfo
         });
       } catch {}
@@ -74,13 +77,173 @@ function getSystemDrives() {
   return drives;
 }
 
+function getQuickFolders() {
+  const home = os.homedir();
+  const folders = [
+    { id: 'desktop', name: 'سطح المكتب (Desktop)', path: path.join(home, 'Desktop'), icon: 'desktop' },
+    { id: 'downloads', name: 'التنزيلات (Downloads)', path: path.join(home, 'Downloads'), icon: 'download' },
+    { id: 'documents', name: 'المستندات (Documents)', path: path.join(home, 'Documents'), icon: 'document' },
+    { id: 'pictures', name: 'الصور (Pictures)', path: path.join(home, 'Pictures'), icon: 'image' },
+    { id: 'videos', name: 'الفيديوهات (Videos)', path: path.join(home, 'Videos'), icon: 'video' },
+    { id: 'userhome', name: 'مجلد المستخدم (User Profile)', path: home, icon: 'user' },
+    { id: 'temp', name: 'ملفات النظام المؤقتة (Temp)', path: os.tmpdir(), icon: 'trash' },
+    { id: 'project', name: 'مجلد المشروع (DZ Open Suite)', path: path.resolve(__dirname, '..', '..', '..'), icon: 'folder' }
+  ];
+
+  if (process.platform === 'win32') {
+    const winTemp = 'C:\\Windows\\Temp';
+    if (fs.existsSync(winTemp)) {
+      folders.push({ id: 'wintemp', name: 'مؤقت ويندوز (Windows Temp)', path: winTemp, icon: 'system' });
+    }
+  }
+
+  return folders.filter(f => {
+    try {
+      return fs.existsSync(f.path);
+    } catch {
+      return false;
+    }
+  });
+}
+
+function openExplorer(targetPath) {
+  return new Promise((resolve) => {
+    if (!fs.existsSync(targetPath)) return resolve(false);
+    try {
+      const isDir = fs.statSync(targetPath).isDirectory();
+      if (process.platform === 'win32') {
+        if (isDir) {
+          execFile('explorer.exe', [targetPath], () => resolve(true));
+        } else {
+          execFile('explorer.exe', [`/select,${targetPath}`], () => resolve(true));
+        }
+      } else {
+        const cmd = process.platform === 'darwin' ? 'open' : 'xdg-open';
+        execFile(cmd, [isDir ? targetPath : path.dirname(targetPath)], () => resolve(true));
+      }
+    } catch {
+      resolve(false);
+    }
+  });
+}
+
+function openFile(targetPath) {
+  return new Promise((resolve) => {
+    if (!fs.existsSync(targetPath)) return resolve(false);
+    try {
+      if (process.platform === 'win32') {
+        exec(`start "" "${targetPath.replace(/"/g, '""')}"`, { shell: 'cmd.exe' }, () => resolve(true));
+      } else {
+        const cmd = process.platform === 'darwin' ? 'open' : 'xdg-open';
+        execFile(cmd, [targetPath], () => resolve(true));
+      }
+    } catch {
+      resolve(false);
+    }
+  });
+}
+
+function openTerminal(targetPath) {
+  return new Promise((resolve) => {
+    let dir = targetPath;
+    try {
+      if (fs.existsSync(targetPath) && !fs.statSync(targetPath).isDirectory()) {
+        dir = path.dirname(targetPath);
+      }
+    } catch {}
+
+    if (process.platform === 'win32') {
+      exec(`start cmd.exe /k "cd /d "${dir}" & title DZ-DiskTree Terminal"`, { shell: 'cmd.exe' }, () => resolve(true));
+    } else {
+      resolve(false);
+    }
+  });
+}
+
+function deleteItem(targetPath, permanent = false) {
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(targetPath)) {
+      return reject(new Error('Target file or folder does not exist'));
+    }
+
+    if (permanent) {
+      fs.rm(targetPath, { recursive: true, force: true }, (err) => {
+        if (err) return reject(err);
+        resolve({ ok: true, permanent: true });
+      });
+      return;
+    }
+
+    if (process.platform === 'win32') {
+      const isDir = fs.statSync(targetPath).isDirectory();
+      const method = isDir ? 'DeleteDirectory' : 'DeleteFile';
+      const psCmd = `Add-Type -AssemblyName Microsoft.VisualBasic; [Microsoft.VisualBasic.FileIO.FileSystem]::${method}('${targetPath.replace(/'/g, "''")}', 'OnlyErrorDialogs', 'SendToRecycleBin')`;
+      execFile('powershell', ['-NoProfile', '-NonInteractive', '-Command', psCmd], (err) => {
+        if (err) {
+          // Fallback to permanent
+          fs.rm(targetPath, { recursive: true, force: true }, (err2) => {
+            if (err2) return reject(err2);
+            resolve({ ok: true, permanent: true, fallback: true });
+          });
+        } else {
+          resolve({ ok: true, recycled: true });
+        }
+      });
+    } else {
+      fs.rm(targetPath, { recursive: true, force: true }, (err) => {
+        if (err) return reject(err);
+        resolve({ ok: true, permanent: true });
+      });
+    }
+  });
+}
+
+function browseFolderNative() {
+  return new Promise((resolve) => {
+    if (process.platform !== 'win32') {
+      return resolve({ ok: false, message: 'Platform not supported' });
+    }
+    const psScript = `
+[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms') | Out-Null
+$dialog = New-Object System.Windows.Forms.FolderBrowserDialog
+$dialog.Description = 'DZ-DiskTree — اختر القرص أو المجلد المراد فحصه وتحليل مساحته'
+$dialog.ShowNewFolderButton = $false
+if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+  [Console]::Out.Write($dialog.SelectedPath)
+}
+`.trim();
+
+    execFile('powershell', ['-NoProfile', '-Command', psScript], (err, stdout) => {
+      const selected = stdout ? stdout.trim() : '';
+      if (selected) {
+        resolve({ ok: true, path: selected });
+      } else {
+        resolve({ ok: false, cancelled: true });
+      }
+    });
+  });
+}
+
+// Active Scan state & SSE progress clients
 let activeScanner = null;
+const sseClients = new Set();
+
+function broadcastProgress(data) {
+  const payload = `data: ${JSON.stringify(data)}\n\n`;
+  for (const client of sseClients) {
+    try {
+      client.write(payload);
+    } catch {
+      sseClients.delete(client);
+    }
+  }
+}
 
 const server = http.createServer(async (req, res) => {
   const parsedUrl = new URL(req.url, `http://localhost:${PORT}`);
   const pathname = decodeURI(parsedUrl.pathname);
 
-  // Set CORS headers for local inter-app communication
+  // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -99,6 +262,139 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // API: Get quick folders shortcuts
+  if (pathname === '/api/quick-folders' && req.method === 'GET') {
+    const folders = getQuickFolders();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true, folders }));
+    return;
+  }
+
+  // API: Native Windows Folder Browser Dialog
+  if (pathname === '/api/browse-folder' && req.method === 'GET') {
+    const result = await browseFolderNative();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+    return;
+  }
+
+  // API: Live Scan Progress Stream (SSE)
+  if (pathname === '/api/scan-stream' && req.method === 'GET') {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive'
+    });
+    res.write('retry: 1000\n\n');
+    sseClients.add(res);
+
+    req.on('close', () => {
+      sseClients.delete(res);
+    });
+    return;
+  }
+
+  // API: Open in Windows Explorer
+  if (pathname === '/api/open-explorer' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const { path: targetPath } = JSON.parse(body || '{}');
+        await openExplorer(targetPath);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // API: Open File with associated application
+  if (pathname === '/api/open-file' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const { path: targetPath } = JSON.parse(body || '{}');
+        await openFile(targetPath);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // API: Open Terminal in directory
+  if (pathname === '/api/open-terminal' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const { path: targetPath } = JSON.parse(body || '{}');
+        await openTerminal(targetPath);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // API: Delete File or Folder (Recycle Bin / Permanent)
+  if (pathname === '/api/delete-file' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const { path: targetPath, permanent } = JSON.parse(body || '{}');
+        const result = await deleteItem(targetPath, permanent);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // API: Clean Delete Batch (for PC Cleaner)
+  if (pathname === '/api/clean-batch' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const { filePaths } = JSON.parse(body || '{}');
+        let cleanedCount = 0;
+        let cleanedBytes = 0;
+        for (const fPath of filePaths || []) {
+          try {
+            if (fs.existsSync(fPath)) {
+              const sz = fs.statSync(fPath).size;
+              await deleteItem(fPath, false);
+              cleanedCount++;
+              cleanedBytes += sz;
+            }
+          } catch {}
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true, cleanedCount, cleanedBytes }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
   // API: Run Disk Scan
   if (pathname === '/api/scan' && req.method === 'POST') {
     let body = '';
@@ -113,7 +409,10 @@ const server = http.createServer(async (req, res) => {
         }
 
         activeScanner = new DiskScanner({
-          maxTopFiles: payload.maxTopFiles || 500
+          maxTopFiles: payload.maxTopFiles || 500,
+          onProgress: (pData) => {
+            broadcastProgress(pData);
+          }
         });
 
         console.log(`[DZ-DiskTree] Starting scan on: ${targetPath}`);
@@ -128,6 +427,7 @@ const server = http.createServer(async (req, res) => {
       } catch (err) {
         console.error(`[DZ-DiskTree] Scan error:`, err);
         if (!res.headersSent && !res.destroyed) {
+          activeScanner = null;
           res.writeHead(500, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ ok: false, error: err.message }));
         }
@@ -142,6 +442,7 @@ const server = http.createServer(async (req, res) => {
       activeScanner.cancel();
       activeScanner = null;
     }
+    broadcastProgress({ status: 'cancelled' });
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ ok: true, message: 'Scan cancelled' }));
     return;
@@ -188,7 +489,6 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (reqFile === '/favicon.ico' || reqFile === '/assets/logo.jpg') {
-    // Route to global asset logo
     const rootLogo = path.join(__dirname, '..', '..', '..', 'assets', 'logo.jpg');
     if (fs.existsSync(rootLogo)) {
       res.writeHead(200, { 'Content-Type': 'image/jpeg' });
@@ -216,8 +516,8 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`\n======================================================`);
-  console.log(`DZ-DiskTree — High-Performance Disk Space Analyzer`);
+  console.log(`DZ-DiskTree — High-Performance PC Disk Space Analyzer`);
   console.log(`[INFO] Server running at: http://localhost:${PORT}`);
-  console.log(`[SYS] Squarified Treemap | Offline-First | Trilingual (AR/FR/EN)`);
+  console.log(`[SYS] Native Windows I/O | Explorer Integration | Trilingual (AR/FR/EN)`);
   console.log(`======================================================\n`);
 });

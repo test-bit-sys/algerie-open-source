@@ -97,6 +97,7 @@ class DiskTreeApp {
     this.initContextMenu();
     this.initEvents();
     this.loadDrives();
+    this.loadQuickShortcuts();
   }
 
   initDOM() {
@@ -167,7 +168,38 @@ class DiskTreeApp {
 
       // About Modal
       aboutModal: document.getElementById('aboutModal'),
-      aboutCloseBtn: document.getElementById('aboutCloseBtn')
+      aboutCloseBtn: document.getElementById('aboutCloseBtn'),
+
+      // Quick Shortcuts & Live Progress
+      shortcutsChipsContainer: document.getElementById('shortcutsChipsContainer'),
+      scanLiveTicker: document.getElementById('scanLiveTicker'),
+      tickerCurrentPath: document.getElementById('tickerCurrentPath'),
+      tickerFilesCount: document.getElementById('tickerFilesCount'),
+      tickerFoldersCount: document.getElementById('tickerFoldersCount'),
+      tickerTotalSize: document.getElementById('tickerTotalSize'),
+      tickerSpeed: document.getElementById('tickerSpeed'),
+
+      // Badges
+      badgeDuplicates: document.getElementById('badgeDuplicates'),
+      badgeCleaner: document.getElementById('badgeCleaner'),
+
+      // Duplicates & Cleaner Panes
+      tabContentDuplicates: document.getElementById('tabContentDuplicates'),
+      tabContentCleaner: document.getElementById('tabContentCleaner'),
+      dupTotalWasted: document.getElementById('dupTotalWasted'),
+      dupTotalClusters: document.getElementById('dupTotalClusters'),
+      duplicatesListContainer: document.getElementById('duplicatesListContainer'),
+      btnExportDuplicatesCsv: document.getElementById('btnExportDuplicatesCsv'),
+      cleanerReclaimable: document.getElementById('cleanerReclaimable'),
+      cleanerCategoriesWrap: document.getElementById('cleanerCategoriesWrap'),
+      btnExecuteCleanBatch: document.getElementById('btnExecuteCleanBatch'),
+
+      // Native Context Menu items
+      ctxOpenExplorer: document.getElementById('ctxOpenExplorer'),
+      ctxOpenFile: document.getElementById('ctxOpenFile'),
+      ctxOpenTerminal: document.getElementById('ctxOpenTerminal'),
+      ctxDeleteRecycle: document.getElementById('ctxDeleteRecycle'),
+      ctxDeletePermanent: document.getElementById('ctxDeletePermanent')
     };
   }
 
@@ -408,6 +440,33 @@ class DiskTreeApp {
       }
     });
     this.dom.ctxProperties.addEventListener('click', () => this.openPropertiesModal(this.selectedNode));
+
+    // Native Desktop Actions
+    this.dom.ctxOpenExplorer?.addEventListener('click', () => {
+      if (this.selectedNode && this.selectedNode.path) {
+        this.openInExplorer(this.selectedNode.path);
+      }
+    });
+    this.dom.ctxOpenFile?.addEventListener('click', () => {
+      if (this.selectedNode && this.selectedNode.path) {
+        this.openFileNative(this.selectedNode.path);
+      }
+    });
+    this.dom.ctxOpenTerminal?.addEventListener('click', () => {
+      if (this.selectedNode && this.selectedNode.path) {
+        this.openTerminalNative(this.selectedNode.path);
+      }
+    });
+    this.dom.ctxDeleteRecycle?.addEventListener('click', () => {
+      if (this.selectedNode && this.selectedNode.path) {
+        this.confirmAndDelete(this.selectedNode, false);
+      }
+    });
+    this.dom.ctxDeletePermanent?.addEventListener('click', () => {
+      if (this.selectedNode && this.selectedNode.path) {
+        this.confirmAndDelete(this.selectedNode, true);
+      }
+    });
   }
 
   openContextMenu(node, x, y) {
@@ -688,16 +747,45 @@ class DiskTreeApp {
     this.dom.driveMeterText.textContent = `${usedPct}% Used`;
   }
 
+  async loadQuickShortcuts() {
+    const container = this.dom.shortcutsChipsContainer;
+    if (!container) return;
+    container.innerHTML = '';
+
+    try {
+      const res = await fetch('/api/quick-folders');
+      const data = await res.json();
+      if (data.ok && data.folders) {
+        data.folders.forEach(f => {
+          const chip = document.createElement('button');
+          chip.className = 'shortcut-chip';
+          chip.innerHTML = `<span>${f.name}</span>`;
+          chip.title = f.path;
+          chip.addEventListener('click', () => {
+            this.dom.pathInput.value = f.path;
+            this.startScan();
+          });
+          container.appendChild(chip);
+        });
+      }
+    } catch {}
+  }
+
   async browseFolder() {
-    if (window.showDirectoryPicker) {
-      try {
-        const handle = await window.showDirectoryPicker();
-        this.dom.pathInput.value = handle.name;
-        // In browser-direct mode, scan client side or trigger server scan
-      } catch {}
-    } else {
+    try {
+      this.dom.sbState.textContent = 'Opening native folder browser...';
+      const res = await fetch('/api/browse-folder');
+      const data = await res.json();
+      if (data.ok && data.path) {
+        this.dom.pathInput.value = data.path;
+        this.startScan();
+      }
+    } catch {
       const input = prompt('Enter directory path to scan:', this.dom.pathInput.value);
-      if (input) this.dom.pathInput.value = input;
+      if (input) {
+        this.dom.pathInput.value = input;
+        this.startScan();
+      }
     }
   }
 
@@ -711,6 +799,35 @@ class DiskTreeApp {
     this.dom.cancelBtn.disabled = false;
     this.dom.cancelBtn.style.display = 'inline-flex';
     this.dom.sbState.textContent = 'Scanning in progress...';
+
+    // Show Live Scanning Ticker
+    if (this.dom.scanLiveTicker) {
+      this.dom.scanLiveTicker.style.display = 'flex';
+      this.dom.tickerCurrentPath.textContent = targetPath;
+      this.dom.tickerFilesCount.textContent = '0 ملف';
+      this.dom.tickerFoldersCount.textContent = '0 مجلد';
+      this.dom.tickerTotalSize.textContent = '0 B';
+      this.dom.tickerSpeed.textContent = '0 ملف/ثانية';
+    }
+
+    // Connect to Server-Sent Events (SSE) for live 60fps streaming
+    let evtSource = null;
+    try {
+      evtSource = new EventSource('/api/scan-stream');
+      evtSource.onmessage = (event) => {
+        try {
+          const progress = JSON.parse(event.data);
+          if (progress.currentPath && this.dom.tickerCurrentPath) {
+            this.dom.tickerCurrentPath.textContent = progress.currentPath;
+            this.dom.tickerFilesCount.textContent = `${(progress.files || 0).toLocaleString()} ملف`;
+            this.dom.tickerFoldersCount.textContent = `${(progress.folders || 0).toLocaleString()} مجلد`;
+            this.dom.tickerTotalSize.textContent = SquarifiedTreemap.formatBytes(progress.size || 0);
+            this.dom.tickerSpeed.textContent = `${(progress.speed || 0).toLocaleString()} ملف/ثانية`;
+            this.dom.sbScanned.textContent = `المساحة: ${SquarifiedTreemap.formatBytes(progress.size || 0)}`;
+          }
+        } catch {}
+      };
+    } catch {}
 
     const startTimestamp = Date.now();
     this.timerInterval = setInterval(() => {
@@ -733,12 +850,71 @@ class DiskTreeApp {
     } catch (err) {
       alert(`Scan failed: ${err.message}`);
     } finally {
+      if (evtSource) {
+        evtSource.close();
+      }
+      if (this.dom.scanLiveTicker) {
+        this.dom.scanLiveTicker.style.display = 'none';
+      }
       this.isScanning = false;
       clearInterval(this.timerInterval);
       this.dom.scanBtn.classList.remove('scanning');
       this.dom.scanBtnText.textContent = 'فحص (Scan)';
       this.dom.cancelBtn.disabled = true;
       this.dom.cancelBtn.style.display = 'none';
+    }
+  }
+
+  async openInExplorer(filePath) {
+    try {
+      await fetch('/api/open-explorer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: filePath })
+      });
+    } catch {}
+  }
+
+  async openFileNative(filePath) {
+    try {
+      await fetch('/api/open-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: filePath })
+      });
+    } catch {}
+  }
+
+  async openTerminalNative(dirPath) {
+    try {
+      await fetch('/api/open-terminal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: dirPath })
+      });
+    } catch {}
+  }
+
+  async confirmAndDelete(node, permanent = false) {
+    const actionText = permanent ? 'حذف نهائي (Permanent Delete)' : 'إرسال إلى سلة المحذوفات (Send to Recycle Bin)';
+    const confirmMsg = `هل أنت متأكد من ${actionText} لـ:\n${node.path}\nالحجم: ${SquarifiedTreemap.formatBytes(node.size)}`;
+    if (!confirm(confirmMsg)) return;
+
+    try {
+      const res = await fetch('/api/delete-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: node.path, permanent })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert(permanent ? 'تم حذف العنصر نهائياً بنجاح.' : 'تم إرسال العنصر إلى سلة المحذوفات بنجاح.');
+        this.startScan();
+      } else {
+        alert(`فشل الحذف: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`خطأ أثناء الحذف: ${err.message}`);
     }
   }
 
@@ -772,6 +948,163 @@ class DiskTreeApp {
 
     // 4. File Extensions Table
     this.renderExtensionsTable(data.extensions, stats.totalSize);
+
+    // 5. Duplicates Table & Badge
+    if (data.duplicates) {
+      this.renderDuplicates(data.duplicates);
+    }
+
+    // 6. Clean Suggestions & Badge
+    if (data.cleanSuggestions) {
+      this.renderCleanSuggestions(data.cleanSuggestions);
+    }
+  }
+
+  renderDuplicates(duplicates) {
+    const badge = this.dom.badgeDuplicates;
+    const container = this.dom.duplicatesListContainer;
+    const totalWastedEl = this.dom.dupTotalWasted;
+    const totalClustersEl = this.dom.dupTotalClusters;
+
+    if (!duplicates || !duplicates.groups || duplicates.groups.length === 0) {
+      if (badge) badge.style.display = 'none';
+      if (totalWastedEl) totalWastedEl.textContent = '0 B';
+      if (totalClustersEl) totalClustersEl.textContent = '0';
+      if (container) {
+        container.innerHTML = '<div class="empty-row text-center text-muted" style="padding:40px; text-align:center;">لم يتم العثور على أي ملفات مكررة متطابقة في الحجم</div>';
+      }
+      return;
+    }
+
+    if (badge) {
+      badge.textContent = `${duplicates.groups.length}`;
+      badge.style.display = 'inline-block';
+    }
+    if (totalWastedEl) {
+      totalWastedEl.textContent = SquarifiedTreemap.formatBytes(duplicates.totalWasted);
+    }
+    if (totalClustersEl) {
+      totalClustersEl.textContent = `${duplicates.groups.length} مجموعات (${duplicates.totalDuplicateFiles} ملف)`;
+    }
+
+    if (container) {
+      container.innerHTML = '';
+      duplicates.groups.slice(0, 50).forEach((group, idx) => {
+        const card = document.createElement('div');
+        card.className = 'dup-cluster-card';
+        card.innerHTML = `
+          <div class="dup-cluster-header">
+            <span>المجموعة #${idx + 1} (${group.count} نسخ متطابقة)</span>
+            <span style="color:var(--accent-red); font-weight:700;">مهدر: ${SquarifiedTreemap.formatBytes(group.wasted)} (حجم النسخة: ${SquarifiedTreemap.formatBytes(group.size)})</span>
+          </div>
+          <div class="dup-files-list">
+            ${group.files.map(f => `
+              <div class="dup-file-row">
+                <span class="dup-file-path" title="${f.path}">${f.path}</span>
+                <div class="dup-file-actions">
+                  <button class="btn-tb-small btn-dup-explore" data-path="${f.path}">فتح في المستكشف</button>
+                  <button class="btn-tb-small btn-dup-delete" data-path="${f.path}" style="color:var(--accent-red);">حذف النسخة</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+
+        card.querySelectorAll('.btn-dup-explore').forEach(btn => {
+          btn.addEventListener('click', () => this.openInExplorer(btn.dataset.path));
+        });
+        card.querySelectorAll('.btn-dup-delete').forEach(btn => {
+          btn.addEventListener('click', () => this.confirmAndDelete({ path: btn.dataset.path, size: group.size }, false));
+        });
+
+        container.appendChild(card);
+      });
+    }
+  }
+
+  renderCleanSuggestions(cleanSuggestions) {
+    const badge = this.dom.badgeCleaner;
+    const reclaimableEl = this.dom.cleanerReclaimable;
+    const container = this.dom.cleanerCategoriesWrap;
+
+    if (!cleanSuggestions || !cleanSuggestions.categories || cleanSuggestions.totalReclaimable === 0) {
+      if (badge) badge.style.display = 'none';
+      if (reclaimableEl) reclaimableEl.textContent = '0 B مساحة قابلة للاسترجاع';
+      if (container) {
+        container.innerHTML = '<div class="empty-row text-center text-muted" style="padding:40px; text-align:center;">النظام نظيف تماماً، لا توجد مخلفات مؤقتة كبيرة</div>';
+      }
+      return;
+    }
+
+    if (badge) {
+      badge.textContent = SquarifiedTreemap.formatBytes(cleanSuggestions.totalReclaimable);
+      badge.style.display = 'inline-block';
+    }
+    if (reclaimableEl) {
+      reclaimableEl.textContent = `${SquarifiedTreemap.formatBytes(cleanSuggestions.totalReclaimable)} مساحة قابلة للاسترجاع بأمان`;
+    }
+
+    if (container) {
+      container.innerHTML = '';
+      cleanSuggestions.categories.forEach(cat => {
+        const card = document.createElement('div');
+        card.className = 'cleaner-cat-card';
+        card.innerHTML = `
+          <div style="display:flex; align-items:center; gap:12px;">
+            <input type="checkbox" class="cleaner-cat-cb" data-cat="${cat.id}" ${cat.recommended ? 'checked' : ''} style="width:18px; height:18px; accent-color:var(--accent-green);">
+            <div class="cleaner-cat-info">
+              <h4>${cat.name} (${cat.count} ملف)</h4>
+              <p>${cat.files.map(f => f.name).slice(0, 3).join(', ')}${cat.files.length > 3 ? '...' : ''}</p>
+            </div>
+          </div>
+          <div class="cleaner-cat-size">${SquarifiedTreemap.formatBytes(cat.size)}</div>
+        `;
+        container.appendChild(card);
+      });
+
+      const cleanBtn = this.dom.btnExecuteCleanBatch;
+      if (cleanBtn) {
+        cleanBtn.onclick = async () => {
+          const checkedCbs = container.querySelectorAll('.cleaner-cat-cb:checked');
+          if (checkedCbs.length === 0) {
+            alert('يرجى تحديد فئة واحدة على الأقل للتنظيف.');
+            return;
+          }
+
+          let filesToDelete = [];
+          checkedCbs.forEach(cb => {
+            const cat = cleanSuggestions.categories.find(c => c.id === cb.dataset.cat);
+            if (cat && cat.files) {
+              filesToDelete.push(...cat.files.map(f => f.path));
+            }
+          });
+
+          if (filesToDelete.length === 0) return;
+          if (!confirm(`هل أنت متأكد من تنظيف ${filesToDelete.length} ملف بأمان؟`)) return;
+
+          cleanBtn.disabled = true;
+          cleanBtn.textContent = 'جاري التنظيف...';
+
+          try {
+            const res = await fetch('/api/clean-batch', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ filePaths: filesToDelete })
+            });
+            const result = await res.json();
+            if (result.ok) {
+              alert(`تم تنظيف ${result.cleanedCount} ملف بنجاح، واسترجاع ${SquarifiedTreemap.formatBytes(result.cleanedBytes)}!`);
+              this.startScan();
+            }
+          } catch (err) {
+            alert(`خطأ أثناء التنظيف: ${err.message}`);
+          } finally {
+            cleanBtn.disabled = false;
+            cleanBtn.textContent = 'تنظيف العناصر المحددة فوراً';
+          }
+        };
+      }
+    }
   }
 
   formatSize(bytes) {
