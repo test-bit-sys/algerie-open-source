@@ -1,0 +1,869 @@
+/**
+ * DZ-Slides (DZ-Impress Pro) — Presentation Studio Design System
+ * Inspired by Microsoft PowerPoint, Apple Keynote, and HeyPuter/everything standard.
+ * 100% Offline-First | Zero Emojis | Vector SVGs Only
+ */
+
+:root {
+  --primary: #ea580c;
+  --primary-hover: #c2410c;
+  --primary-light: #fff7ed;
+  --accent: #059669;
+  --accent-light: #ecfdf5;
+  --surface: #ffffff;
+  --bg: #0f172a;
+  --stage-bg: #1e293b;
+  --border: #334155;
+  --border-light: #475569;
+  --text: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --slide-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.1);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* 1. App Header */
+.app-header {
+  background: #090d16;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px;
+  gap: 12px;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(234, 88, 12, 0.4));
+}
+
+.deck-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-title-input {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  border: 1px solid transparent;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  outline: none;
+  transition: all 0.15s ease;
+  min-width: 240px;
+}
+
+.deck-title-input:hover {
+  border-color: var(--border);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.deck-title-input:focus {
+  border-color: var(--primary);
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.2);
+}
+
+.top-menu-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.menu-dropdown {
+  position: relative;
+}
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.15s, color 0.15s;
+}
+
+.menu-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.menu-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  inset-inline-start: 0;
+  background: #1e293b;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 220px;
+  padding: 4px 0;
+  z-index: 1000;
+}
+
+.menu-dropdown:hover .menu-content {
+  display: block;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: inherit;
+  font-family: inherit;
+  transition: background 0.1s;
+}
+
+.menu-item:hover {
+  background: rgba(234, 88, 12, 0.15);
+  color: var(--primary);
+}
+
+.menu-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid var(--border);
+  background: #1e293b;
+  color: var(--text);
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-light);
+}
+
+.btn-primary {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover) !important;
+}
+
+/* 2. Ribbon Toolbar */
+.ribbon-toolbar {
+  background: #131b2e;
+  border-bottom: 1px solid var(--border);
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  z-index: 80;
+  flex-shrink: 0;
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline-end: 8px;
+  border-inline-end: 1px solid var(--border);
+}
+
+.tool-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  cursor: pointer;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  height: 30px;
+}
+
+.tool-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border);
+}
+
+.color-picker-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.color-picker-wrap input[type="color"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* 3. Main Workspace Layout */
+.workspace-layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  background: #090d16;
+  position: relative;
+}
+
+/* Sidebar Thumbnails */
+.thumbnails-sidebar {
+  width: 220px;
+  background: #0f172a;
+  border-inline-end: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.slide-thumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.slide-thumb:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.slide-thumb.active {
+  border-color: var(--primary);
+  background: rgba(234, 88, 12, 0.12);
+}
+
+.thumb-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-muted);
+  width: 16px;
+  text-align: center;
+}
+
+.thumb-canvas-mini {
+  flex: 1;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 4px;
+}
+
+.mini-title {
+  font-size: 9px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Canvas Viewport */
+.canvas-viewport {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+}
+
+.slide-stage-wrapper {
+  position: relative;
+}
+
+.slide-stage {
+  width: 960px;
+  height: 540px;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--slide-shadow);
+  position: relative;
+  overflow: hidden;
+  transform-origin: center center;
+}
+
+/* Interactive Slide Elements */
+.slide-element {
+  position: absolute;
+  outline: none;
+  box-sizing: border-box;
+  padding: 6px;
+  cursor: move;
+  border: 1px dashed transparent;
+  transition: border-color 0.15s;
+  user-select: text;
+}
+
+.slide-element:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.slide-element.selected {
+  border: 1.5px solid #38bdf8 !important;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3);
+}
+
+/* Selection Resize Handles */
+.resize-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #38bdf8;
+  border: 1px solid #ffffff;
+  border-radius: 2px;
+  z-index: 100;
+  display: none;
+}
+
+.slide-element.selected .resize-handle {
+  display: block;
+}
+
+.handle-nw { top: -4px; left: -4px; cursor: nwse-resize; }
+.handle-n  { top: -4px; left: calc(50% - 4px); cursor: ns-resize; }
+.handle-ne { top: -4px; right: -4px; cursor: nesw-resize; }
+.handle-e  { top: calc(50% - 4px); right: -4px; cursor: ew-resize; }
+.handle-se { bottom: -4px; right: -4px; cursor: nwse-resize; }
+.handle-s  { bottom: -4px; left: calc(50% - 4px); cursor: ns-resize; }
+.handle-sw { bottom: -4px; left: -4px; cursor: nesw-resize; }
+.handle-w  { top: calc(50% - 4px); left: -4px; cursor: ew-resize; }
+
+/* Export Hub Grid */
+.export-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.export-card {
+  background: #0f172a;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.export-card:hover {
+  border-color: var(--primary);
+  background: rgba(234, 88, 12, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.export-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.export-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(234, 88, 12, 0.15);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.export-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.export-card-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Floating Element Toolbar */
+.element-toolbar {
+  position: absolute;
+  top: -38px;
+  right: 0;
+  background: #1e293b;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 3px 6px;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  z-index: 200;
+  box-shadow: var(--shadow-md);
+}
+
+.slide-element.selected .element-toolbar {
+  display: flex;
+}
+
+.toolbar-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+/* 4. Bottom Live Status Bar */
+.status-bar {
+  background: #090d16;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  z-index: 90;
+}
+
+.status-left, .status-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.lang-switcher {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.lang-btn {
+  padding: 2px 8px;
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.lang-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* 5. Fullscreen Slideshow Overlay */
+.slideshow-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.slideshow-overlay.active {
+  display: flex;
+}
+
+.slideshow-screen {
+  width: 90vw;
+  height: 50.625vw;
+  max-height: 90vh;
+  max-width: 160vh;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+}
+
+.ss-slide-element {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Floating Presenter Controls Bar */
+.presenter-controls-bar {
+  position: fixed;
+  bottom: 24px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 30px;
+  padding: 6px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  font-size: 13px;
+  z-index: 2200;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  transition: opacity 0.3s ease;
+}
+
+.ss-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 12.5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+
+.ss-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ss-btn.active {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+/* Laser Pointer Dot */
+.laser-pointer-dot {
+  position: fixed;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 18px 6px #ef4444;
+  pointer-events: none;
+  display: none;
+  z-index: 3000;
+  transform: translate(-50%, -50%);
+}
+
+/* Presentation Pen Drawing Canvas */
+.pen-canvas-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2150;
+  cursor: crosshair;
+  display: none;
+}
+
+.pen-canvas-overlay.active {
+  display: block;
+}
+
+/* 6. Modals */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(3px);
+}
+
+.modal-card {
+  position: relative;
+  background: #1e293b;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 90%;
+  max-width: 680px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  overflow: hidden;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0f172a;
+}
+
+.modal-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--text);
+}
+
+.modal-body {
+  padding: 18px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.modal-footer {
+  padding: 10px 18px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  background: #0f172a;
+}
+
+/* Templates Grid */
+.templates-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.template-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #0f172a;
+}
+
+.template-card:hover {
+  border-color: var(--primary);
+  background: rgba(234, 88, 12, 0.1);
+  transform: translateY(-1px);
+}
+
+.template-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(234, 88, 12, 0.15);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.template-info h4 {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.template-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  background: #334155;
+  color: #94a3b8;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+/* Shapes Grid in Modal */
+.shapes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.shape-item-card {
+  background: #0f172a;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.shape-item-card:hover {
+  border-color: var(--primary);
+  background: rgba(234, 88, 12, 0.1);
+}
+
+.shape-item-preview {
+  width: 60px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shape-item-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* Print Styling */
+@media print {
+  body {
+    background: transparent !important;
+    overflow: visible !important;
+  }
+  .app-header, .ribbon-toolbar, .thumbnails-sidebar, .status-bar, .modal, .presenter-controls-bar {
+    display: none !important;
+  }
+  .workspace-layout, .canvas-viewport {
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  .slide-stage {
+    box-shadow: none !important;
+    width: 100vw !important;
+    height: 56.25vw !important;
+    page-break-after: always !important;
+  }
+}

@@ -3,692 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DZ-Impress Pro — عارض الجزائر | استوديو العروض التقديمية</title>
+  <title>عارض الجزائر (DZ-Impress Pro) — استوديو العروض التقديمية السيادي</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --primary: #ea580c;
-      --primary-hover: #c2410c;
-      --primary-light: #fff7ed;
-      --accent: #059669;
-      --surface: #ffffff;
-      --bg: #f8fafc;
-      --border: #cbd5e1;
-      --border-dark: #94a3b8;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --slide-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Top App Header */
-    .app-header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 16px;
-      gap: 16px;
-      user-select: none;
-      z-index: 50;
-    }
-
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .app-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: block;
-      box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
-    }
-
-    .deck-meta {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .deck-title-input {
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      border: 1px solid transparent;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: transparent;
-      outline: none;
-      transition: all 0.15s ease;
-      min-width: 240px;
-    }
-
-    .deck-title-input:hover {
-      border-color: var(--border);
-      background: #f8fafc;
-    }
-
-    .deck-title-input:focus {
-      border-color: var(--primary);
-      background: #ffffff;
-      box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.15);
-    }
-
-    .top-menu-bar {
-      display: flex;
-      gap: 2px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .menu-dropdown {
-      position: relative;
-    }
-
-    .menu-btn {
-      background: transparent;
-      border: none;
-      padding: 4px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      transition: background 0.15s;
-    }
-
-    .menu-btn:hover {
-      background: #e2e8f0;
-    }
-
-    .menu-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      box-shadow: var(--shadow-lg);
-      min-width: 210px;
-      padding: 4px 0;
-      z-index: 100;
-    }
-
-    [dir="ltr"] .menu-content {
-      right: auto;
-      left: 0;
-    }
-
-    .menu-dropdown:hover .menu-content {
-      display: block;
-    }
-
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 14px;
-      font-size: 13px;
-      color: var(--text);
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      width: 100%;
-      text-align: inherit;
-      font-family: inherit;
-      transition: background 0.1s;
-    }
-
-    .menu-item:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    .menu-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 4px 0;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      border: 1px solid var(--border);
-      background: #ffffff;
-      color: var(--text);
-    }
-
-    .btn:hover {
-      background: #f8fafc;
-      border-color: var(--border-dark);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-    }
-
-    /* Ribbon Toolbar */
-    .ribbon-toolbar {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
-      padding: 6px 16px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      user-select: none;
-      z-index: 40;
-    }
-
-    .tool-group {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding-inline-end: 8px;
-      border-inline-end: 1px solid var(--border);
-    }
-
-    .tool-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      padding: 6px 10px;
-      cursor: pointer;
-      color: var(--text);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.15s ease;
-      height: 32px;
-    }
-
-    .tool-btn:hover {
-      background: #e2e8f0;
-      border-color: var(--border);
-    }
-
-    .color-picker-wrap {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .color-picker-wrap input[type="color"] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-    /* Workspace: Left Thumbnails + Center Slide Canvas */
-    .workspace-layout {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-      background: #e2e8f0;
-    }
-
-    .thumbnails-sidebar {
-      width: 220px;
-      background: #ffffff;
-      border-inline-end: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 16px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      user-select: none;
-      flex-shrink: 0;
-    }
-
-    .slide-thumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 6px;
-      border: 2px solid transparent;
-      transition: all 0.15s ease;
-    }
-
-    .slide-thumb:hover {
-      background: #f1f5f9;
-    }
-
-    .slide-thumb.active {
-      border-color: var(--primary);
-      background: var(--primary-light);
-    }
-
-    .thumb-badge {
-      font-size: 12px;
-      font-weight: bold;
-      color: var(--text-muted);
-      width: 18px;
-      text-align: center;
-    }
-
-    .thumb-canvas-mini {
-      flex: 1;
-      aspect-ratio: 16 / 9;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      padding: 6px;
-    }
-
-    .mini-title {
-      font-size: 9px;
-      font-weight: bold;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .canvas-viewport {
-      flex: 1;
-      overflow: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
-    }
-
-    .slide-stage {
-      width: 960px;
-      height: 540px;
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: var(--slide-shadow);
-      position: relative;
-      overflow: hidden;
-      transform-origin: center center;
-    }
-
-    .slide-element {
-      position: absolute;
-      outline: none;
-      box-sizing: border-box;
-      padding: 6px;
-      cursor: move;
-      border: 1px dashed transparent;
-      transition: border-color 0.15s;
-    }
-
-    .slide-element:hover {
-      border-color: #94a3b8;
-    }
-
-    .slide-element:focus {
-      border-color: var(--primary);
-      background: rgba(234, 88, 12, 0.03);
-    }
-
-    /* Bottom Status Bar */
-    .status-bar {
-      background: #ffffff;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 4px 16px;
-      font-size: 12px;
-      color: var(--text-muted);
-      user-select: none;
-      z-index: 50;
-    }
-
-    .status-left, .status-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .lang-switcher {
-      display: flex;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .lang-btn {
-      padding: 2px 8px;
-      border: none;
-      background: transparent;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: all 0.15s;
-    }
-
-    .lang-btn:hover {
-      background: #f1f5f9;
-      color: var(--text);
-    }
-
-    .lang-btn.active {
-      background: var(--primary);
-      color: #ffffff;
-    }
-
-    /* Fullscreen Slideshow Overlay */
-    .slideshow-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #000000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-
-    .slideshow-overlay.active {
-      display: flex;
-    }
-
-    .slideshow-screen {
-      width: 90vw;
-      height: 50.625vw; /* 16:9 ratio */
-      max-height: 90vh;
-      max-width: 160vh;
-      border-radius: 8px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-    }
-
-    .ss-slide-element {
-      position: absolute;
-      box-sizing: border-box;
-      pointer-events: none;
-    }
-
-    .presenter-controls-bar {
-      position: absolute;
-      bottom: 20px;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 30px;
-      padding: 8px 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      color: #ffffff;
-      font-size: 14px;
-      z-index: 2100;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    }
-
-    .ss-btn {
-      background: transparent;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: inherit;
-      font-size: 13px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: background 0.15s;
-    }
-
-    .ss-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .ss-btn.active {
-      background: #ef4444;
-      color: #ffffff;
-    }
-
-    /* Laser Pointer Dot */
-    .laser-pointer-dot {
-      position: fixed;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #ef4444;
-      box-shadow: 0 0 15px 4px #ef4444;
-      pointer-events: none;
-      display: none;
-      z-index: 3000;
-      transform: translate(-50%, -50%);
-    }
-
-    /* Modals */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-backdrop {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.5);
-      backdrop-filter: blur(3px);
-    }
-
-    .modal-card {
-      position: relative;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-      width: 90%;
-      max-width: 620px;
-      max-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      z-index: 10;
-      overflow: hidden;
-      animation: modalFadeIn 0.2s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .modal-header {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .modal-header h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .modal-close {
-      background: transparent;
-      border: none;
-      font-size: 20px;
-      color: var(--text-muted);
-      cursor: pointer;
-      line-height: 1;
-      padding: 4px;
-    }
-
-    .modal-close:hover {
-      color: var(--text);
-    }
-
-    .modal-body {
-      padding: 20px;
-      overflow-y: auto;
-      font-size: 14px;
-      color: var(--text);
-    }
-
-    .modal-footer {
-      padding: 12px 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      background: #f8fafc;
-    }
-
-    .templates-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    .template-card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      background: #ffffff;
-    }
-
-    .template-card:hover {
-      border-color: var(--primary);
-      background: var(--primary-light);
-      transform: translateY(-1px);
-      box-shadow: var(--shadow);
-    }
-
-    .template-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
-      background: #fed7aa;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .template-info h4 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .template-badge {
-      display: inline-block;
-      font-size: 11px;
-      background: #e2e8f0;
-      color: #475569;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 600;
-    }
-
-    /* Print styling: clean landscape prints of each slide */
-    @media print {
-      body {
-        background: transparent;
-        overflow: visible;
-      }
-      .app-header, .ribbon-toolbar, .thumbnails-sidebar, .status-bar, .modal, .presenter-controls-bar {
-        display: none !important;
-      }
-      .workspace-layout, .canvas-viewport {
-        padding: 0;
-        background: transparent;
-      }
-      .slide-stage {
-        box-shadow: none;
-        width: 100vw;
-        height: 56.25vw;
-        page-break-after: always;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
 
@@ -697,35 +17,74 @@
     <div class="brand-section">
       <img src="assets/logo.svg" alt="DZ-Slides Logo" class="app-logo">
       <div class="deck-meta">
-        <input type="text" id="deckTitleInput" class="deck-title-input" value="عرض تقديمي بدون عنوان" spellcheck="false">
+        <input type="text" id="deckTitleInput" class="deck-title-input" value="مذكرة التخرج — جامعة هواري بومدين" spellcheck="false">
         <div class="top-menu-bar">
           <!-- File Menu -->
           <div class="menu-dropdown">
             <button class="menu-btn" data-i18n="file">ملف</button>
             <div class="menu-content">
               <button class="menu-item" id="btnNewDeck">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
                 <span data-i18n="newDeck">عرض جديد</span>
               </button>
               <button class="menu-item" id="btnOpenDeckFile">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-                <span data-i18n="openDeck">فتح عرض...</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                <span data-i18n="openDeck">فتح مشروع (.dzslide)...</span>
               </button>
               <button class="menu-item" id="btnSaveDeck">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline></svg>
-                <span data-i18n="saveDeck">حفظ (Ctrl+S)</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline></svg>
+                <span data-i18n="saveDeck">حفظ المشروع (Ctrl+S)</span>
               </button>
               <div class="menu-divider"></div>
-              <button class="menu-item" id="btnExportPdf">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                <span data-i18n="exportPdf">طباعة / تصدير PDF</span>
+              <button class="menu-item" id="menuBtnExportHub">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span data-i18n="exportHub">مركز التصدير (PNG, HTML, PDF)...</span>
               </button>
             </div>
           </div>
 
-          <!-- Templates Menu -->
+          <!-- Edit Menu -->
+          <div class="menu-dropdown">
+            <button class="menu-btn" data-i18n="edit">تعديل</button>
+            <div class="menu-content">
+              <button class="menu-item" id="btnDuplicateSlideMenu">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span data-i18n="duplicateSlide">مضاعفة الشريحة الحالية</span>
+              </button>
+              <button class="menu-item" id="btnDeleteSlideMenu" style="color: #ef4444;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span data-i18n="deleteSlide">حذف الشريحة</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Insert Menu -->
+          <div class="menu-dropdown">
+            <button class="menu-btn" data-i18n="insert">إدراج</button>
+            <div class="menu-content">
+              <button class="menu-item" id="menuAddText">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+                <span data-i18n="addText">مربع نص</span>
+              </button>
+              <button class="menu-item" id="menuAddShapes">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                <span data-i18n="insertShapes">أشكال وإنفوجرافيك...</span>
+              </button>
+              <button class="menu-item" id="menuAddCard">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                <span data-i18n="addCard">بطاقة إحصائية</span>
+              </button>
+              <button class="menu-item" id="menuAddImage">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                <span data-i18n="addImage">صورة توضيحية</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Templates Menu Button -->
           <button class="menu-btn" id="btnOpenTemplates" style="color: var(--primary); font-weight: 700;">
-            <span data-i18n="templates">النماذج الأكاديمية</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-inline-end: 4px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span data-i18n="templates">النماذج الأكاديمية والمؤسساتية</span>
           </button>
 
           <!-- Help Menu -->
@@ -733,7 +92,7 @@
             <button class="menu-btn" data-i18n="help">مساعدة</button>
             <div class="menu-content">
               <button class="menu-item" id="btnOpenAbout">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                 <span data-i18n="aboutTitle">عن عارض الجزائر</span>
               </button>
             </div>
@@ -742,9 +101,14 @@
       </div>
     </div>
 
-    <!-- Actions: Start Slideshow -->
+    <!-- Actions: Export Hub & Slideshow -->
     <div class="header-actions">
-      <button class="btn btn-primary" id="btnStartSlideshow" style="background: var(--primary);">
+      <button class="btn" id="btnOpenExportHub" title="مركز التصدير والمشاركة">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span data-i18n="export">تصدير</span>
+      </button>
+
+      <button class="btn btn-primary" id="btnStartSlideshow" title="عرض الشرائح بملء الشاشة (F5)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
         <span data-i18n="startSlideshow">عرض الشرائح (F5)</span>
       </button>
@@ -753,61 +117,83 @@
 
   <!-- Ribbon Toolbar -->
   <div class="ribbon-toolbar">
-    <!-- Slide Actions -->
+    <!-- Slide Structure Controls -->
     <div class="tool-group">
-      <button class="tool-btn" id="btnNewSlide" title="شريحة جديدة">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+      <button class="tool-btn" id="btnNewSlide" title="إضافة شريحة جديدة فارغة">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
         <span data-i18n="newSlide">شريحة جديدة</span>
       </button>
-      <button class="tool-btn" id="btnDuplicateSlide" title="تكرار الشريحة">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <button class="tool-btn" id="btnDuplicateSlide" title="مضاعفة الشريحة الحالية">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
       </button>
-      <button class="tool-btn" id="btnDeleteSlide" title="حذف الشريحة" style="color: #ef4444;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+      <button class="tool-btn" id="btnDeleteSlide" title="حذف الشريحة الحالية" style="color: #ef4444;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
       </button>
     </div>
 
-    <!-- Insert Elements: Text, Card, Image -->
+    <!-- Insert Elements -->
     <div class="tool-group">
-      <button class="tool-btn" id="btnAddText">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
-        <span data-i18n="addText">إضافة نص</span>
+      <button class="tool-btn" id="btnAddText" title="إدراج نص جديد">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+        <span data-i18n="addText">نص</span>
       </button>
-      <button class="tool-btn" id="btnAddCard">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-        <span data-i18n="addCard">بطاقة إحصائية</span>
+      <button class="tool-btn" id="btnOpenShapesModal" title="معرض الأشكال والإنفوجرافيك الجزائري">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        <span data-i18n="shapes">أشكال وإنفوجرافيك</span>
       </button>
-      <button class="tool-btn" id="btnAddImage">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+      <button class="tool-btn" id="btnAddCard" title="إدراج بطاقة إحصائية">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+        <span data-i18n="addCard">بطاقة</span>
+      </button>
+      <button class="tool-btn" id="btnAddImage" title="إدراج صورة من الجهاز">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
         <span data-i18n="addImage">صورة</span>
       </button>
     </div>
 
-    <!-- Slide Background Color -->
+    <!-- Slide Canvas Background -->
     <div class="tool-group">
-      <div class="color-picker-wrap tool-btn" title="لون خلفية الشريحة">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"></path><path d="m5 2 5 5"></path><path d="M2 13h15"></path></svg>
-        <span data-i18n="changeBg">الخلفية</span>
-        <input type="color" id="slideBgColor" value="#ffffff">
+      <div class="color-picker-wrap tool-btn" title="تغيير لون خلفية الشريحة">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"></path><path d="m5 2 5 5"></path><path d="M2 13h15"></path></svg>
+        <span data-i18n="changeBg">لون الخلفية</span>
+        <input type="color" id="slideBgColor" value="#091e3a">
       </div>
+    </div>
+
+    <!-- Element Formatting & Layering -->
+    <div class="tool-group" id="elementActionGroup" style="opacity: 0.6;">
+      <button class="tool-btn" id="btnLayerUp" title="تقديم للأمام (Bring Forward)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+      <button class="tool-btn" id="btnLayerDown" title="إرسال للخلف (Send Backward)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <button class="tool-btn" id="btnDuplicateEl" title="تكرار العنصر (Ctrl+D)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      </button>
+      <button class="tool-btn" id="btnDeleteEl" title="حذف العنصر المحدد (Delete)" style="color: #ef4444;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+      </button>
     </div>
   </div>
 
-  <!-- Hidden Inputs -->
+  <!-- Hidden File Pickers -->
   <input type="file" id="slideImageInput" accept="image/*" style="display: none;">
-  <input type="file" id="deckFileInput" accept=".dzslide" style="display: none;">
+  <input type="file" id="deckFileInput" accept=".dzslide,application/json" style="display: none;">
 
   <!-- Main Workspace Layout -->
   <div class="workspace-layout">
     <!-- Left Thumbnails Sidebar -->
     <aside class="thumbnails-sidebar" id="slidesThumbnailsList">
-      <!-- Generated dynamically in app.js -->
+      <!-- Populated dynamically -->
     </aside>
 
     <!-- Center Slide Stage -->
-    <main class="canvas-viewport">
-      <div id="slideCanvas" class="slide-stage">
-        <!-- Rendered active slide elements -->
+    <main class="canvas-viewport" id="canvasViewport">
+      <div class="slide-stage-wrapper">
+        <div id="slideCanvas" class="slide-stage">
+          <!-- Rendered active slide elements -->
+        </div>
       </div>
     </main>
   </div>
@@ -815,7 +201,9 @@
   <!-- Bottom Live Status Bar -->
   <footer class="status-bar">
     <div class="status-left">
-      <span id="statusSlideCounter">شريحة 1 من 4</span>
+      <span id="statusSlideCounter">شريحة 1 من 7</span>
+      <span style="color: var(--border-light);">|</span>
+      <span style="font-size: 11px; color: var(--text-secondary);">نسبة العرض: 16:9 عالي الدقة (HD)</span>
     </div>
     <div class="status-right">
       <div class="lang-switcher">
@@ -829,25 +217,51 @@
   <!-- Fullscreen Slideshow Overlay Mode -->
   <div id="slideshowOverlay" class="slideshow-overlay">
     <div id="slideshowScreen" class="slideshow-screen">
-      <!-- Rendered slide in presentation mode -->
+      <!-- Active slide contents rendered here -->
+      <div id="ssElementsContainer" style="position: absolute; inset: 0;"></div>
+      <!-- Interactive Presentation Drawing Layer -->
+      <canvas id="slideshowDrawCanvas" class="pen-canvas-overlay"></canvas>
     </div>
 
     <!-- Floating Presenter Controls Bar -->
     <div class="presenter-controls-bar">
-      <button class="ss-btn" id="ssPrev">
+      <button class="ss-btn" id="ssPrev" title="الشريحة السابقة (السهم الأيسر / Backspace)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
       </button>
-      <span id="ssCounter" style="font-weight: bold; min-width: 45px; text-align: center;">1 / 4</span>
-      <button class="ss-btn" id="ssNext">
+      <span id="ssCounter" style="font-weight: 800; min-width: 50px; text-align: center; color: #f8fafc;">1 / 7</span>
+      <button class="ss-btn" id="ssNext" title="الشريحة التالية (السهم الأيمن / مسافة)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
       </button>
       <span style="border-left: 1px solid rgba(255,255,255,0.2); height: 16px;"></span>
-      <span id="ssTimer" style="font-family: monospace; font-weight: bold; color: #38bdf8;">00:00</span>
-      <button class="ss-btn" id="ssLaser">
+
+      <!-- Presentation Stopwatch Timer -->
+      <span id="ssTimer" style="font-family: monospace; font-weight: 800; color: #38bdf8; font-size: 14px;" title="مؤقت العرض">00:00</span>
+      <span style="border-left: 1px solid rgba(255,255,255,0.2); height: 16px;"></span>
+
+      <!-- Interactive Pen Annotator -->
+      <button class="ss-btn" id="ssPen" title="قلم الرسم التفاعلي المباشر (P)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+        <span data-i18n="penTool">قلم العرض</span>
+      </button>
+
+      <!-- Clear Annotations -->
+      <button class="ss-btn" id="ssClearDraw" title="مسح رسومات القلم (C)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+      </button>
+
+      <!-- Laser Pointer -->
+      <button class="ss-btn" id="ssLaser" title="مؤشر الليزر الأحمر (L)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
         <span data-i18n="laserPointer">مؤشر ليزر</span>
       </button>
-      <button class="ss-btn" id="ssExit" style="color: #ef4444;">
+
+      <!-- Blackout toggle -->
+      <button class="ss-btn" id="ssBlackout" title="شاشة سوداء للتركيز على المتحدث (B)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+      </button>
+
+      <!-- Exit Slideshow -->
+      <button class="ss-btn" id="ssExit" style="color: #ef4444;" title="إنهاء وضع العرض (Esc)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         <span data-i18n="exitSlideshow">خروج</span>
       </button>
@@ -862,7 +276,7 @@
     <div class="modal-backdrop"></div>
     <div class="modal-card">
       <div class="modal-header">
-        <h3 data-i18n="templates">النماذج الجامعية والمؤسساتية</h3>
+        <h3 data-i18n="templates">النماذج الجامعية والمؤسساتية الجزائرية</h3>
         <button class="modal-close">&times;</button>
       </div>
       <div class="modal-body">
@@ -873,20 +287,94 @@
     </div>
   </div>
 
+  <!-- Modal: Shapes & Infographics Gallery -->
+  <div id="modalShapes" class="modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card" style="max-width: 720px;">
+      <div class="modal-header">
+        <h3 data-i18n="shapesGallery">معرض الأشكال والإنفوجرافيك الجزائري</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="shapesList" class="shapes-grid">
+          <!-- Populated via app.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Export Hub -->
+  <div id="modalExport" class="modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card" style="max-width: 640px;">
+      <div class="modal-header">
+        <h3 data-i18n="exportHubTitle">مركز التصدير والمشاركة المكتبي</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="export-options-grid">
+          <!-- 1. High-Res PNG -->
+          <div class="export-card" id="exportActionPng">
+            <div class="export-card-header">
+              <div class="export-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              </div>
+              <span class="export-card-title" data-i18n="exportPngTitle">شريحة PNG فائقة الدقة</span>
+            </div>
+            <p class="export-card-desc" data-i18n="exportPngDesc">تصدير الشريحة الحالية بدقة 1920×1080 Full HD بجودة نقية جاهزة للنشر والطباعة.</p>
+          </div>
+
+          <!-- 2. Standalone Portable HTML -->
+          <div class="export-card" id="exportActionHtml">
+            <div class="export-card-header">
+              <div class="export-card-icon" style="color: #3b82f6; background: rgba(59, 130, 246, 0.15);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+              </div>
+              <span class="export-card-title" data-i18n="exportHtmlTitle">ملف HTML مستقل (Portable)</span>
+            </div>
+            <p class="export-card-desc" data-i18n="exportHtmlDesc">توليد ملف HTML مستقل ذاتي التشغيل يحتوي العرض بالكامل، يعمل 100% بدون إنترنت على أي جهاز.</p>
+          </div>
+
+          <!-- 3. Native .dzslide JSON -->
+          <div class="export-card" id="exportActionDzslide">
+            <div class="export-card-header">
+              <div class="export-card-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.15);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline></svg>
+              </div>
+              <span class="export-card-title" data-i18n="exportProjectTitle">مشروع عارض الجزائر (.dzslide)</span>
+            </div>
+            <p class="export-card-desc" data-i18n="exportProjectDesc">حفظ المشروع بالكامل بصيغة JSON المعيارية لإعادة فتحه والتعديل عليه مستقبلاً.</p>
+          </div>
+
+          <!-- 4. PDF Print Direct -->
+          <div class="export-card" id="exportActionPdf">
+            <div class="export-card-header">
+              <div class="export-card-icon" style="color: #ef4444; background: rgba(239, 68, 68, 0.15);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              </div>
+              <span class="export-card-title" data-i18n="exportPdfTitle">طباعة / تصدير PDF مباشر</span>
+            </div>
+            <p class="export-card-desc" data-i18n="exportPdfDesc">طباعة العرض أو حفظه كملف PDF مع ترقيم وانتقال صفحات تلقائي أفقي 16:9.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal: About DZ-Slides -->
   <div id="modalAbout" class="modal">
     <div class="modal-backdrop"></div>
-    <div class="modal-card" style="max-width: 480px; text-align: center;">
+    <div class="modal-card" style="max-width: 500px; text-align: center;">
       <div class="modal-header">
-        <h3 data-i18n="aboutTitle">عن عارض الجزائر (DZ-Slides)</h3>
+        <h3 data-i18n="aboutTitle">عن عارض الجزائر — DZ-Impress Pro</h3>
         <button class="modal-close">&times;</button>
       </div>
       <div class="modal-body" style="padding: 24px;">
-        <img src="assets/logo.svg" alt="DZ-Slides Logo" style="width: 80px; height: 80px; margin-bottom: 16px;">
-        <h2 style="font-size: 20px; color: var(--primary); margin-bottom: 8px;">عارض الجزائر — DZ-Impress Pro</h2>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">الإصدار 1.0.0 • الإصدار السيادي المفتوح المصدر</p>
-        <p style="line-height: 1.8; color: var(--text); font-size: 13.5px;" data-i18n="aboutDesc">
-          استوديو عروض تقديمية مكتبي حر ومفتوح المصدر 100% جزائري، بديل متقدم لمايكروسوفت باوربوينت مع قوالب مذكرات التخرج ومشاريع الشركات الناشئة.
+        <img src="assets/logo.svg" alt="DZ-Slides Logo" style="width: 72px; height: 72px; margin-bottom: 14px; filter: drop-shadow(0 4px 10px rgba(234, 88, 12, 0.3));">
+        <h2 style="font-size: 19px; color: var(--primary); margin-bottom: 6px;">عارض الجزائر — DZ-Impress Pro</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">الإصدار 2.0.0 • الحزمة السيادية الجزائرية المفتوحة المصدر</p>
+        <p style="line-height: 1.8; color: var(--text-secondary); font-size: 13px;" data-i18n="aboutDesc">
+          استوديو عروض تقديمية مكتبي حر ومفتوح المصدر 100% جزائري، بديل متقدم لمايكروسوفت باوربوينت مع قوالب مذكرات التخرج ومشاريع الشركات الناشئة، مع مؤشر ليزر وقلم عرض وتصدير عالي الدقة.
         </p>
       </div>
       <div class="modal-footer" style="justify-content: center;">
@@ -895,7 +383,7 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Main Application Logic -->
   <script type="module" src="src/app.js"></script>
 </body>
 </html>
