@@ -23,6 +23,34 @@ export class CanvasEngine {
     this.laserColor = '#ef4444'; // Bright laser red
     this.laserGlow = 'rgba(239, 68, 68, 0.4)';
 
+    // Interactive Classroom Geometric Tools (Ruler & Protractor)
+    this.ruler = {
+      active: false,
+      x: 320,
+      y: 280,
+      length: 440,
+      width: 65,
+      angle: 0, // Radians
+      isDragging: false,
+      isRotating: false,
+      dragOffset: { x: 0, y: 0 }
+    };
+
+    this.protractor = {
+      active: false,
+      x: 480,
+      y: 320,
+      radius: 170,
+      angle: 0,
+      isDragging: false,
+      isRotating: false,
+      dragOffset: { x: 0, y: 0 }
+    };
+
+    // Grid snapping toggle
+    this.gridSnap = false;
+    this.gridSnapSize = 20;
+
     // Multi-page document structure
     this.pages = [
       this.createBlankPage('الصفحة 1 (الدرس الرئيسي)')
@@ -62,6 +90,7 @@ export class CanvasEngine {
     const height = parent.clientHeight || window.innerHeight;
 
     this.dpr = window.devicePixelRatio || 1;
+    this.canvas.dir = 'ltr';
     this.canvas.width = Math.floor(width * this.dpr);
     this.canvas.height = Math.floor(height * this.dpr);
     this.canvas.style.width = width + 'px';
@@ -272,6 +301,20 @@ export class CanvasEngine {
     return Math.hypot(px - (x1 + t * (x2 - x1)), py - (y1 + t * (y2 - y1)));
   }
 
+  snapCoord(val) {
+    if (!this.gridSnap) return val;
+    const size = this.gridSnapSize || 20;
+    return Math.round(val / size) * size;
+  }
+
+  snapPoint(x, y) {
+    if (!this.gridSnap) return { x, y };
+    return {
+      x: this.snapCoord(x),
+      y: this.snapCoord(y)
+    };
+  }
+
   // --- Rendering Pipeline ---
 
   render() {
@@ -301,6 +344,14 @@ export class CanvasEngine {
 
     // 5. Render Laser Pointer Trail
     this.drawLaserTrail(ctx);
+
+    // 6. Render Geometric Teaching Tools (Ruler & Protractor)
+    if (this.ruler && this.ruler.active) {
+      this.drawRuler(ctx);
+    }
+    if (this.protractor && this.protractor.active) {
+      this.drawProtractor(ctx);
+    }
 
     ctx.restore();
     ctx.restore();
@@ -525,6 +576,48 @@ export class CanvasEngine {
         rot += step;
       }
       ctx.closePath();
+    } else if (el.shapeType === 'speech-bubble') {
+      const r = 12;
+      const tailW = 20;
+      const tailH = 18;
+      const bubbleH = Math.max(20, h - tailH);
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + bubbleH - r);
+      ctx.quadraticCurveTo(x + w, y + bubbleH, x + w - r, y + bubbleH);
+      ctx.lineTo(x + 40 + tailW, y + bubbleH);
+      ctx.lineTo(x + 25, y + h); // tail tip
+      ctx.lineTo(x + 40, y + bubbleH);
+      ctx.lineTo(x + r, y + bubbleH);
+      ctx.quadraticCurveTo(x, y + bubbleH, x, y + bubbleH - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    } else if (el.shapeType === 'cloud') {
+      const cx = x + w / 2;
+      const cy = y + h / 2;
+      const rx = Math.abs(w / 2);
+      const ry = Math.abs(h / 2);
+      ctx.moveTo(cx - rx * 0.7, cy + ry * 0.4);
+      ctx.bezierCurveTo(cx - rx, cy + ry * 0.3, cx - rx, cy - ry * 0.4, cx - rx * 0.5, cy - ry * 0.5);
+      ctx.bezierCurveTo(cx - rx * 0.5, cy - ry, cx + rx * 0.2, cy - ry, cx + rx * 0.4, cy - ry * 0.5);
+      ctx.bezierCurveTo(cx + rx, cy - ry * 0.5, cx + rx, cy + ry * 0.2, cx + rx * 0.6, cy + ry * 0.5);
+      ctx.bezierCurveTo(cx + rx * 0.4, cy + ry, cx - rx * 0.4, cy + ry, cx - rx * 0.7, cy + ry * 0.4);
+      ctx.closePath();
+    } else if (el.shapeType === 'hexagon') {
+      const cx = x + w / 2;
+      const cy = y + h / 2;
+      const rx = Math.abs(w / 2);
+      const ry = Math.abs(h / 2);
+      for (let i = 0; i < 6; i++) {
+        const a = (Math.PI / 3) * i - Math.PI / 6;
+        const px = cx + rx * Math.cos(a);
+        const py = cy + ry * Math.sin(a);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
     }
 
     if (el.fillColor && el.fillColor !== 'transparent') {
@@ -546,6 +639,35 @@ export class CanvasEngine {
       ctx.setLineDash([8, 6]);
     } else if (el.strokeStyle === 'dotted') {
       ctx.setLineDash([3, 5]);
+    }
+
+    if (el.lineType === 'elbow') {
+      const midX = (el.x1 + el.x2) / 2;
+      ctx.beginPath();
+      ctx.moveTo(el.x1, el.y1);
+      ctx.lineTo(midX, el.y1);
+      ctx.lineTo(midX, el.y2);
+      ctx.lineTo(el.x2, el.y2);
+      ctx.stroke();
+
+      // Arrow head at destination
+      const arrowLen = Math.max(12, (el.strokeWidth || 3) * 3);
+      const angle = el.x2 >= midX ? 0 : Math.PI;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(el.x2, el.y2);
+      ctx.lineTo(
+        el.x2 - arrowLen * Math.cos(angle - Math.PI / 6),
+        el.y2 - arrowLen * Math.sin(angle - Math.PI / 6)
+      );
+      ctx.lineTo(
+        el.x2 - arrowLen * Math.cos(angle + Math.PI / 6),
+        el.y2 - arrowLen * Math.sin(angle + Math.PI / 6)
+      );
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+      return;
     }
 
     ctx.beginPath();
@@ -602,7 +724,8 @@ export class CanvasEngine {
     ctx.font = `${style}${weight}${fontSize}px ${fontFamily}`;
     ctx.fillStyle = el.color || '#000000';
     ctx.textBaseline = 'top';
-    ctx.textAlign = el.align || 'start';
+    ctx.direction = 'ltr';
+    ctx.textAlign = el.align || 'left';
 
     const lines = (el.text || '').split('\n');
     const lineHeight = fontSize * 1.35;
@@ -652,10 +775,12 @@ export class CanvasEngine {
     ctx.fill();
 
     // Text content inside sticky note
-    const fontSize = 15;
+    const fontSize = 14;
     ctx.font = `600 ${fontSize}px system-ui, sans-serif`;
     ctx.fillStyle = theme.text;
     ctx.textBaseline = 'top';
+    ctx.direction = 'ltr';
+    ctx.textAlign = 'left';
 
     const padding = 12;
     const maxWidth = el.width - padding * 2;
@@ -857,5 +982,274 @@ export class CanvasEngine {
     mctx.strokeRect(vMin.x, vMin.y, vMax.x - vMin.x, vMax.y - vMin.y);
 
     mctx.restore();
+  }
+
+  // --- Classroom Geometric Tools (Ruler & Protractor) ---
+
+  drawRuler(ctx) {
+    if (!this.ruler || !this.ruler.active) return;
+    const r = this.ruler;
+
+    ctx.save();
+    ctx.translate(r.x, r.y);
+    ctx.rotate(r.angle);
+
+    const halfL = r.length / 2;
+    const halfW = r.width / 2;
+
+    // Body: clear glass acrylic with drop shadow
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
+    ctx.shadowBlur = 14;
+    ctx.shadowOffsetY = 6;
+
+    ctx.fillStyle = 'rgba(240, 249, 255, 0.9)';
+    ctx.strokeStyle = 'rgba(2, 132, 199, 0.65)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(-halfL, -halfW, r.length, r.width, 8);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.shadowColor = 'transparent';
+
+    // Centimeter & Millimeter markings along top edge (-halfW)
+    const cmPixels = 20; // 20px per cm
+    const totalCm = Math.floor(r.length / cmPixels) - 1;
+    const startX = -halfL + 20;
+
+    ctx.fillStyle = '#0f172a';
+    ctx.strokeStyle = '#0f172a';
+    ctx.font = '600 9px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+
+    for (let cm = 0; cm <= totalCm; cm++) {
+      const cx = startX + cm * cmPixels;
+      if (cx > halfL - 15) break;
+
+      // Major CM tick
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(cx, -halfW);
+      ctx.lineTo(cx, -halfW + 16);
+      ctx.stroke();
+
+      // Number label
+      ctx.fillText(cm.toString(), cx, -halfW + 18);
+
+      // Minor mm ticks
+      ctx.lineWidth = 0.8;
+      for (let mm = 1; mm < 10; mm++) {
+        const mx = cx + mm * (cmPixels / 10);
+        if (mx > halfL - 15) break;
+        const tickH = mm === 5 ? 10 : 5;
+        ctx.beginPath();
+        ctx.moveTo(mx, -halfW);
+        ctx.lineTo(mx, -halfW + tickH);
+        ctx.stroke();
+      }
+    }
+
+    // Ruler center label
+    ctx.fillStyle = '#0284c7';
+    ctx.font = 'bold 11px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('DZ-RULER • مسطرة قياس سنتيمترية', 0, 6);
+
+    // Rotation Handle (Right circle)
+    ctx.fillStyle = '#0284c7';
+    ctx.beginPath();
+    ctx.arc(halfL - 20, 0, 12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 11px system-ui';
+    ctx.fillText('↻', halfL - 20, 1);
+
+    // Close button (Left circle)
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.arc(-halfL + 20, 0, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 11px system-ui';
+    ctx.fillText('×', -halfL + 20, -1);
+
+    ctx.restore();
+  }
+
+  drawProtractor(ctx) {
+    if (!this.protractor || !this.protractor.active) return;
+    const p = this.protractor;
+
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.angle);
+
+    const rad = p.radius;
+
+    // Body: clear glass semi-circle
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
+    ctx.shadowBlur = 14;
+    ctx.shadowOffsetY = 6;
+
+    ctx.fillStyle = 'rgba(240, 249, 255, 0.9)';
+    ctx.strokeStyle = 'rgba(2, 132, 199, 0.65)';
+    ctx.lineWidth = 1.5;
+
+    ctx.beginPath();
+    ctx.arc(0, 0, rad, Math.PI, 0, false); // top half
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Inner cutout arc
+    ctx.beginPath();
+    ctx.arc(0, 0, rad * 0.38, Math.PI, 0, false);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.shadowColor = 'transparent';
+
+    // Degree markings from 0° to 180°
+    ctx.fillStyle = '#0f172a';
+    ctx.strokeStyle = '#0f172a';
+    ctx.font = '600 8px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    for (let deg = 0; deg <= 180; deg++) {
+      const angle = (Math.PI / 180) * (180 - deg);
+      let tickLen = 4;
+      if (deg % 10 === 0) tickLen = 14;
+      else if (deg % 5 === 0) tickLen = 8;
+
+      const x1 = Math.cos(angle) * (rad - tickLen);
+      const y1 = -Math.sin(angle) * (rad - tickLen);
+      const x2 = Math.cos(angle) * rad;
+      const y2 = -Math.sin(angle) * rad;
+
+      ctx.lineWidth = deg % 10 === 0 ? 1.5 : 0.8;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+
+      // Degree number labels every 10 degrees
+      if (deg % 10 === 0 && deg > 0 && deg < 180) {
+        const lx = Math.cos(angle) * (rad - 22);
+        const ly = -Math.sin(angle) * (rad - 22);
+        ctx.fillText(deg.toString(), lx, ly);
+      }
+    }
+
+    // Origin crosshair
+    ctx.strokeStyle = '#0284c7';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(-15, 0); ctx.lineTo(15, 0);
+    ctx.moveTo(0, -15); ctx.lineTo(0, 5);
+    ctx.stroke();
+    ctx.fillStyle = '#0284c7';
+    ctx.beginPath();
+    ctx.arc(0, 0, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Center Protractor Label
+    ctx.font = 'bold 10px system-ui, sans-serif';
+    ctx.fillText('منقلة الزوايا 180°', 0, -rad * 0.18);
+
+    // Rotation Handle at top vertex (angle = 90°)
+    const topX = 0;
+    const topY = -rad + 18;
+    ctx.fillStyle = '#0284c7';
+    ctx.beginPath();
+    ctx.arc(topX, topY, 11, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 10px system-ui';
+    ctx.fillText('↻', topX, topY + 1);
+
+    // Close button (bottom left)
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.arc(-rad + 20, -12, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 10px system-ui';
+    ctx.fillText('×', -rad + 20, -13);
+
+    ctx.restore();
+  }
+
+  rulerHitTest(worldX, worldY) {
+    if (!this.ruler || !this.ruler.active) return null;
+    const r = this.ruler;
+    const dx = worldX - r.x;
+    const dy = worldY - r.y;
+    const cos = Math.cos(-r.angle);
+    const sin = Math.sin(-r.angle);
+    const lx = dx * cos - dy * sin;
+    const ly = dx * sin + dy * cos;
+
+    const halfL = r.length / 2;
+    const halfW = r.width / 2;
+
+    // Check close button (-halfL + 20, 0)
+    if (Math.hypot(lx - (-halfL + 20), ly) <= 16) {
+      return 'close';
+    }
+    // Check rotate handle (halfL - 20, 0)
+    if (Math.hypot(lx - (halfL - 20), ly) <= 18) {
+      return 'rotate';
+    }
+    // Check ruler body
+    if (lx >= -halfL && lx <= halfL && ly >= -halfW && ly <= halfW) {
+      return 'drag';
+    }
+    return null;
+  }
+
+  protractorHitTest(worldX, worldY) {
+    if (!this.protractor || !this.protractor.active) return null;
+    const p = this.protractor;
+    const dx = worldX - p.x;
+    const dy = worldY - p.y;
+    const cos = Math.cos(-p.angle);
+    const sin = Math.sin(-p.angle);
+    const lx = dx * cos - dy * sin;
+    const ly = dx * sin + dy * cos;
+
+    const rad = p.radius;
+
+    // Check close button (-rad + 20, -12)
+    if (Math.hypot(lx - (-rad + 20), ly - (-12)) <= 16) {
+      return 'close';
+    }
+    // Check rotate handle (0, -rad + 18)
+    if (Math.hypot(lx, ly - (-rad + 18)) <= 18) {
+      return 'rotate';
+    }
+    // Check semi-circle body (ly <= 10 and dist <= rad)
+    const dist = Math.hypot(lx, ly);
+    if (ly <= 10 && dist <= rad) {
+      return 'drag';
+    }
+    return null;
   }
 }

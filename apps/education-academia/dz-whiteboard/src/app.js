@@ -3,14 +3,15 @@
  * ------------------------------------------------
  * 100% Client-side orchestrator for OpenBoard / Miro alternative:
  * State management, multi-page slide navigation, undo/redo history,
- * presentation mode, export pipeline, and keyboard shortcuts.
+ * presentation mode, export pipeline, keyboard shortcuts, templates,
+ * interactive geometry tools (Ruler, Protractor), and clipboard image pasting.
  */
 
 import { CanvasEngine } from './canvas-engine.js';
 import { ToolsManager } from './tools.js';
 import { ExportEngine } from './export-engine.js';
 
-// Trilingual Dictionary
+// Comprehensive Trilingual Dictionary
 const I18N = {
   ar: {
     appTitle: 'DZ-Whiteboard Pro — السبورة البيضاء التفاعلية',
@@ -31,6 +32,7 @@ const I18N = {
 
     undo: 'تراجع (Undo)',
     redo: 'إعادة (Redo)',
+    duplicate: 'تكرار المحدد (Duplicate)',
     deleteSelection: 'حذف المحدد',
     clearPage: 'مسح كافة عناصر الصفحة',
 
@@ -59,6 +61,20 @@ const I18N = {
     toolLaser: 'مؤشر الليزر (K)',
     toolHand: 'تحريك الرقعة (Space)',
 
+    btnTemplates: 'قوالب تعليمية',
+    btnMath: 'رموز رياضية',
+    templatesTitle: 'مكتبة القوالب التعليمية الجاهزة',
+    templatesSubtitle: 'اختر قالباً جاهزاً لبدء الدرس أو الشرح التفاعلي بضغطة زر واحدة:',
+    mathTitle: 'لوحة الرموز الرياضية والعلمية',
+    mathSubtitle: 'انقر على أي رمز لإدراجه فوراً على السبورة كنص متجهي:',
+    clearConfirmTitle: 'مسح كافة محتويات الصفحة؟',
+    clearConfirmText: 'سيتم مسح جميع الرسومات والنصوص والأشكال في هذه الصفحة. يمكنك التراجع عبر Ctrl+Z.',
+    cancel: 'إلغاء',
+    confirmClear: 'نعم، امسح الكل',
+    strokeColor: 'اللون:',
+    strokeWidth: 'السمك:',
+    shapeFill: 'التعبئة:',
+
     pageLabel: 'الصفحة',
     about: 'حول DZ-Whiteboard Pro...'
   },
@@ -81,6 +97,7 @@ const I18N = {
 
     undo: 'Annuler (Undo)',
     redo: 'Rétablir (Redo)',
+    duplicate: 'Dupliquer la sélection',
     deleteSelection: 'Supprimer la sélection',
     clearPage: 'Effacer toute la page',
 
@@ -109,6 +126,20 @@ const I18N = {
     toolLaser: 'Pointeur laser (K)',
     toolHand: 'Déplacer (Space)',
 
+    btnTemplates: 'Modèles',
+    btnMath: 'Symboles Math',
+    templatesTitle: 'Bibliothèque de Modèles Pédagogiques',
+    templatesSubtitle: 'Choisissez un modèle prêt à l’emploi pour démarrer votre cours :',
+    mathTitle: 'Palette de Symboles Mathématiques',
+    mathSubtitle: 'Cliquez sur un symbole pour l’insérer sur le tableau :',
+    clearConfirmTitle: 'Effacer tout le contenu ?',
+    clearConfirmText: 'Tous les tracés et formes seront effacés. Annulable avec Ctrl+Z.',
+    cancel: 'Annuler',
+    confirmClear: 'Oui, tout effacer',
+    strokeColor: 'Couleur :',
+    strokeWidth: 'Épaisseur :',
+    shapeFill: 'Remplissage :',
+
     pageLabel: 'Page',
     about: 'À propos de DZ-Whiteboard Pro...'
   },
@@ -131,6 +162,7 @@ const I18N = {
 
     undo: 'Undo',
     redo: 'Redo',
+    duplicate: 'Duplicate Selection',
     deleteSelection: 'Delete Selection',
     clearPage: 'Clear Entire Page',
 
@@ -159,6 +191,20 @@ const I18N = {
     toolLaser: 'Laser Pointer (K)',
     toolHand: 'Pan Canvas (Space)',
 
+    btnTemplates: 'Templates',
+    btnMath: 'Math Symbols',
+    templatesTitle: 'Educational Templates Library',
+    templatesSubtitle: 'Choose a ready-to-use template for your lesson or diagram:',
+    mathTitle: 'Math & Scientific Symbols Palette',
+    mathSubtitle: 'Click any symbol to insert it directly onto the board:',
+    clearConfirmTitle: 'Clear entire page content?',
+    clearConfirmText: 'All drawings and shapes on this page will be cleared. Undoable with Ctrl+Z.',
+    cancel: 'Cancel',
+    confirmClear: 'Yes, Clear All',
+    strokeColor: 'Color:',
+    strokeWidth: 'Width:',
+    shapeFill: 'Fill:',
+
     pageLabel: 'Page',
     about: 'About DZ-Whiteboard Pro...'
   }
@@ -172,19 +218,22 @@ class DZWhiteboardApp {
     // History stack per page
     this.historyStack = [];
     this.historyIndex = -1;
-    this.maxHistory = 35;
+    this.maxHistory = 40;
 
     this.initDOM();
     this.initEngine();
     this.initTools();
     this.initMenus();
+    this.initFastHeader();
     this.initStyleControls();
+    this.initModals();
+    this.initImagePasting();
     this.initPagesDrawer();
     this.initKeyboardShortcuts();
     this.applyTheme(this.currentTheme);
     this.applyLanguage(this.currentLang);
 
-    // Initial seed with demo lecture content if empty
+    // Initial seed with exemplary lecture content if empty
     this.seedDemoIfEmpty();
     this.saveStateToHistory();
     this.updateUI();
@@ -197,12 +246,23 @@ class DZWhiteboardApp {
       minimapCanvas: document.getElementById('minimapCanvas'),
       textEditor: document.getElementById('textEditorOverlay'),
       fileInput: document.getElementById('fileInputProject'),
+      fileInputImage: document.getElementById('fileInputImage'),
 
       // Header buttons
       langSelect: document.getElementById('langSelect'),
       themeToggleBtn: document.getElementById('themeToggleBtn'),
       btnPresentation: document.getElementById('btnPresentation'),
       btnTogglePages: document.getElementById('btnTogglePages'),
+
+      // Fast Header Action Buttons
+      btnHeaderUndo: document.getElementById('btnHeaderUndo'),
+      btnHeaderRedo: document.getElementById('btnHeaderRedo'),
+      btnHeaderTemplates: document.getElementById('btnHeaderTemplates'),
+      btnHeaderMath: document.getElementById('btnHeaderMath'),
+      btnHeaderRuler: document.getElementById('btnHeaderRuler'),
+      btnHeaderProtractor: document.getElementById('btnHeaderProtractor'),
+      btnHeaderSnap: document.getElementById('btnHeaderSnap'),
+      btnHeaderClear: document.getElementById('btnHeaderClear'),
 
       // Page Drawer
       pagesDrawer: document.getElementById('pagesDrawer'),
@@ -214,12 +274,18 @@ class DZWhiteboardApp {
       dock: document.getElementById('floatingDock'),
       dockButtons: document.querySelectorAll('.dock-btn'),
       shapesFlyout: document.getElementById('shapesFlyout'),
+      linesFlyout: document.getElementById('linesFlyout'),
       stickyFlyout: document.getElementById('stickyFlyout'),
+      btnUploadImageDock: document.getElementById('btnUploadImageDock'),
 
       // Style Shelf
       styleShelf: document.getElementById('styleShelf'),
       colorSwatches: document.querySelectorAll('.color-dot'),
-      strokeWidthButtons: document.querySelectorAll('.stroke-width-btn'),
+      customColorInput: document.getElementById('customColorInput'),
+      strokeWidthButtons: document.querySelectorAll('.stroke-width-btn[data-width]'),
+      btnFillNone: document.getElementById('btnFillNone'),
+      btnFillTint: document.getElementById('btnFillTint'),
+      btnFillSolid: document.getElementById('btnFillSolid'),
 
       // Zoom Controls
       zoomInBtn: document.getElementById('btnZoomIn'),
@@ -233,7 +299,19 @@ class DZWhiteboardApp {
       btnExitPresent: document.getElementById('btnExitPresent'),
       btnPresentPrevPage: document.getElementById('btnPresentPrevPage'),
       btnPresentNextPage: document.getElementById('btnPresentNextPage'),
-      presenterPageText: document.getElementById('presenterPageText')
+      presenterPageText: document.getElementById('presenterPageText'),
+
+      // Modals
+      templatesModal: document.getElementById('templatesModal'),
+      btnCloseTemplatesModal: document.getElementById('btnCloseTemplatesModal'),
+      mathModal: document.getElementById('mathModal'),
+      btnCloseMathModal: document.getElementById('btnCloseMathModal'),
+      mathSymbolsGrid: document.getElementById('mathSymbolsGrid'),
+      clearConfirmModal: document.getElementById('clearConfirmModal'),
+      btnCancelClear: document.getElementById('btnCancelClear'),
+      btnConfirmClear: document.getElementById('btnConfirmClear'),
+      aboutModal: document.getElementById('aboutModal'),
+      btnCloseAboutModal: document.getElementById('btnCloseAboutModal')
     };
   }
 
@@ -244,62 +322,6 @@ class DZWhiteboardApp {
         this.engine.renderMinimap(this.dom.minimapCanvas);
       }
     });
-
-    // Support dropping external images onto the whiteboard
-    const canvasWrap = this.dom.canvas.parentElement;
-    if (canvasWrap) {
-      canvasWrap.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-      });
-
-      canvasWrap.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith('image/'));
-        if (files.length === 0) return;
-
-        const file = files[0];
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          const src = ev.target.result;
-          const img = new Image();
-          img.onload = () => {
-            const rect = this.dom.canvas.getBoundingClientRect();
-            const clientX = e.clientX - rect.left;
-            const clientY = e.clientY - rect.top;
-            const worldPos = this.engine.screenToWorld(clientX, clientY);
-
-            let w = img.naturalWidth || 400;
-            let h = img.naturalHeight || 300;
-            const maxDim = 600;
-            if (w > maxDim || h > maxDim) {
-              const ratio = Math.min(maxDim / w, maxDim / h);
-              w = Math.round(w * ratio);
-              h = Math.round(h * ratio);
-            }
-
-            const newEl = {
-              id: 'img_' + Date.now(),
-              type: 'image',
-              x: Math.round(worldPos.x - w / 2),
-              y: Math.round(worldPos.y - h / 2),
-              width: w,
-              height: h,
-              src: src,
-              imgObj: img
-            };
-
-            this.engine.activePage.elements.push(newEl);
-            this.engine.selectElement(newEl.id);
-            this.engine.render();
-            this.saveStateToHistory();
-            this.engine.renderMinimap(this.dom.minimapCanvas);
-          };
-          img.src = src;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
   }
 
   initTools() {
@@ -310,53 +332,78 @@ class DZWhiteboardApp {
         this.renderPagesList();
       },
       onSelectionChanged: (selectedIds) => {
-        this.updateStyleShelfVisibility();
+        this.updateStyleShelfForSelection();
       },
-      onTextEditRequest: (req) => {
-        this.openInlineTextEditor(req);
+      onTextEditRequest: ({ x, y, screenPos, existingElement }) => {
+        this.openInlineTextEditor(x, y, screenPos, existingElement);
       }
     });
 
-    // Tool dock clicks
+    // Tool dock buttons
     this.dom.dockButtons.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const tool = btn.getAttribute('data-tool');
+        const toolName = btn.dataset.tool;
+        if (!toolName) return;
 
-        if (tool === 'shapes-menu') {
-          const isOpen = this.dom.shapesFlyout.classList.contains('show');
-          this.closeAllFlyouts();
-          if (!isOpen) this.dom.shapesFlyout.classList.add('show');
+        if (toolName === 'shapes-menu') {
+          this.dom.linesFlyout?.classList.remove('show');
+          this.dom.stickyFlyout?.classList.remove('show');
+          this.dom.shapesFlyout.classList.toggle('show');
           return;
         }
 
-        if (tool === 'sticky-menu') {
-          const isOpen = this.dom.stickyFlyout.classList.contains('show');
-          this.closeAllFlyouts();
-          if (!isOpen) this.dom.stickyFlyout.classList.add('show');
+        if (toolName === 'line-menu') {
+          this.dom.shapesFlyout?.classList.remove('show');
+          this.dom.stickyFlyout?.classList.remove('show');
+          this.dom.linesFlyout.classList.toggle('show');
+          return;
+        }
+
+        if (toolName === 'sticky-menu') {
+          this.dom.shapesFlyout?.classList.remove('show');
+          this.dom.linesFlyout?.classList.remove('show');
+          this.dom.stickyFlyout.classList.toggle('show');
           return;
         }
 
         this.closeAllFlyouts();
-        this.setActiveToolUI(tool);
-        this.tools.setTool(tool);
+        this.tools.setTool(toolName);
+        this.setActiveToolUI(toolName);
       });
     });
 
-    // Shapes sub-menu clicks
+    // Shapes Flyout items
     document.querySelectorAll('.shape-choice-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const shapeType = btn.getAttribute('data-shape');
-        this.tools.setTool('shape', shapeType);
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const shape = btn.dataset.shape;
+        document.querySelectorAll('.shape-choice-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.tools.setTool('shape', shape);
         this.setActiveToolUI('shapes-menu');
         this.closeAllFlyouts();
       });
     });
 
-    // Sticky colors sub-menu clicks
+    // Lines Flyout items
+    document.querySelectorAll('.line-choice-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const line = btn.dataset.line;
+        document.querySelectorAll('.line-choice-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.tools.setTool('line', line);
+        this.setActiveToolUI('line-menu');
+        this.closeAllFlyouts();
+      });
+    });
+
+    // Sticky Notes Flyout items
     document.querySelectorAll('.sticky-choice-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const theme = btn.getAttribute('data-theme');
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const theme = btn.dataset.theme;
         this.tools.activeStickyTheme = theme;
         this.tools.setTool('sticky');
         this.setActiveToolUI('sticky-menu');
@@ -364,161 +411,1016 @@ class DZWhiteboardApp {
       });
     });
 
-    // Lines choices
-    document.querySelectorAll('.line-choice-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const lineType = btn.getAttribute('data-line');
-        this.tools.setTool('line', lineType);
-        this.setActiveToolUI('line');
+    // Close flyouts on click outside
+    window.addEventListener('click', (e) => {
+      if (!e.target.closest('.floating-dock')) {
         this.closeAllFlyouts();
-      });
+      }
     });
 
-    window.addEventListener('click', () => this.closeAllFlyouts());
+    // Zoom Controls
+    this.dom.zoomInBtn?.addEventListener('click', () => this.engine.zoomIn());
+    this.dom.zoomOutBtn?.addEventListener('click', () => this.engine.zoomOut());
+    this.dom.zoomResetBtn?.addEventListener('click', () => this.engine.resetZoom());
+    this.dom.zoomFitBtn?.addEventListener('click', () => this.engine.fitToContent());
   }
 
   closeAllFlyouts() {
     this.dom.shapesFlyout?.classList.remove('show');
+    this.dom.linesFlyout?.classList.remove('show');
     this.dom.stickyFlyout?.classList.remove('show');
   }
 
   setActiveToolUI(toolName) {
     this.dom.dockButtons.forEach((b) => {
-      b.classList.toggle('active', b.getAttribute('data-tool') === toolName);
+      if (b.dataset.tool === toolName) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
     });
-    this.updateStyleShelfVisibility();
   }
 
-  updateStyleShelfVisibility() {
-    const hasSelection = this.engine.selectedElementIds.size > 0;
-    const isDrawingTool = ['pen', 'highlighter', 'shape', 'line', 'text', 'shapes-menu'].includes(this.tools.activeTool);
-    this.dom.styleShelf.style.display = (hasSelection || isDrawingTool) ? 'flex' : 'none';
+  // --- Fast Header Actions ---
+
+  initFastHeader() {
+    // Direct Undo / Redo
+    this.dom.btnHeaderUndo?.addEventListener('click', () => this.undo());
+    this.dom.btnHeaderRedo?.addEventListener('click', () => this.redo());
+
+    // Templates Modal toggle
+    this.dom.btnHeaderTemplates?.addEventListener('click', () => {
+      this.dom.templatesModal.style.display = 'flex';
+    });
+
+    // Math Symbols Palette toggle
+    this.dom.btnHeaderMath?.addEventListener('click', () => {
+      this.dom.mathModal.style.display = 'flex';
+    });
+
+    // Ruler toggle
+    this.dom.btnHeaderRuler?.addEventListener('click', () => {
+      this.engine.ruler.active = !this.engine.ruler.active;
+      this.dom.btnHeaderRuler.classList.toggle('active', this.engine.ruler.active);
+      this.engine.render();
+    });
+
+    // Protractor toggle
+    this.dom.btnHeaderProtractor?.addEventListener('click', () => {
+      this.engine.protractor.active = !this.engine.protractor.active;
+      this.dom.btnHeaderProtractor.classList.toggle('active', this.engine.protractor.active);
+      this.engine.render();
+    });
+
+    // Grid Snap toggle
+    this.dom.btnHeaderSnap?.addEventListener('click', () => {
+      this.engine.gridSnap = !this.engine.gridSnap;
+      this.dom.btnHeaderSnap.classList.toggle('active', this.engine.gridSnap);
+    });
+
+    // Clear Page Modal
+    this.dom.btnHeaderClear?.addEventListener('click', () => {
+      this.dom.clearConfirmModal.style.display = 'flex';
+    });
+
+    this.dom.btnCancelClear?.addEventListener('click', () => {
+      this.dom.clearConfirmModal.style.display = 'none';
+    });
+
+    this.dom.btnConfirmClear?.addEventListener('click', () => {
+      this.dom.clearConfirmModal.style.display = 'none';
+      this.engine.activePage.elements = [];
+      this.engine.selectedElementIds.clear();
+      this.engine.render();
+      this.saveStateToHistory();
+      this.engine.renderMinimap(this.dom.minimapCanvas);
+      this.renderPagesList();
+    });
   }
 
-  // --- Inline Text Editor ---
+  // --- Style Shelf (Color, Stroke, Fill) ---
 
-  openInlineTextEditor({ x, y, screenPos, existingElement }) {
-    const editor = this.dom.textEditor;
-    const canvasRect = this.dom.canvas.getBoundingClientRect();
+  initStyleControls() {
+    // Preset Color Dots
+    this.dom.colorSwatches.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        this.dom.colorSwatches.forEach((d) => d.classList.remove('active'));
+        dot.classList.add('active');
+        const color = dot.dataset.color;
+        this.tools.strokeColor = color;
+        this.applyColorToSelected(color);
+      });
+    });
 
-    let initialText = '';
-    let targetX = x;
-    let targetY = y;
+    // Custom Color Input
+    this.dom.customColorInput?.addEventListener('input', (e) => {
+      const color = e.target.value;
+      this.dom.colorSwatches.forEach((d) => d.classList.remove('active'));
+      this.tools.strokeColor = color;
+      this.applyColorToSelected(color);
+    });
 
-    if (existingElement) {
-      initialText = existingElement.text || '';
-      targetX = existingElement.x;
-      targetY = existingElement.y;
+    // Stroke Width Buttons
+    this.dom.strokeWidthButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        this.dom.strokeWidthButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const width = parseInt(btn.dataset.width, 10);
+        this.tools.strokeWidth = width;
+        this.applyStrokeWidthToSelected(width);
+      });
+    });
+
+    // Fill Mode Buttons
+    const setFillUI = (activeBtn) => {
+      [this.dom.btnFillNone, this.dom.btnFillTint, this.dom.btnFillSolid].forEach((b) => b?.classList.remove('active'));
+      activeBtn?.classList.add('active');
+    };
+
+    this.dom.btnFillNone?.addEventListener('click', () => {
+      setFillUI(this.dom.btnFillNone);
+      this.tools.fillColor = 'transparent';
+      this.applyFillToSelected('transparent');
+    });
+
+    this.dom.btnFillTint?.addEventListener('click', () => {
+      setFillUI(this.dom.btnFillTint);
+      const color = this.tools.strokeColor || '#0284c7';
+      // Convert to rgba with 15% opacity
+      const tint = this.hexToRgba(color, 0.15);
+      this.tools.fillColor = tint;
+      this.applyFillToSelected(tint);
+    });
+
+    this.dom.btnFillSolid?.addEventListener('click', () => {
+      setFillUI(this.dom.btnFillSolid);
+      const color = this.tools.strokeColor || '#0284c7';
+      this.tools.fillColor = color;
+      this.applyFillToSelected(color);
+    });
+  }
+
+  hexToRgba(hex, alpha = 0.2) {
+    if (hex.startsWith('rgba') || hex.startsWith('rgb')) return hex;
+    let c = hex.replace('#', '');
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    const num = parseInt(c, 16);
+    return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
+  }
+
+  applyColorToSelected(color) {
+    const selected = this.engine.activePage.elements.filter((el) => this.engine.selectedElementIds.has(el.id));
+    if (selected.length === 0) return;
+    selected.forEach((el) => {
+      if (el.type === 'pen') el.color = color;
+      else if (el.type === 'shape' || el.type === 'line') el.strokeColor = color;
+      else if (el.type === 'text') el.color = color;
+    });
+    this.engine.render();
+    this.saveStateToHistory();
+  }
+
+  applyStrokeWidthToSelected(width) {
+    const selected = this.engine.activePage.elements.filter((el) => this.engine.selectedElementIds.has(el.id));
+    if (selected.length === 0) return;
+    selected.forEach((el) => {
+      if (el.type === 'pen') el.width = width;
+      else if (el.type === 'shape' || el.type === 'line') el.strokeWidth = width;
+    });
+    this.engine.render();
+    this.saveStateToHistory();
+  }
+
+  applyFillToSelected(fill) {
+    const selected = this.engine.activePage.elements.filter((el) => this.engine.selectedElementIds.has(el.id));
+    if (selected.length === 0) return;
+    selected.forEach((el) => {
+      if (el.type === 'shape') el.fillColor = fill;
+    });
+    this.engine.render();
+    this.saveStateToHistory();
+  }
+
+  updateStyleShelfForSelection() {
+    const selected = this.engine.activePage.elements.filter((el) => this.engine.selectedElementIds.has(el.id));
+    if (selected.length > 0) {
+      const first = selected[0];
+      const color = first.color || first.strokeColor;
+      if (color) {
+        this.dom.colorSwatches.forEach((dot) => {
+          dot.classList.toggle('active', dot.dataset.color.toLowerCase() === color.toLowerCase());
+        });
+      }
+    }
+  }
+
+  // --- Image Upload & Clipboard Pasting (Ctrl+V) ---
+
+  initImagePasting() {
+    // Dock Image Upload Button
+    this.dom.btnUploadImageDock?.addEventListener('click', () => {
+      this.dom.fileInputImage.click();
+    });
+
+    this.dom.fileInputImage?.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        this.insertImageFromFile(e.target.files[0]);
+      }
+      this.dom.fileInputImage.value = '';
+    });
+
+    // Native Drag and Drop onto canvas
+    const wrap = this.dom.canvas.parentElement;
+    wrap?.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    });
+    wrap?.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith('image/'));
+      if (files.length > 0) this.insertImageFromFile(files[0], e.clientX, e.clientY);
+    });
+
+    // Clipboard Paste (Ctrl+V)
+    window.addEventListener('paste', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      const items = (e.clipboardData || window.clipboardData)?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          const file = items[i].getAsFile();
+          this.insertImageFromFile(file);
+          return;
+        }
+      }
+
+      // If text/elements copied internally, paste them
+      this.tools.pasteSelected();
+      this.saveStateToHistory();
+    });
+  }
+
+  insertImageFromFile(file, screenX = null, screenY = null) {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const src = ev.target.result;
+      const img = new Image();
+      img.onload = () => {
+        let w = img.naturalWidth || 400;
+        let h = img.naturalHeight || 300;
+        const maxDim = 550;
+        if (w > maxDim || h > maxDim) {
+          const ratio = Math.min(maxDim / w, maxDim / h);
+          w = Math.round(w * ratio);
+          h = Math.round(h * ratio);
+        }
+
+        let worldPos;
+        if (screenX != null && screenY != null) {
+          worldPos = this.engine.screenToWorld(screenX, screenY);
+        } else {
+          worldPos = this.engine.screenToWorld(
+            this.engine.canvas.width / (2 * this.engine.dpr),
+            this.engine.canvas.height / (2 * this.engine.dpr)
+          );
+        }
+
+        const newEl = {
+          id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          type: 'image',
+          x: Math.round(worldPos.x - w / 2),
+          y: Math.round(worldPos.y - h / 2),
+          width: w,
+          height: h,
+          src: src,
+          imgObj: img
+        };
+
+        this.engine.activePage.elements.push(newEl);
+        this.engine.selectedElementIds.clear();
+        this.engine.selectedElementIds.add(newEl.id);
+        this.engine.render();
+        this.saveStateToHistory();
+        this.engine.renderMinimap(this.dom.minimapCanvas);
+      };
+      img.src = src;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // --- Modals & Templates & Math Symbols ---
+
+  initModals() {
+    // Close templates modal
+    this.dom.btnCloseTemplatesModal?.addEventListener('click', () => {
+      this.dom.templatesModal.style.display = 'none';
+    });
+
+    // Template Cards Click
+    document.querySelectorAll('.template-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        const type = card.dataset.template;
+        this.loadTemplate(type);
+        this.dom.templatesModal.style.display = 'none';
+      });
+    });
+
+    // Math Modal
+    this.dom.btnCloseMathModal?.addEventListener('click', () => {
+      this.dom.mathModal.style.display = 'none';
+    });
+
+    // Populate Math Symbols Grid
+    const symbols = [
+      'α', 'β', 'γ', 'θ', 'λ', 'μ', 'π', 'σ', 'φ', 'ω', 'Δ', 'Ω',
+      '√', '∑', '∫', '≈', '≠', '≤', '≥', '±', '∞', '×', '÷', '∂',
+      '∈', '∉', '⊂', '∪', '∩', '½', '¼', '¾', '²', '³', '₀', '₁'
+    ];
+
+    const grid = this.dom.mathSymbolsGrid;
+    if (grid) {
+      grid.innerHTML = '';
+      symbols.forEach((sym) => {
+        const btn = document.createElement('button');
+        btn.className = 'math-sym-btn';
+        btn.textContent = sym;
+        btn.addEventListener('click', () => {
+          this.insertMathSymbol(sym);
+          this.dom.mathModal.style.display = 'none';
+        });
+        grid.appendChild(btn);
+      });
     }
 
-    const scr = this.engine.worldToScreen(targetX, targetY);
+    // About Modal
+    document.getElementById('itemAbout')?.addEventListener('click', () => {
+      this.dom.aboutModal.style.display = 'flex';
+    });
+    this.dom.btnCloseAboutModal?.addEventListener('click', () => {
+      this.dom.aboutModal.style.display = 'none';
+    });
 
+    // Close on backdrop click
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-backdrop')) {
+        e.target.style.display = 'none';
+      }
+    });
+  }
+
+  insertMathSymbol(sym) {
+    const vCenter = this.engine.screenToWorld(
+      this.engine.canvas.width / (2 * this.engine.dpr),
+      this.engine.canvas.height / (2 * this.engine.dpr)
+    );
+
+    const newEl = {
+      id: 'sym_' + Date.now(),
+      type: 'text',
+      x: Math.round(vCenter.x),
+      y: Math.round(vCenter.y),
+      text: sym,
+      fontSize: 28,
+      color: this.tools.strokeColor || '#0f172a',
+      isBold: true
+    };
+
+    this.engine.activePage.elements.push(newEl);
+    this.engine.selectedElementIds.clear();
+    this.engine.selectedElementIds.add(newEl.id);
+    this.engine.render();
+    this.saveStateToHistory();
+  }
+
+  // --- Educational Template Loaders ---
+
+  loadTemplate(type) {
+    const page = this.engine.activePage;
+    page.elements = [];
+    this.engine.selectedElementIds.clear();
+
+    if (type === 'math') {
+      page.background = 'grid';
+      // Coordinate Plane X-Y
+      page.elements.push({
+        id: 'tpl_axis_x',
+        type: 'line',
+        lineType: 'arrow',
+        x1: 100, y1: 340, x2: 860, y2: 340,
+        strokeColor: '#0284c7', strokeWidth: 3
+      });
+      page.elements.push({
+        id: 'tpl_axis_y',
+        type: 'line',
+        lineType: 'arrow',
+        x1: 480, y1: 580, x2: 480, y2: 100,
+        strokeColor: '#0284c7', strokeWidth: 3
+      });
+      page.elements.push({
+        id: 'tpl_lbl_x',
+        type: 'text',
+        x: 875, y: 325,
+        text: 'X (t) [s]', fontSize: 18, color: '#0284c7', isBold: true
+      });
+      page.elements.push({
+        id: 'tpl_lbl_y',
+        type: 'text',
+        x: 465, y: 70,
+        text: 'Y [m]', fontSize: 18, color: '#0284c7', isBold: true
+      });
+      page.elements.push({
+        id: 'tpl_lbl_o',
+        type: 'text',
+        x: 460, y: 348,
+        text: 'O (0,0)', fontSize: 14, color: '#64748b', isBold: true
+      });
+
+      // Sticky note formula
+      page.elements.push({
+        id: 'tpl_formula_sticky',
+        type: 'sticky',
+        x: 100, y: 100, width: 240, height: 160,
+        text: 'معادلة المسار:\ny(x) = - (g / 2v₀²cos²α) · x² + (tan α) · x\n\nقم برسم نقاط المنحنى ومطابقة الشروط الابتدائية.',
+        colorTheme: 'cyan'
+      });
+    } else if (type === 'mindmap') {
+      page.background = 'dots';
+      // Center Topic
+      page.elements.push({
+        id: 'tpl_mm_center',
+        type: 'shape',
+        shapeType: 'rounded-rect',
+        x: 400, y: 260, width: 220, height: 90,
+        strokeColor: '#8b5cf6', strokeWidth: 3,
+        fillColor: 'rgba(139, 92, 246, 0.12)'
+      });
+      page.elements.push({
+        id: 'tpl_mm_center_txt',
+        type: 'text',
+        x: 435, y: 295,
+        text: 'الفكرة المركزية\n(الموضوع الأساسي)', fontSize: 16, color: '#581c87', isBold: true
+      });
+
+      // 4 Branches
+      const branches = [
+        { name: '1. الأهداف والنتائج', color: '#0284c7', x: 400, y: 100, x1: 510, y1: 260, x2: 510, y2: 170 },
+        { name: '2. الموارد والميزانية', color: '#008744', x: 700, y: 260, x1: 620, y1: 305, x2: 700, y2: 305 },
+        { name: '3. خطة التنفيذ والمهام', color: '#ea580c', x: 400, y: 440, x1: 510, y1: 350, x2: 510, y2: 440 },
+        { name: '4. المخاطر والبدائل', color: '#d93025', x: 100, y: 260, x1: 400, y1: 305, x2: 320, y2: 305 }
+      ];
+
+      branches.forEach((b, i) => {
+        page.elements.push({
+          id: `tpl_mm_arr_${i}`,
+          type: 'line',
+          lineType: 'arrow',
+          x1: b.x1, y1: b.y1, x2: b.x2, y2: b.y2,
+          strokeColor: b.color, strokeWidth: 3
+        });
+        page.elements.push({
+          id: `tpl_mm_box_${i}`,
+          type: 'shape',
+          shapeType: 'rounded-rect',
+          x: b.x, y: b.y, width: 220, height: 70,
+          strokeColor: b.color, strokeWidth: 2,
+          fillColor: this.hexToRgba(b.color, 0.1)
+        });
+        page.elements.push({
+          id: `tpl_mm_txt_${i}`,
+          type: 'text',
+          x: b.x + 20, y: b.y + 24,
+          text: b.name, fontSize: 15, color: b.color, isBold: true
+        });
+      });
+    } else if (type === 'kanban') {
+      page.background = 'white';
+      const cols = [
+        { title: 'قيد الانتظار (To Do)', color: '#64748b', x: 80, theme: 'yellow' },
+        { title: 'قيد الإنجاز (In Progress)', color: '#0284c7', x: 380, theme: 'cyan' },
+        { title: 'مكتمل بنجاح (Completed)', color: '#008744', x: 680, theme: 'green' }
+      ];
+      cols.forEach((col, idx) => {
+        page.elements.push({
+          id: `tpl_kb_col_${idx}`,
+          type: 'shape',
+          shapeType: 'rounded-rect',
+          x: col.x, y: 80, width: 270, height: 500,
+          strokeColor: col.color, strokeWidth: 2,
+          fillColor: this.hexToRgba(col.color, 0.05)
+        });
+        page.elements.push({
+          id: `tpl_kb_hdr_${idx}`,
+          type: 'text',
+          x: col.x + 20, y: 100,
+          text: col.title, fontSize: 16, color: col.color, isBold: true
+        });
+        // Sample card
+        page.elements.push({
+          id: `tpl_kb_card_${idx}`,
+          type: 'sticky',
+          x: col.x + 15, y: 150, width: 240, height: 110,
+          text: `مهمة ${idx + 1}:\nدراسة الفصل وتحضير الملخص المنهجي والمراجع.`,
+          colorTheme: col.theme
+        });
+      });
+    } else if (type === 'calligraphy') {
+      page.background = 'lines';
+      page.elements.push({
+        id: 'tpl_callig_title',
+        type: 'text',
+        x: 120, y: 120,
+        text: 'دَفْتَرُ اللُّغَةِ العَرَبِيَّةِ وَالخَطِّ المَدْرَسِيّ',
+        fontSize: 22, color: '#008744', isBold: true
+      });
+      page.elements.push({
+        id: 'tpl_callig_verse',
+        type: 'text',
+        x: 120, y: 190,
+        text: 'العِلْمُ يَرْفَعُ بَيْتًا لا عِمَادَ لَهُ ... وَالجَهْلُ يَهْدِمُ بَيْتَ العِزِّ وَالشَّرَفِ',
+        fontSize: 24, color: '#0f172a', isBold: true
+      });
+      page.elements.push({
+        id: 'tpl_callig_note',
+        type: 'sticky',
+        x: 680, y: 260, width: 220, height: 140,
+        text: 'قواعد الخط المدرسي:\n• احترام مسافات الأسطر (Seyès)\n• كتابة الحروف الرأسية والأفقية بانتظام',
+        colorTheme: 'yellow'
+      });
+    } else if (type === 'flowchart') {
+      page.background = 'grid';
+      // Flowchart blocks
+      page.elements.push({
+        id: 'tpl_fc_start',
+        type: 'shape', shapeType: 'circle',
+        x: 420, y: 80, width: 140, height: 70,
+        strokeColor: '#008744', strokeWidth: 3, fillColor: 'rgba(0,135,68,0.1)'
+      });
+      page.elements.push({
+        id: 'tpl_fc_txt_start',
+        type: 'text', x: 460, y: 105, text: 'البداية', fontSize: 16, color: '#008744', isBold: true
+      });
+      page.elements.push({
+        id: 'tpl_fc_arr1',
+        type: 'line', lineType: 'arrow',
+        x1: 490, y1: 150, x2: 490, y2: 210, strokeColor: '#0284c7', strokeWidth: 3
+      });
+      page.elements.push({
+        id: 'tpl_fc_proc',
+        type: 'shape', shapeType: 'rect',
+        x: 390, y: 210, width: 200, height: 80,
+        strokeColor: '#0284c7', strokeWidth: 2, fillColor: 'rgba(2,132,199,0.1)'
+      });
+      page.elements.push({
+        id: 'tpl_fc_txt_proc',
+        type: 'text', x: 420, y: 238, text: 'معالجة البيانات\n(Process X = A + B)', fontSize: 14, color: '#0369a1', isBold: true
+      });
+      page.elements.push({
+        id: 'tpl_fc_arr2',
+        type: 'line', lineType: 'arrow',
+        x1: 490, y1: 290, x2: 490, y2: 350, strokeColor: '#0284c7', strokeWidth: 3
+      });
+      page.elements.push({
+        id: 'tpl_fc_cond',
+        type: 'shape', shapeType: 'diamond',
+        x: 400, y: 350, width: 180, height: 110,
+        strokeColor: '#ea580c', strokeWidth: 2, fillColor: 'rgba(234,88,12,0.1)'
+      });
+      page.elements.push({
+        id: 'tpl_fc_txt_cond',
+        type: 'text', x: 440, y: 395, text: 'هل X > 100؟', fontSize: 14, color: '#c2410c', isBold: true
+      });
+    } else if (type === 'table') {
+      page.background = 'white';
+      // 2-column comparison matrix
+      page.elements.push({
+        id: 'tpl_tbl_hdr1',
+        type: 'shape', shapeType: 'rounded-rect',
+        x: 100, y: 100, width: 360, height: 60,
+        strokeColor: '#0284c7', strokeWidth: 2, fillColor: 'rgba(2,132,199,0.15)'
+      });
+      page.elements.push({
+        id: 'tpl_tbl_txt1',
+        type: 'text', x: 180, y: 118, text: 'المفهوم الأول (الجانب أ)', fontSize: 18, color: '#0369a1', isBold: true
+      });
+      page.elements.push({
+        id: 'tpl_tbl_hdr2',
+        type: 'shape', shapeType: 'rounded-rect',
+        x: 500, y: 100, width: 360, height: 60,
+        strokeColor: '#008744', strokeWidth: 2, fillColor: 'rgba(0,135,68,0.15)'
+      });
+      page.elements.push({
+        id: 'tpl_tbl_txt2',
+        type: 'text', x: 580, y: 118, text: 'المفهوم الثاني (الجانب ب)', fontSize: 18, color: '#15803d', isBold: true
+      });
+      page.elements.push({
+        id: 'tpl_tbl_body1',
+        type: 'shape', shapeType: 'rect',
+        x: 100, y: 170, width: 360, height: 350,
+        strokeColor: '#cbd5e1', strokeWidth: 1, fillColor: '#f8fafc'
+      });
+      page.elements.push({
+        id: 'tpl_tbl_body2',
+        type: 'shape', shapeType: 'rect',
+        x: 500, y: 170, width: 360, height: 350,
+        strokeColor: '#cbd5e1', strokeWidth: 1, fillColor: '#f8fafc'
+      });
+    }
+
+    this.engine.fitToContent();
+    this.saveStateToHistory();
+    this.renderPagesList();
+    this.updateUI();
+  }
+
+  // --- Seed Demo Elements (Clean Classroom Layout) ---
+
+  seedDemoIfEmpty() {
+    const page = this.engine.activePage;
+    if (page.elements.length > 0) return;
+
+    page.background = 'grid';
+
+    // 1. Algerian Republic National Banner Box
+    page.elements.push({
+      id: 'demo_header_box',
+      type: 'shape',
+      shapeType: 'rounded-rect',
+      x: 80,
+      y: 40,
+      width: 860,
+      height: 75,
+      strokeColor: '#0284c7',
+      fillColor: 'rgba(2, 132, 199, 0.08)',
+      strokeWidth: 2,
+      strokeStyle: 'solid'
+    });
+
+    page.elements.push({
+      id: 'demo_title',
+      type: 'text',
+      x: 110,
+      y: 52,
+      text: 'الجمهورية الجزائرية الديمقراطية الشعبية — مادة العلوم الفيزيائية والرياضيات',
+      fontSize: 18,
+      color: '#0f172a',
+      isBold: true
+    });
+
+    page.elements.push({
+      id: 'demo_subtitle',
+      type: 'text',
+      x: 110,
+      y: 80,
+      text: 'الوحدة 01: دراسة تطور جملة ميكانيكية • قوانين نيوتن للحركة والمعادلات الزمنية',
+      fontSize: 14,
+      color: '#0284c7',
+      isBold: false
+    });
+
+    // 2. Educational Flowchart Blocks (3 Aligned Steps)
+    page.elements.push({
+      id: 'demo_rect_1',
+      type: 'shape',
+      shapeType: 'rounded-rect',
+      x: 80,
+      y: 150,
+      width: 220,
+      height: 95,
+      strokeColor: '#008744',
+      fillColor: 'rgba(0, 135, 68, 0.1)',
+      strokeWidth: 2.5,
+      strokeStyle: 'solid'
+    });
+    page.elements.push({
+      id: 'demo_txt_1',
+      type: 'text',
+      x: 105,
+      y: 175,
+      text: '1. الشروط الابتدائية\n(الموضع والسرعة عند t=0)',
+      fontSize: 15,
+      color: '#14532d',
+      isBold: true
+    });
+
+    // Arrow 1 -> 2
+    page.elements.push({
+      id: 'demo_arr_1',
+      type: 'line',
+      lineType: 'arrow',
+      x1: 300,
+      y1: 198,
+      x2: 370,
+      y2: 198,
+      strokeColor: '#0284c7',
+      strokeWidth: 3.5,
+      strokeStyle: 'solid'
+    });
+
+    // Block 2
+    page.elements.push({
+      id: 'demo_rect_2',
+      type: 'shape',
+      shapeType: 'rounded-rect',
+      x: 370,
+      y: 150,
+      width: 250,
+      height: 95,
+      strokeColor: '#0284c7',
+      fillColor: 'rgba(2, 132, 199, 0.1)',
+      strokeWidth: 2.5,
+      strokeStyle: 'solid'
+    });
+    page.elements.push({
+      id: 'demo_txt_2',
+      type: 'text',
+      x: 395,
+      y: 175,
+      text: '2. تطبيق القانون الثاني لنيوتن\n∑ F_ext = m · a',
+      fontSize: 15,
+      color: '#0369a1',
+      isBold: true
+    });
+
+    // Arrow 2 -> 3
+    page.elements.push({
+      id: 'demo_arr_2',
+      type: 'line',
+      lineType: 'arrow',
+      x1: 620,
+      y1: 198,
+      x2: 690,
+      y2: 198,
+      strokeColor: '#0284c7',
+      strokeWidth: 3.5,
+      strokeStyle: 'solid'
+    });
+
+    // Block 3
+    page.elements.push({
+      id: 'demo_rect_3',
+      type: 'shape',
+      shapeType: 'rounded-rect',
+      x: 690,
+      y: 150,
+      width: 250,
+      height: 95,
+      strokeColor: '#d93025',
+      fillColor: 'rgba(217, 48, 37, 0.08)',
+      strokeWidth: 2.5,
+      strokeStyle: 'solid'
+    });
+    page.elements.push({
+      id: 'demo_txt_3',
+      type: 'text',
+      x: 715,
+      y: 175,
+      text: '3. المعادلات الزمنية للحركة\nx(t) و v(t) بالتكامل',
+      fontSize: 15,
+      color: '#b91c1c',
+      isBold: true
+    });
+
+    // 3. Clean Yellow Sticky Note (Methodological advice)
+    page.elements.push({
+      id: 'demo_sticky',
+      type: 'sticky',
+      x: 80,
+      y: 285,
+      width: 260,
+      height: 160,
+      text: 'تنبيه منهجي للطلبة:\n• تحديد الجملة المدروسة بدقة\n• اختيار مرجع عطالي مناسب\n• إسقاط شعاع القوى على المحاور',
+      colorTheme: 'yellow'
+    });
+
+    // 4. Motion Equations Box
+    page.elements.push({
+      id: 'demo_formula_box',
+      type: 'shape',
+      shapeType: 'rounded-rect',
+      x: 370,
+      y: 285,
+      width: 570,
+      height: 160,
+      strokeColor: '#94a3b8',
+      fillColor: 'rgba(248, 250, 252, 0.85)',
+      strokeWidth: 1.5,
+      strokeStyle: 'solid'
+    });
+
+    page.elements.push({
+      id: 'demo_formula_title',
+      type: 'text',
+      x: 395,
+      y: 305,
+      text: 'المعادلات التفاضلية والزمنية للحركة المستقيمة بانتظام:',
+      fontSize: 15,
+      color: '#0f172a',
+      isBold: true
+    });
+
+    page.elements.push({
+      id: 'demo_formula_v',
+      type: 'text',
+      x: 395,
+      y: 345,
+      text: 'v(t) = a · t + v₀       [معادلة السرعة اللحظية]',
+      fontSize: 16,
+      color: '#0284c7',
+      isBold: true
+    });
+
+    page.elements.push({
+      id: 'demo_formula_x',
+      type: 'text',
+      x: 395,
+      y: 385,
+      text: 'x(t) = ½ · a · t² + v₀ · t + x₀   [معادلة الموضع والمسافة]',
+      fontSize: 16,
+      color: '#008744',
+      isBold: true
+    });
+
+    this.engine.fitToContent();
+  }
+
+  // --- Inline Text Editor (Overlaid on Canvas) ---
+
+  openInlineTextEditor(worldX, worldY, screenPos, existingElement = null) {
+    const editor = this.dom.textEditor;
+    if (!editor) return;
+
+    const screen = this.engine.worldToScreen(worldX, worldY);
+    editor.style.left = screen.x + 'px';
+    editor.style.top = screen.y + 'px';
+    editor.style.fontSize = Math.max(14, (existingElement?.fontSize || this.tools.fontSize) * this.engine.zoom) + 'px';
+    editor.style.color = existingElement?.color || this.tools.strokeColor || '#0f172a';
+    editor.value = existingElement ? existingElement.text : '';
     editor.style.display = 'block';
-    editor.style.left = (scr.x - canvasRect.left) + 'px';
-    editor.style.top = (scr.y - canvasRect.top) + 'px';
-    editor.style.fontSize = (this.tools.fontSize * this.engine.zoom) + 'px';
-    editor.style.minWidth = (140 * this.engine.zoom) + 'px';
-    editor.value = initialText;
-
     editor.focus();
 
     const commit = () => {
+      if (editor.style.display === 'none') return;
+      const text = editor.value.trim();
       editor.style.display = 'none';
-      const val = editor.value.trim();
-      if (!val) {
+
+      if (!text) {
         if (existingElement) {
           const idx = this.engine.activePage.elements.indexOf(existingElement);
           if (idx !== -1) this.engine.activePage.elements.splice(idx, 1);
         }
       } else {
         if (existingElement) {
-          existingElement.text = val;
+          existingElement.text = text;
         } else {
-          const newText = {
-            id: 'text_' + Date.now(),
+          const newEl = {
+            id: 'txt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
             type: 'text',
-            x: targetX,
-            y: targetY,
-            text: val,
-            fontSize: this.tools.fontSize,
-            color: this.tools.strokeColor
+            x: worldX,
+            y: worldY,
+            text: text,
+            fontSize: this.tools.fontSize || 20,
+            color: this.tools.strokeColor || '#0f172a',
+            isBold: false
           };
-          this.engine.activePage.elements.push(newText);
+          this.engine.activePage.elements.push(newEl);
+          this.engine.selectedElementIds.clear();
+          this.engine.selectedElementIds.add(newEl.id);
         }
       }
-      this.saveStateToHistory();
+
       this.engine.render();
+      this.saveStateToHistory();
       this.engine.renderMinimap(this.dom.minimapCanvas);
     };
 
-    editor.onblur = () => commit();
+    editor.onblur = commit;
     editor.onkeydown = (e) => {
       if (e.key === 'Escape') {
         editor.style.display = 'none';
+      } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        commit();
       }
     };
   }
 
-  // --- Style Controls Shelf ---
+  // --- Presentation Mode ---
 
-  initStyleControls() {
-    this.dom.colorSwatches.forEach((dot) => {
-      dot.addEventListener('click', () => {
-        this.dom.colorSwatches.forEach((d) => d.classList.remove('active'));
-        dot.classList.add('active');
-        const color = dot.getAttribute('data-color');
-        this.tools.strokeColor = color;
+  togglePresentationMode() {
+    const app = this.dom.appContainer;
+    const isPresent = app.classList.toggle('presenter-mode');
 
-        // Apply to current selection if any
-        if (this.engine.selectedElementIds.size > 0) {
-          this.engine.activePage.elements.forEach((el) => {
-            if (this.engine.selectedElementIds.has(el.id)) {
-              if (el.type === 'pen') el.color = color;
-              else if (el.type === 'shape' || el.type === 'line') el.strokeColor = color;
-              else if (el.type === 'text') el.color = color;
-            }
-          });
-          this.engine.render();
-          this.saveStateToHistory();
-        }
-      });
-    });
+    if (isPresent) {
+      if (app.requestFullscreen) {
+        app.requestFullscreen().catch(() => {});
+      }
+      this.tools.setTool('laser');
+      this.setActiveToolUI('laser');
+    } else {
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+      this.tools.setTool('pen');
+      this.setActiveToolUI('pen');
+    }
 
-    this.dom.strokeWidthButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        this.dom.strokeWidthButtons.forEach((b) => b.classList.remove('active'));
-        btn.classList.add('active');
-        const w = parseInt(btn.getAttribute('data-width'), 10) || 3;
-        this.tools.strokeWidth = w;
-
-        if (this.engine.selectedElementIds.size > 0) {
-          this.engine.activePage.elements.forEach((el) => {
-            if (this.engine.selectedElementIds.has(el.id)) {
-              if (el.type === 'pen') el.width = w;
-              else if (el.type === 'shape' || el.type === 'line') el.strokeWidth = w;
-            }
-          });
-          this.engine.render();
-          this.saveStateToHistory();
-        }
-      });
-    });
+    this.updateUI();
+    setTimeout(() => this.engine.resize(), 100);
   }
 
-  // --- Multi-Page Deck Management ---
+  // --- Undo / Redo History Engine ---
+
+  saveStateToHistory() {
+    const snapshot = JSON.stringify(this.engine.activePage.elements);
+
+    if (this.historyIndex < this.historyStack.length - 1) {
+      this.historyStack = this.historyStack.slice(0, this.historyIndex + 1);
+    }
+
+    this.historyStack.push(snapshot);
+    if (this.historyStack.length > this.maxHistory) {
+      this.historyStack.shift();
+    }
+    this.historyIndex = this.historyStack.length - 1;
+
+    try {
+      localStorage.setItem('dz_whiteboard_autosave', JSON.stringify({
+        pages: this.engine.pages,
+        activePageIndex: this.engine.activePageIndex
+      }));
+    } catch {}
+  }
+
+  undo() {
+    if (this.historyIndex > 0) {
+      this.historyIndex--;
+      const snapshot = this.historyStack[this.historyIndex];
+      this.engine.activePage.elements = JSON.parse(snapshot);
+      this.engine.selectedElementIds.clear();
+      this.engine.render();
+      this.engine.renderMinimap(this.dom.minimapCanvas);
+      this.renderPagesList();
+    }
+  }
+
+  redo() {
+    if (this.historyIndex < this.historyStack.length - 1) {
+      this.historyIndex++;
+      const snapshot = this.historyStack[this.historyIndex];
+      this.engine.activePage.elements = JSON.parse(snapshot);
+      this.engine.selectedElementIds.clear();
+      this.engine.render();
+      this.engine.renderMinimap(this.dom.minimapCanvas);
+      this.renderPagesList();
+    }
+  }
+
+  deleteSelected() {
+    if (this.engine.selectedElementIds.size === 0) return;
+    this.engine.activePage.elements = this.engine.activePage.elements.filter(
+      (el) => !this.engine.selectedElementIds.has(el.id)
+    );
+    this.engine.selectedElementIds.clear();
+    this.engine.render();
+    this.saveStateToHistory();
+    this.engine.renderMinimap(this.dom.minimapCanvas);
+  }
+
+  // --- Slide & Page Drawer ---
 
   initPagesDrawer() {
-    this.dom.btnTogglePages.addEventListener('click', () => {
+    this.dom.btnTogglePages?.addEventListener('click', () => {
       this.dom.pagesDrawer.classList.toggle('open');
-      this.renderPagesList();
     });
 
     this.dom.btnCloseDrawer?.addEventListener('click', () => {
       this.dom.pagesDrawer.classList.remove('open');
     });
 
-    this.dom.btnAddPage.addEventListener('click', () => {
+    this.dom.btnAddPage?.addEventListener('click', () => {
       this.addNewPage();
+    });
+
+    // Presenter bar page buttons
+    this.dom.btnPresentPrevPage?.addEventListener('click', () => {
+      if (this.engine.activePageIndex > 0) {
+        this.engine.activePageIndex--;
+        this.engine.render();
+        this.updateUI();
+      }
+    });
+
+    this.dom.btnPresentNextPage?.addEventListener('click', () => {
+      if (this.engine.activePageIndex < this.engine.pages.length - 1) {
+        this.engine.activePageIndex++;
+        this.engine.render();
+        this.updateUI();
+      }
+    });
+
+    this.dom.btnExitPresent?.addEventListener('click', () => {
+      this.togglePresentationMode();
     });
   }
 
@@ -537,6 +1439,7 @@ class DZWhiteboardApp {
 
   renderPagesList() {
     const listEl = this.dom.pagesDrawerBody;
+    if (!listEl) return;
     listEl.innerHTML = '';
 
     this.engine.pages.forEach((page, index) => {
@@ -588,15 +1491,32 @@ class DZWhiteboardApp {
 
   setBackground(bgType) {
     this.engine.activePage.background = bgType;
+
+    // Smart Chalkboard / Blackboard Palette auto-switch
+    if (bgType === 'chalkboard' || bgType === 'blackboard') {
+      if (this.tools.strokeColor === '#0f172a' || this.tools.strokeColor === '#000000') {
+        this.tools.strokeColor = '#ffffff';
+        this.dom.colorSwatches.forEach(d => {
+          d.classList.toggle('active', d.dataset.color === '#ffffff');
+        });
+      }
+    } else {
+      if (this.tools.strokeColor === '#ffffff') {
+        this.tools.strokeColor = '#0f172a';
+        this.dom.colorSwatches.forEach(d => {
+          d.classList.toggle('active', d.dataset.color === '#0f172a');
+        });
+      }
+    }
+
     this.engine.render();
     this.renderPagesList();
     this.saveStateToHistory();
   }
 
-  // --- Menu Bar & Header Actions ---
+  // --- Classic Menus ---
 
   initMenus() {
-    // Menu Dropdown toggles
     document.querySelectorAll('.menu-btn').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -650,32 +1570,30 @@ class DZWhiteboardApp {
     });
 
     document.getElementById('itemExportPng')?.addEventListener('click', () => {
-      ExportEngine.exportPNG(this.engine, 'whiteboard-export.png');
+      ExportEngine.exportPNG(this.engine, 'dz-whiteboard-lecture.png');
     });
 
     document.getElementById('itemExportSvg')?.addEventListener('click', () => {
-      ExportEngine.exportSVG(this.engine, 'whiteboard-vector.svg');
+      ExportEngine.exportSVG(this.engine, 'dz-whiteboard-lecture.svg');
     });
 
     document.getElementById('itemExportPdf')?.addEventListener('click', () => {
-      ExportEngine.exportMultiPagePDF(this.engine, 'DZ-Whiteboard-Lesson');
+      ExportEngine.exportMultiPagePDF(this.engine, 'الدرس التفاعلي — DZ-Whiteboard Pro');
     });
 
-    // Edit Actions
+    // Edit Menu
     document.getElementById('itemUndo')?.addEventListener('click', () => this.undo());
     document.getElementById('itemRedo')?.addEventListener('click', () => this.redo());
+    document.getElementById('itemDuplicate')?.addEventListener('click', () => {
+      this.tools.duplicateSelected();
+      this.saveStateToHistory();
+    });
     document.getElementById('itemDeleteSelection')?.addEventListener('click', () => this.deleteSelected());
     document.getElementById('itemClearPage')?.addEventListener('click', () => {
-      if (confirm('هل أنت متأكد من رغبتك في مسح كافة عناصر الصفحة الحالية؟')) {
-        this.engine.activePage.elements = [];
-        this.engine.selectedElementIds.clear();
-        this.engine.render();
-        this.saveStateToHistory();
-        this.renderPagesList();
-      }
+      this.dom.clearConfirmModal.style.display = 'flex';
     });
 
-    // Backgrounds Menu
+    // Background Menu
     document.getElementById('bgOptWhite')?.addEventListener('click', () => this.setBackground('white'));
     document.getElementById('bgOptGrid')?.addEventListener('click', () => this.setBackground('grid'));
     document.getElementById('bgOptLines')?.addEventListener('click', () => this.setBackground('lines'));
@@ -683,47 +1601,18 @@ class DZWhiteboardApp {
     document.getElementById('bgOptChalkboard')?.addEventListener('click', () => this.setBackground('chalkboard'));
     document.getElementById('bgOptBlackboard')?.addEventListener('click', () => this.setBackground('blackboard'));
 
-    // Zoom Controls
-    this.dom.zoomInBtn?.addEventListener('click', () => this.engine.zoomIn());
-    this.dom.zoomOutBtn?.addEventListener('click', () => this.engine.zoomOut());
-    this.dom.zoomResetBtn?.addEventListener('click', () => this.engine.resetZoom());
-    this.dom.zoomFitBtn?.addEventListener('click', () => this.engine.fitToContent());
-
-    // Presentation Mode
+    // Presentation mode button in header
     this.dom.btnPresentation?.addEventListener('click', () => this.togglePresentationMode());
-    this.dom.btnExitPresent?.addEventListener('click', () => this.togglePresentationMode(false));
 
-    this.dom.btnPresentPrevPage?.addEventListener('click', () => {
-      if (this.engine.activePageIndex > 0) {
-        this.engine.activePageIndex--;
-        this.engine.render();
-        this.updateUI();
-      }
-    });
-
-    this.dom.btnPresentNextPage?.addEventListener('click', () => {
-      if (this.engine.activePageIndex < this.engine.pages.length - 1) {
-        this.engine.activePageIndex++;
-        this.engine.render();
-        this.updateUI();
-      }
-    });
-
-    // Language & Theme
-    this.dom.langSelect?.addEventListener('change', (e) => this.applyLanguage(e.target.value));
+    // Theme Toggle
     this.dom.themeToggleBtn?.addEventListener('click', () => {
-      this.applyTheme(this.currentTheme === 'dark' ? 'light' : 'dark');
+      const next = this.currentTheme === 'light' ? 'dark' : 'light';
+      this.applyTheme(next);
     });
 
-    // About Dialog
-    document.getElementById('itemAbout')?.addEventListener('click', () => {
-      const modal = document.getElementById('aboutModal');
-      if (modal) modal.style.display = 'flex';
-      this.closeAllMenus();
-    });
-    document.getElementById('btnCloseAboutModal')?.addEventListener('click', () => {
-      const modal = document.getElementById('aboutModal');
-      if (modal) modal.style.display = 'none';
+    // Language select
+    this.dom.langSelect?.addEventListener('change', (e) => {
+      this.applyLanguage(e.target.value);
     });
   }
 
@@ -732,97 +1621,10 @@ class DZWhiteboardApp {
     document.querySelectorAll('.menu-btn').forEach((b) => b.classList.remove('active'));
   }
 
-  // --- Presentation / Lecture Mode ---
-
-  togglePresentationMode(forceState = null) {
-    const isCurrentlyPresent = this.dom.appContainer.classList.contains('presenter-mode');
-    const newState = forceState !== null ? forceState : !isCurrentlyPresent;
-
-    this.dom.appContainer.classList.toggle('presenter-mode', newState);
-
-    if (newState) {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      }
-      this.tools.setTool('laser');
-      this.setActiveToolUI('laser');
-    } else {
-      if (document.fullscreenElement && document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
-      }
-      this.tools.setTool('pen');
-      this.setActiveToolUI('pen');
-    }
-
-    this.updateUI();
-    setTimeout(() => this.engine.resize(), 100);
-  }
-
-  // --- Undo / Redo History Engine ---
-
-  saveStateToHistory() {
-    const snapshot = JSON.stringify(this.engine.activePage.elements);
-
-    // If we've undone and then perform an action, discard redo branch
-    if (this.historyIndex < this.historyStack.length - 1) {
-      this.historyStack = this.historyStack.slice(0, this.historyIndex + 1);
-    }
-
-    this.historyStack.push(snapshot);
-    if (this.historyStack.length > this.maxHistory) {
-      this.historyStack.shift();
-    }
-    this.historyIndex = this.historyStack.length - 1;
-
-    // Auto-save project to localStorage
-    try {
-      localStorage.setItem('dz_whiteboard_autosave', JSON.stringify({
-        pages: this.engine.pages,
-        activePageIndex: this.engine.activePageIndex
-      }));
-    } catch {}
-  }
-
-  undo() {
-    if (this.historyIndex > 0) {
-      this.historyIndex--;
-      const snapshot = this.historyStack[this.historyIndex];
-      this.engine.activePage.elements = JSON.parse(snapshot);
-      this.engine.selectedElementIds.clear();
-      this.engine.render();
-      this.engine.renderMinimap(this.dom.minimapCanvas);
-      this.renderPagesList();
-    }
-  }
-
-  redo() {
-    if (this.historyIndex < this.historyStack.length - 1) {
-      this.historyIndex++;
-      const snapshot = this.historyStack[this.historyIndex];
-      this.engine.activePage.elements = JSON.parse(snapshot);
-      this.engine.selectedElementIds.clear();
-      this.engine.render();
-      this.engine.renderMinimap(this.dom.minimapCanvas);
-      this.renderPagesList();
-    }
-  }
-
-  deleteSelected() {
-    if (this.engine.selectedElementIds.size === 0) return;
-    this.engine.activePage.elements = this.engine.activePage.elements.filter(
-      (el) => !this.engine.selectedElementIds.has(el.id)
-    );
-    this.engine.selectedElementIds.clear();
-    this.engine.render();
-    this.saveStateToHistory();
-    this.engine.renderMinimap(this.dom.minimapCanvas);
-  }
-
   // --- Keyboard Shortcuts ---
 
   initKeyboardShortcuts() {
     window.addEventListener('keydown', (e) => {
-      // Ignore if user is currently typing in an input
       if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
 
       if (e.code === 'Space') {
@@ -843,6 +1645,25 @@ class DZWhiteboardApp {
         return;
       }
 
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        this.tools.duplicateSelected();
+        this.saveStateToHistory();
+        return;
+      }
+
+      if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+        e.preventDefault();
+        this.tools.copySelected();
+        return;
+      }
+
+      if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+        e.preventDefault();
+        this.tools.selectAll();
+        return;
+      }
+
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
         ExportEngine.saveProjectJSON(this.engine, 'lesson.dzboard');
@@ -854,13 +1675,23 @@ class DZWhiteboardApp {
         return;
       }
 
+      if (e.key === ']') {
+        this.tools.bringForward();
+        return;
+      }
+
+      if (e.key === '[') {
+        this.tools.sendBackward();
+        return;
+      }
+
       if (e.key === 'F11' || (e.key === 'f' && !e.ctrlKey)) {
         e.preventDefault();
         this.togglePresentationMode();
         return;
       }
 
-      // Tool shortcut keys
+      // Quick Tools keys
       const key = e.key.toLowerCase();
       if (key === 'v') { this.tools.setTool('select'); this.setActiveToolUI('select'); }
       else if (key === 'p') { this.tools.setTool('pen'); this.setActiveToolUI('pen'); }
@@ -868,8 +1699,8 @@ class DZWhiteboardApp {
       else if (key === 'e') { this.tools.setTool('eraser'); this.setActiveToolUI('eraser'); }
       else if (key === 'r') { this.tools.setTool('shape', 'rect'); this.setActiveToolUI('shapes-menu'); }
       else if (key === 'o') { this.tools.setTool('shape', 'circle'); this.setActiveToolUI('shapes-menu'); }
-      else if (key === 'a') { this.tools.setTool('line', 'arrow'); this.setActiveToolUI('line'); }
-      else if (key === 'l') { this.tools.setTool('line', 'line'); this.setActiveToolUI('line'); }
+      else if (key === 'a') { this.tools.setTool('line', 'arrow'); this.setActiveToolUI('line-menu'); }
+      else if (key === 'l') { this.tools.setTool('line', 'line'); this.setActiveToolUI('line-menu'); }
       else if (key === 't') { this.tools.setTool('text'); this.setActiveToolUI('text'); }
       else if (key === 's') { this.tools.setTool('sticky'); this.setActiveToolUI('sticky-menu'); }
       else if (key === 'k') { this.tools.setTool('laser'); this.setActiveToolUI('laser'); }
@@ -883,218 +1714,49 @@ class DZWhiteboardApp {
     });
   }
 
-  // --- Seed Demo Elements (Classroom lesson layout) ---
-
-  seedDemoIfEmpty() {
-    const page = this.engine.activePage;
-    if (page.elements.length > 0) return;
-
-    page.background = 'grid';
-
-    // 1. Header Box
-    page.elements.push({
-      id: 'demo_header_box',
-      type: 'shape',
-      shapeType: 'rounded-rect',
-      x: 100,
-      y: 80,
-      width: 580,
-      height: 70,
-      strokeColor: '#0284c7',
-      fillColor: 'rgba(2, 132, 199, 0.08)',
-      strokeWidth: 2,
-      strokeStyle: 'solid'
-    });
-
-    // 2. Title Text
-    page.elements.push({
-      id: 'demo_title',
-      type: 'text',
-      x: 120,
-      y: 100,
-      text: 'الجمهورية الجزائرية الديمقراطية الشعبية — درس الرياضيات والفيزياء',
-      fontSize: 22,
-      color: '#0f172a',
-      isBold: true
-    });
-
-    // 3. Educational Flowchart Blocks
-    page.elements.push({
-      id: 'demo_rect_1',
-      type: 'shape',
-      shapeType: 'rounded-rect',
-      x: 120,
-      y: 200,
-      width: 180,
-      height: 90,
-      strokeColor: '#008744',
-      fillColor: 'rgba(0, 135, 68, 0.1)',
-      strokeWidth: 3,
-      strokeStyle: 'solid'
-    });
-    page.elements.push({
-      id: 'demo_txt_1',
-      type: 'text',
-      x: 145,
-      y: 232,
-      text: '1. المعطيات الأولية\nوالشروط الابتدائية',
-      fontSize: 16,
-      color: '#14532d',
-      isBold: true
-    });
-
-    // Arrow to next block
-    page.elements.push({
-      id: 'demo_arr_1',
-      type: 'line',
-      lineType: 'arrow',
-      x1: 300,
-      y1: 245,
-      x2: 390,
-      y2: 245,
-      strokeColor: '#0284c7',
-      strokeWidth: 4,
-      strokeStyle: 'solid'
-    });
-
-    // Block 2
-    page.elements.push({
-      id: 'demo_rect_2',
-      type: 'shape',
-      shapeType: 'rounded-rect',
-      x: 400,
-      y: 200,
-      width: 180,
-      height: 90,
-      strokeColor: '#0284c7',
-      fillColor: 'rgba(2, 132, 199, 0.1)',
-      strokeWidth: 3,
-      strokeStyle: 'solid'
-    });
-    page.elements.push({
-      id: 'demo_txt_2',
-      type: 'text',
-      x: 425,
-      y: 232,
-      text: '2. تطبيق القانون:\nE = m · c²',
-      fontSize: 16,
-      color: '#0369a1',
-      isBold: true
-    });
-
-    // Arrow to Result
-    page.elements.push({
-      id: 'demo_arr_2',
-      type: 'line',
-      lineType: 'arrow',
-      x1: 580,
-      y1: 245,
-      x2: 670,
-      y2: 245,
-      strokeColor: '#0284c7',
-      strokeWidth: 4,
-      strokeStyle: 'solid'
-    });
-
-    // Block 3 (Result Circle)
-    page.elements.push({
-      id: 'demo_circle',
-      type: 'shape',
-      shapeType: 'circle',
-      x: 680,
-      y: 190,
-      width: 110,
-      height: 110,
-      strokeColor: '#d93025',
-      fillColor: 'rgba(217, 48, 37, 0.1)',
-      strokeWidth: 3,
-      strokeStyle: 'solid'
-    });
-    page.elements.push({
-      id: 'demo_txt_3',
-      type: 'text',
-      x: 705,
-      y: 232,
-      text: 'النتيجة\nالنهائية',
-      fontSize: 16,
-      color: '#b91c1c',
-      isBold: true
-    });
-
-    // Sticky Note Note for students
-    page.elements.push({
-      id: 'demo_sticky',
-      type: 'sticky',
-      x: 120,
-      y: 350,
-      width: 200,
-      height: 140,
-      text: 'تنبيه للطلبة:\nتطبيق القوانين يتطلب تحويل كافة الوحدات إلى النظام الدولي (SI) قبل بدء الحساب.',
-      colorTheme: 'yellow'
-    });
-
-    // Pen formula note
-    page.elements.push({
-      id: 'demo_pen_note',
-      type: 'text',
-      x: 380,
-      y: 360,
-      text: 'v(t) = v₀ + a·t   |   x(t) = x₀ + v₀·t + ½a·t²',
-      fontSize: 20,
-      color: '#0f172a',
-      isBold: true
-    });
-
-    this.engine.fitToContent();
-  }
-
-  // --- UI Update & Theme / Language ---
-
-  updateZoomDisplay() {
-    if (this.dom.zoomLabel) {
-      this.dom.zoomLabel.textContent = `${Math.round(this.engine.zoom * 100)}%`;
-    }
-  }
-
-  updateUI() {
-    this.updateZoomDisplay();
-    const cur = this.engine.activePageIndex + 1;
-    const total = this.engine.pages.length;
-    if (this.dom.presenterPageText) {
-      this.dom.presenterPageText.textContent = `${cur} / ${total}`;
-    }
-  }
+  // --- Theme & Language ---
 
   applyTheme(theme) {
     this.currentTheme = theme;
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('dz_wb_theme', theme);
+    this.engine.render();
   }
 
   applyLanguage(lang) {
     this.currentLang = lang;
-    document.documentElement.setAttribute('lang', lang);
-    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-    document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
     localStorage.setItem('dz_wb_lang', lang);
+    const dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+    document.documentElement.setAttribute('lang', lang);
+
+    if (this.dom.langSelect) this.dom.langSelect.value = lang;
 
     const dict = I18N[lang] || I18N.ar;
     document.querySelectorAll('[data-i18n]').forEach((el) => {
-      const key = el.getAttribute('data-i18n');
-      if (dict[key]) {
-        if (el.tagName === 'INPUT' && el.placeholder) {
-          el.placeholder = dict[key];
-        } else {
-          el.textContent = dict[key];
-        }
-      }
+      const key = el.dataset.i18n;
+      if (dict[key]) el.textContent = dict[key];
     });
 
-    if (this.dom.langSelect) this.dom.langSelect.value = lang;
+    document.title = dict.appTitle || 'DZ-Whiteboard Pro';
+  }
+
+  updateZoomDisplay() {
+    if (this.dom.zoomLabel) {
+      this.dom.zoomLabel.textContent = Math.round(this.engine.zoom * 100) + '%';
+    }
+  }
+
+  updateUI() {
+    this.updateZoomDisplay();
+    if (this.dom.presenterPageText) {
+      this.dom.presenterPageText.textContent = `${this.engine.activePageIndex + 1} / ${this.engine.pages.length}`;
+    }
+    this.renderPagesList();
   }
 }
 
-// Bootstrap on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  window.dzWhiteboard = new DZWhiteboardApp();
+// Bootstrap application on DOM ready
+window.addEventListener('DOMContentLoaded', () => {
+  window.dzWhiteboardApp = new DZWhiteboardApp();
 });

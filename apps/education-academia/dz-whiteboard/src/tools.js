@@ -29,6 +29,15 @@ export class ToolsManager {
     this.isPanning = false;
     this.lastPanMouse = { x: 0, y: 0 };
 
+    // Geometric Tools interaction states
+    this.activeRulerAction = null; // 'drag', 'rotate'
+    this.rulerStartAngle = 0;
+    this.activeProtractorAction = null; // 'drag', 'rotate'
+    this.protractorStartAngle = 0;
+
+    // Internal clipboard for copy/paste
+    this.copiedElements = [];
+
     // Laser pointer animation loop
     this.laserAnimationId = null;
 
@@ -93,6 +102,35 @@ export class ToolsManager {
 
   // --- Pointer Down ---
 
+  snapToRulerEdge(world) {
+    if (!this.engine.ruler || !this.engine.ruler.active) return world;
+    const r = this.engine.ruler;
+    const halfL = r.length / 2;
+    const halfW = r.width / 2;
+
+    // Convert world to local ruler coordinates
+    const dx = world.x - r.x;
+    const dy = world.y - r.y;
+    const cos = Math.cos(-r.angle);
+    const sin = Math.sin(-r.angle);
+    const lx = dx * cos - dy * sin;
+    const ly = dx * sin + dy * cos;
+
+    // Check distance to top edge (y = -halfW)
+    if (Math.abs(ly - (-halfW)) <= 22 && lx >= -halfL - 25 && lx <= halfL + 25) {
+      const clampedX = Math.max(-halfL, Math.min(halfL, lx));
+      const nlx = clampedX;
+      const nly = -halfW;
+      const rcos = Math.cos(r.angle);
+      const rsin = Math.sin(r.angle);
+      return {
+        x: r.x + (nlx * rcos - nly * rsin),
+        y: r.y + (nlx * rsin + nly * rcos)
+      };
+    }
+    return world;
+  }
+
   handlePointerDown(e) {
     // If Space is pressed, treat as Pan
     if (e.spaceKey || e.button === 1 || this.activeTool === 'hand') {
@@ -105,7 +143,57 @@ export class ToolsManager {
     if (e.button !== 0) return; // Left click only
 
     this.isMouseDown = true;
-    const world = this.engine.screenToWorld(e.clientX, e.clientY);
+    let world = this.engine.screenToWorld(e.clientX, e.clientY);
+
+    // 1. Check interactive Ruler hit
+    if (this.engine.ruler && this.engine.ruler.active) {
+      const hit = this.engine.rulerHitTest(world.x, world.y);
+      if (hit === 'close') {
+        this.engine.ruler.active = false;
+        this.engine.render();
+        this.isMouseDown = false;
+        return;
+      } else if (hit === 'rotate') {
+        this.activeRulerAction = 'rotate';
+        this.rulerStartAngle = Math.atan2(world.y - this.engine.ruler.y, world.x - this.engine.ruler.x) - this.engine.ruler.angle;
+        return;
+      } else if (hit === 'drag') {
+        this.activeRulerAction = 'drag';
+        this.engine.ruler.dragOffset = {
+          x: world.x - this.engine.ruler.x,
+          y: world.y - this.engine.ruler.y
+        };
+        return;
+      }
+    }
+
+    // 2. Check interactive Protractor hit
+    if (this.engine.protractor && this.engine.protractor.active) {
+      const hit = this.engine.protractorHitTest(world.x, world.y);
+      if (hit === 'close') {
+        this.engine.protractor.active = false;
+        this.engine.render();
+        this.isMouseDown = false;
+        return;
+      } else if (hit === 'rotate') {
+        this.activeProtractorAction = 'rotate';
+        this.protractorStartAngle = Math.atan2(world.y - this.engine.protractor.y, world.x - this.engine.protractor.x) - this.engine.protractor.angle;
+        return;
+      } else if (hit === 'drag') {
+        this.activeProtractorAction = 'drag';
+        this.engine.protractor.dragOffset = {
+          x: world.x - this.engine.protractor.x,
+          y: world.y - this.engine.protractor.y
+        };
+        return;
+      }
+    }
+
+    // Grid snapping & Ruler edge snapping
+    if (this.engine.gridSnap && this.activeTool !== 'pen') {
+      world = this.engine.snapPoint(world.x, world.y);
+    }
+    world = this.snapToRulerEdge(world);
     this.startPoint = world;
 
     if (this.activeTool === 'select') {
@@ -233,7 +321,35 @@ export class ToolsManager {
       return;
     }
 
-    const world = this.engine.screenToWorld(e.clientX, e.clientY);
+    let world = this.engine.screenToWorld(e.clientX, e.clientY);
+
+    // Active Ruler Drag / Rotate
+    if (this.activeRulerAction === 'drag') {
+      this.engine.ruler.x = world.x - this.engine.ruler.dragOffset.x;
+      this.engine.ruler.y = world.y - this.engine.ruler.dragOffset.y;
+      this.engine.render();
+      return;
+    }
+    if (this.activeRulerAction === 'rotate') {
+      const curAngle = Math.atan2(world.y - this.engine.ruler.y, world.x - this.engine.ruler.x);
+      this.engine.ruler.angle = curAngle - this.rulerStartAngle;
+      this.engine.render();
+      return;
+    }
+
+    // Active Protractor Drag / Rotate
+    if (this.activeProtractorAction === 'drag') {
+      this.engine.protractor.x = world.x - this.engine.protractor.dragOffset.x;
+      this.engine.protractor.y = world.y - this.engine.protractor.dragOffset.y;
+      this.engine.render();
+      return;
+    }
+    if (this.activeProtractorAction === 'rotate') {
+      const curAngle = Math.atan2(world.y - this.engine.protractor.y, world.x - this.engine.protractor.x);
+      this.engine.protractor.angle = curAngle - this.protractorStartAngle;
+      this.engine.render();
+      return;
+    }
 
     if (this.activeTool === 'laser') {
       this.engine.addLaserPoint(world.x, world.y);
@@ -245,8 +361,12 @@ export class ToolsManager {
     if (this.activeTool === 'select' && this.draggedElement) {
       const el = this.draggedElement;
       const b = this.engine.getElementBounds(el);
-      const targetX = world.x - this.dragOffset.x;
-      const targetY = world.y - this.dragOffset.y;
+      let targetX = world.x - this.dragOffset.x;
+      let targetY = world.y - this.dragOffset.y;
+      if (this.engine.gridSnap) {
+        targetX = this.engine.snapCoord(targetX);
+        targetY = this.engine.snapCoord(targetY);
+      }
       const deltaX = targetX - b.x;
       const deltaY = targetY - b.y;
 
@@ -269,6 +389,7 @@ export class ToolsManager {
 
     if (this.activeTool === 'pen' || this.activeTool === 'highlighter') {
       if (this.currentDraftElement) {
+        world = this.snapToRulerEdge(world);
         this.currentDraftElement.points.push({ x: world.x, y: world.y });
         this.engine.render();
       }
@@ -281,6 +402,9 @@ export class ToolsManager {
     }
 
     if (this.activeTool === 'shape' && this.currentDraftElement) {
+      if (this.engine.gridSnap) {
+        world = this.engine.snapPoint(world.x, world.y);
+      }
       let w = world.x - this.startPoint.x;
       let h = world.y - this.startPoint.y;
 
@@ -301,6 +425,10 @@ export class ToolsManager {
     }
 
     if (this.activeTool === 'line' && this.currentDraftElement) {
+      world = this.snapToRulerEdge(world);
+      if (this.engine.gridSnap && (!this.engine.ruler || !this.engine.ruler.active)) {
+        world = this.engine.snapPoint(world.x, world.y);
+      }
       let x2 = world.x;
       let y2 = world.y;
 
@@ -326,6 +454,11 @@ export class ToolsManager {
   // --- Pointer Up ---
 
   handlePointerUp() {
+    if (this.activeRulerAction || this.activeProtractorAction) {
+      this.activeRulerAction = null;
+      this.activeProtractorAction = null;
+    }
+
     if (this.isPanning) {
       this.isPanning = false;
       this.updateCursor();
@@ -353,6 +486,98 @@ export class ToolsManager {
     }
 
     this.draggedElement = null;
+  }
+
+  // --- Selection Utilities (Duplicate, Reorder, Copy/Paste) ---
+
+  duplicateSelected() {
+    const selected = this.engine.activePage.elements.filter((el) => this.engine.selectedElementIds.has(el.id));
+    if (selected.length === 0) return;
+
+    const newIds = new Set();
+    selected.forEach((orig) => {
+      const copy = JSON.parse(JSON.stringify(orig));
+      copy.id = (copy.type || 'el') + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+      if (copy.type === 'pen') {
+        copy.points.forEach((p) => { p.x += 25; p.y += 25; });
+      } else if (copy.type === 'line') {
+        copy.x1 += 25; copy.y1 += 25;
+        copy.x2 += 25; copy.y2 += 25;
+      } else {
+        copy.x += 25;
+        copy.y += 25;
+      }
+      this.engine.activePage.elements.push(copy);
+      newIds.add(copy.id);
+    });
+
+    this.engine.selectedElementIds = newIds;
+    this.engine.render();
+    this.onSelectionChanged(Array.from(newIds));
+  }
+
+  copySelected() {
+    const selected = this.engine.activePage.elements.filter((el) => this.engine.selectedElementIds.has(el.id));
+    if (selected.length === 0) return;
+    this.copiedElements = JSON.parse(JSON.stringify(selected));
+  }
+
+  pasteSelected() {
+    if (!this.copiedElements || this.copiedElements.length === 0) return;
+    const newIds = new Set();
+    this.copiedElements.forEach((orig) => {
+      const copy = JSON.parse(JSON.stringify(orig));
+      copy.id = (copy.type || 'el') + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+      if (copy.type === 'pen') {
+        copy.points.forEach((p) => { p.x += 30; p.y += 30; });
+      } else if (copy.type === 'line') {
+        copy.x1 += 30; copy.y1 += 30;
+        copy.x2 += 30; copy.y2 += 30;
+      } else {
+        copy.x += 30;
+        copy.y += 30;
+      }
+      this.engine.activePage.elements.push(copy);
+      newIds.add(copy.id);
+    });
+    this.engine.selectedElementIds = newIds;
+    this.engine.render();
+    this.onSelectionChanged(Array.from(newIds));
+  }
+
+  bringForward() {
+    const elements = this.engine.activePage.elements;
+    const selected = elements.filter((el) => this.engine.selectedElementIds.has(el.id));
+    if (selected.length === 0) return;
+    selected.forEach((el) => {
+      const idx = elements.indexOf(el);
+      if (idx !== -1 && idx < elements.length - 1) {
+        elements.splice(idx, 1);
+        elements.push(el);
+      }
+    });
+    this.engine.render();
+  }
+
+  sendBackward() {
+    const elements = this.engine.activePage.elements;
+    const selected = elements.filter((el) => this.engine.selectedElementIds.has(el.id));
+    if (selected.length === 0) return;
+    selected.forEach((el) => {
+      const idx = elements.indexOf(el);
+      if (idx > 0) {
+        elements.splice(idx, 1);
+        elements.unshift(el);
+      }
+    });
+    this.engine.render();
+  }
+
+  selectAll() {
+    this.engine.selectedElementIds.clear();
+    this.engine.activePage.elements.forEach((el) => this.engine.selectedElementIds.add(el.id));
+    this.engine.render();
+    this.onSelectionChanged(Array.from(this.engine.selectedElementIds));
   }
 
   // --- Eraser Logic ---

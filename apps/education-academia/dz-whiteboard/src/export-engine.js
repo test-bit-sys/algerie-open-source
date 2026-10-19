@@ -127,14 +127,45 @@ export class ExportEngine {
           const p2 = `${el.x + el.width},${el.y + el.height}`;
           const p3 = `${el.x},${el.y + el.height}`;
           svgContent += `  <polygon points="${p1} ${p2} ${p3}" stroke="${stroke}" stroke-width="${sw}" fill="${fill}"${dash} />\n`;
+        } else if (el.shapeType === 'diamond') {
+          const p1 = `${el.x + el.width / 2},${el.y}`;
+          const p2 = `${el.x + el.width},${el.y + el.height / 2}`;
+          const p3 = `${el.x + el.width / 2},${el.y + el.height}`;
+          const p4 = `${el.x},${el.y + el.height / 2}`;
+          svgContent += `  <polygon points="${p1} ${p2} ${p3} ${p4}" stroke="${stroke}" stroke-width="${sw}" fill="${fill}"${dash} />\n`;
+        } else if (el.shapeType === 'hexagon') {
+          const cx = el.x + el.width / 2;
+          const cy = el.y + el.height / 2;
+          const rx = Math.abs(el.width / 2);
+          const ry = Math.abs(el.height / 2);
+          let pts = [];
+          for (let i = 0; i < 6; i++) {
+            const a = (Math.PI / 3) * i - Math.PI / 6;
+            pts.push(`${cx + rx * Math.cos(a)},${cy + ry * Math.sin(a)}`);
+          }
+          svgContent += `  <polygon points="${pts.join(' ')}" stroke="${stroke}" stroke-width="${sw}" fill="${fill}"${dash} />\n`;
+        } else {
+          svgContent += `  <rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" rx="8" stroke="${stroke}" stroke-width="${sw}" fill="${fill}"${dash} />\n`;
         }
       } else if (el.type === 'line') {
-        svgContent += `  <line x1="${el.x1}" y1="${el.y1}" x2="${el.x2}" y2="${el.y2}" stroke="${el.strokeColor || '#000000'}" stroke-width="${el.strokeWidth || 3}" stroke-linecap="round" />\n`;
+        if (el.lineType === 'elbow') {
+          const midX = (el.x1 + el.x2) / 2;
+          svgContent += `  <path d="M ${el.x1} ${el.y1} L ${midX} ${el.y1} L ${midX} ${el.y2} L ${el.x2} ${el.y2}" stroke="${el.strokeColor || '#000000'}" stroke-width="${el.strokeWidth || 3}" fill="none" stroke-linecap="round" />\n`;
+        } else {
+          svgContent += `  <line x1="${el.x1}" y1="${el.y1}" x2="${el.x2}" y2="${el.y2}" stroke="${el.strokeColor || '#000000'}" stroke-width="${el.strokeWidth || 3}" stroke-linecap="round" />\n`;
+        }
+      } else if (el.type === 'sticky') {
+        const themeBg = { yellow: '#fef08a', green: '#bbf7d0', cyan: '#a5f3fc', pink: '#fbcfe8', orange: '#fed7aa', purple: '#e9d5ff' }[el.colorTheme || 'yellow'] || '#fef08a';
+        svgContent += `  <rect x="${el.x}" y="${el.y}" width="${el.width}" height="${el.height}" rx="6" fill="${themeBg}" stroke="#e2e8f0" stroke-width="1" />\n`;
+        const lines = (el.text || '').split('\n');
+        lines.forEach((line, idx) => {
+          svgContent += `  <text x="${el.x + 10}" y="${el.y + 24 + idx * 18}" font-size="14" font-weight="bold" fill="#334155" font-family="system-ui, sans-serif">${line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</text>\n`;
+        });
       } else if (el.type === 'text') {
         const lines = (el.text || '').split('\n');
         const fs = el.fontSize || 20;
         lines.forEach((line, idx) => {
-          svgContent += `  <text x="${el.x}" y="${el.y + (idx + 1) * fs}" font-size="${fs}" fill="${el.color || '#000000'}" font-family="system-ui, sans-serif">${line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</text>\n`;
+          svgContent += `  <text x="${el.x}" y="${el.y + (idx + 1) * fs}" font-size="${fs}" font-weight="${el.isBold ? 'bold' : 'normal'}" fill="${el.color || '#000000'}" font-family="system-ui, sans-serif">${line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</text>\n`;
         });
       }
     });
