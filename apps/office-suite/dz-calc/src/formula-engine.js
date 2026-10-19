@@ -1,6 +1,7 @@
 /**
  * DZ-Calc — Spreadsheet Formula Engine
  * Evaluates Excel/Google Sheets compatible formulas and Algerian fiscal/financial functions.
+ * 100% offline-first, pure JavaScript.
  */
 
 // Algerian Arabic Tafqit dictionary & logic
@@ -122,6 +123,11 @@ export function calculateTimbreDz(amount) {
   return Math.min(10000, Math.max(5, raw));
 }
 
+export function calculateCnasDz(brut) {
+  const b = Number(brut) || 0;
+  return Math.round(b * 0.09 * 100) / 100;
+}
+
 export function calculateIrgDz(taxable) {
   const s = Number(taxable) || 0;
   if (s <= 30000) return 0;
@@ -132,6 +138,7 @@ export function calculateIrgDz(taxable) {
 
 // Cell coordinate helpers: "A1" -> { col: 0, row: 0 }
 export function parseCellAddress(addr) {
+  if (!addr || typeof addr !== 'string') return null;
   const m = addr.toUpperCase().match(/^([A-Z]+)([0-9]+)$/);
   if (!m) return null;
   const colStr = m[1];
@@ -160,6 +167,7 @@ export class FormulaEngine {
   }
 
   evaluate(formula) {
+    if (!formula || typeof formula !== 'string') return formula;
     if (!formula.startsWith('=')) return formula;
     const expr = formula.slice(1).trim();
 
@@ -172,14 +180,15 @@ export class FormulaEngine {
   }
 
   evaluateExpression(expr) {
-    const fnMatch = expr.match(/^([A-Z_]+)\s*\((.*)\)$/i);
+    // Nested functions handling
+    const fnMatch = expr.match(/^([A-Z_0-9]+)\s*\((.*)\)$/i);
     if (fnMatch) {
       const fnName = fnMatch[1].toUpperCase();
       const rawArgs = this.splitArgs(fnMatch[2]);
       return this.executeFunction(fnName, rawArgs);
     }
 
-    // Direct arithmetic expression: replace cell tokens with values
+    // Direct arithmetic / logical expression: replace cell tokens with values
     let sanitized = expr.replace(/[A-Z]+[0-9]+/gi, (token) => {
       const v = this.resolveValue(token);
       return typeof v === 'number' ? v : (parseFloat(v) || 0);
@@ -187,9 +196,12 @@ export class FormulaEngine {
 
     if (/^[0-9+\-*/().\s^%><=!&|]+$/.test(sanitized)) {
       sanitized = sanitized.replace(/\^/g, '**');
-      // eslint-disable-next-line no-eval
-      const res = Function(`"use strict"; return (${sanitized})`)();
-      return typeof res === 'number' ? (Math.round(res * 10000) / 10000) : res;
+      try {
+        const res = Function(`"use strict"; return (${sanitized})`)();
+        return typeof res === 'number' ? (Math.round(res * 10000) / 10000) : res;
+      } catch (e) {
+        return '#ERR!';
+      }
     }
 
     return expr;
@@ -236,6 +248,17 @@ export class FormulaEngine {
   }
 
   resolveValue(token) {
+    if (token == null) return '';
+    token = String(token).trim();
+
+    // Nested formula like =IF(...) or SUM(...)
+    if (token.startsWith('=')) {
+      return this.evaluate(token);
+    }
+    if (/^[A-Z_0-9]+\(.*\)$/i.test(token)) {
+      return this.evaluateExpression(token);
+    }
+
     if (token.includes(':')) {
       return this.expandRange(token).map(cell => this.resolveValue(cell));
     }
@@ -254,7 +277,7 @@ export class FormulaEngine {
   flattenNumericArgs(rawArgs) {
     const nums = [];
     for (const arg of rawArgs) {
-      if (arg.includes(':')) {
+      if (typeof arg === 'string' && arg.includes(':')) {
         const expanded = this.expandRange(arg);
         for (const cell of expanded) {
           const v = this.resolveValue(cell);
@@ -273,7 +296,9 @@ export class FormulaEngine {
 
   executeFunction(name, rawArgs) {
     switch (name) {
-      case 'SUM': {
+      // 1. Math & Statistics
+      case 'SUM':
+      case 'SOMME': {
         const nums = this.flattenNumericArgs(rawArgs);
         return nums.reduce((a, b) => a + b, 0);
       }
@@ -295,12 +320,67 @@ export class FormulaEngine {
         const nums = this.flattenNumericArgs(rawArgs);
         return nums.length;
       }
+      case 'COUNTA':
+      case 'NBVAL': {
+        let count = 0;
+        for (const arg of rawArgs) {
+          if (typeof arg === 'string' && arg.includes(':')) {
+            const cells = this.expandRange(arg);
+            for (const c of cells) {
+              const v = this.resolveValue(c);
+              if (v !== '' && v != null) count++;
+            }
+          } else {
+            const v = this.resolveValue(arg);
+            if (v !== '' && v != null) count++;
+          }
+        }
+        return count;
+      }
+      case 'COUNTIF':
+      case 'NB.SI': {
+        const range = typeof rawArgs[0] === 'string' && rawArgs[0].includes(':') ? this.expandRange(rawArgs[0]) : [rawArgs[0]];
+        const target = this.resolveValue(rawArgs[1]);
+        let count = 0;
+        for (const cell of range) {
+          const v = this.resolveValue(cell);
+          if (String(v) === String(target)) count++;
+        }
+        return count;
+      }
+      case 'SUMIF':
+      case 'SOMME.SI': {
+        const range = typeof rawArgs[0] === 'string' && rawArgs[0].includes(':') ? this.expandRange(rawArgs[0]) : [rawArgs[0]];
+        const target = this.resolveValue(rawArgs[1]);
+        const sumRange = rawArgs[2] ? (rawArgs[2].includes(':') ? this.expandRange(rawArgs[2]) : [rawArgs[2]]) : range;
+        let sum = 0;
+        for (let i = 0; i < range.length; i++) {
+          const v = this.resolveValue(range[i]);
+          if (String(v) === String(target)) {
+            const num = Number(this.resolveValue(sumRange[i])) || 0;
+            sum += num;
+          }
+        }
+        return sum;
+      }
       case 'ROUND':
       case 'ARRONDI': {
         const val = Number(this.resolveValue(rawArgs[0])) || 0;
         const dec = Number(this.resolveValue(rawArgs[1])) || 0;
         const factor = Math.pow(10, dec);
         return Math.round(val * factor) / factor;
+      }
+      case 'ROUNDUP': {
+        const val = Number(this.resolveValue(rawArgs[0])) || 0;
+        const dec = Number(this.resolveValue(rawArgs[1])) || 0;
+        const factor = Math.pow(10, dec);
+        return Math.ceil(val * factor) / factor;
+      }
+      case 'ROUNDDOWN': {
+        const val = Number(this.resolveValue(rawArgs[0])) || 0;
+        const dec = Number(this.resolveValue(rawArgs[1])) || 0;
+        const factor = Math.pow(10, dec);
+        return Math.floor(val * factor) / factor;
       }
       case 'ABS': {
         return Math.abs(Number(this.resolveValue(rawArgs[0])) || 0);
@@ -309,6 +389,22 @@ export class FormulaEngine {
       case 'RACINE': {
         return Math.sqrt(Number(this.resolveValue(rawArgs[0])) || 0);
       }
+      case 'POWER':
+      case 'PUISSANCE': {
+        const b = Number(this.resolveValue(rawArgs[0])) || 0;
+        const p = Number(this.resolveValue(rawArgs[1])) || 0;
+        return Math.pow(b, p);
+      }
+      case 'MOD': {
+        const n = Number(this.resolveValue(rawArgs[0])) || 0;
+        const d = Number(this.resolveValue(rawArgs[1])) || 1;
+        return n % d;
+      }
+      case 'INT': {
+        return Math.floor(Number(this.resolveValue(rawArgs[0])) || 0);
+      }
+
+      // 2. Logic
       case 'IF':
       case 'SI': {
         const cond = this.resolveValue(rawArgs[0]);
@@ -316,7 +412,86 @@ export class FormulaEngine {
         const valFalse = rawArgs[2] != null ? this.resolveValue(rawArgs[2]) : '';
         return cond ? valTrue : valFalse;
       }
-      // Algerian Fiscal Functions
+      case 'AND':
+      case 'ET': {
+        return rawArgs.every(a => Boolean(this.resolveValue(a)));
+      }
+      case 'OR':
+      case 'OU': {
+        return rawArgs.some(a => Boolean(this.resolveValue(a)));
+      }
+      case 'NOT':
+      case 'NON': {
+        return !Boolean(this.resolveValue(rawArgs[0]));
+      }
+      case 'IFERROR':
+      case 'SIERREUR': {
+        try {
+          const res = this.resolveValue(rawArgs[0]);
+          return (res === '#VALUE!' || res === '#ERR!' || res === '#NAME?') ? this.resolveValue(rawArgs[1]) : res;
+        } catch (e) {
+          return this.resolveValue(rawArgs[1]);
+        }
+      }
+
+      // 3. Text
+      case 'CONCAT':
+      case 'CONCATENATE': {
+        return rawArgs.map(a => this.resolveValue(a)).join('');
+      }
+      case 'UPPER':
+      case 'MAJUSCULE': {
+        return String(this.resolveValue(rawArgs[0])).toUpperCase();
+      }
+      case 'LOWER':
+      case 'MINUSCULE': {
+        return String(this.resolveValue(rawArgs[0])).toLowerCase();
+      }
+      case 'TRIM':
+      case 'SUPPRESPACE': {
+        return String(this.resolveValue(rawArgs[0])).trim();
+      }
+      case 'LEN':
+      case 'NBCAR': {
+        return String(this.resolveValue(rawArgs[0])).length;
+      }
+      case 'LEFT':
+      case 'GAUCHE': {
+        const str = String(this.resolveValue(rawArgs[0]));
+        const count = Number(this.resolveValue(rawArgs[1])) || 1;
+        return str.substring(0, count);
+      }
+      case 'RIGHT':
+      case 'DROITE': {
+        const str = String(this.resolveValue(rawArgs[0]));
+        const count = Number(this.resolveValue(rawArgs[1])) || 1;
+        return str.substring(str.length - count);
+      }
+      case 'MID':
+      case 'STXT': {
+        const str = String(this.resolveValue(rawArgs[0]));
+        const start = (Number(this.resolveValue(rawArgs[1])) || 1) - 1;
+        const len = Number(this.resolveValue(rawArgs[2])) || str.length;
+        return str.substring(start, start + len);
+      }
+
+      // 4. Date & Time
+      case 'TODAY':
+      case 'AUJOURDHUI': {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+      case 'NOW':
+      case 'MAINTENANT': {
+        return new Date().toLocaleString('ar-DZ');
+      }
+      case 'YEAR':
+      case 'ANNEE': {
+        const d = new Date(this.resolveValue(rawArgs[0]));
+        return isNaN(d) ? new Date().getFullYear() : d.getFullYear();
+      }
+
+      // 5. Algerian Sovereign & Fiscal Functions
       case 'TAFQIT_AR':
       case 'تفقيط': {
         const val = this.resolveValue(rawArgs[0]);
@@ -340,12 +515,33 @@ export class FormulaEngine {
         const val = this.resolveValue(rawArgs[0]);
         return calculateTimbreDz(val);
       }
+      case 'CNAS_DZ': {
+        const val = this.resolveValue(rawArgs[0]);
+        return calculateCnasDz(val);
+      }
       case 'IRG_DZ': {
         const val = this.resolveValue(rawArgs[0]);
         return calculateIrgDz(val);
       }
+      case 'SALAIRE_NET_DZ': {
+        const brut = Number(this.resolveValue(rawArgs[0])) || 0;
+        const prime = Number(this.resolveValue(rawArgs[1])) || 0;
+        const cnas = calculateCnasDz(brut);
+        const taxable = (brut + prime) - cnas;
+        const irg = calculateIrgDz(taxable);
+        return Math.round((taxable - irg) * 100) / 100;
+      }
+
       default:
         return `#NAME? (${name})`;
     }
   }
+}
+
+if (typeof window !== 'undefined') {
+  window.FormulaEngine = FormulaEngine;
+  window.tafqitArabic = tafqitArabic;
+  window.tafqitFrench = tafqitFrench;
+  window.parseCellAddress = parseCellAddress;
+  window.colToLetter = colToLetter;
 }
