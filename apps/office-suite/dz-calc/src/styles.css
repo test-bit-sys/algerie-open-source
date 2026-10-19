@@ -1373,3 +1373,91 @@ body {
 .btn-dialog.secondary:hover {
   background: #f1f5f9;
 }
+
+/* ==========================================================================
+   Language Switcher & Multi-Lingual Layouts (AR / FR / EN)
+   ========================================================================== */
+.lang-switch-pill {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 14px;
+  padding: 2px 3px;
+  gap: 2px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lang-btn.active {
+  background: #ffffff;
+  color: var(--excel-green);
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* LTR Multi-Lingual Direction Overrides (French / English) */
+html[dir="ltr"] .grid-corner-cell {
+  left: 0;
+  right: auto;
+  border-right: 1px solid var(--grid-border);
+  border-left: none;
+}
+
+html[dir="ltr"] .grid-corner-cell::after {
+  right: 3px;
+  left: auto;
+  border-width: 0 6px 6px 0;
+  border-color: transparent transparent #94a3b8 transparent;
+}
+
+html[dir="ltr"] .row-header-cell {
+  left: 0;
+  right: auto;
+  border-right: 1px solid var(--grid-border);
+  border-left: none;
+}
+
+html[dir="ltr"] .col-resizer {
+  right: -3px;
+  left: auto;
+}
+
+html[dir="ltr"] .autofill-handle {
+  right: -4px;
+  left: auto;
+}
+
+html[dir="ltr"] .backstage-sidebar {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: none;
+}
+
+html[dir="ltr"] .ribbon-group {
+  border-right: 1px solid var(--ribbon-divider);
+  border-left: none;
+  padding-right: 8px;
+  padding-left: 0;
+  margin-right: 2px;
+  margin-left: 0;
+}
+
+html[dir="ltr"] .tab-btn.tab-file {
+  margin-right: 6px;
+  margin-left: 0;
+}
+

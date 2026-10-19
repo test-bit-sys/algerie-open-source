@@ -5,6 +5,7 @@
 
 import { FormulaEngine, parseCellAddress, colToLetter, tafqitArabic, tafqitFrench } from './formula-engine.js';
 import { SPREADSHEET_TEMPLATES } from './templates.js';
+import { I18N } from './i18n.js';
 
 export class DZCalcApp {
   constructor() {
@@ -23,6 +24,7 @@ export class DZCalcApp {
     this.history = [];
     this.historyIndex = -1;
     this.isAutoSaveOn = true;
+    this.currentLang = localStorage.getItem('dz_calc_lang') || 'ar';
 
     // Multi-sheet Workbook Structure
     this.workbook = {
@@ -62,12 +64,90 @@ export class DZCalcApp {
     this.setupTemplatesGallery();
     this.loadDefaultTemplate();
     this.selectCell('A1');
-    this.updateStatusMetrics();
+    this.setLanguage(this.currentLang);
 
     // Auto-expose on window for inline handlers & testing
     if (typeof window !== 'undefined') {
       window.dzCalcApp = this;
     }
+  }
+
+  // ==========================================================================
+  // MULTI-LINGUAL LOCALIZATION ENGINE (AR / FR / EN)
+  // ==========================================================================
+  setLanguage(lang) {
+    if (!I18N[lang]) return;
+    this.currentLang = lang;
+    localStorage.setItem('dz_calc_lang', lang);
+    const dict = I18N[lang];
+
+    // Document Direction & Lang
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('dir', dict.dir);
+
+    // Active button in pill
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    // Translate DOM nodes with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (dict[key]) {
+        el.textContent = dict[key];
+      }
+    });
+
+    // Translate DOM nodes with data-i18n-title
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+      const key = el.dataset.i18nTitle;
+      if (dict[key]) {
+        el.title = dict[key];
+      }
+    });
+
+    // Translate DOM nodes with data-i18n-placeholder
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.dataset.i18nPlaceholder;
+      if (dict[key]) {
+        el.placeholder = dict[key];
+      }
+    });
+
+    // Update AutoSave status label
+    const autoSaveLabel = document.getElementById('autoSaveLabel');
+    if (autoSaveLabel) {
+      autoSaveLabel.textContent = this.isAutoSaveOn ? dict.autoSaveOn : dict.autoSaveOff;
+    }
+
+    // Update Transform origin of zoom based on dir
+    const table = document.getElementById('sheetTable');
+    if (table) {
+      table.style.transformOrigin = dict.dir === 'rtl' ? 'top right' : 'top left';
+    }
+
+    // Update corner cell title
+    const cornerCell = document.querySelector('.grid-corner-cell');
+    if (cornerCell) {
+      cornerCell.title = lang === 'fr' ? 'Sélectionner tout (Ctrl+A)' :
+                         lang === 'en' ? 'Select All (Ctrl+A)' :
+                         'تحديد كافة الخلايا (Ctrl+A)';
+    }
+
+    // Re-render templates gallery so names are in current language
+    this.setupTemplatesGallery();
+
+    // Re-render status metrics
+    this.updateStatusMetrics();
+
+    // Re-render selection highlights to reposition handles properly
+    this.renderSelectionHighlights();
+  }
+
+  getLocale() {
+    if (this.currentLang === 'fr') return 'fr-FR';
+    if (this.currentLang === 'en') return 'en-US';
+    return 'ar-DZ';
   }
 
   // ==========================================================================
@@ -87,7 +167,9 @@ export class DZCalcApp {
     // Corner Cell
     const cornerTh = document.createElement('th');
     cornerTh.className = 'grid-corner-cell';
-    cornerTh.title = 'تحديد كافة الخلايا (Ctrl+A)';
+    cornerTh.title = this.currentLang === 'fr' ? 'Sélectionner tout (Ctrl+A)' :
+                     this.currentLang === 'en' ? 'Select All (Ctrl+A)' :
+                     'تحديد كافة الخلايا (Ctrl+A)';
     cornerTh.addEventListener('click', () => this.selectAllCells());
     headerRow.appendChild(cornerTh);
 
@@ -943,6 +1025,35 @@ export class DZCalcApp {
     document.getElementById('btnAboutDialog')?.addEventListener('click', () => {
       document.getElementById('modalAbout')?.classList.add('active');
     });
+
+    // Language Switcher Buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        if (lang) {
+          this.setLanguage(lang);
+        }
+      });
+    });
+
+    // Add Sheet Button
+    document.getElementById('btnAddSheet')?.addEventListener('click', () => {
+      this.addNewSheet();
+    });
+
+    // Tell Me / Search input Enter key
+    const searchTellMe = document.getElementById('titleSearchInput') || document.getElementById('searchTellMeInput');
+    searchTellMe?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const val = searchTellMe.value.trim();
+        if (val) {
+          const findInput = document.getElementById('findTextInput');
+          if (findInput) findInput.value = val;
+          this.openFindReplaceModal();
+          this.findNext();
+        }
+      }
+    });
   }
 
   // ==========================================================================
@@ -1278,16 +1389,13 @@ export class DZCalcApp {
 
       container.appendChild(tab);
     });
-
-    document.getElementById('btnAddSheet')?.addEventListener('click', () => {
-      this.addNewSheet();
-    });
   }
 
   addNewSheet(customName = null) {
     const nextIdx = Object.keys(this.workbook.sheets).length + 1;
     const newId = `sheet_${Date.now()}`;
-    const name = customName || `ورقة ${nextIdx}`;
+    const dict = I18N[this.currentLang] || I18N.ar;
+    const name = customName || `${dict.sheetTabDefault} ${nextIdx}`;
 
     this.workbook.sheets[newId] = {
       id: newId,
@@ -1338,11 +1446,12 @@ export class DZCalcApp {
     const finalMin = min !== Infinity ? min : 0;
     const finalMax = max !== -Infinity ? max : 0;
 
-    document.getElementById('metricAvg').textContent = avg.toLocaleString('ar-DZ');
+    const loc = this.getLocale();
+    document.getElementById('metricAvg').textContent = avg.toLocaleString(loc);
     document.getElementById('metricCount').textContent = count;
-    document.getElementById('metricMin').textContent = finalMin.toLocaleString('ar-DZ');
-    document.getElementById('metricMax').textContent = finalMax.toLocaleString('ar-DZ');
-    document.getElementById('metricSum').textContent = sum.toLocaleString('ar-DZ');
+    document.getElementById('metricMin').textContent = finalMin.toLocaleString(loc);
+    document.getElementById('metricMax').textContent = finalMax.toLocaleString(loc);
+    document.getElementById('metricSum').textContent = sum.toLocaleString(loc);
   }
 
   setZoom(lvl) {
@@ -1355,7 +1464,8 @@ export class DZCalcApp {
     const table = document.getElementById('sheetTable');
     if (table) {
       table.style.transform = `scale(${this.zoomLevel / 100})`;
-      table.style.transformOrigin = 'top right';
+      const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+      table.style.transformOrigin = isRtl ? 'top right' : 'top left';
     }
   }
 
@@ -1364,6 +1474,10 @@ export class DZCalcApp {
     const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
     const nextDir = isRtl ? 'ltr' : 'rtl';
     document.documentElement.setAttribute('dir', nextDir);
+    if (table) {
+      table.style.transformOrigin = nextDir === 'rtl' ? 'top right' : 'top left';
+    }
+    this.renderSelectionHighlights();
   }
 
   // ==========================================================================
@@ -1437,10 +1551,14 @@ export class DZCalcApp {
     SPREADSHEET_TEMPLATES.forEach(tmpl => {
       const card = document.createElement('div');
       card.className = 'template-card';
+      const name = this.currentLang === 'fr' ? (tmpl.nameFr || tmpl.nameAr) :
+                   this.currentLang === 'en' ? (tmpl.nameEn || tmpl.nameAr) :
+                   tmpl.nameAr;
+      const subName = this.currentLang === 'ar' ? (tmpl.nameFr || '') : (tmpl.nameAr || '');
       card.innerHTML = `
         <div>
-          <h4>${tmpl.nameAr}</h4>
-          <p>${tmpl.nameFr || ''}</p>
+          <h4>${name}</h4>
+          <p>${subName}</p>
         </div>
         <span class="template-category-tag">${tmpl.category}</span>
       `;
@@ -1461,9 +1579,12 @@ export class DZCalcApp {
   }
 
   loadTemplate(tmpl) {
-    this.workbook.title = tmpl.nameAr;
-    document.getElementById('workbookTitleInput').value = tmpl.nameAr;
-    document.title = `${tmpl.nameAr} — Excel`;
+    const title = this.currentLang === 'fr' ? (tmpl.nameFr || tmpl.nameAr) :
+                  this.currentLang === 'en' ? (tmpl.nameEn || tmpl.nameAr) :
+                  tmpl.nameAr;
+    this.workbook.title = title;
+    document.getElementById('workbookTitleInput').value = title;
+    document.title = `${title} — Excel`;
 
     const sheet = this.getCurrentSheet();
     sheet.cells = JSON.parse(JSON.stringify(tmpl.data));
@@ -1474,13 +1595,15 @@ export class DZCalcApp {
   }
 
   newBlankWorkbook() {
+    const dict = I18N[this.currentLang] || I18N.ar;
+    const title = `${dict.appTitle}`;
     this.workbook = {
-      title: 'مصنف جديد 1 — Excel',
+      title: title,
       activeSheetId: 'sheet1',
       sheets: {
         'sheet1': {
           id: 'sheet1',
-          name: 'ورقة 1',
+          name: `${dict.sheetTabDefault} 1`,
           cells: {},
           colWidths: {},
           rowHeights: {}
@@ -1488,6 +1611,7 @@ export class DZCalcApp {
       }
     };
     document.getElementById('workbookTitleInput').value = this.workbook.title;
+    document.title = `${this.workbook.title} — Excel`;
     this.renderSheetTabs();
     this.buildGridDOM();
     this.selectCell('A1');
@@ -1762,22 +1886,24 @@ export class DZCalcApp {
     if (!list) return;
     list.innerHTML = '';
 
+    const isFr = this.currentLang === 'fr';
+    const isEn = this.currentLang === 'en';
     const functions = [
-      { name: 'SUM', desc: 'حساب مجموع نطاق من الخلايا', syntax: '=SUM(number1, [number2], ...)' },
-      { name: 'AVERAGE', desc: 'حساب المتوسط الحسابي للقيم المحددة', syntax: '=AVERAGE(number1, [number2], ...)' },
-      { name: 'COUNT', desc: 'حساب عدد الخلايا التي تحتوي على أرقام', syntax: '=COUNT(value1, [value2], ...)' },
-      { name: 'MIN', desc: 'إرجاع القيمة الصغرى من بين القيم', syntax: '=MIN(number1, [number2], ...)' },
-      { name: 'MAX', desc: 'إرجاع القيمة الكبرى من بين القيم', syntax: '=MAX(number1, [number2], ...)' },
-      { name: 'IF', desc: 'إرجاع قيمة معينة عند تحقق شرط منطقي', syntax: '=IF(condition, value_if_true, value_if_false)' },
-      { name: 'ROUND', desc: 'تقريب رقم إلى عدد محدد من المنازل العشرية', syntax: '=ROUND(number, num_digits)' },
-      { name: 'TAFQIT_AR', desc: 'التفقيط المالي بالدينار الجزائري والسنتيم', syntax: '=TAFQIT_AR(amount)' },
-      { name: 'TAFQIT_FR', desc: 'Tafqit financier en dinars algériens et centimes', syntax: '=TAFQIT_FR(amount)' },
-      { name: 'TVA_DZ', desc: 'حساب الرسم على القيمة المضافة وفق القانون الجزائري (19% أو 9%)', syntax: '=TVA_DZ(ht, rate)' },
-      { name: 'TTC_DZ', desc: 'حساب المبلغ الإجمالي المتضمن كافة الرسوم (HT + TVA)', syntax: '=TTC_DZ(ht, rate)' },
-      { name: 'TIMBRE_DZ', desc: 'حساب قسيمة الطابع الجبائي وفق قانون المالية الجزائري', syntax: '=TIMBRE_DZ(amount)' },
-      { name: 'IRG_DZ', desc: 'الضريبة على الدخل الإجمالي وفق الجدول الضريبي الجزائري 2024/2026', syntax: '=IRG_DZ(taxable)' },
-      { name: 'CNAS_DZ', desc: 'حساب اقتطاع اشتراك الضمان الاجتماعي (9%) من الراتب الخام', syntax: '=CNAS_DZ(brut)' },
-      { name: 'SALAIRE_NET_DZ', desc: 'حساب صافي الراتب الجزائري القابل للدفع مباشرة', syntax: '=SALAIRE_NET_DZ(brut, prime)' }
+      { name: 'SUM', desc: isFr ? 'Calcule la somme des cellules' : isEn ? 'Calculates the sum of cells' : 'حساب مجموع نطاق من الخلايا', syntax: '=SUM(number1, [number2], ...)' },
+      { name: 'AVERAGE', desc: isFr ? 'Calcule la moyenne arithmétique' : isEn ? 'Calculates arithmetic average' : 'حساب المتوسط الحسابي للقيم المحددة', syntax: '=AVERAGE(number1, [number2], ...)' },
+      { name: 'COUNT', desc: isFr ? 'Compte le nombre de cellules contenant des nombres' : isEn ? 'Counts the number of cells with numbers' : 'حساب عدد الخلايا التي تحتوي على أرقام', syntax: '=COUNT(value1, [value2], ...)' },
+      { name: 'MIN', desc: isFr ? 'Renvoie la valeur minimale' : isEn ? 'Returns the minimum value' : 'إرجاع القيمة الصغرى من بين القيم', syntax: '=MIN(number1, [number2], ...)' },
+      { name: 'MAX', desc: isFr ? 'Renvoie la valeur maximale' : isEn ? 'Returns the maximum value' : 'إرجاع القيمة الكبرى من بين القيم', syntax: '=MAX(number1, [number2], ...)' },
+      { name: 'IF', desc: isFr ? 'Renvoie une valeur selon une condition logique' : isEn ? 'Returns value based on logical condition' : 'إرجاع قيمة معينة عند تحقق شرط منطقي', syntax: '=IF(condition, value_if_true, value_if_false)' },
+      { name: 'ROUND', desc: isFr ? 'Arrondit un nombre au nombre de chiffres spécifié' : isEn ? 'Rounds a number to specified digits' : 'تقريب رقم إلى عدد محدد من المنازل العشرية', syntax: '=ROUND(number, num_digits)' },
+      { name: 'TAFQIT_AR', desc: isFr ? 'Conversion en lettres en Dinars Algériens (Arabe)' : isEn ? 'Number to Arabic words in Algerian Dinars' : 'التفقيط المالي بالدينار الجزائري والسنتيم', syntax: '=TAFQIT_AR(amount)' },
+      { name: 'TAFQIT_FR', desc: isFr ? 'Conversion en lettres en Dinars Algériens (Français)' : isEn ? 'Number to French words in Algerian Dinars' : 'Tafqit financier en dinars algériens et centimes', syntax: '=TAFQIT_FR(amount)' },
+      { name: 'TVA_DZ', desc: isFr ? 'Calcul de la TVA selon la législation algérienne (19% ou 9%)' : isEn ? 'Calculates Algerian VAT (19% or 9%)' : 'حساب الرسم على القيمة المضافة وفق القانون الجزائري (19% أو 9%)', syntax: '=TVA_DZ(ht, rate)' },
+      { name: 'TTC_DZ', desc: isFr ? 'Calcul du montant Toutes Taxes Comprises (HT + TVA)' : isEn ? 'Calculates Total Including Taxes (HT + TVA)' : 'حساب المبلغ الإجمالي المتضمن كافة الرسوم (HT + TVA)', syntax: '=TTC_DZ(ht, rate)' },
+      { name: 'TIMBRE_DZ', desc: isFr ? 'Calcul du droit de timbre selon le code des impôts' : isEn ? 'Calculates Algerian fiscal stamp duty' : 'حساب قسيمة الطابع الجبائي وفق قانون المالية الجزائري', syntax: '=TIMBRE_DZ(amount)' },
+      { name: 'IRG_DZ', desc: isFr ? 'Barème IRG Salaires selon la loi de finances algérienne' : isEn ? 'Algerian Income Tax on Wages (IRG Schedule)' : 'الضريبة على الدخل الإجمالي وفق الجدول الضريبي الجزائري 2024/2026', syntax: '=IRG_DZ(taxable)' },
+      { name: 'CNAS_DZ', desc: isFr ? 'Cotisation Sécurité Sociale CNAS (9% du salaire brut)' : isEn ? 'Algerian Social Security CNAS deduction (9%)' : 'حساب اقتطاع اشتراك الضمان الاجتماعي (9%) من الراتب الخام', syntax: '=CNAS_DZ(brut)' },
+      { name: 'SALAIRE_NET_DZ', desc: isFr ? 'Calcul du salaire net à payer en Algérie' : isEn ? 'Calculates Algerian Net Payable Salary' : 'حساب صافي الراتب الجزائري القابل للدفع مباشرة', syntax: '=SALAIRE_NET_DZ(brut, prime)' }
     ];
 
     functions.forEach(fn => {

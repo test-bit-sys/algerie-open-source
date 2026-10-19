@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مصنف 1 — Excel (جداول الجزائر)</title>
+  <title data-i18n="appTitle">مصنف 1 — Excel (جداول الجزائر)</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,16 +26,16 @@
 
       <!-- Quick Access Toolbar -->
       <div class="quick-access-tools">
-        <button class="qa-btn" id="qaSaveBtn" title="حفظ المصنف كـ Excel (Ctrl+S)">
+        <button class="qa-btn" id="qaSaveBtn" data-i18n-title="save" title="حفظ المصنف كـ Excel (Ctrl+S)">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
         </button>
-        <button class="qa-btn" id="qaUndoBtn" title="تراجع (Ctrl+Z)">
+        <button class="qa-btn" id="qaUndoBtn" data-i18n-title="undo" title="تراجع (Ctrl+Z)">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
         </button>
-        <button class="qa-btn" id="qaRedoBtn" title="إعادة (Ctrl+Y)">
+        <button class="qa-btn" id="qaRedoBtn" data-i18n-title="redo" title="إعادة (Ctrl+Y)">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
         </button>
-        <button class="qa-btn" id="qaPrintBtn" title="طباعة فورية / PDF (Ctrl+P)">
+        <button class="qa-btn" id="qaPrintBtn" data-i18n-title="print" title="طباعة فورية / PDF (Ctrl+P)">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
         </button>
       </div>
@@ -43,7 +43,7 @@
       <!-- AutoSave Switch -->
       <div class="autosave-pill" id="autoSaveTogglePill" title="تبديل الحفظ التلقائي">
         <div class="autosave-toggle"></div>
-        <span id="autoSaveLabel">الحفظ التلقائي: تشغيل</span>
+        <span id="autoSaveLabel" data-i18n="autoSaveOn">الحفظ التلقائي: تشغيل</span>
       </div>
     </div>
 
@@ -51,25 +51,32 @@
     <div class="titlebar-center">
       <div class="doc-name-container">
         <input type="text" id="workbookTitleInput" class="doc-name-input" value="كشف الأجور والرواتب الجزائري (Fiche de Paie)" title="انقر لتعديل اسم المصنف">
-        <span class="doc-saved-status">• تم الحفظ محلياً</span>
+        <span class="doc-saved-status" data-i18n="savedLocally">• تم الحفظ محلياً</span>
       </div>
 
-      <div class="excel-search-box" title="البحث في المصنف والأدوات (Alt+Q)">
+      <div class="excel-search-box" data-i18n-title="searchPlaceholder" title="البحث في المصنف والأدوات (Alt+Q)">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" id="titleSearchInput" placeholder="أخبرني بما تريد القيام به (Alt+Q)">
+        <input type="text" id="titleSearchInput" data-i18n-placeholder="searchPlaceholder" placeholder="أخبرني بما تريد القيام به (Alt+Q)">
       </div>
     </div>
 
     <!-- Right Controls -->
     <div class="titlebar-right">
-      <div class="sovereignty-badge" title="منظومة جزائرية 100% مفتوحة المصدر">
-        <span>🇩🇿 كاتب الجزائر — Excel</span>
+      <!-- Language Switcher Pill -->
+      <div class="lang-switch-pill" id="langSwitchPill" title="تغيير لغة الواجهة / Changer de langue / Switch Language">
+        <button class="lang-btn active" data-lang="ar">عربي</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <div class="sovereignty-badge" data-i18n="sovereignty" title="منظومة جزائرية 100% مفتوحة المصدر">
+        <span>🇩🇿 جداول الجزائر — Excel</span>
       </div>
 
       <div class="window-controls">
-        <button class="win-btn" title="تصغير"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-        <button class="win-btn" title="استعادة"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg></button>
-        <button class="win-btn close" title="إغلاق"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <button class="win-btn" data-i18n-title="minimize" title="تصغير"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        <button class="win-btn" data-i18n-title="restore" title="استعادة"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg></button>
+        <button class="win-btn close" data-i18n-title="close" title="إغلاق"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
     </div>
   </header>
@@ -80,15 +87,15 @@
   <nav class="excel-ribbon">
     <!-- Ribbon Tabs Header -->
     <div class="ribbon-tabs">
-      <button class="tab-btn tab-file" data-tab="file">ملف</button>
-      <button class="tab-btn active" data-tab="home">الشريط الرئيسي</button>
-      <button class="tab-btn" data-tab="insert">إدراج</button>
-      <button class="tab-btn" data-tab="layout">تخطيط الصفحة</button>
-      <button class="tab-btn" data-tab="formulas">صيغ</button>
-      <button class="tab-btn" data-tab="data">بيانات</button>
-      <button class="tab-btn" data-tab="review">مراجعة</button>
-      <button class="tab-btn" data-tab="view">عرض</button>
-      <button class="tab-btn" data-tab="help">تعليمات</button>
+      <button class="tab-btn tab-file" data-tab="file" data-i18n="tabFile">ملف</button>
+      <button class="tab-btn active" data-tab="home" data-i18n="tabHome">الشريط الرئيسي</button>
+      <button class="tab-btn" data-tab="insert" data-i18n="tabInsert">إدراج</button>
+      <button class="tab-btn" data-tab="layout" data-i18n="tabLayout">تخطيط الصفحة</button>
+      <button class="tab-btn" data-tab="formulas" data-i18n="tabFormulas">صيغ</button>
+      <button class="tab-btn" data-tab="data" data-i18n="tabData">بيانات</button>
+      <button class="tab-btn" data-tab="review" data-i18n="tabReview">مراجعة</button>
+      <button class="tab-btn" data-tab="view" data-i18n="tabView">عرض</button>
+      <button class="tab-btn" data-tab="help" data-i18n="tabHelp">تعليمات</button>
     </div>
 
     <!-- Ribbon Panes Body -->
@@ -99,26 +106,26 @@
         <!-- Clipboard Group -->
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large" id="btnRibbonPaste" title="لصق (Ctrl+V)">
+            <button class="ribbon-btn-large" id="btnRibbonPaste" data-i18n-title="paste" title="لصق (Ctrl+V)">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-              <span>لصق</span>
+              <span data-i18n="paste">لصق</span>
             </button>
             <div class="group-tools-col">
-              <button class="ribbon-btn-text" id="btnRibbonCut" title="قص (Ctrl+X)">
+              <button class="ribbon-btn-text" id="btnRibbonCut" data-i18n-title="cut" title="قص (Ctrl+X)">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
-                <span>قص</span>
+                <span data-i18n="cut">قص</span>
               </button>
-              <button class="ribbon-btn-text" id="btnRibbonCopy" title="نسخ (Ctrl+C)">
+              <button class="ribbon-btn-text" id="btnRibbonCopy" data-i18n-title="copy" title="نسخ (Ctrl+C)">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                <span>نسخ</span>
+                <span data-i18n="copy">نسخ</span>
               </button>
-              <button class="ribbon-btn-text" id="btnFormatPainter" title="نسخ التنسيق (Format Painter)">
+              <button class="ribbon-btn-text" id="btnFormatPainter" data-i18n-title="formatPainter" title="نسخ التنسيق (Format Painter)">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18.37 2.63L14 7l3 3 4.37-4.37a2.12 2.12 0 1 0-3-3z"></path><path d="M9 12l-7 7v4h4l7-7"></path><path d="M14 7l3 3"></path></svg>
-                <span>نسخ التنسيق</span>
+                <span data-i18n="formatPainter">نسخ التنسيق</span>
               </button>
             </div>
           </div>
-          <div class="group-label">الحافظة</div>
+          <div class="group-label" data-i18n="grpClipboard">الحافظة</div>
         </div>
 
         <!-- Font Group -->
@@ -155,13 +162,13 @@
 
             <!-- Row 2: B, I, U, Borders, Fill Color, Font Color -->
             <div class="group-tools-row">
-              <button class="ribbon-btn" id="btnBold" title="غامق (Ctrl+B)"><strong>B</strong></button>
-              <button class="ribbon-btn" id="btnItalic" title="مائل (Ctrl+I)"><em>I</em></button>
-              <button class="ribbon-btn" id="btnUnderline" title="تسطير (Ctrl+U)"><span style="text-decoration: underline;">U</span></button>
+              <button class="ribbon-btn" id="btnBold" data-i18n-title="bold" title="غامق (Ctrl+B)"><strong>B</strong></button>
+              <button class="ribbon-btn" id="btnItalic" data-i18n-title="italic" title="مائل (Ctrl+I)"><em>I</em></button>
+              <button class="ribbon-btn" id="btnUnderline" data-i18n-title="underline" title="تسطير (Ctrl+U)"><span style="text-decoration: underline;">U</span></button>
 
               <!-- Borders Dropdown Picker -->
               <div style="position: relative;">
-                <button class="ribbon-btn" id="btnBordersToggle" title="حدود الخلايا">
+                <button class="ribbon-btn" id="btnBordersToggle" data-i18n-title="borders" title="حدود الخلايا">
                   <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="1"></rect><line x1="3" y1="12" x2="21" y2="12"></line><line x1="12" y1="3" x2="12" y2="21"></line></svg>
                 </button>
                 <div class="borders-dropdown-menu" id="bordersMenu">
@@ -174,21 +181,21 @@
               </div>
 
               <!-- Fill Color Picker -->
-              <div class="color-tool-btn" title="لون تعبئة الخلية (دلو التعبئة)">
+              <div class="color-tool-btn" data-i18n-title="fillColor" title="لون تعبئة الخلية (دلو التعبئة)">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 11l-8-8-8.5 8.5a2.12 2.12 0 0 0 0 3l5 5a2.12 2.12 0 0 0 3 0L19 11z"></path><path d="M5 21h14"></path></svg>
                 <div class="color-indicator-bar" id="fillColorBar" style="background-color: #f1f5f9;"></div>
                 <input type="color" id="fillColorInput" value="#f1f5f9">
               </div>
 
               <!-- Font Color Picker -->
-              <div class="color-tool-btn" title="لون الخط">
+              <div class="color-tool-btn" data-i18n-title="fontColor" title="لون الخط">
                 <span style="font-weight: 800; font-size: 13px;">A</span>
                 <div class="color-indicator-bar" id="textColorBar" style="background-color: #047857;"></div>
                 <input type="color" id="textColorInput" value="#047857">
               </div>
             </div>
           </div>
-          <div class="group-label">خط</div>
+          <div class="group-label" data-i18n="grpFont">خط</div>
         </div>
 
         <!-- Alignment Group -->
@@ -196,29 +203,29 @@
           <div class="group-tools-col">
             <!-- Row 1: Vertical alignment Top, Middle, Bottom -->
             <div class="group-tools-row">
-              <button class="ribbon-btn" id="btnValignTop" title="محاذاة لأعلى"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="4" y1="4" x2="20" y2="4"></line><rect x="6" y="8" width="12" height="6"></rect></svg></button>
-              <button class="ribbon-btn active" id="btnValignMiddle" title="محاذاة للوسط العمودي"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="4" y1="12" x2="20" y2="12"></line><rect x="6" y="8" width="12" height="8"></rect></svg></button>
-              <button class="ribbon-btn" id="btnValignBottom" title="محاذاة لأسفل"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="4" y1="20" x2="20" y2="20"></line><rect x="6" y="10" width="12" height="6"></rect></svg></button>
+              <button class="ribbon-btn" id="btnValignTop" data-i18n-title="valignTop" title="محاذاة لأعلى"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="4" y1="4" x2="20" y2="4"></line><rect x="6" y="8" width="12" height="6"></rect></svg></button>
+              <button class="ribbon-btn active" id="btnValignMiddle" data-i18n-title="valignMiddle" title="محاذاة للوسط العمودي"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="4" y1="12" x2="20" y2="12"></line><rect x="6" y="8" width="12" height="8"></rect></svg></button>
+              <button class="ribbon-btn" id="btnValignBottom" data-i18n-title="valignBottom" title="محاذاة لأسفل"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="4" y1="20" x2="20" y2="20"></line><rect x="6" y="10" width="12" height="6"></rect></svg></button>
 
-              <button class="ribbon-btn-text" id="btnWrapText" title="التفاف النص داخل الخلية">
+              <button class="ribbon-btn-text" id="btnWrapText" data-i18n-title="wrapText" title="التفاف النص داخل الخلية">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><path d="M3 12h15a3 3 0 1 1 0 6h-4"></path><polyline points="16 16 14 18 16 20"></polyline><line x1="3" y1="18" x2="10" y2="18"></line></svg>
-                <span>التفاف النص</span>
+                <span data-i18n="wrapText">التفاف النص</span>
               </button>
             </div>
 
             <!-- Row 2: Horizontal alignment Right, Center, Left, Merge & Center -->
             <div class="group-tools-row">
-              <button class="ribbon-btn active" id="btnAlignRight" title="محاذاة لليمين"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="9" y2="12"></line><line x1="21" y1="18" x2="5" y2="18"></line></svg></button>
-              <button class="ribbon-btn" id="btnAlignCenter" title="توسيط"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg></button>
-              <button class="ribbon-btn" id="btnAlignLeft" title="محاذاة لليسار"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="15" y1="12" x2="3" y2="12"></line><line x1="19" y1="18" x2="3" y2="18"></line></svg></button>
+              <button class="ribbon-btn active" id="btnAlignRight" data-i18n-title="alignRight" title="محاذاة لليمين"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="9" y2="12"></line><line x1="21" y1="18" x2="5" y2="18"></line></svg></button>
+              <button class="ribbon-btn" id="btnAlignCenter" data-i18n-title="alignCenter" title="توسيط"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="6"></line><line x1="21" y1="12" x2="3" y2="12"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg></button>
+              <button class="ribbon-btn" id="btnAlignLeft" data-i18n-title="alignLeft" title="محاذاة لليسار"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="15" y1="12" x2="3" y2="12"></line><line x1="19" y1="18" x2="3" y2="18"></line></svg></button>
 
-              <button class="ribbon-btn-text" id="btnMergeCenter" title="دمج وتوسيط الخلايا المحددة">
+              <button class="ribbon-btn-text" id="btnMergeCenter" data-i18n-title="mergeCenter" title="دمج وتوسيط الخلايا المحددة">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="9" y1="12" x2="15" y2="12"></line><polyline points="11 10 9 12 11 14"></polyline><polyline points="13 10 15 12 13 14"></polyline></svg>
-                <span>دمج وتوسيط</span>
+                <span data-i18n="mergeCenter">دمج وتوسيط</span>
               </button>
             </div>
           </div>
-          <div class="group-label">محاذاة</div>
+          <div class="group-label" data-i18n="grpAlignment">محاذاة</div>
         </div>
 
         <!-- Number Format Group -->
@@ -246,45 +253,45 @@
               <button class="ribbon-btn" id="btnDecreaseDecimal" title="إنقاص المنازل العشرية (.0)">.0</button>
             </div>
           </div>
-          <div class="group-label">رقم</div>
+          <div class="group-label" data-i18n="grpNumber">رقم</div>
         </div>
 
         <!-- Cells Group -->
         <div class="ribbon-group">
           <div class="group-tools-col">
-            <button class="ribbon-btn-text" id="btnInsertRow" title="إدراج صف جديد فوق التحديد">
+            <button class="ribbon-btn-text" id="btnInsertRow" data-i18n-title="insertRow" title="إدراج صف جديد فوق التحديد">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>إدراج صف</span>
+              <span data-i18n="insertRow">إدراج صف</span>
             </button>
-            <button class="ribbon-btn-text" id="btnInsertCol" title="إدراج عمود جديد">
+            <button class="ribbon-btn-text" id="btnInsertCol" data-i18n-title="insertCol" title="إدراج عمود جديد">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>إدراج عمود</span>
+              <span data-i18n="insertCol">إدراج عمود</span>
             </button>
-            <button class="ribbon-btn-text" id="btnDeleteSelected" title="حذف الصفوف أو الأعمدة المحددة" style="color: #b91c1c;">
+            <button class="ribbon-btn-text" id="btnDeleteSelected" data-i18n-title="delete" title="حذف الصفوف أو الأعمدة المحددة" style="color: #b91c1c;">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-              <span>حذف</span>
+              <span data-i18n="delete">حذف</span>
             </button>
           </div>
-          <div class="group-label">خلايا</div>
+          <div class="group-label" data-i18n="grpCells">خلايا</div>
         </div>
 
         <!-- Editing Group -->
         <div class="ribbon-group">
           <div class="group-tools-col">
-            <button class="ribbon-btn-text" id="btnAutoSum" title="الجمع التلقائي (∑ AutoSum)">
+            <button class="ribbon-btn-text" id="btnAutoSum" data-i18n-title="autoSum" title="الجمع التلقائي (∑ AutoSum)">
               <span style="font-weight: 800; font-size: 14px; color: #107c41;">∑</span>
-              <span>جمع تلقائي</span>
+              <span data-i18n="autoSum">جمع تلقائي</span>
             </button>
-            <button class="ribbon-btn-text" id="btnSortAsc" title="فرز من الألف إلى الياء (A-Z)">
+            <button class="ribbon-btn-text" id="btnSortAsc" data-i18n-title="sortAsc" title="فرز من الألف إلى الياء (A-Z)">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 6h18M3 12h12M3 18h6"></path></svg>
-              <span>فرز تصاعدي (A-Z)</span>
+              <span data-i18n="sortAsc">فرز تصاعدي (A-Z)</span>
             </button>
-            <button class="ribbon-btn-text" id="btnFindReplace" title="بحث وتصفح (Ctrl+F / Ctrl+H)">
+            <button class="ribbon-btn-text" id="btnFindReplace" data-i18n-title="findReplace" title="بحث وتصفح (Ctrl+F / Ctrl+H)">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <span>بحث وتحديد</span>
+              <span data-i18n="findReplace">بحث وتحديد</span>
             </button>
           </div>
-          <div class="group-label">تحرير</div>
+          <div class="group-label" data-i18n="grpEditing">تحرير</div>
         </div>
       </div>
 
@@ -293,31 +300,31 @@
         <!-- Charts Group -->
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large" id="btnInsertChart" title="إنشاء مخطط بياني للبيانات المحددة">
+            <button class="ribbon-btn-large" id="btnInsertChart" data-i18n-title="chart" title="إنشاء مخطط بياني للبيانات المحددة">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-              <span>مخطط بياني</span>
+              <span data-i18n="chart">مخطط بياني</span>
             </button>
-            <button class="ribbon-btn-large" id="btnQuickPieChart" title="مخطط دائري سريع (Pie Chart)">
+            <button class="ribbon-btn-large" id="btnQuickPieChart" data-i18n-title="pieChart" title="مخطط دائري سريع (Pie Chart)">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-              <span>مخطط دائري</span>
+              <span data-i18n="pieChart">مخطط دائري</span>
             </button>
           </div>
-          <div class="group-label">مخططات بيانية</div>
+          <div class="group-label" data-i18n="grpCharts">مخططات بيانية</div>
         </div>
 
         <!-- Illustrations & Sovereign Symbols -->
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large" id="btnInsertAlgerianHeader" title="إدراج ترويسة الجمهورية الجزائرية">
+            <button class="ribbon-btn-large" id="btnInsertAlgerianHeader" data-i18n-title="algerianHeader" title="إدراج ترويسة الجمهورية الجزائرية">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-              <span>ترويسة الجمهورية</span>
+              <span data-i18n="algerianHeader">ترويسة الجمهورية</span>
             </button>
-            <button class="ribbon-btn-large" id="btnInsertOfficialSeal" title="إدراج ختم رسمي">
+            <button class="ribbon-btn-large" id="btnInsertOfficialSeal" data-i18n-title="officialSeal" title="إدراج ختم رسمي">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
-              <span>ختم رسمي</span>
+              <span data-i18n="officialSeal">ختم رسمي</span>
             </button>
           </div>
-          <div class="group-label">وثائق وطنية رسمية</div>
+          <div class="group-label" data-i18n="grpSovereign">وثائق وطنية رسمية</div>
         </div>
       </div>
 
@@ -325,20 +332,20 @@
       <div class="ribbon-tab-pane" id="tabPane_layout">
         <div class="ribbon-group">
           <div class="group-tools-col">
-            <button class="ribbon-btn-text" id="btnToggleGridlines" title="إظهار / إخفاء خطوط شبكة الخلايا">
+            <button class="ribbon-btn-text" id="btnToggleGridlines" data-i18n-title="gridlines" title="إظهار / إخفاء خطوط شبكة الخلايا">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-              <span>خطوط الشبكة: إظهار</span>
+              <span data-i18n="gridlines">خطوط الشبكة</span>
             </button>
-            <button class="ribbon-btn-text" id="btnToggleHeadings" title="إظهار / إخفاء عناوين الأعمدة والصفوف">
+            <button class="ribbon-btn-text" id="btnToggleHeadings" data-i18n-title="headings" title="إظهار / إخفاء عناوين الأعمدة والصفوف">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18"></rect><path d="M3 9h18M9 21V9"></path></svg>
-              <span>عناوين الصفوف والأعمدة</span>
+              <span data-i18n="headings">عناوين الصفوف والأعمدة</span>
             </button>
-            <button class="ribbon-btn-text" id="btnToggleRtl" title="تبديل اتجاه الورقة (RTL / LTR)">
+            <button class="ribbon-btn-text" id="btnToggleRtl" data-i18n-title="sheetDir" title="تبديل اتجاه الورقة (RTL / LTR)">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 12H3"></path><path d="M7 8l-4 4 4 4"></path><path d="M21 4v16"></path></svg>
-              <span>اتجاه الورقة (يمين - يسار)</span>
+              <span data-i18n="sheetDir">اتجاه الورقة (يمين - يسار)</span>
             </button>
           </div>
-          <div class="group-label">خيارات الورقة</div>
+          <div class="group-label" data-i18n="grpSheetOpts">خيارات الورقة</div>
         </div>
       </div>
 
@@ -347,9 +354,9 @@
         <!-- Function Library -->
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large" id="btnInsertFunctionFx" title="إدراج دالة رياضية أو مالية">
+            <button class="ribbon-btn-large" id="btnInsertFunctionFx" data-i18n-title="insertFunction" title="إدراج دالة رياضية أو مالية">
               <span style="font-family: Georgia, serif; font-size: 26px; font-weight: bold; color: #107c41;">fx</span>
-              <span>إدراج دالة</span>
+              <span data-i18n="insertFunction">إدراج دالة</span>
             </button>
             <div class="group-tools-col">
               <button class="ribbon-btn-text" id="btnFormulaTafqit" title="دالة التفقيط بالدينار الجزائري =TAFQIT_AR(A1)">
@@ -368,17 +375,17 @@
               <button class="ribbon-btn-text" id="btnFormulaIf" title="=IF(Cond, True, False)"><span>=IF (شرط)</span></button>
             </div>
           </div>
-          <div class="group-label">مكتبة الدوال المالية والجزائرية</div>
+          <div class="group-label" data-i18n="grpFuncLib">مكتبة الدوال المالية والجزائرية</div>
         </div>
 
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large" id="btnShowFormulasToggle" title="إظهار الصيغ بدلاً من القيم المحسوبة (Ctrl+`)">
+            <button class="ribbon-btn-large" id="btnShowFormulasToggle" data-i18n-title="showFormulas" title="إظهار الصيغ بدلاً من القيم المحسوبة (Ctrl+`)">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-              <span>إظهار الصيغ</span>
+              <span data-i18n="showFormulas">إظهار الصيغ</span>
             </button>
           </div>
-          <div class="group-label">تدقيق الصيغ</div>
+          <div class="group-label" data-i18n="grpAuditing">تدقيق الصيغ</div>
         </div>
       </div>
 
@@ -386,21 +393,21 @@
       <div class="ribbon-tab-pane" id="tabPane_data">
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large" id="btnDataSortAsc" title="فرز تصاعدي للبيانات المحددة">
+            <button class="ribbon-btn-large" id="btnDataSortAsc" data-i18n-title="sortAsc" title="فرز تصاعدي للبيانات المحددة">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5l7 7-7 7"></path></svg>
-              <span>فرز (A-Z)</span>
+              <span data-i18n="sortAsc">فرز (A-Z)</span>
             </button>
-            <button class="ribbon-btn-large" id="btnDataSortDesc" title="فرز تنازلي للبيانات المحددة">
+            <button class="ribbon-btn-large" id="btnDataSortDesc" data-i18n-title="sortDesc" title="فرز تنازلي للبيانات المحددة">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 19l-7-7 7-7"></path></svg>
-              <span>فرز (Z-A)</span>
+              <span data-i18n="sortDesc">فرز (Z-A)</span>
             </button>
-            <button class="ribbon-btn-large" id="btnImportCsvBtn" title="استيراد ملف خارجي CSV أو JSON">
+            <button class="ribbon-btn-large" id="btnImportCsvBtn" data-i18n-title="importData" title="استيراد ملف خارجي CSV أو JSON">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              <span>استيراد بيانات</span>
+              <span data-i18n="importData">استيراد بيانات</span>
             </button>
             <input type="file" id="fileImportInput" accept=".csv,.xlsx,.json" style="display: none;">
           </div>
-          <div class="group-label">فرز واستيراد</div>
+          <div class="group-label" data-i18n="grpSortImport">فرز واستيراد</div>
         </div>
       </div>
 
@@ -408,12 +415,12 @@
       <div class="ribbon-tab-pane" id="tabPane_review">
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large" id="btnProtectSheet" title="حماية ورقة العمل من التعديل العرضي">
+            <button class="ribbon-btn-large" id="btnProtectSheet" data-i18n-title="protectSheet" title="حماية ورقة العمل من التعديل العرضي">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              <span>حماية الورقة</span>
+              <span data-i18n="protectSheet">حماية الورقة</span>
             </button>
           </div>
-          <div class="group-label">أمان ومراجعة</div>
+          <div class="group-label" data-i18n="grpSecurity">أمان ومراجعة</div>
         </div>
       </div>
 
@@ -421,25 +428,25 @@
       <div class="ribbon-tab-pane" id="tabPane_view">
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large active" id="btnViewNormal" title="عرض عادي">
+            <button class="ribbon-btn-large active" id="btnViewNormal" data-i18n-title="normalView" title="عرض عادي">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg>
-              <span>عادي</span>
+              <span data-i18n="normalView">عادي</span>
             </button>
-            <button class="ribbon-btn-large" id="btnViewPrintPreview" title="معاينة الطباعة A4">
+            <button class="ribbon-btn-large" id="btnViewPrintPreview" data-i18n-title="printPreview" title="معاينة الطباعة A4">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-              <span>معاينة الطباعة</span>
+              <span data-i18n="printPreview">معاينة الطباعة</span>
             </button>
           </div>
-          <div class="group-label">طرق العرض</div>
+          <div class="group-label" data-i18n="grpViews">طرق العرض</div>
         </div>
 
         <div class="ribbon-group">
           <div class="group-tools-col">
-            <button class="ribbon-btn-text" onclick="window.dzCalcApp.setZoom(100)">100% (حجم قياسي)</button>
-            <button class="ribbon-btn-text" onclick="window.dzCalcApp.setZoom(125)">125% (تكبير)</button>
-            <button class="ribbon-btn-text" onclick="window.dzCalcApp.setZoom(75)">75% (تصغير)</button>
+            <button class="ribbon-btn-text" onclick="window.dzCalcApp.setZoom(100)">100%</button>
+            <button class="ribbon-btn-text" onclick="window.dzCalcApp.setZoom(125)">125%</button>
+            <button class="ribbon-btn-text" onclick="window.dzCalcApp.setZoom(75)">75%</button>
           </div>
-          <div class="group-label">تكبير / تصغير</div>
+          <div class="group-label" data-i18n="grpZoom">تكبير / تصغير</div>
         </div>
       </div>
 
@@ -447,12 +454,12 @@
       <div class="ribbon-tab-pane" id="tabPane_help">
         <div class="ribbon-group">
           <div class="group-tools">
-            <button class="ribbon-btn-large" id="btnAboutDialog" title="عن جداول الجزائر">
+            <button class="ribbon-btn-large" id="btnAboutDialog" data-i18n-title="aboutApp" title="عن جداول الجزائر">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-              <span>عن البرنامج</span>
+              <span data-i18n="aboutApp">عن البرنامج</span>
             </button>
           </div>
-          <div class="group-label">مساعدة ومعلومات</div>
+          <div class="group-label" data-i18n="grpAbout">مساعدة ومعلومات</div>
         </div>
       </div>
 
@@ -493,8 +500,8 @@
        ====================================================================== -->
   <footer class="excel-sheets-bar">
     <div class="sheets-nav-group">
-      <button class="sheets-nav-btn" id="btnSheetNavLeft" title="التمرير لليمين">◀</button>
-      <button class="sheets-nav-btn" id="btnSheetNavRight" title="التمرير لليسار">▶</button>
+      <button class="sheets-nav-btn" id="btnSheetNavLeft" title="التمرير">◀</button>
+      <button class="sheets-nav-btn" id="btnSheetNavRight" title="التمرير">▶</button>
       
       <div class="sheets-list-container" id="sheetsListContainer">
         <!-- Sheet Tabs Rendered Dynamically -->
@@ -509,15 +516,15 @@
        ====================================================================== -->
   <aside class="excel-statusbar">
     <div class="statusbar-left">
-      <span class="status-pill" id="statusReadyPill">جاهز</span>
+      <span class="status-pill" id="statusReadyPill" data-i18n="ready">جاهز</span>
     </div>
 
     <div class="statusbar-metrics" id="statusbarMetrics">
-      <div class="metric-item"><span class="metric-label">المتوسط:</span> <span class="metric-value" id="metricAvg">0</span></div>
-      <div class="metric-item"><span class="metric-label">العدد:</span> <span class="metric-value" id="metricCount">1</span></div>
-      <div class="metric-item"><span class="metric-label">الحد الأدنى:</span> <span class="metric-value" id="metricMin">0</span></div>
-      <div class="metric-item"><span class="metric-label">الحد الأقصى:</span> <span class="metric-value" id="metricMax">0</span></div>
-      <div class="metric-item"><span class="metric-label">المجموع:</span> <span class="metric-value" id="metricSum">0</span></div>
+      <div class="metric-item"><span class="metric-label" data-i18n="average">المتوسط:</span> <span class="metric-value" id="metricAvg">0</span></div>
+      <div class="metric-item"><span class="metric-label" data-i18n="count">العدد:</span> <span class="metric-value" id="metricCount">1</span></div>
+      <div class="metric-item"><span class="metric-label" data-i18n="min">الحد الأدنى:</span> <span class="metric-value" id="metricMin">0</span></div>
+      <div class="metric-item"><span class="metric-label" data-i18n="max">الحد الأقصى:</span> <span class="metric-value" id="metricMax">0</span></div>
+      <div class="metric-item"><span class="metric-label" data-i18n="sum">المجموع:</span> <span class="metric-value" id="metricSum">0</span></div>
     </div>
 
     <div class="statusbar-right">
@@ -536,21 +543,21 @@
   <div class="excel-backstage" id="excelBackstage">
     <div class="backstage-sidebar">
       <button class="backstage-back-btn" id="btnBackstageBack">
-        <span>← العودة إلى المصنف</span>
+        <span data-i18n="backToWorkbook">← العودة إلى المصنف</span>
       </button>
 
-      <button class="backstage-nav-btn active" data-pane="info">معلومات المصنف</button>
-      <button class="backstage-nav-btn" data-pane="new">جديد ونماذج وطنية</button>
-      <button class="backstage-nav-btn" data-pane="open">فتح مصنف...</button>
-      <button class="backstage-nav-btn" data-pane="save">حفظ (Save)</button>
-      <button class="backstage-nav-btn" data-pane="export">تصدير (Excel / CSV / PDF)</button>
-      <button class="backstage-nav-btn" data-pane="print">طباعة</button>
+      <button class="backstage-nav-btn active" data-pane="info" data-i18n="bsInfo">معلومات المصنف</button>
+      <button class="backstage-nav-btn" data-pane="new" data-i18n="bsNew">جديد ونماذج وطنية</button>
+      <button class="backstage-nav-btn" data-pane="open" data-i18n="bsOpen">فتح مصنف...</button>
+      <button class="backstage-nav-btn" data-pane="save" data-i18n="bsSave">حفظ (Save)</button>
+      <button class="backstage-nav-btn" data-pane="export" data-i18n="bsExport">تصدير (Excel / CSV / PDF)</button>
+      <button class="backstage-nav-btn" data-pane="print" data-i18n="bsPrint">طباعة</button>
     </div>
 
     <div class="backstage-content">
       <!-- Info Pane -->
       <div class="backstage-pane active" id="backstagePane_info">
-        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 12px;">معلومات المصنف الحالي</h2>
+        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 12px;" data-i18n="bsInfo">معلومات المصنف الحالي</h2>
         <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; line-height: 2;">
           <p><strong>اسم الملف:</strong> <span id="infoWorkbookTitle">مصنف 1 — Excel</span></p>
           <p><strong>عدد أوراق العمل:</strong> <span id="infoSheetsCount">1</span></p>
@@ -562,11 +569,11 @@
 
       <!-- New Pane -->
       <div class="backstage-pane" id="backstagePane_new">
-        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 8px;">إنشاء مصنف جديد أو اختيار نموذج جزائري رسمي</h2>
+        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 8px;" data-i18n="bsNew">إنشاء مصنف جديد أو اختيار نموذج جزائري رسمي</h2>
         <p style="color: #64748b; font-size: 13px; margin-bottom: 24px;">نماذج محاسبية ومالية معدّة مسبقاً ومتوافقة مع النظام المحاسبي المالي (SCF) والتشريعات الجزائرية.</p>
 
         <div style="margin-bottom: 24px;">
-          <button class="btn-dialog primary" id="btnNewBlankWorkbook" style="font-size: 14px; padding: 10px 20px;">
+          <button class="btn-dialog primary" id="btnNewBlankWorkbook" style="font-size: 14px; padding: 10px 20px;" data-i18n="newBlank">
             + مصنف فارغ جديد (Blank Workbook)
           </button>
         </div>
@@ -579,28 +586,28 @@
 
       <!-- Open Pane -->
       <div class="backstage-pane" id="backstagePane_open">
-        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 12px;">فتح ملف من جهازك</h2>
+        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 12px;" data-i18n="bsOpen">فتح ملف من جهازك</h2>
         <p style="color: #64748b; margin-bottom: 24px;">يمكنك فتح وتعديل ملفات Excel (.xlsx) أو ملفات القيم المفصولة بفواصل (.csv) أو مشاريع جداول الجزائر (.json).</p>
-        <button class="btn-dialog primary" onclick="document.getElementById('fileImportInput').click()" style="padding: 12px 24px; font-size: 14px;">
+        <button class="btn-dialog primary" onclick="document.getElementById('fileImportInput').click()" style="padding: 12px 24px; font-size: 14px;" data-i18n="browseFiles">
           استعراض الملفات من الجهاز...
         </button>
       </div>
 
       <!-- Export Pane -->
       <div class="backstage-pane" id="backstagePane_export">
-        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 12px;">تصدير المصنف والبيانات</h2>
+        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 12px;" data-i18n="bsExport">تصدير المصنف والبيانات</h2>
         <div style="display: flex; flex-direction: column; gap: 16px; max-width: 480px; margin-top: 20px;">
           <button class="btn-dialog primary" id="btnExportXlsx" style="padding: 12px; text-align: start; display: flex; align-items: center; justify-content: space-between;">
-            <span>تصدير كـ Microsoft Excel حقيقي (.xlsx)</span>
+            <span data-i18n="exportXlsx">تصدير كـ Microsoft Excel حقيقي (.xlsx)</span>
             <span style="font-size: 11px; opacity: 0.9;">موصى به</span>
           </button>
-          <button class="btn-dialog secondary" id="btnExportCsv" style="padding: 12px; text-align: start;">
+          <button class="btn-dialog secondary" id="btnExportCsv" style="padding: 12px; text-align: start;" data-i18n="exportCsv">
             تصدير كـ جدول بيانات CSV (.csv)
           </button>
-          <button class="btn-dialog secondary" id="btnExportPdf" style="padding: 12px; text-align: start;">
+          <button class="btn-dialog secondary" id="btnExportPdf" style="padding: 12px; text-align: start;" data-i18n="exportPdf">
             طباعة / تصدير بصيغة PDF
           </button>
-          <button class="btn-dialog secondary" id="btnExportJson" style="padding: 12px; text-align: start;">
+          <button class="btn-dialog secondary" id="btnExportJson" style="padding: 12px; text-align: start;" data-i18n="exportJson">
             حفظ نسخة احتياطية (.json)
           </button>
         </div>
@@ -608,7 +615,7 @@
 
       <!-- Print Pane -->
       <div class="backstage-pane" id="backstagePane_print">
-        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 12px;">معاينة وطباعة المستند</h2>
+        <h2 style="font-size: 22px; color: var(--excel-green); margin-bottom: 12px;" data-i18n="bsPrint">معاينة وطباعة المستند</h2>
         <p style="color: #64748b; margin-bottom: 24px;">طباعة الجداول مع خطوط الشبكة وتنسيقات الأعمدة بدقة عالية.</p>
         <button class="btn-dialog primary" id="btnTriggerPrint" style="padding: 12px 24px;">
           طباعة الآن (Ctrl+P)
@@ -624,7 +631,7 @@
   <div class="modal-overlay" id="modalChart">
     <div class="excel-dialog" style="max-width: 700px;">
       <div class="dialog-header">
-        <h3>المخطط البياني للبيانات المحددة</h3>
+        <h3 data-i18n="chart">المخطط البياني للبيانات المحددة</h3>
         <button class="dialog-close" data-close-modal>×</button>
       </div>
       <div class="dialog-body" style="text-align: center;">
@@ -639,7 +646,7 @@
         <canvas id="chartCanvas" width="620" height="340" style="max-width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; background: #ffffff;"></canvas>
       </div>
       <div class="dialog-footer">
-        <button class="btn-dialog primary" data-close-modal>إغلاق</button>
+        <button class="btn-dialog primary" data-close-modal data-i18n="close">إغلاق</button>
       </div>
     </div>
   </div>
@@ -648,7 +655,7 @@
   <div class="modal-overlay" id="modalFunctions">
     <div class="excel-dialog" style="max-width: 600px;">
       <div class="dialog-header">
-        <h3>إدراج دالة (Insert Function fx)</h3>
+        <h3 data-i18n="insertFunction">إدراج دالة (Insert Function fx)</h3>
         <button class="dialog-close" data-close-modal>×</button>
       </div>
       <div class="dialog-body">
@@ -668,7 +675,7 @@
   <div class="modal-overlay" id="modalFindReplace">
     <div class="excel-dialog" style="max-width: 480px;">
       <div class="dialog-header">
-        <h3>بحث واستبدال (Find & Replace)</h3>
+        <h3 data-i18n="findReplace">بحث واستبدال (Find & Replace)</h3>
         <button class="dialog-close" data-close-modal>×</button>
       </div>
       <div class="dialog-body" style="display: flex; flex-direction: column; gap: 12px;">
@@ -693,7 +700,7 @@
   <div class="modal-overlay" id="modalAbout">
     <div class="excel-dialog" style="max-width: 500px; text-align: center;">
       <div class="dialog-header">
-        <h3>عن جداول الجزائر (DZ-Calc Studio)</h3>
+        <h3 data-i18n="aboutApp">عن جداول الجزائر (DZ-Calc Studio)</h3>
         <button class="dialog-close" data-close-modal>×</button>
       </div>
       <div class="dialog-body" style="padding: 24px;">
@@ -710,7 +717,7 @@
         </p>
       </div>
       <div class="dialog-footer" style="justify-content: center;">
-        <button class="btn-dialog primary" data-close-modal>موافق</button>
+        <button class="btn-dialog primary" data-close-modal data-i18n="close">موافق</button>
       </div>
     </div>
   </div>
