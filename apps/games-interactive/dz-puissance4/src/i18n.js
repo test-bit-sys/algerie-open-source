@@ -1,0 +1,83 @@
+/**
+ * DZ-Puissance4: Trilingual dictionary (AR / FR / EN).
+ */
+
+export const I18N = {
+  ar: {
+    title: 'الرباعية',
+    subtitle: 'رباعية الفوز بالأربعة',
+    newGame: 'لعبة جديدة',
+    undo: 'تراجع',
+    vsAi: 'ضد الحاسوب',
+    twoPlayers: 'لاعبان',
+    playAs: 'العب بـ',
+    red: 'الأحمر',
+    yellow: 'الأصفر',
+    redToMove: 'دور الأحمر',
+    yellowToMove: 'دور الأصفر',
+    redWins: 'فاز الأحمر',
+    yellowWins: 'فاز الأصفر',
+    draw: 'تعادل — امتلأت الرقعة',
+    difficulty: 'الصعوبة',
+    easy: 'سهل',
+    medium: 'متوسط',
+    hard: 'صعب',
+    thinking: 'الحاسوب يفكر…',
+    hint: 'انقر على عمود لإسقاط قرصك',
+    confirmNew: 'بدء لعبة جديدة؟ سيتم فقدان اللعبة الحالية.',
+    theme: 'المظهر',
+    sound: 'الصوت'
+  },
+  fr: {
+    title: 'Puissance 4',
+    subtitle: 'Alignez quatre jetons',
+    newGame: 'Nouvelle partie',
+    undo: 'Annuler',
+    vsAi: 'Contre l\u2019ordinateur',
+    twoPlayers: 'Deux joueurs',
+    playAs: 'Jouer les',
+    red: 'Rouge',
+    yellow: 'Jaune',
+    redToMove: 'Trait aux Rouges',
+    yellowToMove: 'Trait aux Jaunes',
+    redWins: 'Les Rouges gagnent',
+    yellowWins: 'Les Jaunes gagnent',
+    draw: 'Nulle — grille pleine',
+    difficulty: 'Difficulté',
+    easy: 'Facile',
+    medium: 'Moyen',
+    hard: 'Difficile',
+    thinking: 'L\u2019ordinateur réfléchit…',
+    hint: 'Cliquez sur une colonne pour lâcher votre jeton',
+    confirmNew: 'Nouvelle partie ? La partie en cours sera perdue.',
+    theme: 'Thème',
+    sound: 'Son'
+  },
+  en: {
+    title: 'Connect Four',
+    subtitle: 'Line up four discs',
+    newGame: 'New game',
+    undo: 'Undo',
+    vsAi: 'vs Computer',
+    twoPlayers: 'Two players',
+    playAs: 'Play as',
+    red: 'Red',
+    yellow: 'Yellow',
+    redToMove: 'Red to move',
+    yellowToMove: 'Yellow to move',
+    redWins: 'Red wins',
+    yellowWins: 'Yellow wins',
+    draw: 'Draw — full board',
+    difficulty: 'Difficulty',
+    easy: 'Easy',
+    medium: 'Medium',
+    hard: 'Hard',
+    thinking: 'Computer is thinking…',
+    hint: 'Click a column to drop your disc',
+    confirmNew: 'Start a new game? The current game will be lost.',
+    theme: 'Theme',
+    sound: 'Sound'
+  }
+};
+
+export const LANGS = ['ar', 'fr', 'en'];

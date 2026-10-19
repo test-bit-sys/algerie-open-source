@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Othello | أوثيلو — Reversi</title>
+  <meta name="description" content="DZ-Othello — أوثيلو/ريفيرسي بقواعد الانقلاب الكاملة وذكاء موضعي وحسم نهائي دقيق، ثلاث لغات، بدون إنترنت.">
+  <meta name="theme-color" content="#008744">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">DZ-Othello</div>
+      <div class="brand-subtitle" data-i18n="subtitle">أوثيلو — الانقلاب والسيطرة</div>
+    </div>
+    <div class="topbar-actions">
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="ar">ع</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button id="themeBtn" class="icon-btn" data-i18n-title="theme" title="المظهر"></button>
+      <button id="soundBtn" class="icon-btn" data-i18n-title="sound" title="الصوت"></button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <section class="board-zone">
+      <div class="status-bar">
+        <span id="turnDot" class="turn-dot d1"></span>
+        <span id="statusText" class="status-text">…</span>
+      </div>
+
+      <div id="board" class="board"></div>
+
+      <div class="controls-row">
+        <button id="newGameBtn" class="btn primary" data-i18n="newGame">لعبة جديدة</button>
+        <button id="undoBtn" class="btn" data-i18n="undo">تراجع</button>
+      </div>
+      <div class="hint" data-i18n="hint">انقر مربعاً مظللاً لوضع قرصك وقلب خصمك</div>
+    </section>
+
+    <aside class="side-panel">
+      <div class="card score-card">
+        <div class="score-row"><span class="chip black"></span><span data-i18n="black">الأسود</span><b id="blackCount">2</b></div>
+        <div class="score-row"><span class="chip white"></span><span data-i18n="white">الأبيض</span><b id="whiteCount">2</b></div>
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <span data-i18n="vsAi">ضد الحاسوب</span>
+          <select id="modeSelect" class="select">
+            <option value="ai" data-i18n="vsAi">ضد الحاسوب</option>
+            <option value="human" data-i18n="twoPlayers">لاعبان</option>
+          </select>
+        </div>
+        <div class="field" id="colorRow">
+          <span data-i18n="playAs">العب بـ</span>
+          <select id="colorSelect" class="select">
+            <option value="1" data-i18n="black">الأسود</option>
+            <option value="2" data-i18n="white">الأبيض</option>
+          </select>
+        </div>
+        <div class="field" id="diffRow">
+          <span data-i18n="difficulty">الصعوبة</span>
+          <select id="diffSelect" class="select">
+            <option value="easy" data-i18n="easy">سهل</option>
+            <option value="medium" data-i18n="medium">متوسط</option>
+            <option value="hard" data-i18n="hard">صعب</option>
+          </select>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="gameOver" class="banner">
+    <div class="banner-card">
+      <h2 id="bannerText">—</h2>
+      <button id="bannerClose" class="btn primary" data-i18n="newGame">لعبة جديدة</button>
+    </div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

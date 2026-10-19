@@ -1,0 +1,95 @@
+/* DZ-Domino — design system (Algerian green, dark mode, RTL-friendly) */
+
+:root {
+  --bg: #eef2f7; --card: #fff; --text: #0f172a; --muted: #64748b; --border: #e2e8f0;
+  --accent: #008744; --accent-soft: #e8f5e9;
+  --tile-face: #fdfdf8; --tile-edge: #d9c9a3; --tile-pip: #16202e;
+  --shadow: 0 10px 25px -8px rgba(15, 23, 42, 0.25);
+}
+
+[data-theme="dark"] {
+  --bg: #0e1420; --card: #1a2233; --text: #e8eef7; --muted: #8fa0b8; --border: #2a3650;
+  --accent-soft: rgba(0, 135, 68, 0.18);
+  --tile-face: #22304a; --tile-edge: #46587a; --tile-pip: #e8eef7;
+  --shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.6);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: 'Segoe UI', 'Cairo', 'Tahoma', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.8rem 1.4rem; background: linear-gradient(135deg, var(--accent), #005a2e); color: #fff; box-shadow: var(--shadow); }
+.brand-title { font-weight: 800; font-size: 1.15rem; }
+.brand-subtitle { font-size: 0.75rem; opacity: 0.85; }
+.topbar-actions { display: flex; align-items: center; gap: 0.5rem; }
+.lang-switch { display: flex; background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 2px; }
+.lang-btn { border: none; background: transparent; color: rgba(255, 255, 255, 0.75); font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
+.lang-btn.active { background: #fff; color: var(--accent); }
+.icon-btn { border: none; background: rgba(255, 255, 255, 0.15); color: #fff; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+.icon-btn.muted { opacity: 0.5; }
+
+.layout { display: grid; grid-template-columns: minmax(340px, 1fr) 300px; gap: 1.2rem; max-width: 1100px; margin: 0 auto; padding: 1.2rem; align-items: start; }
+
+.status-bar { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.6rem 0.9rem; margin-bottom: 0.9rem; font-weight: 700; font-size: 0.9rem; }
+.ends-chip { font-size: 0.78rem; color: var(--muted); }
+
+/* ---------------- the chain ---------------- */
+.chain-panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; min-height: 220px; display: flex; flex-direction: column; justify-content: center; }
+.chain { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; direction: ltr; }
+.ends-label { text-align: center; margin-top: 0.7rem; font-size: 0.8rem; color: var(--muted); font-weight: 700; }
+.ends-label b { color: var(--accent); font-size: 1rem; }
+
+/* ---------------- domino tile ---------------- */
+.domino { width: 46px; height: 80px; background: var(--tile-face); border: 1px solid var(--tile-edge); border-radius: 7px; display: grid; grid-template-rows: 1fr 1fr; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18); position: relative; }
+.domino::after { content: ''; position: absolute; left: 6px; right: 6px; top: 50%; height: 1px; background: var(--tile-edge); }
+.half { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 5px; gap: 1px; }
+.half i { display: block; }
+.half i.pip { background: var(--tile-pip); border-radius: 50%; width: 80%; height: 80%; place-self: center; }
+.chain-end { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------------- hand ---------------- */
+.hand-panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin-top: 1rem; }
+.hand-title { font-size: 0.8rem; color: var(--accent); font-weight: 800; margin-bottom: 0.6rem; }
+.hand { display: flex; flex-wrap: wrap; gap: 8px; min-height: 84px; }
+.hand .domino { cursor: pointer; transition: transform 0.15s ease; }
+.hand .domino.playable { box-shadow: 0 4px 10px rgba(0, 135, 68, 0.35); border-color: var(--accent); }
+.hand .domino.playable:hover { transform: translateY(-6px); }
+.hand .domino.dimmed { opacity: 0.45; cursor: default; }
+.hand-actions { display: flex; gap: 0.6rem; margin-top: 0.85rem; flex-wrap: wrap; }
+
+/* ---------------- controls & panels ---------------- */
+.btn { border: 1px solid var(--border); background: var(--card); color: var(--text); font-weight: 700; font-size: 0.85rem; padding: 0.55rem 1.1rem; border-radius: 9px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.wide { width: 100%; margin-top: 0.4rem; }
+
+.side-panel { display: flex; flex-direction: column; gap: 1rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.95rem; }
+.card-title { font-size: 0.9rem; margin-bottom: 0.6rem; color: var(--accent); }
+.field { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.55rem; font-weight: 700; }
+.select { background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 0.45rem; font-size: 0.85rem; }
+
+.seats { display: flex; flex-direction: column; gap: 0.5rem; }
+.seat { border: 1px solid var(--border); border-radius: 9px; padding: 0.5rem 0.7rem; background: var(--bg); }
+.seat.active { border-color: var(--accent); background: var(--accent-soft); }
+.seat-name { font-weight: 800; font-size: 0.85rem; }
+.seat-tiles { font-size: 0.95rem; letter-spacing: 2px; color: var(--muted); min-height: 1.2rem; }
+.seat-score { font-size: 0.75rem; color: var(--muted); font-weight: 700; }
+.seat-score b { color: var(--accent); font-size: 0.9rem; }
+
+/* ---------------- overlays ---------------- */
+.overlay, .banner { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); display: none; align-items: center; justify-content: center; z-index: 50; }
+.overlay.active, .banner.active { display: flex; }
+.overlay-card, .banner-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; text-align: center; box-shadow: var(--shadow); }
+.end-title { margin-bottom: 0.9rem; }
+.end-row { display: flex; gap: 0.6rem; justify-content: center; }
+.banner-card h2 { margin-bottom: 1rem; color: var(--accent); }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .domino { width: 38px; height: 66px; }
+  .side-panel { flex-direction: row; flex-wrap: wrap; }
+  .card { flex: 1 1 240px; }
+}
+

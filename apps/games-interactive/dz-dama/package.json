@@ -1,0 +1,26 @@
+{
+  "name": "dz-dama",
+  "version": "1.0.0",
+  "description": "DZ-Dama — Algerian Trilingual Checkers (full English-draughts rules, forced captures, multi-jumps, kings, minimax AI, zero dependencies)",
+  "main": "server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "algeria",
+    "checkers",
+    "draughts",
+    "dama",
+    "board-games",
+    "minimax",
+    "offline-first",
+    "trilingual"
+  ],
+  "author": "Algeria Open Source Initiative",
+  "license": "MIT"
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Chess | الشطرنج — Échecs</title>
+  <meta name="description" content="DZ-Chess — شطرنج كامل القواعد (FIDE) بذكاء اصطناعي وواجهة ثلاثية اللغات، يعمل 100% بدون إنترنت.">
+  <meta name="theme-color" content="#008744">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">DZ-Chess</div>
+      <div class="brand-subtitle" data-i18n="subtitle">منظومة الشطرنج الجزائرية</div>
+    </div>
+    <div class="topbar-actions">
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="ar" title="العربية">ع</button>
+        <button class="lang-btn" data-lang="fr" title="Français">FR</button>
+        <button class="lang-btn" data-lang="en" title="English">EN</button>
+      </div>
+      <button id="themeBtn" class="icon-btn" data-i18n-title="theme" title="المظهر"></button>
+      <button id="soundBtn" class="icon-btn" data-i18n-title="sound" title="الصوت"></button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <section class="board-zone">
+      <div class="status-bar">
+        <span id="turnDot" class="turn-dot w"></span>
+        <span id="statusText" class="status-text">…</span>
+      </div>
+
+      <div class="board-frame">
+        <div id="rankCoords" class="ranks"></div>
+        <div class="board-wrap">
+          <div id="board" class="board"></div>
+          <div id="fileCoords" class="files"></div>
+        </div>
+      </div>
+
+      <div class="controls-row">
+        <button id="newGameBtn" class="btn primary" data-i18n="newGame">لعبة جديدة</button>
+        <button id="undoBtn" class="btn" data-i18n="undo">تراجع</button>
+        <button id="flipBtn" class="btn" data-i18n="flip">قلب الرقعة</button>
+      </div>
+    </section>
+
+    <aside class="side-panel">
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="difficulty">الصعوبة</h3>
+        <label class="field">
+          <span data-i18n="vsAi">ضد الحاسوب</span>
+          <select id="modeSelect" class="select">
+            <option value="ai" data-i18n="vsAi">ضد الحاسوب</option>
+            <option value="human" data-i18n="twoPlayers">لاعبان</option>
+          </select>
+        </label>
+        <label class="field" id="colorRow">
+          <span data-i18n="playAs">العب بـ</span>
+          <select id="colorSelect" class="select">
+            <option value="w" data-i18n="white">الأبيض</option>
+            <option value="b" data-i18n="black">الأسود</option>
+          </select>
+        </label>
+        <label class="field" id="diffRow">
+          <span data-i18n="difficulty">الصعوبة</span>
+          <select id="diffSelect" class="select">
+            <option value="easy" data-i18n="easy">سهل</option>
+            <option value="medium" data-i18n="medium">متوسط</option>
+            <option value="hard" data-i18n="hard">صعب</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="captured">الأسرى</h3>
+        <div class="captured-row">
+          <span class="captured-label" data-i18n="whitePlayer">الأبيض</span>
+          <span id="capturedByWhite" class="captured-pieces"></span>
+        </div>
+        <div class="captured-row">
+          <span class="captured-label" data-i18n="blackPlayer">الأسود</span>
+          <span id="capturedByBlack" class="captured-pieces"></span>
+        </div>
+        <div class="advantage-row">
+          <span data-i18n="captured">الأسرى</span>
+          <span id="advantageText" class="advantage">±0</span>
+        </div>
+      </div>
+
+      <div class="card moves-card">
+        <h3 class="card-title" data-i18n="moves">النقلات</h3>
+        <div id="movesList" class="moves-list"></div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- Promotion picker -->
+  <div id="promoOverlay" class="overlay">
+    <div class="overlay-card">
+      <h3 class="promo-title" data-i18n="promoteTo">ترقية البيادق إلى</h3>
+      <div class="promo-row">
+        <button class="promo-btn" data-promo="Q">&#x265B;</button>
+        <button class="promo-btn" data-promo="R">&#x265C;</button>
+        <button class="promo-btn" data-promo="B">&#x265D;</button>
+        <button class="promo-btn" data-promo="N">&#x265E;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game over banner -->
+  <div id="gameOver" class="banner">
+    <div class="banner-card">
+      <h2 id="bannerText">—</h2>
+      <button id="bannerClose" class="btn primary" data-i18n="newGame">لعبة جديدة</button>
+    </div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

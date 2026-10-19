@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Domino | دومينو — Dominos</title>
+  <meta name="description" content="DZ-Domino — دومينو Draw كامل (28 حجراً، 2-4 لاعبين، نقاط جولات) بذكاء اصطناعي وثلاث لغات، بدون إنترنت.">
+  <meta name="theme-color" content="#008744">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">DZ-Domino</div>
+      <div class="brand-subtitle" data-i18n="subtitle">منظومة الدومينو الجزائرية</div>
+    </div>
+    <div class="topbar-actions">
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="ar">ع</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button id="themeBtn" class="icon-btn" data-i18n-title="theme" title="المظهر"></button>
+      <button id="soundBtn" class="icon-btn" data-i18n-title="sound" title="الصوت"></button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <section class="table-zone">
+      <div class="status-bar">
+        <span id="statusText" class="status-text">…</span>
+        <span class="ends-chip"><b data-i18n="boneyard">بنك القطع</b>: <span id="boneyardCount">0</span></span>
+      </div>
+
+      <div class="chain-panel">
+        <div id="chainZone" class="chain"></div>
+        <div class="ends-label"><span data-i18n="ends">الطرفان</span>: <b id="endsLabel">—</b></div>
+      </div>
+
+      <div class="hand-panel">
+        <div class="hand-title" data-i18n="yourHand">يدك</div>
+        <div id="handZone" class="hand"></div>
+        <div class="hand-actions">
+          <button id="drawBtn" class="btn" data-i18n="drawTile">اسحب حجراً</button>
+          <button id="passBtn" class="btn" data-i18n="pass">مرر الدور</button>
+          <button id="nextRoundBtn" class="btn primary" data-i18n="nextRound">الجولة التالية</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side-panel">
+
+      <div class="card">
+        <div class="field">
+          <span data-i18n="playersCount">عدد اللاعبين</span>
+          <select id="playersSelect" class="select">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+        <div class="field">
+          <span data-i18n="target">هدف النقاط</span>
+          <select id="targetSelect" class="select">
+            <option value="100">100</option>
+            <option value="150">150</option>
+            <option value="200">200</option>
+          </select>
+        </div>
+        <div class="field">
+          <span data-i18n="difficulty">الصعوبة</span>
+          <select id="diffSelect" class="select">
+            <option value="easy" data-i18n="easy">سهل</option>
+            <option value="medium" data-i18n="medium">متوسط</option>
+            <option value="hard" data-i18n="hard">صعب</option>
+          </select>
+        </div>
+        <button id="newMatchBtn" class="btn primary wide" data-i18n="newMatch">مباراة جديدة</button>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="scores">النقاط</h3>
+        <div id="seatsZone" class="seats"></div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- Choose end overlay -->
+  <div id="endOverlay" class="overlay">
+    <div class="overlay-card">
+      <h3 class="end-title" data-i18n="hint">اختر الطرف</h3>
+      <div class="end-row">
+        <button class="btn primary" data-end="left">&#x2190; <span data-i18n="left">يسار</span></button>
+        <button class="btn primary" data-end="right"><span data-i18n="right">يمين</span> &#x2192;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Match over banner -->
+  <div id="gameOver" class="banner">
+    <div class="banner-card">
+      <h2 id="bannerText">—</h2>
+      <button class="btn primary" onclick="document.getElementById('gameOver').classList.remove('active')">OK</button>
+    </div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
