@@ -3,7 +3,6 @@
 // Video) follows the playhead, View > Video Display sets its scaling, the
 // video clip commands and the Properties section for the session's video.
 
-import '../styles/video.css';
 import { h } from '../lib/dom.js';
 import { resolveItems } from '../ui/menubar.js';
 import { OPEN_HOOKS } from '../storage/files.js';

@@ -2,7 +2,6 @@
 // command overrides), the Mixer panel, session files, Properties sections
 // and the glue that keeps sessions in step with their source files.
 
-import '../styles/multitrack.css';
 import { registerIcons } from '../ui/icons.js';
 import { MULTITRACK_ICONS } from '../multitrack/icons.js';
 import { MultitrackView } from '../editor/multitrack-view.js';

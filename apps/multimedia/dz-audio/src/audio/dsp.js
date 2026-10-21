@@ -2,7 +2,7 @@
 // the kernels used on the main thread and in workers. The compiled
 // WebAssembly.Module is also handed to the playback worklet.
 
-import wasmUrl from './dsp.wasm?url';
+const wasmUrl = new URL('./dsp.wasm', import.meta.url).href;
 
 let modulePromise = null;
 let instancePromise = null;

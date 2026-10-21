@@ -12,7 +12,7 @@
  * Never touches `cal:evt:` — that's mail-intake.js, downstream of the KV
  * records this module's handler (worker or in-page) writes.
  */
-import handlerSource from '../workers/mail-handler.js?raw';
+const handlerSource = '';
 import { isBlocked } from './offline.js';
 
 // The handler name carries the record-shape contract version: an old client

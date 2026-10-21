@@ -1,7 +1,11 @@
 // Main-thread export API. Encoding runs in a dedicated worker per export
 // (src/export/export-worker.js); cancelling terminates it immediately.
 
-import ExportWorker from './export-worker.js?worker';
+const ExportWorker = class extends Worker {
+  constructor() {
+    super(new URL('./export-worker.js', import.meta.url), { type: 'module' });
+  }
+};
 import { dspModule, resampleSettings } from '../audio/dsp.js';
 import { conformOptions, exportMarkers } from './formats.js';
 

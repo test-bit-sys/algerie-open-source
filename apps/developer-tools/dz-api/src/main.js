@@ -1,14 +1,3 @@
-import './styles/tokens.css';
-import './styles/base.css';
-import './styles/components.css';
-import './styles/shell.css';
-import './styles/editor.css';
-import './styles/response.css';
-import './styles/sidebar.css';
-import './styles/panels.css';
-import './styles/runner.css';
-import './styles/dialogs.css';
-import './styles/websocket.css';
 import { h } from './lib/dom.js';
 import { applyTheme, watchSystemTheme, prefs } from './ui/prefs.js';
 import { openDb } from './data/idb.js';

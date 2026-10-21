@@ -34,7 +34,7 @@
  * retires the suggestion when the address appears in membership), dismissal
  * goes through dismissSuggestion.
  */
-import workerSource from '../workers/rsvp-worker.js?raw';
+const workerSource = '';
 import { describeRecurrence, expandOccurrences } from './recurrence.js';
 import { getUser } from './auth.js';
 import { isBlocked } from './offline.js';

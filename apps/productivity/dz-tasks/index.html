@@ -26,6 +26,14 @@
       } catch {}
     })();
   </script>
+  <!-- Native browser Import Map for offline vendored packages -->
+  <script type="importmap">
+  {
+    "imports": {
+      "lucide": "../../../packages/vendor/lucide.js"
+    }
+  }
+  </script>
   <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
   <script type="module" src="./src/main.js"></script>
 </head>

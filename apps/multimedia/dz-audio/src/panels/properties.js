@@ -4,7 +4,6 @@
 // session. Every section collapses from its heading; collapsed headings are
 // remembered across files and sessions.
 
-import '../styles/docked-panels.css';
 import { h } from '../lib/dom.js';
 import { icon } from '../ui/icons.js';
 

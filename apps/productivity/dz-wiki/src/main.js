@@ -1,10 +1,3 @@
-import './styles/tokens.css';
-import './styles/base.css';
-import './styles/components.css';
-import './styles/shell.css';
-import './styles/page.css';
-import './styles/editor.css';
-import './styles/database.css';
 import { h } from './lib/dom.js';
 import { icon } from './lib/icons.js';
 import { applyTheme } from './ui/prefs.js';
@@ -111,7 +104,7 @@ function inviteFromHash() {
 async function boot() {
   const link = inviteFromHash();
   const params = new URLSearchParams(location.search);
-  if (import.meta.env.DEV && params.has('local')) {
+  if (import.meta.env?.DEV && params.has('local')) {
     // Development sandbox: everything stays in this browser, no Puter account.
     // Sharing runs on a local copy of the collaboration service; add &as=<name>
     // in another tab to be someone else.

@@ -8,6 +8,7 @@ import { openFiles } from './storage/files.js';
 const app = new App();
 for (const install of FEATURES) install(app);
 createShell(app, document.getElementById('app'));
+app.setWorkspace(app.prefs.get('workspace') || 'Default');
 app.setStatus(`Launched in ${(performance.now() / 1000).toFixed(2)} seconds`);
 
 // Files handed to the app by the Puter desktop ("Open with").
@@ -21,7 +22,7 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations?.().then((regs) => regs.forEach((r) => r.unregister())).catch(() => {});
 }
 
-if (import.meta.env.DEV) {
+if (import.meta.env?.DEV) {
   window.as = app;
   // Dev hook: open gitignored test media from .dev-media/ by file name.
   app.openDev = async (names) => {

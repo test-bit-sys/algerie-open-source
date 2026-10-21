@@ -18,7 +18,7 @@ const appRoot = document.getElementById('app');
  * network. A waiting update surfaces as a toast; reloading swaps it in.
  */
 function registerServiceWorker() {
-  if (!import.meta.env.PROD || !('serviceWorker' in navigator)) return;
+  if (!import.meta.env?.PROD || !('serviceWorker' in navigator)) return;
   window.addEventListener('load', async () => {
     let reg;
     try {

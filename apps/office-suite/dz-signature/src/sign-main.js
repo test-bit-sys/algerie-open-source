@@ -5,7 +5,6 @@
  * never hit server logs.
  */
 
-import './styles/index.css';
 import { el, clear, append, fieldId } from './ui/dom.js';
 import { icon } from './ui/icons.js';
 import { openPdf } from './lib/pdfdoc.js';

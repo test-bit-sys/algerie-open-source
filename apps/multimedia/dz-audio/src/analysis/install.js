@@ -1,7 +1,6 @@
 // Analysis panels: Frequency Analysis, Amplitude Statistics, Phase Analysis,
 // Phase Meter and Match Loudness, plus Effects > Match Loudness.
 
-import '../styles/analysis.css';
 import { frequencyPanel } from './frequency.js';
 import { amplitudePanel } from './amplitude.js';
 import { phaseAnalysisPanel, phaseMeterPanel } from './phase.js';

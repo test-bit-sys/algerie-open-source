@@ -3,7 +3,6 @@
 // and the event log the Events panel shows (fed by wrapping app.notify and
 // app.setStatus and by engine dropout and error reports).
 
-import '../styles/panels-extra.css';
 import { registerIcons } from '../ui/icons.js';
 import { resolveItems } from '../ui/menubar.js';
 import { EventLog } from '../lib/event-log.js';

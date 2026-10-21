@@ -2,7 +2,6 @@
 // spectral selection tools and spectral editing (Delete, effects and the
 // HUD restricted to a spectral selection, Spot Healing, Auto Heal).
 
-import '../styles/spectral.css';
 import { h, announce } from '../lib/dom.js';
 import { WaveformView } from '../editor/waveform-view.js';
 import { openDialog } from '../ui/dialog.js';

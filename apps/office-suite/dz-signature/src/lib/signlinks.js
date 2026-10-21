@@ -22,7 +22,7 @@
  * are pulled on boot, on an interval, and when a document is opened.
  */
 
-import workerSource from '../workers/sign-worker.js?raw';
+const workerSource = '';
 import { coerce, randomHex, sha256Hex } from './util.js';
 import { pdfPath } from './store.js';
 import { sendChannel } from './model.js';

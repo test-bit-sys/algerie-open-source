@@ -3,7 +3,6 @@
 // device choice, the Media Browser and Metadata panels, marker import,
 // Open Recent, autosave with crash recovery and the Puter window-close prompt.
 
-import '../styles/files.css';
 import { CornerLeftUp } from 'lucide';
 import { h } from '../lib/dom.js';
 import { registerIcons } from '../ui/icons.js';

@@ -17,7 +17,8 @@
   <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <link rel="manifest" href="./manifest.json" />
   <!-- Sovereign Offline DZ Runtime Styles & Cairo Typography -->
-  <link rel="stylesheet" href="/packages/dz-runtime/dz-runtime.css" />
+  <link rel="stylesheet" href="../../../packages/dz-runtime/dz-runtime.css" />
+  <link rel="stylesheet" href="./src/styles/index.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" />
   <script>
     // Apply saved theme before first paint to avoid a flash.
@@ -32,12 +33,12 @@
   <script type="importmap">
   {
     "imports": {
-      "lucide": "/packages/vendor/lucide.js"
+      "lucide": "../../../packages/vendor/lucide.js"
     }
   }
   </script>
   <!-- Sovereign DZ Runtime (100% Local, zero telemetry) -->
-  <script src="/packages/dz-runtime/dz-runtime.js"></script>
+  <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
   <script type="module" src="./src/main.js"></script>
 </head>
 <body>

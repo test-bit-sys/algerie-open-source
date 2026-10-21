@@ -1,8 +1,6 @@
 // Effects feature: effect commands and dialogs, the Effects Rack panel,
 // Favorites, and the Generate submenu.
 
-import '../styles/effects.css';
-import '../styles/effects-content.css';
 import { registerIcons } from '../ui/icons.js';
 import { installEffectCommands } from '../effects/commands.js';
 import { effectsRackPanel, extendFileGraph, addToRack, applyRack, rackFor, setRack, installRackCommands } from '../effects/rack-panel.js';

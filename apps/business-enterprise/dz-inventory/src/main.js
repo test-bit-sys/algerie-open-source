@@ -1,4 +1,3 @@
-import './styles/index.css';
 import { el } from './ui/dom.js';
 import { icon } from './ui/icons.js';
 import { store } from './lib/store.js';

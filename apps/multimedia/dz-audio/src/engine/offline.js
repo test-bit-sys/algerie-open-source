@@ -2,7 +2,11 @@
 // effect chains). Rendering runs in a Worker with the same mix core and WASM
 // effects as playback, so what you hear is what you get.
 
-import OfflineWorker from './offline-worker.js?worker';
+const OfflineWorker = class extends Worker {
+  constructor() {
+    super(new URL('./offline-worker.js', import.meta.url), { type: 'module' });
+  }
+};
 import { CHUNK } from './mixcore.js';
 import { dspModule } from '../audio/dsp.js';
 import { sourceKey } from './engine.js';

@@ -4,8 +4,8 @@
 // need around the playhead (and the loop start) and drops the rest, so the
 // worklet holds a few seconds of audio regardless of project size.
 
-import mixerUrl from './mixer-worklet.js?worker&url';
-import captureUrl from './capture-worklet.js?worker&url';
+const mixerUrl = new URL('./mixer-worklet.js', import.meta.url).href;
+const captureUrl = new URL('./capture-worklet.js', import.meta.url).href;
 import { Emitter } from '../lib/emitter.js';
 import { CHUNK } from './mixcore.js';
 import { dspModule } from '../audio/dsp.js';

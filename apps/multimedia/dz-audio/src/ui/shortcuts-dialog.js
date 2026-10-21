@@ -10,7 +10,6 @@
 // Clipboard exports the keymap as text, and Cancel restores the keymap the
 // dialog opened with.
 
-import '../styles/shortcuts.css';
 import { h, announce } from '../lib/dom.js';
 import { icon } from './icons.js';
 import { openDialog, promptDialog, confirmDialog } from './dialog.js';

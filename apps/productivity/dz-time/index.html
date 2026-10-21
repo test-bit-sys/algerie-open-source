@@ -65,7 +65,16 @@
       #boot-splash .boot-mark { animation: boot-appear 0.01ms linear 0.25s forwards; }
       #boot-splash { transition: none; }
     }
+  </style>
   <link rel="stylesheet" href="./src/styles/index.css" />
+  <!-- Native browser Import Map for offline vendored packages -->
+  <script type="importmap">
+  {
+    "imports": {
+      "lucide": "../../../packages/vendor/lucide.js"
+    }
+  }
+  </script>
   <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
   <script type="module" src="./src/main.js"></script>
 </head>

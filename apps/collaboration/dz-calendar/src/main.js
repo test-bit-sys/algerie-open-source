@@ -1,9 +1,3 @@
-import './styles/tokens.css';
-import './styles/base.css';
-import './styles/layout.css';
-import './styles/views.css';
-import './styles/offline.css';
-
 import { el, clear } from './js/dom.js';
 import { icon } from './js/icons.js';
 import { toast } from './js/toast.js';
@@ -130,7 +124,7 @@ function waitForPuter(timeout = 8000) {
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   const inPuterGui = typeof puter !== 'undefined' && (puter.env === 'app' || puter.env === 'gui');
-  if (import.meta.env.PROD && !inPuterGui) {
+  if (import.meta.env?.PROD && !inPuterGui) {
     // `updateViaCache: 'none'` forces the browser to revalidate sw.js from the
     // network on every update check — the kill-switch: a fixed/neutered sw.js
     // always reaches clients on their next load.
@@ -138,7 +132,7 @@ function registerServiceWorker() {
       navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).catch(() => {});
     if (document.readyState === 'complete') register();
     else window.addEventListener('load', register, { once: true });
-  } else if (import.meta.env.DEV) {
+  } else if (import.meta.env?.DEV) {
     navigator.serviceWorker
       .getRegistrations()
       .then((regs) => regs.forEach((r) => r.unregister()))

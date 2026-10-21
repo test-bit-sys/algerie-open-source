@@ -1,6 +1,5 @@
 // Sound Assistant, Batch Process and Diagnostics panels.
 
-import '../styles/sound-assistant.css';
 import { Mic, Music, Zap, Trees } from 'lucide';
 import { registerIcons } from '../ui/icons.js';
 import { soundAssistantPanel } from '../sound-assistant/panel.js';

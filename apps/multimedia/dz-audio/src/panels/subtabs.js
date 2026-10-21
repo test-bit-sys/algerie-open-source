@@ -1,7 +1,6 @@
 // Tabs inside a panel (Amplitude Statistics, Metadata): a row of text tabs
 // with arrow-key navigation over panes that are shown one at a time.
 
-import '../styles/docked-panels.css';
 import { h } from '../lib/dom.js';
 
 let uid = 0;

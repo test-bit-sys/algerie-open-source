@@ -2,7 +2,11 @@
 // least busy worker; sessions stay on one worker. Sample buffers are
 // transferred, so callers pass copies they no longer need.
 
-import AnalysisWorker from './worker.js?worker';
+const AnalysisWorker = class extends Worker {
+  constructor() {
+    super(new URL('./worker.js', import.meta.url), { type: 'module' });
+  }
+};
 import { dspModule } from '../audio/dsp.js';
 
 let pool = null;
