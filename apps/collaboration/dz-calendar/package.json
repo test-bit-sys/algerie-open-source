@@ -1,0 +1,29 @@
+{
+  "name": "calendar-puter",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A modern, minimal calendar app for the web, powered by Puter.js.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy:email-worker": "puter worker deploy src/workers/email-worker.js calendar-email",
+    "publish:mail-handler": "node scripts/publish-mail-handler.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "calendar",
+    "puter",
+    "vanilla-js"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.10",
+    "jsdom": "^29.1.1",
+    "vite": "^8.1.4",
+    "vitest": "^4.1.10"
+  }
+}

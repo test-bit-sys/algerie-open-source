@@ -205,7 +205,11 @@
     ui: {
       alert: (msg) => window.alert(msg),
       showSaveDialog: async () => null,
-      showOpenDialog: async () => null
+      showOpenDialog: async () => null,
+      hideWindow: () => {},
+      showWindow: () => {},
+      parentApp: () => null,
+      launchApp: async () => null
     }
   };
 

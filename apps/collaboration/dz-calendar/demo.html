@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Calendar — local demo (mock Puter)</title>
+    <script>
+      // ---- Mock Puter SDK (local preview only — DELETE THIS FILE before shipping).
+      // Backed by localStorage so seeded data survives reloads.
+      (function () {
+        const LS = window.localStorage;
+
+        function setOne(key, value) {
+          LS.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+          return true;
+        }
+
+        // ?noemail simulates production-before-grant: getUser() has NO `email`
+        // until puter.perms.request() is granted via a confirm() dialog.
+        // NOTE: don't open the ?noemail variant under browser automation — the
+        // confirm() blocks the CDP session.
+        let emailGranted = !new URLSearchParams(location.search).has('noemail');
+
+        window.puter = {
+          env: 'web',
+          auth: {
+            isSignedIn: () => true,
+            getUser: async () =>
+              emailGranted
+                ? { uuid: 'demo-uuid', username: 'nj', email: 'nj@puter.com' }
+                : { uuid: 'demo-uuid', username: 'nj' },
+            signIn: async () => true,
+            signOut: async () => {},
+          },
+          perms: {
+            request: async (perm) => {
+              if (emailGranted) return true;
+              emailGranted = window.confirm(
+                `[mock Puter permission prompt]\n\nCalendar wants: ${perm}\n(read your email address). Allow?`,
+              );
+              return emailGranted;
+            },
+          },
+          kv: {
+            // Real puter.kv.set also accepts an array of {key, value} pairs.
+            set: async (key, value) => {
+              if (Array.isArray(key)) {
+                for (const e of key) setOne(e.key, e.value);
+                return true;
+              }
+              return setOne(key, value);
+            },
+            get: async (key) => LS.getItem(key), // store's coerceValue JSON-parses strings
+            del: async (key) => (LS.removeItem(key), true),
+            list: async (pattern, returnValues) => {
+              const prefix = String(pattern).replace(/\*$/, '');
+              const out = [];
+              for (let i = 0; i < LS.length; i++) {
+                const key = LS.key(i);
+                if (!key.startsWith(prefix)) continue; // MUST honor the glob prefix
+                out.push(returnValues ? { key, value: LS.getItem(key) } : key);
+              }
+              return out;
+            },
+          },
+        };
+
+        // ---- Seed demo data once (times are epoch ms — never ISO strings).
+        if (!LS.getItem('cal:demo-seeded')) {
+          const now = new Date();
+          const at = (h, m) =>
+            new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m).getTime();
+
+          // 1. An invitation TO you → the details card shows the "Going?" chips.
+          setOne('cal:evt:demo-invite', {
+            id: 'demo-invite',
+            title: 'Q3 kickoff (invite to me)',
+            start: at(10, 0),
+            end: at(11, 0),
+            allDay: false,
+            color: 'blue',
+            location: 'Conf room 4',
+            description: 'Try the Yes / No / Maybe chips on this one.',
+            organizer: { email: 'jane@corp.com', name: 'Jane Boss' },
+            guests: [
+              { email: 'jane@corp.com', name: 'Jane Boss', status: 'accepted' },
+              { email: 'nj@puter.com', status: 'needs-action' },
+              { email: 'sam@corp.com', name: 'Sam', status: 'tentative' },
+            ],
+          });
+
+          // 2. Your own event with guests → organizer view: list + summary, no chips.
+          setOne('cal:evt:demo-own', {
+            id: 'demo-own',
+            title: 'Design review (my event)',
+            start: at(14, 0),
+            end: at(15, 0),
+            allDay: false,
+            color: 'green',
+            organizer: { email: 'nj@puter.com' },
+            guests: [
+              { email: 'ada@x.com', name: 'Ada Lovelace', status: 'accepted' },
+              { email: 'bob@x.com', status: 'needs-action' },
+            ],
+          });
+
+          // 3. A recurring invite → RSVP from any occurrence applies series-wide.
+          setOne('cal:evt:demo-weekly', {
+            id: 'demo-weekly',
+            title: 'Team standup (recurring invite)',
+            start: at(9, 0),
+            end: at(9, 30),
+            allDay: false,
+            color: 'violet',
+            recurrence: { freq: 'weekly', interval: 1, byWeekday: [now.getDay()] },
+            organizer: { email: 'jane@corp.com', name: 'Jane Boss' },
+            guests: [{ email: 'nj@puter.com', status: 'needs-action' }],
+          });
+
+          setOne('cal:demo-seeded', '1');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app" aria-busy="true"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,235 @@
+/* =========================================================================
+   Design tokens — colors, spacing, typography, elevation, motion.
+   Light is the default; dark is applied via [data-theme="dark"] and honours
+   the OS preference when the user has not made an explicit choice.
+   ========================================================================= */
+
+:root {
+  /* Neutral ramp (light) */
+  --gray-0: #ffffff;
+  --gray-25: #fbfbfd;
+  --gray-50: #f5f6f8;
+  --gray-100: #eceef2;
+  --gray-150: #e2e5eb;
+  --gray-200: #d6dae2;
+  --gray-300: #b9bfcc;
+  /* An off switch's track: 3.4:1 on --surface, 3.1:1 on --surface-2. */
+  --switch-off: #858c9d;
+  --gray-400: #939bab;
+  /* 4.9:1 on --surface-2 and 4.5:1 on --surface-3 (the old #6b7280 sat at
+     4.47 and 4.16): --text-3 is resting text on both — other-month day
+     numbers, chip times, task due times, and every hovered row. */
+  --gray-500: #656c7a;
+  --gray-600: #4b5162;
+  --gray-700: #363b49;
+  --gray-800: #23262f;
+  --gray-900: #14161c;
+
+  /* Typography */
+  --font-sans: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Brand / accent (Algerian Sovereign Emerald) */
+  --accent: #15803d;
+  --accent-hover: #166534;
+  --accent-active: #14532d;
+  --accent-soft: #f0fdf4;
+  --accent-contrast: #ffffff;
+
+  /* Semantic surfaces */
+  --bg: var(--gray-25);
+  --surface: var(--gray-0);
+  --surface-2: var(--gray-50);
+  --surface-3: var(--gray-100);
+  --surface-inset: var(--gray-50);
+  --overlay-scrim: rgba(20, 22, 28, 0.44);
+
+  /* Text */
+  --text: var(--gray-900);
+  --text-2: var(--gray-600);
+  --text-3: var(--gray-500);
+  --text-inverse: var(--gray-0);
+  --text-on-accent: #ffffff;
+  /* Accent-colored text sitting on --accent-soft (the active mobile tab). */
+  --accent-ink-on-soft: var(--accent);
+
+  /* Lines */
+  --border: var(--gray-150);
+  --border-strong: var(--gray-200);
+  --grid-line: var(--gray-100);
+  --ring: color-mix(in srgb, var(--accent) 45%, transparent);
+
+  /* Feedback */
+  --danger: #e5484d;
+  --danger-hover: #d13438;
+  --danger-soft: #fdecec;
+  --success: #2fa66b;
+  --warning: #b45309;
+  /* Ink for feedback TEXT — Delete, a failed or finished import, the editor's
+     error line, a Delete row's fill under white text. The fills above are
+     pitched for dots and chips; as 12–14px text on white, --danger reads
+     3.9:1 and --success 3.1:1. */
+  --danger-ink: #cc2f34;
+  --success-ink: #15803d;
+  --today: var(--accent);
+
+  /* Radius */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 9px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-full: 999px;
+
+  /* Spacing scale (4px base) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, 'Apple Color Emoji', sans-serif;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-base: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 20px;
+  --fs-2xl: 26px;
+  --lh-tight: 1.2;
+  --lh-normal: 1.5;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(20, 22, 28, 0.06), 0 1px 1px rgba(20, 22, 28, 0.04);
+  --shadow-md: 0 4px 12px rgba(20, 22, 28, 0.1), 0 2px 4px rgba(20, 22, 28, 0.06);
+  --shadow-lg: 0 12px 32px rgba(20, 22, 28, 0.16), 0 4px 10px rgba(20, 22, 28, 0.08);
+  --shadow-pop: 0 8px 28px rgba(20, 22, 28, 0.18);
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur: 180ms;
+  --dur-slow: 260ms;
+
+  /* Layout metrics */
+  --header-h: 60px;
+  /* The mobile tab bar's height without its safe-area padding (see views.css:
+     6px paddings, a 16px icon, a 2px gap and a 10px label — plus its border).
+     Anything fixed to the bottom of the viewport on a phone clears it by this. */
+  --tabbar-h: 58px;
+  --sidebar-w: 264px;
+}
+
+/* ---- Dark theme (explicit or via OS preference) ---------------------- */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --gray-0: #16181f;
+  --gray-25: #0e0f13;
+  --gray-50: #1a1c24;
+  --gray-100: #21242e;
+  --gray-150: #2a2e3a;
+  --gray-200: #343946;
+  --gray-300: #454b5b;
+  --switch-off: #606779; /* 3.1:1 on the dark surfaces */
+  --gray-400: #6a7182;
+  --gray-500: #8a91a2;
+  --gray-600: #a7adbc;
+  --gray-700: #c6cad5;
+  --gray-800: #e2e5ec;
+  --gray-900: #f4f6fa;
+
+  --accent: #22c55e;
+  --accent-hover: #16a34a;
+  --accent-active: #15803d;
+  --accent-soft: #052e16;
+  --accent-contrast: #0b0f19;
+  /* The dark accent is lifted so it reads as text on the dark ground (4.9:1);
+     white ink on that same fill lands at 3.9:1, under AA for the 12–14px it
+     carries (Create, Save, the today pill, the selected mini-calendar day).
+     Dark ink on it clears the bar — the same inversion Material's dark
+     "on-primary" makes, and what --accent-contrast has been for all along. */
+  --text-on-accent: var(--accent-contrast);
+  /* Accent-colored text on the accent-soft fill (the active mobile tab, at
+     10px) reads 3.6:1 in the dark; the hover tint of the accent clears 4.8:1. */
+  --accent-ink-on-soft: var(--accent-hover);
+
+  --bg: var(--gray-25);
+  --surface: var(--gray-0);
+  --surface-2: var(--gray-50);
+  --surface-3: var(--gray-100);
+  --overlay-scrim: rgba(0, 0, 0, 0.6);
+
+  --border: var(--gray-150);
+  --border-strong: var(--gray-200);
+  --grid-line: var(--gray-100);
+
+  --danger: #ff6b6f;
+  --danger-hover: #ff8386;
+  --danger-soft: #3a2224;
+  --success: #4cc38a;
+  --warning: #e0900d;
+  /* The lifted dark feedback colors already read as text on the dark ground. */
+  --danger-ink: var(--danger);
+  --success-ink: var(--success);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-pop: 0 10px 34px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --gray-0: #16181f;
+    --gray-25: #0e0f13;
+    --gray-50: #1a1c24;
+    --gray-100: #21242e;
+    --gray-150: #2a2e3a;
+    --gray-200: #343946;
+    --gray-300: #454b5b;
+  --switch-off: #606779; /* 3.1:1 on the dark surfaces */
+    --gray-400: #6a7182;
+    --gray-500: #8a91a2;
+    --gray-600: #a7adbc;
+    --gray-700: #c6cad5;
+    --gray-800: #e2e5ec;
+    --gray-900: #f4f6fa;
+
+    --accent: #22c55e;
+    --accent-hover: #16a34a;
+    --accent-active: #15803d;
+    --accent-soft: #052e16;
+    --accent-contrast: #0b0f19;
+    --text-on-accent: var(--accent-contrast);
+    --accent-ink-on-soft: var(--accent-hover);
+
+    --bg: var(--gray-25);
+    --surface: var(--gray-0);
+    --surface-2: var(--gray-50);
+    --surface-3: var(--gray-100);
+    --overlay-scrim: rgba(0, 0, 0, 0.6);
+
+    --border: var(--gray-150);
+    --border-strong: var(--gray-200);
+    --grid-line: var(--gray-100);
+
+    --danger: #ff6b6f;
+    --danger-hover: #ff8386;
+    --danger-soft: #3a2224;
+    --success: #4cc38a;
+    --warning: #e0900d;
+    --danger-ink: var(--danger);
+    --success-ink: var(--success);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+    --shadow-pop: 0 10px 34px rgba(0, 0, 0, 0.6);
+  }
+}

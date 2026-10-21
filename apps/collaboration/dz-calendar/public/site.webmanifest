@@ -1,0 +1,32 @@
+{
+  "name": "Calendar",
+  "short_name": "Calendar",
+  "description": "A modern, minimal calendar for the web — month, week, day, and agenda views, recurring events, reminders, search, and iCalendar import/export. Your data stays in your own Puter storage.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "lang": "en",
+  "dir": "ltr",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "/icon-192-maskable.png", "type": "image/png", "sizes": "192x192", "purpose": "maskable" },
+    { "src": "/icon-512-maskable.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    { "src": "/screenshots/screenshot-month.png", "type": "image/png", "sizes": "1920x1080", "form_factor": "wide", "label": "Month view with color-coded events" },
+    { "src": "/screenshots/screenshot-week.png", "type": "image/png", "sizes": "1920x1080", "form_factor": "wide", "label": "Week view with overlapping events and a live time indicator" },
+    { "src": "/screenshots/screenshot-editor.png", "type": "image/png", "sizes": "1920x1080", "form_factor": "wide", "label": "Event editor with recurrence and reminders (dark theme)" },
+    { "src": "/screenshots/screenshot-day.png", "type": "image/png", "sizes": "1440x1080", "form_factor": "wide", "label": "Day view timeline" },
+    { "src": "/screenshots/screenshot-search.png", "type": "image/png", "sizes": "1440x1080", "form_factor": "wide", "label": "Search across all your events" },
+    { "src": "/screenshots/screenshot-import-export.png", "type": "image/png", "sizes": "1440x1080", "form_factor": "wide", "label": "Import and export as iCalendar or JSON (dark theme)" },
+    { "src": "/screenshots/screenshot-mobile-agenda.png", "type": "image/png", "sizes": "1080x1920", "form_factor": "narrow", "label": "Agenda list on mobile" },
+    { "src": "/screenshots/screenshot-mobile-day.png", "type": "image/png", "sizes": "1080x1920", "form_factor": "narrow", "label": "Day view on mobile (dark theme)" },
+    { "src": "/screenshots/screenshot-mobile-editor.png", "type": "image/png", "sizes": "1080x1920", "form_factor": "narrow", "label": "Editing an event on mobile" }
+  ]
+}

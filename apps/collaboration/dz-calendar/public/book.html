@@ -1,0 +1,1428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f7f9">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#101216">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<title>Book a meeting — Puter Calendar</title>
+<style>
+  :root { color-scheme: light dark;
+    --bg: #f6f7f9; --card: #ffffff; --text: #1a1d21; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --accent-soft: #eff4ff;
+    --on-fill: #ffffff; --ok: #0f6b34; --no: #b91c1c; }
+  /* --on-fill is the text color on accent/muted-filled controls. The dark
+     accent and muted grays are light enough that white text on them fails
+     WCAG AA (3.2:1 and 2.6:1) — dark ink passes on both (5.9:1 / 7.2:1). */
+  @media (prefers-color-scheme: dark) { :root {
+    --bg: #101216; --card: #1a1e24; --text: #e8eaed; --muted: #9aa1ab; --line: #2a2f37;
+    --accent: #5b8def; --accent-soft: #1c2740; --on-fill: #101216;
+    --ok: #4ade80; --no: #f87171; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
+    display: flex; justify-content: center; padding: 24px 16px; min-height: 100vh; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    max-width: 760px; width: 100%; height: fit-content;
+    box-shadow: 0 8px 30px rgba(0,0,0,.06); overflow: hidden;
+    /* Centred in the viewport, top and bottom. `margin: auto` rather than
+       align-items on the body: auto margins only ever absorb POSITIVE free
+       space, so a card taller than the screen (a long times list, a phone in
+       landscape) still starts at the top edge and scrolls — where centring it
+       would push its head above the viewport with no way to scroll back up.
+       The body's 24px padding stays as the minimum breathing room. */
+    margin: auto; }
+  /* The picker runs three columns — details, month, times — so the day's times
+     sit beside the month instead of a screen below it, which is what made a
+     guest scroll to do the one thing this page is for. */
+  .card--pick { max-width: 940px; }
+  .layout { display: grid; grid-template-columns: 252px 1fr; }
+  .layout--pick { grid-template-columns: 252px minmax(280px, 1fr) 288px; }
+  .info { padding: 24px; border-right: 1px solid var(--line); min-width: 0; }
+  .pane { padding: 24px; min-width: 0; }
+  .pane--times { border-left: 1px solid var(--line); padding: 24px 20px;
+    display: flex; flex-direction: column; position: relative; }
+  /* The times are the one thing bounded here: a full day of short slots is the
+     only part of this page that can outrun a screen, and it is the part a
+     guest can scroll knowing what they are looking for. Everything else stays
+     the height it needs, so nothing is ever quietly cut off.
+     What bounds them is the month beside them. The list must not decide the
+     card's height: three times and fourteen times are one click apart, and a
+     card that resizes (and, being centred, MOVES) under the cursor between two
+     days is a page that won't hold still while it is read. So the frame takes
+     whatever height the month column has already settled, and the scroller is
+     taken out of flow inside it — the list scrolls within that height and
+     contributes none of its own. */
+  .times-frame { position: relative; flex: 1; min-height: 0; }
+  .times-scroll { position: absolute; inset: 0; overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--muted) 45%, transparent) transparent; }
+  /* A list cut off at the card's edge has to look cut off. Overlay scrollbars
+     stay invisible until something scrolls them, so a guest offered more times
+     than the column holds would read the last visible one as the last one. */
+  .pane--times::after { content: ''; position: absolute; left: 1px; right: 1px; bottom: 0;
+    height: 44px; pointer-events: none; opacity: 0; transition: opacity .12s ease;
+    background: linear-gradient(to top, var(--card), transparent); }
+  .pane--times.has-more::after { opacity: 1; }
+  .kicker { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 4px; overflow-wrap: anywhere; }
+  /* The host's picture, when their page publishes one. A fixed circle: the
+     picture is a stranger's file, so its own dimensions decide nothing here. */
+  .host-pic { width: 56px; height: 56px; border-radius: 50%; display: block;
+    margin: 0 0 12px; object-fit: cover; background: var(--accent-soft); }
+  h1 { font-size: 21px; margin: 0 0 12px; overflow-wrap: anywhere; }
+  h2 { font-size: 16px; margin: 0 0 12px; }
+  .fact { display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; color: var(--muted);
+    font-size: 14px; overflow-wrap: anywhere; }
+  .fact svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
+  .desc { margin: 14px 0 0; font-size: 14px; color: var(--muted); white-space: pre-wrap;
+    overflow-wrap: anywhere; }
+  .banner { border-radius: 10px; padding: 10px 14px; margin: 0 0 16px; font-weight: 600; font-size: 14px;
+    background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--ok); }
+  .banner--err { background: color-mix(in srgb, var(--no) 12%, transparent); color: var(--no); }
+  /* Plain text color: muted-on-muted lands just under AA in light mode. */
+  .banner--muted { background: color-mix(in srgb, var(--muted) 14%, transparent); color: var(--text); }
+  /* Above the columns, not inside one of them: a banner in the month column
+     pushes its header a line below the times header beside it, and the columns
+     stop reading as one row. */
+  .banner--bar { margin: 0; border-radius: 0; padding: 12px 24px;
+    border-bottom: 1px solid var(--line); }
+  @media (max-width: 640px) { .banner--bar { padding: 12px 14px; } }
+  /* Month calendar */
+  .cal-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 8px; }
+  .cal-title { font-weight: 650; font-size: 15px; }
+  .cal-nav { display: flex; gap: 4px; }
+  .cal-nav button { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line);
+    background: transparent; color: var(--text); font: inherit; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; }
+  .cal-nav svg { width: 18px; height: 18px; flex: none; }
+  .cal-nav button:hover:not(:disabled) { border-color: var(--accent); }
+  .cal-nav button:disabled { opacity: .35; cursor: default; }
+  /* Comfortable month-nav taps on touch devices (32px is fine for a mouse). */
+  @media (pointer: coarse) {
+    .cal-nav button { width: 44px; height: 44px; }
+  }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .cal-dow { text-align: center; font-size: 11px; font-weight: 600; text-transform: uppercase;
+    color: var(--muted); padding: 4px 0; }
+  /* Blank cells hold a row open like a date does. Without this the trailing
+     filler (below) would collapse to nothing, and the month would still be a
+     row shorter in February than in August. */
+  .cal-blank { aspect-ratio: 1; }
+  .cal-day { aspect-ratio: 1; border: 0; border-radius: 50%; background: transparent;
+    color: var(--text); font: inherit; font-size: 14px; position: relative; }
+  .cal-day:not(:disabled) { cursor: pointer; background: var(--accent-soft); color: var(--accent);
+    font-weight: 650; }
+  .cal-day:not(:disabled):hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+  /* Muted, but never faint: at .5 opacity on top of --muted these numbers
+     landed at 1.97:1 (light) / 2.64:1 (dark) and the month stopped reading as
+     a calendar — a guest can't tell which week or weekday a date is in if the
+     dates around it are invisible. The muted color alone is the de-emphasis;
+     the accent-soft pill is what marks a day as bookable. */
+  .cal-day:disabled { color: var(--muted); }
+  .cal-day[aria-pressed='true'] { background: var(--accent); color: var(--on-fill); }
+  .cal-day--today:not(:disabled)::after, .cal-day--today:disabled::after { content: '';
+    position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+    width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+  /* The zone reads as one of the meeting's facts, so it's dressed as one rather
+     than as a labelled form row beside the month — the month column got that
+     row's height back. The select keeps its native arrow as the affordance. */
+  .fact--tz { align-items: center; }
+  .fact--tz svg { margin-top: 0; }
+  /* Pulled left by the padding it is given back, so the zone's text starts on
+     the same column as the facts above it. The left padding is short of the
+     right by the few pixels the control reserves for its own text inset. */
+  .fact--tz select { flex: 1; min-width: 0; max-width: 100%; margin: -5px -7px;
+    padding: 5px 7px 5px 2px; border-radius: 8px; border: 1px solid transparent;
+    background: transparent; color: inherit; font: inherit; font-size: 14px; }
+  .fact--tz select:hover { background: color-mix(in srgb, var(--muted) 14%, transparent); }
+  /* Slot list */
+  /* Matched to the month header's height (its nav buttons set that) so the two
+     column headings sit on the same line and their lists start level. */
+  .day-title { font-weight: 650; margin: 0 0 8px; font-size: 14px;
+    min-height: 32px; display: flex; align-items: center; }
+  @media (pointer: coarse) { .day-title { min-height: 44px; } }
+  .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 8px; }
+  .slot, .slot-confirm { padding: 10px 0; border-radius: 10px; font: inherit; font-weight: 600;
+    font-size: 14px; cursor: pointer; text-align: center; }
+  /* The times are the page's main action and 43px tall lands just under a
+     comfortable thumb; give them the room on touch (as the month nav gets). */
+  @media (pointer: coarse) {
+    .slot, .slot-confirm { padding: 12px 0; }
+  }
+  .slot { border: 1.5px solid var(--line); background: transparent; color: var(--accent); }
+  .slot:hover { border-color: var(--accent); }
+  .slot[aria-pressed='true'] { background: var(--muted); border-color: var(--muted); color: var(--on-fill); }
+  .slot-confirm { border: 1.5px solid var(--accent); background: var(--accent); color: var(--on-fill); }
+  /* The armed slot (time + Confirm) takes the whole row so neither half is
+     ever squeezed into wrapping or truncation. */
+  .slot-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; grid-column: 1 / -1; }
+  /* Each of these stands in for the list of times, at the top of its column. */
+  .empty { color: var(--muted); font-size: 14px; margin: 0; }
+  .slots-error .banner { margin: 0; }
+  .slots-error .retry { margin-top: 10px; }
+  .loading { color: var(--muted); font-size: 14px; margin: 0; }
+  /* Form */
+  .summary { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 16px; }
+  .summary .when { font-weight: 650; }
+  .summary .sub { color: var(--muted); font-size: 13px; margin-top: 2px; overflow-wrap: anywhere; }
+  label.f { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 4px; }
+  input.f, textarea.f { width: 100%; padding: 10px 12px; border-radius: 10px;
+    border: 1.5px solid var(--line); background: transparent; color: inherit; font: inherit; }
+  /* A ring, not just a tinted border: the invalid rule below repaints the
+     border red at the same specificity, so with border-color as the only focus
+     signal a focused invalid field looked exactly like an unfocused one and
+     keyboard users had nothing to follow between the two. The ring is drawn
+     outside the box, so it survives whatever the border is doing. */
+  input.f:focus, textarea.f:focus { outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 32%, transparent); }
+  input.f[aria-invalid='true'] { border-color: var(--no); }
+  input.f[aria-invalid='true']:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--no) 32%, transparent); }
+  .f-err { color: var(--no); font-size: 13px; margin: 4px 0 0; }
+  textarea.f { resize: vertical; min-height: 64px; }
+  /* iOS Safari auto-zooms into any focused control whose font-size is under
+     16px, shoving the card half off-screen on a phone (same fix as the app's
+     base.css). Bump the controls to 16px on small screens to suppress it. */
+  @media (max-width: 720px) {
+    input.f, textarea.f, .fact--tz select { font-size: 16px; }
+  }
+  .actions { display: flex; gap: 10px; align-items: center; margin-top: 18px; }
+  .primary { padding: 11px 20px; border-radius: 10px; border: 1.5px solid var(--accent);
+    background: var(--accent); color: var(--on-fill); font: inherit; font-weight: 650; cursor: pointer; }
+  .primary:disabled { opacity: .6; cursor: default; }
+  /* .ghost also dresses the "Add to calendar (.ics)" anchor as a button, so
+     the link underline has to go. */
+  .ghost { padding: 11px 16px; border-radius: 10px; border: 1.5px solid var(--line);
+    background: transparent; color: var(--text); font: inherit; font-weight: 600; cursor: pointer;
+    text-decoration: none; }
+  .ghost:hover:not(:disabled) { border-color: var(--accent); }
+  .danger { padding: 11px 20px; border-radius: 10px; border: 1.5px solid var(--no);
+    background: transparent; color: var(--no); font: inherit; font-weight: 650; cursor: pointer; }
+  .danger:disabled { opacity: .6; cursor: default; }
+  a { color: var(--accent); }
+  /* Confirmation */
+  .done-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; background: color-mix(in srgb, var(--ok) 14%, transparent);
+    color: var(--ok); margin: 0 0 12px; }
+  /* Without an explicit size the unsized SVG fills the badge and the check's
+     rounded stroke caps graze past the circle's edge — size it like the other
+     icons (.fact svg) so it sits inside with even breathing room. */
+  .done-icon svg { width: 22px; height: 22px; flex: none; }
+  .row { margin: 10px 0; overflow-wrap: anywhere; }
+  .row b { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--muted); margin-bottom: 2px; }
+  .fine { margin-top: 16px; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+  .retry { margin-top: 12px; padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer;
+    border-radius: 10px; border: 1.5px solid var(--line); background: transparent; color: var(--text); }
+  .foot { padding: 12px 24px; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+  .foot a { color: inherit; display: inline-flex; align-items: center; gap: 6px; }
+  .foot img { width: 18px; height: 18px; border-radius: 4px; display: block; }
+  /* Narrower than the three columns can hold, the times drop back under the
+     month — two columns of them, so the fold is one short scroll away rather
+     than a screenful. The height cap goes with the third column: stacked, the
+     page is the scroller again. */
+  @media (max-width: 900px) {
+    .card--pick { max-width: 760px; }
+    .layout--pick { grid-template-columns: 252px 1fr; grid-template-rows: auto auto; }
+    .layout--pick .info { grid-row: 1 / span 2; }
+    .pane--cal { padding-bottom: 0; }
+    .pane--times { border-left: 0; padding: 18px 24px 24px; }
+    /* Back in flow: stacked, there is no month beside the list to take a
+       height from, and the page scrolls the whole card anyway. */
+    .times-frame { position: static; flex: none; }
+    .times-scroll { position: static; overflow: visible; }
+    /* Stacked, the page scrolls the list and there is no month header beside
+       it to line up with. */
+    .pane--times::after { display: none; }
+    .day-title { min-height: 0; display: block; }
+  }
+  /* Once the layout is a single column, 24px of side padding is width the month
+     grid needs more: seven columns plus their gaps come out of whatever is
+     left, which left 38px per date at 375px and squeezed the time list down to
+     one column at 320px. Hand some back. */
+  @media (max-width: 640px) {
+    .layout, .layout--pick { grid-template-columns: 1fr; }
+    .layout--pick .info { grid-row: auto; }
+    .info { border-right: 0 !important; border-bottom: 1px solid var(--line); }
+    .info, .pane { padding: 20px 14px; }
+    .pane--cal { padding-bottom: 0; }
+    .pane--times { padding: 18px 14px 20px; }
+    .foot { padding: 12px 14px; }
+  }
+  button:focus-visible, a:focus-visible, select:focus-visible { outline: 2px solid var(--accent);
+    outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main class="card" id="book-root">
+  <div class="pane"><p class="kicker">Book a meeting</p><h1>Loading…</h1></div>
+</main>
+<script>
+/**
+ * Standalone booking page — the Calendly-style guest side. Visitors land here
+ * from a host's share link — calendar.puter.com/#/<host>/<page>, which
+ * index.html forwards to /book.html#/<host>/<page>; the worker is
+ * https://cal-<host>.puter.work, rebuilt below — or from the worker's own
+ * redirects (…puter.work/book/<page> → /book.html#w=<worker>&p=<page>; a
+ * manage link redirects with t=<token>). Everything below talks to that
+ * worker's JSON API; the worker itself serves no HTML. Needs no Puter sign-in
+ * and no SDK.
+ *
+ * All data is rendered with textContent (never markup), POSTs are urlencoded
+ * so they stay CORS "simple requests" (no preflight), and only https
+ * *.puter.work origins with well-formed page ids / tokens are ever contacted.
+ */
+(function () {
+  'use strict';
+
+  var DAY = 86400000;
+  // Kept in step with PAGE_ID_RE in src/js/booking.js and rsvp-worker.js.
+  var PAGE_ID_RE = /^[a-z0-9][a-z0-9-]{2,30}[a-z0-9]$/;
+  /**
+   * The weekday the viewer's locale starts its weeks on (0 = Sunday). Most of
+   * the world starts on Monday, and half a date grid's job is telling one
+   * column from another — a fixed Sunday grid quietly misreads dates for
+   * everyone outside the US, while every other date on this page is already
+   * rendered in their locale. `weekInfo` is the standard source (a getter on
+   * older engines, a method on newer ones); anything that has neither keeps
+   * the Sunday start.
+   */
+  function firstWeekday() {
+    try {
+      var loc = new Intl.Locale(navigator.language || 'en');
+      var info = typeof loc.getWeekInfo === 'function' ? loc.getWeekInfo() : loc.weekInfo;
+      // weekInfo.firstDay runs 1 = Monday … 7 = Sunday.
+      if (info && info.firstDay >= 1 && info.firstDay <= 7) return info.firstDay % 7;
+    } catch (e) { /* fall through to Sunday */ }
+    return 0;
+  }
+
+  /** Short weekday headers in the viewer's locale, from `first` onwards. */
+  function weekdayLabels(first) {
+    var fmt = new Intl.DateTimeFormat(undefined, { weekday: 'short', timeZone: 'UTC' });
+    var out = [];
+    // 2027-02-07 is a Sunday, so +n lands on weekday n.
+    for (var i = 0; i < 7; i++) out.push(fmt.format(new Date(Date.UTC(2027, 1, 7 + ((first + i) % 7)))));
+    return out;
+  }
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  function svgIcon(path) {
+    var span = el('span');
+    span.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg>';
+    var svg = span.firstChild;
+    return svg;
+  }
+  var ICONS = {
+    clock: '<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/>',
+    pin: '<path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+    user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"/>',
+    check: '<polyline points="20 6 9 17 4 12"/>',
+    chevronLeft: '<polyline points="15 18 9 12 15 6"/>',
+    chevronRight: '<polyline points="9 18 15 12 9 6"/>',
+  };
+
+  function guessTz() {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    } catch (e) {
+      return 'UTC';
+    }
+  }
+
+  function tzList(current) {
+    var ids = [];
+    try {
+      if (typeof Intl.supportedValuesOf === 'function') ids = Intl.supportedValuesOf('timeZone');
+    } catch (e) { /* fall through */ }
+    if (!ids.length) {
+      ids = ['UTC', 'America/Los_Angeles', 'America/Denver', 'America/Chicago', 'America/New_York',
+        'America/Sao_Paulo', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Europe/Moscow',
+        'Africa/Johannesburg', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Bangkok', 'Asia/Shanghai',
+        'Asia/Tokyo', 'Australia/Sydney', 'Pacific/Auckland'];
+    }
+    if (ids.indexOf(current) === -1) ids = [current].concat(ids);
+    if (ids.indexOf('UTC') === -1) ids = ['UTC'].concat(ids);
+    return ids;
+  }
+
+  /** 'YYYY-MM-DD' of an instant in tz (en-CA renders exactly that shape).
+   *  One formatter per zone, kept: slotsByDay calls this for every slot on
+   *  every repaint — a 15-minute grid over a working month is ~700 of them —
+   *  and constructing an Intl.DateTimeFormat is the expensive part, some
+   *  fifty times the cost of formatting with one. Per tap, on a phone, that
+   *  was the difference between instant and a visible stall. */
+  var dayKeyFormatters = Object.create(null);
+  function dayKey(ms, tz) {
+    var f = dayKeyFormatters[tz];
+    if (!f) {
+      f = dayKeyFormatters[tz] = new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+      });
+    }
+    return f.format(new Date(ms));
+  }
+
+  function fmtTime(ms, tz) {
+    return new Intl.DateTimeFormat(undefined, {
+      timeZone: tz, hour: 'numeric', minute: '2-digit',
+    }).format(new Date(ms));
+  }
+
+  function fmtLongDay(ms, tz) {
+    return new Intl.DateTimeFormat(undefined, {
+      timeZone: tz, weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+    }).format(new Date(ms));
+  }
+
+  function fmtWhenRange(startMs, endMs, tz) {
+    return fmtLongDay(startMs, tz) + ' · ' + fmtTime(startMs, tz) + ' – ' + fmtTime(endMs, tz);
+  }
+
+  function tzLabel(tz) {
+    return String(tz).replace(/_/g, ' ');
+  }
+
+  function monthTitle(y, m) {
+    return new Intl.DateTimeFormat(undefined, {
+      month: 'long', year: 'numeric', timeZone: 'UTC',
+    }).format(new Date(Date.UTC(y, m - 1, 1)));
+  }
+
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  function durationLabel(min) {
+    if (min % 60 === 0) return min === 60 ? '1 hour' : (min / 60) + ' hours';
+    return min + ' minutes';
+  }
+
+  /** The value if it is exactly a Puter Meetings room link, else '' — the only
+   *  URL this page will render clickable or write into the .ics (same shape
+   *  test the worker applies before serving it). */
+  function meetingUrlOf(booking) {
+    var v = booking && booking.meetingUrl;
+    if (typeof v !== 'string' || v.length > 100) return '';
+    return /^https:\/\/meetings\.puter\.com\/#\/m\/(?:[a-z]{3}-[a-z]{4}-[a-z]{3}|[a-z]{4}-[a-z]{4}-[a-z]{4})$/.test(v)
+      ? v : '';
+  }
+
+  /** A minimal .ics for the confirmed booking, offered as a download. The
+   *  meeting link rides in the four places calendar clients disagree on
+   *  reading a joinable URL from (same reasoning as the worker's bookingIcs):
+   *  URL, X-GOOGLE-CONFERENCE, CONFERENCE, and a "Join:" description line —
+   *  never LOCATION, which Gmail treats as a mappable place. The URI lines are
+   *  emitted raw: meetingUrlOf() only ever passes an exact Meetings room URL,
+   *  which has no TEXT-special characters anyway. */
+  function bookingIcs(booking) {
+    // Every line-break form — CRLF, lone LF, lone CR — becomes an escaped \n.
+    // A bare CR left raw is a line split to lenient parsers, which orphans the
+    // tail into a line with no ':' (silently truncating the value) or re-reads
+    // it as an injected property. (Same routine, and the same reason, as the
+    // worker's bookIcsEscape.)
+    function esc(v) {
+      return String(v).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,')
+        .replace(/\r\n|\r|\n/g, '\\n');
+    }
+    function dt(ms) { return new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); }
+    var join = meetingUrlOf(booking);
+    // The worker mints hex booking ids; held to that shape (like meetingUrlOf
+    // for URLs) so a rogue worker's id can't smuggle CRLF-joined ICS lines.
+    var uid = /^[0-9a-f]{8,64}$/.test(String(booking.id)) ? booking.id : 'booking';
+    var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Puter Calendar//Booking//EN',
+      'BEGIN:VEVENT', 'UID:' + uid + '@calendar.puter.com', 'DTSTAMP:' + dt(Date.now()),
+      'DTSTART:' + dt(booking.start), 'DTEND:' + dt(booking.end),
+      'SUMMARY:' + esc(booking.title || 'Meeting')];
+    if (booking.location) lines.push('LOCATION:' + esc(booking.location));
+    if (join) lines.push('DESCRIPTION:' + esc('Join: ' + join), 'URL:' + join,
+      'X-GOOGLE-CONFERENCE:' + join, 'CONFERENCE;VALUE=URI;FEATURE=VIDEO:' + join);
+    lines.push('STATUS:CONFIRMED', 'END:VEVENT', 'END:VCALENDAR');
+    return lines.join('\r\n') + '\r\n';
+  }
+
+  function init(opts) {
+    var WEEK_START = firstWeekday();
+    var DOW = weekdayLabels(WEEK_START);
+    var root = opts.root;
+    var fetchFn = opts.fetchFn;
+    var hash = String(opts.hash || '');
+    // The share-link form, #/<host>/<page>: the worker by its label, the page
+    // by its slug. Matched lowercased — these links get read out and retyped;
+    // hostnames are case-insensitive and page ids are stored lowercase. The
+    // grammar is exact, so the origin built from it can only ever be a
+    // `cal-…` worker on puter.work (the guard below re-checks it anyway).
+    // Kept in step with the same test in index.html and src/js/booking.js.
+    // The worker's own redirects arrive as #w=<worker>&p=<page> / &t=<token>
+    // and are read exactly as before.
+    var route = /^#\/([a-z0-9][a-z0-9-]{0,58})\/([a-z0-9][a-z0-9-]{2,30}[a-z0-9])$/.exec(hash.toLowerCase());
+    var params = new URLSearchParams(route ? '' : hash.replace(/^#/, ''));
+    var worker = route ? 'https://cal-' + route[1] + '.puter.work' : (params.get('w') || '');
+    var pageId = route ? route[2] : (params.get('p') || '');
+    var token = route ? '' : (params.get('t') || '');
+
+    // This page must never become a relay to arbitrary origins: only https
+    // Puter workers, and only well-formed ids/tokens, are ever contacted.
+    var workerOk = /^https:\/\/[a-z0-9][a-z0-9-]*\.puter\.work$/.test(worker);
+    if (!workerOk || (!PAGE_ID_RE.test(pageId) && !/^[0-9a-f]{40}$/.test(token))) {
+      renderGone();
+      return;
+    }
+
+    /* ================= Manage mode (t=<token>) ============================ */
+
+    // The note typed for the organizer survives the re-render a failed cancel
+    // triggers — the guest's own words are the one thing we can't regenerate.
+    var cancelDraft = '';
+    // Why a confirmed booking has no cancel control: the worker refuses a
+    // cancellation once the meeting has started. (Declared up here, before
+    // the dispatch below returns — a `var` further down would still be
+    // undefined when the fetch callbacks run.)
+    var STARTED_TEXT = 'This meeting has already started, so it can no longer be cancelled from here.';
+
+    if (/^[0-9a-f]{40}$/.test(token)) {
+      loadManage();
+      return;
+    }
+
+    /** `notice` rides along to the render: what the reload is FOR, when it
+     *  follows an action the guest took (a cancel refused because the
+     *  meeting had started) — otherwise the page would silently come back
+     *  with the button gone and nothing to say why. */
+    function loadManage(notice) {
+      renderLoading('Loading your booking…');
+      fetchFn(worker + '/api/booking/' + token)
+        .then(function (res) {
+          if (res.status === 404) return renderGone();
+          if (!res.ok) throw new Error('http ' + res.status);
+          return res.json().then(function (data) { renderManage(data, notice); });
+        })
+        .catch(function () { renderError(loadManage); });
+    }
+
+    function renderManage(data, notice) {
+      var booking = data.booking || {};
+      var page = data.page || null;
+      document.title = (booking.title || 'Booking') + ' — Puter Calendar';
+      root.replaceChildren();
+      root.className = 'card';
+      var pane = el('div', 'pane');
+      pane.append(el('p', 'kicker', 'Your booking'));
+      pane.append(el('h1', null, booking.title || 'Meeting'));
+      if (notice) {
+        var ban = el('div', 'banner' + (notice.err ? ' banner--err' : ''), notice.text);
+        ban.setAttribute('role', notice.err ? 'alert' : 'status');
+        pane.append(ban);
+      } else if (booking.status === 'cancelled') {
+        var cb = booking.cancelledBy === 'host' ? 'by the organizer' : '';
+        var ended = el('div', 'banner banner--muted', ('This booking was cancelled ' + cb).trim() + '.');
+        ended.setAttribute('role', 'status');
+        pane.append(ended);
+      }
+      row(pane, 'When', fmtWhenRange(booking.start, booking.end, guessTz()) + ' (' + tzLabel(guessTz()) + ')');
+      if (booking.location) row(pane, 'Where', booking.location);
+      // No join link on a cancelled booking — the room was never started.
+      if (booking.status === 'confirmed') joinRow(pane, meetingUrlOf(booking));
+      if (booking.organizer) row(pane, 'With', booking.organizer);
+      row(pane, 'Booked for', booking.name ? booking.name + ' (' + booking.email + ')' : booking.email);
+
+      if (booking.status === 'confirmed' && booking.canCancel) {
+        var reasonLabel = el('label', 'f', 'Add a note for the organizer (optional)');
+        reasonLabel.htmlFor = 'cancel-reason';
+        var reason = el('textarea', 'f');
+        reason.id = 'cancel-reason';
+        reason.maxLength = 500;
+        reason.value = cancelDraft;
+        var actions = el('div', 'actions');
+        var cancelBtn = el('button', 'danger', 'Cancel booking');
+        cancelBtn.type = 'button';
+        cancelBtn.addEventListener('click', function () {
+          cancelDraft = reason.value;
+          cancelBtn.disabled = true;
+          cancelBtn.textContent = 'Cancelling…';
+          fetchFn(worker + '/api/booking/' + token + '/cancel', {
+            method: 'POST',
+            body: new URLSearchParams({ reason: reason.value }),
+          })
+            .then(function (res) {
+              if (res.status === 404) return renderGone();
+              // Already started: reload read-only, and SAY so — the button
+              // and the note the guest typed are about to disappear.
+              if (res.status === 410) return loadManage({ text: STARTED_TEXT });
+              if (!res.ok) throw new Error('http ' + res.status);
+              return res.json().then(function (out) {
+                renderManage({ booking: out.booking, page: page });
+              });
+            })
+            .catch(function () {
+              // renderManage rebuilds the pane (this button included), so a
+              // fresh, enabled Cancel comes back on its own — with the draft.
+              renderManage(data, { err: true, text: "Couldn't cancel. Check your connection and try again." });
+            });
+        });
+        actions.append(cancelBtn);
+        pane.append(reasonLabel, reason, actions);
+      } else if (booking.status === 'confirmed' && !notice) {
+        // Confirmed, but past the point of cancelling (the meeting has
+        // started): a manage page with no controls should explain itself,
+        // not leave the guest hunting for a button that was here yesterday.
+        pane.append(el('p', 'fine', STARTED_TEXT));
+      } else if (booking.status === 'cancelled' && page && page.enabled) {
+        var rebook = el('p', 'fine');
+        var a = el('a', null, 'Pick a new time');
+        a.href = worker + '/book/' + page.id;
+        rebook.append(a);
+        pane.append(rebook);
+      }
+      root.append(pane);
+      foot();
+    }
+
+    /* ================= Booking mode (p=<page>) ============================ */
+
+    var page = null; // the public page config
+    // The worker's own clock at load, minus ours: the slot grid is aged
+    // against the host's notion of "now", so a guest whose device clock is
+    // wrong doesn't lose (or keep) times the worker disagrees about.
+    var serverSkew = 0;
+    var minNoticeMs = 0;
+    var lastBookable = -1; // still-bookable slots the picker last drew
+    var tz = guessTz();
+    var view = null; // { y, m } visible month (calendar months, in tz)
+    var minMonthKey = ''; // 'YYYY-MM' bounds for navigation
+    var maxMonthKey = '';
+    var monthCache = {}; // 'YYYY-MM' -> { slots: [...] } | { error: true }
+    // The page load reports the first bookable slot in the WHOLE window, so a
+    // null answer means there is nothing anywhere — worth saying, instead of
+    // sending the guest month by month to the end of the horizon to find out.
+    var noneAnywhere = false;
+    var selectedDay = ''; // 'YYYY-MM-DD'
+    var armedSlot = null; // slot awaiting its Confirm tap
+    var chosenSlot = null; // slot the form is about
+    var step = 'pick'; // 'pick' | 'form'
+    var pickNotice = null; // one-shot banner above the picker
+    // Set by the times column each render; run once it is on-screen and measurable.
+    var afterPaint = null;
+    var formState = { name: '', email: '', notes: '' };
+
+    function monthKeyOf(y, m) { return y + '-' + pad2(m); }
+
+    function monthOfKey(key) {
+      var m = /^(\d{4})-(\d{2})/.exec(key);
+      return m ? { y: Number(m[1]), m: Number(m[2]) } : null;
+    }
+
+    function shiftMonth(v, delta) {
+      var d = new Date(Date.UTC(v.y, v.m - 1 + delta, 1));
+      return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1 };
+    }
+
+    /** "Now" as the WORKER reckons it. Every bound the picker draws — which
+     *  months can be visited, which day is today, which slots have expired —
+     *  has to agree with the side that decides what is bookable. A device
+     *  clock weeks out (they exist, and the guest is a stranger we can't ask
+     *  to fix theirs) otherwise disabled the month arrows around a window
+     *  that isn't there: a clock 45 days slow put the whole real horizon past
+     *  a greyed-out "next month". */
+    function nowMs() {
+      return Date.now() + serverSkew;
+    }
+
+    /** The earliest instant still bookable — the worker's clock plus the
+     *  page's minimum notice, the same two rules its slot engine applies. A
+     *  fetched month is a snapshot: leave this page open over lunch and its
+     *  grid would otherwise keep offering times that have since passed, which
+     *  only fail on submit. */
+    function bookableFrom() {
+      return nowMs() + minNoticeMs;
+    }
+
+    /** How many of the visible month's cached slots are still bookable.
+     *  Compared across ticks so the picker rebuilds only when time actually
+     *  took one away. -1 while the month isn't loaded. */
+    function bookableCount(v) {
+      var entry = v && monthCache[monthKeyOf(v.y, v.m)];
+      if (!entry || !entry.slots) return -1;
+      var cutoff = bookableFrom();
+      var n = 0;
+      for (var i = 0; i < entry.slots.length; i++) if (entry.slots[i] >= cutoff) n++;
+      return n;
+    }
+
+    /** Re-draw the picker when the passage of time has retired a slot. Runs
+     *  only while the grid is actually on screen (never over the confirmation,
+     *  the gone/off screens, or the details form). */
+    function ageSlots() {
+      if (step !== 'pick' || !page || !view) return;
+      if (!root.querySelector('.cal-grid')) return;
+      if (bookableCount(view) === lastBookable) return;
+      if (armedSlot != null && armedSlot < bookableFrom()) armedSlot = null;
+      renderBooking();
+    }
+
+    function loadPage() {
+      renderLoading('Loading available times…');
+      fetchFn(worker + '/api/book/' + pageId)
+        .then(function (res) {
+          if (res.status === 404) return renderGone();
+          if (res.status === 410) return renderOff();
+          if (!res.ok) throw new Error('http ' + res.status);
+          return res.json().then(function (data) {
+            page = data.page || {};
+            serverSkew = isFinite(data.now) ? data.now - Date.now() : 0;
+            minNoticeMs = Math.max(0, Number(page.minNoticeMin) || 0) * 60000;
+            document.title = (page.title || 'Book a meeting') + ' — Puter Calendar';
+            var today = monthOfKey(dayKey(nowMs(), tz));
+            minMonthKey = monthKeyOf(today.y, today.m);
+            var horizon = monthOfKey(dayKey(nowMs() + (page.maxAdvanceDays || 60) * DAY, tz));
+            maxMonthKey = monthKeyOf(horizon.y, horizon.m);
+            noneAnywhere = !data.firstAvailable;
+            if (data.firstAvailable) {
+              var firstKey = dayKey(data.firstAvailable, tz);
+              selectedDay = firstKey;
+              view = monthOfKey(firstKey);
+            } else {
+              view = today;
+            }
+            renderBooking();
+            ensureMonth(view);
+          });
+        })
+        .catch(function () { renderError(loadPage); });
+    }
+
+    /** Fetch (and cache) the slots overlapping the visible month. The ±2-day
+     *  margin keeps the grouping right in every time zone; the worker clamps
+     *  whatever we ask for. */
+    function ensureMonth(v) {
+      var key = monthKeyOf(v.y, v.m);
+      if (monthCache[key] && !monthCache[key].error) return;
+      monthCache[key] = { loading: true };
+      // Repaint so a slow fetch shows "Loading times…" rather than an
+      // all-disabled grid that reads as "no availability".
+      if (step === 'pick' && monthKeyOf(view.y, view.m) === key) renderBooking();
+      var from = Date.UTC(v.y, v.m - 1, 1) - 2 * DAY;
+      var to = Date.UTC(v.y, v.m, 1) + 2 * DAY;
+      fetchFn(worker + '/api/book/' + pageId + '/slots?from=' + from + '&to=' + to)
+        .then(function (res) {
+          // The page can vanish or be switched off between opening it and
+          // browsing to another month; both are final, not "try again".
+          if (res.status === 404) return renderGone();
+          if (res.status === 410) return renderOff();
+          if (!res.ok) throw new Error('http ' + res.status);
+          return res.json().then(function (data) {
+            monthCache[key] = { slots: data.slots || [] };
+            if (monthKeyOf(view.y, view.m) === key && step === 'pick') renderBooking();
+          });
+        })
+        .catch(function () {
+          monthCache[key] = { error: true };
+          if (monthKeyOf(view.y, view.m) === key && step === 'pick') renderBooking();
+        });
+    }
+
+    function slotsByDay(v) {
+      var key = monthKeyOf(v.y, v.m);
+      var entry = monthCache[key];
+      var map = {};
+      if (!entry || !entry.slots) return map;
+      var cutoff = bookableFrom();
+      for (var i = 0; i < entry.slots.length; i++) {
+        var ms = entry.slots[i];
+        if (ms < cutoff) continue; // retired since this month was fetched
+        var k = dayKey(ms, tz);
+        if (k.slice(0, 7) !== key) continue;
+        (map[k] = map[k] || []).push(ms);
+      }
+      return map;
+    }
+
+    function infoPanel() {
+      var info = el('div', 'info');
+      // The host's picture, above their name. Decorative on purpose: the name
+      // is right below it as text, so alt text here would only make a screen
+      // reader say it twice. Only ever inline image data — the same rule the
+      // worker applies before sending it (see bookPicture in rsvp-worker.js).
+      if (/^data:image\//i.test(page.organizerPicture || '')) {
+        var pic = el('img', 'host-pic');
+        pic.addEventListener('error', function () { pic.remove(); }, { once: true });
+        pic.src = page.organizerPicture;
+        pic.alt = '';
+        pic.width = 56;
+        pic.height = 56;
+        pic.draggable = false;
+        info.append(pic);
+      }
+      if (page.organizer) info.append(el('p', 'kicker', page.organizer));
+      info.append(el('h1', null, page.title || 'Meeting'));
+      var dur = el('p', 'fact');
+      dur.append(svgIcon(ICONS.clock), el('span', null, durationLabel(page.durationMin || 30)));
+      info.append(dur);
+      if (page.location) {
+        var loc = el('p', 'fact');
+        loc.append(svgIcon(ICONS.pin), el('span', null, page.location));
+        info.append(loc);
+      }
+      // On the picker the zone is not just a fact, it is the control that
+      // regroups the times, so it takes the place of the read-only line rather
+      // than repeating it beside the month — a row the month column no longer
+      // spends. The details step keeps the plain line: rebuilding that pane to
+      // change zones would throw away whatever the guest has typed.
+      var zone = el('div', 'fact fact--tz');
+      zone.append(svgIcon(ICONS.globe));
+      if (step === 'pick') {
+        var tzLabelEl = el('label', 'sr-only', 'Time zone');
+        tzLabelEl.htmlFor = 'bk-tz';
+        var tzSelect = el('select');
+        tzSelect.id = 'bk-tz';
+        tzSelect.setAttribute('data-focus-key', 'tz');
+        tzList(tz).forEach(function (id) {
+          var opt = el('option', null, tzLabel(id));
+          opt.value = id;
+          if (id === tz) opt.selected = true;
+          tzSelect.append(opt);
+        });
+        tzSelect.addEventListener('change', function () { setTz(tzSelect.value); });
+        zone.append(tzLabelEl, tzSelect);
+      } else {
+        zone.append(el('span', null, tzLabel(tz)));
+      }
+      info.append(zone);
+      if (page.description) info.append(el('p', 'desc', page.description));
+      return info;
+    }
+
+    /** Rebuild the visible pane. `nextFocusKey` overrides where focus lands —
+     *  needed when the control that triggered the render doesn't survive it
+     *  (leaving the details form kills the button that was pressed). */
+    function renderBooking(nextFocusKey) {
+      // Every interaction rebuilds the pane, which would drop keyboard focus
+      // to <body>. Remember which control had it (they carry data-focus-key)
+      // and re-plant focus on its replacement.
+      var focused = document.activeElement;
+      var focusKey = nextFocusKey
+        || (focused && root.contains(focused) ? focused.getAttribute('data-focus-key') : null);
+      root.replaceChildren();
+      root.className = 'card' + (step === 'form' ? '' : ' card--pick');
+      afterPaint = null;
+      // The notice survives re-renders (the slot refetch repaints moments
+      // later) and is dismissed by the guest's next action instead.
+      if (step === 'pick' && pickNotice) {
+        var ban = el('div', 'banner banner--bar' + (pickNotice.err ? ' banner--err' : ''), pickNotice.text);
+        ban.setAttribute('role', pickNotice.err ? 'alert' : 'status');
+        // Focusable so a booking bounced back out of the form can land the
+        // keyboard on the explanation rather than at the top of the document.
+        ban.tabIndex = -1;
+        ban.setAttribute('data-focus-key', 'notice');
+        root.append(ban);
+      }
+      var layout = el('div', 'layout' + (step === 'form' ? '' : ' layout--pick'));
+      layout.append(infoPanel());
+      if (step === 'form') {
+        var pane = el('div', 'pane');
+        buildForm(pane);
+        layout.append(pane);
+      } else {
+        buildPicker(layout);
+      }
+      root.append(layout);
+      foot();
+      if (afterPaint) afterPaint();
+      if (focusKey) restoreFocus(focusKey);
+    }
+
+    function restoreFocus(key) {
+      var target = root.querySelector('[data-focus-key="' + key + '"]');
+      // Month nav can disable the button just pressed (the window's edge) —
+      // hand focus to its twin instead of dropping it.
+      if (target && target.disabled) {
+        if (key === 'nav-prev') target = root.querySelector('[data-focus-key="nav-next"]');
+        else if (key === 'nav-next') target = root.querySelector('[data-focus-key="nav-prev"]');
+      }
+      // Returning from the details form aims at the slot the guest chose; it
+      // can have been retired while the form was open, so fall back to its day.
+      if (!target && key.indexOf('slot-') === 0 && selectedDay) {
+        target = root.querySelector('[data-focus-key="day-' + selectedDay + '"]');
+      }
+      // A retry walks the guest through up to three panes: "Loading times…",
+      // then either a fresh Try again or the loaded grid. The first two carry
+      // the 'retry' key themselves; the loaded grid has no retry control at
+      // all, so aim at the day being looked at rather than dropping the
+      // keyboard at the top of the document.
+      if (!target && key === 'retry' && selectedDay) {
+        target = root.querySelector('[data-focus-key="day-' + selectedDay + '"]');
+      }
+      if (target && !target.disabled) target.focus();
+    }
+
+    /** Fills the picker's own two columns — the month, then the chosen day's
+     *  times — into the layout it is handed. */
+    function buildPicker(layout) {
+      lastBookable = bookableCount(view);
+      var pane = el('div', 'pane pane--cal');
+      // The month's own header names this column on screen; the heading stays
+      // for the outline a screen reader walks.
+      pane.append(el('h2', 'sr-only', 'Pick a date & time'));
+
+      var key = monthKeyOf(view.y, view.m);
+      var entry = monthCache[key];
+      var byDay = slotsByDay(view);
+
+      // --- month header ---
+      var head = el('div', 'cal-head');
+      head.append(el('span', 'cal-title', monthTitle(view.y, view.m)));
+      var nav = el('div', 'cal-nav');
+      // Chevrons, not single guillemets: every other mark on this page is a
+      // 2px-stroke 24-box icon, and the glyphs rendered thin and undersized
+      // beside them (and at whatever weight the reader's font happened to give
+      // a punctuation character).
+      var prev = el('button');
+      prev.append(svgIcon(ICONS.chevronLeft));
+      prev.type = 'button';
+      prev.setAttribute('aria-label', 'Previous month');
+      prev.setAttribute('data-focus-key', 'nav-prev');
+      prev.disabled = key <= minMonthKey;
+      prev.addEventListener('click', function () {
+        view = shiftMonth(view, -1);
+        pickNotice = null;
+        renderBooking();
+        ensureMonth(view);
+      });
+      var next = el('button');
+      next.append(svgIcon(ICONS.chevronRight));
+      next.type = 'button';
+      next.setAttribute('aria-label', 'Next month');
+      next.setAttribute('data-focus-key', 'nav-next');
+      next.disabled = key >= maxMonthKey;
+      next.addEventListener('click', function () {
+        view = shiftMonth(view, 1);
+        pickNotice = null;
+        renderBooking();
+        ensureMonth(view);
+      });
+      nav.append(prev, next);
+      head.append(nav);
+      pane.append(head);
+
+      // --- day grid --- (a plain set of labeled buttons: role="grid" would
+      // promise row/gridcell semantics this markup doesn't have)
+      var grid = el('div', 'cal-grid');
+      for (var d = 0; d < 7; d++) grid.append(el('div', 'cal-dow', DOW[d]));
+      // Leading blanks are counted from the locale's first weekday, not Sunday.
+      var firstDow = (new Date(Date.UTC(view.y, view.m - 1, 1)).getUTCDay() - WEEK_START + 7) % 7;
+      var days = new Date(Date.UTC(view.y, view.m, 0)).getUTCDate();
+      var todayKey = dayKey(nowMs(), tz);
+      // Speakable date for each day button ("Wednesday, August 19"), instead
+      // of the raw YYYY-MM-DD cache key.
+      var dayLabelFmt = new Intl.DateTimeFormat(undefined, {
+        weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC',
+      });
+      for (var b = 0; b < firstDow; b++) grid.append(el('div', 'cal-blank'));
+      for (var day = 1; day <= days; day++) {
+        var k = key + '-' + pad2(day);
+        var btn = el('button', 'cal-day', String(day));
+        btn.type = 'button';
+        var available = Boolean(byDay[k] && byDay[k].length);
+        btn.disabled = !available;
+        // A day is "pressed" only while it can be pressed. The selected day can
+        // lose its last slot under the guest — a lost race (409) refetches the
+        // month, and ageSlots() retires times as the clock passes them — and a
+        // disabled day still carrying aria-pressed="true" would be painted as
+        // the chosen pill over a times column saying to pick one, and read to
+        // a screen reader as both pressed and "no times".
+        btn.setAttribute('aria-pressed', String(k === selectedDay && available));
+        btn.setAttribute('aria-label', dayLabelFmt.format(new Date(Date.UTC(view.y, view.m - 1, day)))
+          + (available ? ', times available' : ', no times'));
+        btn.setAttribute('data-focus-key', 'day-' + k);
+        if (k === todayKey) btn.className += ' cal-day--today';
+        (function (dk) {
+          btn.addEventListener('click', function () {
+            selectedDay = dk;
+            armedSlot = null;
+            pickNotice = null;
+            renderBooking();
+          });
+        })(k);
+        grid.append(btn);
+      }
+      // Six week rows, always: a month needing five (or four) is otherwise a
+      // whole row shorter, so stepping through months resized the card — the
+      // same jump picking a day used to cause. The filler is empty and
+      // unreachable; it only holds the height still.
+      for (var f = firstDow + days; f < 42; f++) grid.append(el('div', 'cal-blank'));
+      pane.append(grid);
+      layout.append(pane);
+
+      // --- times for the selected day, beside the month ---
+      var times = el('section', 'pane pane--times');
+      times.setAttribute('aria-label', 'Available times');
+      layout.append(times);
+      if (entry && entry.loading) {
+        var busy = el('p', 'loading', 'Loading times…');
+        // Stands in for the Try again button while the refetch is in flight:
+        // focusable, and carrying that button's key so the keyboard hops from
+        // the press to this message and on to whatever replaces it.
+        busy.tabIndex = -1;
+        busy.setAttribute('data-focus-key', 'retry');
+        times.append(busy);
+      } else if (entry && entry.error) {
+        // Same treatment as renderError's page-level failure: this is the same
+        // kind of dead end, and dressing it as muted body text with an inline
+        // link both hid it and left "Try again" a 59x21 target.
+        var errBox = el('div', 'slots-error');
+        errBox.append(el('div', 'banner banner--err', "Couldn't load times for this month."));
+        var retry = el('button', 'retry', 'Try again');
+        retry.type = 'button';
+        retry.setAttribute('data-focus-key', 'retry');
+        retry.addEventListener('click', function () {
+          // No repaint here: with the entry dropped, ensureMonth marks the month
+          // loading and repaints itself. Painting first would render the
+          // "pick a day" state instead — a frame with nowhere to put the focus
+          // of the button that was just pressed, which left the keyboard at the
+          // top of the document for the rest of the visit.
+          delete monthCache[key];
+          ensureMonth(view);
+        });
+        errBox.append(retry);
+        times.append(errBox);
+      } else if (selectedDay && byDay[selectedDay] && byDay[selectedDay].length) {
+        // The day heads its own column now, so it is a real heading.
+        times.append(el('h2', 'day-title', fmtLongDay(byDay[selectedDay][0], tz)));
+        var frame = el('div', 'times-frame');
+        var scroller = el('div', 'times-scroll');
+        var slots = el('div', 'slots');
+        byDay[selectedDay].sort(function (a, b) { return a - b; }).forEach(function (ms) {
+          if (armedSlot === ms) {
+            var pair = el('div', 'slot-pair');
+            var time = el('button', 'slot', fmtTime(ms, tz));
+            time.type = 'button';
+            time.setAttribute('aria-pressed', 'true');
+            time.setAttribute('data-focus-key', 'slot-' + ms);
+            time.addEventListener('click', function () {
+              armedSlot = null;
+              renderBooking();
+            });
+            var confirm = el('button', 'slot-confirm', 'Confirm');
+            confirm.type = 'button';
+            confirm.setAttribute('data-focus-key', 'confirm-' + ms);
+            confirm.addEventListener('click', function () {
+              chosenSlot = ms;
+              step = 'form';
+              renderBooking();
+              var first = root.querySelector('#bk-name');
+              if (first) first.focus();
+            });
+            pair.append(time, confirm);
+            slots.append(pair);
+          } else {
+            var slot = el('button', 'slot', fmtTime(ms, tz));
+            slot.type = 'button';
+            slot.setAttribute('aria-pressed', 'false');
+            slot.setAttribute('data-focus-key', 'slot-' + ms);
+            slot.addEventListener('click', function () {
+              armedSlot = ms;
+              pickNotice = null;
+              renderBooking();
+            });
+            slots.append(slot);
+          }
+        });
+        scroller.append(slots);
+        frame.append(scroller);
+        times.append(frame);
+        // Measured after the append below, not here: off-document the column
+        // has no height to compare the list against.
+        afterPaint = function () {
+          var more = scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop > 2;
+          times.classList.toggle('has-more', more);
+        };
+        scroller.addEventListener('scroll', function () { afterPaint(); });
+      } else if (Object.keys(byDay).length === 0 && entry && entry.slots) {
+        // Point at the next month only while the horizon lets it be visited —
+        // at the last month the nav button beside this text is disabled.
+        times.append(el('p', 'empty', noneAnywhere
+          ? 'No times are available at the moment. Check back later, or contact the organizer.'
+          : key < maxMonthKey
+            ? 'No times available this month. Try the next one.'
+            : 'No times available this month.'));
+      } else {
+        times.append(el('p', 'empty', 'Pick a highlighted day to see times.'));
+      }
+    }
+
+    /** Re-groups the (absolute) slots into a different zone's days. */
+    function setTz(next) {
+      // The day the guest was looking at is a set of instants, and in another
+      // zone those instants can fall on a different date — a Thursday morning
+      // in Auckland is Wednesday afternoon in Los Angeles. Follow them: keep
+      // the guest on the same times, under whatever date the new zone gives
+      // them. (Keeping the old date instead left a day that no longer has
+      // times painted as selected, over a times column saying to pick one.)
+      var anchor = selectedDay ? (slotsByDay(view)[selectedDay] || [])[0] : null;
+      tz = next;
+      if (anchor != null) {
+        selectedDay = dayKey(anchor, tz);
+        view = monthOfKey(selectedDay) || view;
+      }
+      // Month bounds move with the zone, so recompute them and keep the view legal.
+      var today = monthOfKey(dayKey(nowMs(), tz));
+      minMonthKey = monthKeyOf(today.y, today.m);
+      var horizon = monthOfKey(dayKey(nowMs() + (page.maxAdvanceDays || 60) * DAY, tz));
+      maxMonthKey = monthKeyOf(horizon.y, horizon.m);
+      var cur = monthKeyOf(view.y, view.m);
+      if (cur < minMonthKey) view = monthOfKey(minMonthKey);
+      if (cur > maxMonthKey) view = monthOfKey(maxMonthKey);
+      armedSlot = null;
+      renderBooking();
+      ensureMonth(view);
+    }
+
+    function buildForm(pane) {
+      pane.append(el('h2', null, 'Enter your details'));
+      var summary = el('div', 'summary');
+      summary.append(el('div', 'when', fmtWhenRange(chosenSlot, chosenSlot + (page.durationMin || 30) * 60000, tz)));
+      summary.append(el('div', 'sub', tzLabel(tz) + ' · ' + durationLabel(page.durationMin || 30)));
+      pane.append(summary);
+
+      var form = el('form');
+      // Native type=email validation would block submit before this handler
+      // runs, splitting the feedback between browser bubbles and the styled
+      // inline errors (and leaving stale ones behind) — the handler's own
+      // checks are the single source of truth.
+      form.noValidate = true;
+      var nameLabel = el('label', 'f', 'Name');
+      nameLabel.htmlFor = 'bk-name';
+      var name = el('input', 'f');
+      name.id = 'bk-name';
+      name.type = 'text';
+      name.autocomplete = 'name';
+      // The form marks its one optional field "(optional)", so everything else
+      // is meant to read as required — say so to a screen reader too, which
+      // otherwise only learns these are mandatory by failing a submit. Safe with
+      // the form's noValidate: it suppresses the browser's own enforcement and
+      // bubbles, leaving these as semantics for assistive tech.
+      name.required = true;
+      name.maxLength = 200;
+      name.value = formState.name;
+      var nameErr = el('p', 'f-err');
+      nameErr.id = 'bk-name-err';
+      nameErr.hidden = true;
+      // aria-invalid alone tells a screen reader the field failed, not why;
+      // the described-by link reads the message out (ignored while hidden).
+      name.setAttribute('aria-describedby', nameErr.id);
+
+      var emailLabel = el('label', 'f', 'Email');
+      emailLabel.htmlFor = 'bk-email';
+      var email = el('input', 'f');
+      email.id = 'bk-email';
+      email.type = 'email';
+      email.autocomplete = 'email';
+      email.required = true;
+      email.maxLength = 254;
+      email.value = formState.email;
+      var emailErr = el('p', 'f-err');
+      emailErr.id = 'bk-email-err';
+      emailErr.hidden = true;
+      email.setAttribute('aria-describedby', emailErr.id);
+
+      var notesLabel = el('label', 'f', 'Anything that will help prepare? (optional)');
+      notesLabel.htmlFor = 'bk-notes';
+      var notes = el('textarea', 'f');
+      notes.id = 'bk-notes';
+      notes.maxLength = 2000;
+      notes.value = formState.notes;
+
+      var banner = el('div', 'banner banner--err');
+      banner.setAttribute('role', 'alert');
+      banner.hidden = true;
+
+      var actions = el('div', 'actions');
+      var submit = el('button', 'primary', 'Schedule meeting');
+      submit.type = 'submit';
+      var back = el('button', 'ghost', 'Back');
+      back.type = 'button';
+      back.addEventListener('click', function () {
+        rememberForm();
+        step = 'pick';
+        armedSlot = null;
+        renderBooking('slot-' + chosenSlot);
+      });
+      actions.append(submit, back);
+
+      function rememberForm() {
+        formState = { name: name.value, email: email.value, notes: notes.value };
+      }
+
+      form.append(banner, nameLabel, name, nameErr, emailLabel, email, emailErr, notesLabel, notes, actions);
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        rememberForm();
+        var okName = Boolean(name.value.trim());
+        var okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+        name.setAttribute('aria-invalid', String(!okName));
+        nameErr.hidden = okName;
+        nameErr.textContent = 'Please enter your name.';
+        email.setAttribute('aria-invalid', String(!okEmail));
+        emailErr.hidden = okEmail;
+        emailErr.textContent = 'Please enter a valid email address.';
+        if (!okName || !okEmail) {
+          (okName ? email : name).focus();
+          return;
+        }
+        banner.hidden = true;
+        submit.disabled = true;
+        back.disabled = true;
+        submit.textContent = 'Scheduling…';
+        submit.setAttribute('aria-busy', 'true');
+        fetchFn(worker + '/api/book/' + pageId, {
+          method: 'POST',
+          body: new URLSearchParams({
+            start: String(chosenSlot),
+            name: name.value.trim(),
+            email: email.value.trim(),
+            notes: notes.value,
+            tz: tz,
+          }),
+        })
+          .then(function (res) {
+            if (res.status === 404) return renderGone();
+            if (res.status === 410) return renderOff();
+            return res.json().catch(function () { return null; }).then(function (data) {
+              if (res.ok && data && data.ok) return renderDone(data);
+              if (res.status === 409) {
+                // That slot just went — put the guest back on a fresh grid.
+                monthCache = {};
+                step = 'pick';
+                armedSlot = null;
+                pickNotice = { err: true, text: 'That time was just booked. Please pick another.' };
+                renderBooking('notice');
+                ensureMonth(view);
+                return;
+              }
+              if (res.status === 400 && data && data.error === 'invalid_slot') {
+                // The slot is no longer offered at all (it slipped inside the
+                // minimum notice, or the page's hours changed). Retrying the
+                // same form can never succeed — back to a fresh grid instead.
+                monthCache = {};
+                step = 'pick';
+                armedSlot = null;
+                pickNotice = { err: true, text: 'That time is no longer available. Please pick another.' };
+                renderBooking('notice');
+                ensureMonth(view);
+                return;
+              }
+              if (res.status === 429) {
+                showFail("This page can't take more bookings today. Please try again tomorrow.");
+                return;
+              }
+              showFail("Couldn't schedule the meeting. Check your connection and try again.");
+            });
+          })
+          .catch(function () {
+            showFail("Couldn't schedule the meeting. Check your connection and try again.");
+          });
+
+        function showFail(text) {
+          submit.disabled = false;
+          back.disabled = false;
+          submit.textContent = 'Schedule meeting';
+          submit.removeAttribute('aria-busy');
+          banner.textContent = text;
+          banner.hidden = false;
+        }
+      });
+      pane.append(form);
+    }
+
+    function renderDone(data) {
+      var booking = data.booking || {};
+      // By this point the booking exists server-side, so a rogue or buggy
+      // worker that confirmed without usable times must not blank this page:
+      // an Intl/toISOString throw here would land in the POST's .catch, whose
+      // showFail writes into nodes the replaceChildren below just detached.
+      var hasTimes = isFinite(booking.start) && isFinite(booking.end);
+      var manageUrl = data.token ? worker + '/booking/' + data.token : '';
+      document.title = 'Confirmed — Puter Calendar';
+      root.replaceChildren();
+      root.className = 'card';
+      var pane = el('div', 'pane');
+      var mark = el('div', 'done-icon');
+      mark.append(svgIcon(ICONS.check));
+      pane.append(mark);
+      var h = el('h1', null, "You're scheduled");
+      h.tabIndex = -1;
+      pane.append(h);
+      // `duplicate` means this press found the booking the guest already had
+      // (their first press landed, its reply didn't) — so the mail is already
+      // sent and this reply carries no manage token to promise.
+      var status = el('div', 'banner', data.duplicate
+        ? 'You had already booked this time, so nothing changed.' +
+          (hasTimes ? ' You can add it to your calendar below.' : '')
+        : !hasTimes
+        ? (data.emailed && data.emailed.guest
+          ? 'A confirmation email is on its way to ' + booking.email + '.'
+          : 'Your booking is confirmed.')
+        : (data.emailed && data.emailed.guest
+          ? 'A confirmation email is on its way to ' + booking.email +
+            '. You can also add this meeting to your calendar below.'
+          : 'Add this meeting to your calendar below.'));
+      status.setAttribute('role', 'status');
+      pane.append(status);
+      row(pane, 'What', (booking.title || 'Meeting') + (booking.organizer ? ' with ' + booking.organizer : ''));
+      if (hasTimes) row(pane, 'When', fmtWhenRange(booking.start, booking.end, tz) + ' (' + tzLabel(tz) + ')');
+      if (booking.location) row(pane, 'Where', booking.location);
+      joinRow(pane, meetingUrlOf(booking));
+      row(pane, 'Booked for', booking.name ? booking.name + ' (' + booking.email + ')' : booking.email);
+
+      if (hasTimes) {
+        var actions = el('div', 'actions');
+        var ics = el('a', 'ghost', 'Add to calendar (.ics)');
+        ics.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(bookingIcs(booking));
+        ics.setAttribute('download', 'meeting.ics');
+        actions.append(ics);
+        pane.append(actions);
+      }
+
+      if (manageUrl) {
+        var fine = el('p', 'fine');
+        fine.append(document.createTextNode('Need to make a change? '));
+        var a = el('a', null, 'Cancel this booking');
+        a.href = manageUrl;
+        fine.append(a);
+        fine.append(document.createTextNode('. This link is personal, so keep it handy.'));
+        pane.append(fine);
+      }
+      root.append(pane);
+      foot();
+      h.focus();
+    }
+
+    loadPage();
+    // A minute is finer than any slot increment the editor offers, so the grid
+    // never shows a time more than a minute past its welcome. Backgrounded
+    // tabs get throttled, hence the visibility check too.
+    setInterval(ageSlots, 60000);
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') ageSlots();
+    });
+
+    /* ================= Shared chrome ====================================== */
+
+    function row(pane, label, value) {
+      if (!value) return;
+      var node = el('div', 'row');
+      node.append(el('b', null, label));
+      node.append(document.createTextNode(value));
+      pane.append(node);
+    }
+
+    /** A "Join" row whose value is the meeting link itself, clickable. Only
+     *  ever called with meetingUrlOf() output — a real anchor needs the shape
+     *  guarantee, not just escaping. */
+    function joinRow(pane, url) {
+      if (!url) return;
+      var node = el('div', 'row');
+      node.append(el('b', null, 'Join'));
+      var a = el('a', null, url);
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      node.append(a);
+      pane.append(node);
+    }
+
+    function renderLoading(text) {
+      root.replaceChildren();
+      root.className = 'card';
+      var pane = el('div', 'pane');
+      pane.append(el('p', 'kicker', 'Book a meeting'));
+      pane.append(el('h1', null, text));
+      root.append(pane);
+    }
+
+    function renderGone() {
+      root.replaceChildren();
+      root.className = 'card';
+      var pane = el('div', 'pane');
+      pane.append(el('p', 'kicker', 'Book a meeting'));
+      pane.append(el('h1', null, "This link isn't active"));
+      pane.append(el('div', 'row',
+        "This booking link is invalid or has been removed. If you think that's a mistake, ask the person who sent it for a fresh one."));
+      root.append(pane);
+      foot();
+    }
+
+    function renderOff() {
+      root.replaceChildren();
+      root.className = 'card';
+      var pane = el('div', 'pane');
+      pane.append(el('p', 'kicker', 'Book a meeting'));
+      pane.append(el('h1', null, 'Not accepting bookings'));
+      pane.append(el('div', 'row',
+        'This booking page is turned off right now. Check back later, or contact the organizer directly.'));
+      root.append(pane);
+      foot();
+    }
+
+    function renderError(retryFn) {
+      root.replaceChildren();
+      root.className = 'card';
+      var pane = el('div', 'pane');
+      pane.append(el('p', 'kicker', 'Book a meeting'));
+      pane.append(el('h1', null, 'Could not load this page'));
+      pane.append(el('div', 'banner banner--err', 'Check your connection and try again.'));
+      var retry = el('button', 'retry', 'Try again');
+      retry.type = 'button';
+      retry.addEventListener('click', function () { retryFn(); });
+      pane.append(retry);
+      root.append(pane);
+      foot();
+    }
+
+    function foot() {
+      var bar = el('p', 'foot');
+      bar.append(document.createTextNode('Scheduled with'));
+      var link = el('a');
+      var markImg = el('img');
+      markImg.src = '/favicon-48x48.png';
+      markImg.alt = '';
+      markImg.width = 18;
+      markImg.height = 18;
+      link.append(markImg);
+      link.append(document.createTextNode('Puter Calendar'));
+      link.href = 'https://puter.com/app/calendar';
+      link.rel = 'noopener';
+      bar.append(link);
+      root.append(bar);
+    }
+  }
+
+  window.__bookPageInit = init;
+  if (!window.__BOOK_PAGE_TEST__) {
+    init({
+      root: document.getElementById('book-root'),
+      hash: location.hash,
+      fetchFn: function (url, options) { return fetch(url, options); },
+    });
+  }
+})();
+</script>
+</body>
+</html>

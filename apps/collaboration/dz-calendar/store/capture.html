@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Calendar — store screenshot harness</title>
+    <script>
+      // ---- Screenshot harness (LOCAL ONLY — delete before shipping).
+      // Mocks the Puter SDK, pins the clock, and seeds a realistic August 2026
+      // calendar so every store screenshot is deterministic.
+      (function () {
+        const LS = window.localStorage;
+
+        // ---- Pin "now" to 10:20 on today's date. The timegrid scrolls to
+        // (now - 2h) and draws its live indicator at `now`, so this puts the
+        // working day on screen with the indicator visible.
+        const RealDate = Date;
+        const pinned = new RealDate();
+        pinned.setHours(10, 20, 0, 0);
+        const OFFSET = pinned.getTime() - RealDate.now();
+        class MockDate extends RealDate {
+          constructor(...args) {
+            if (args.length === 0) super(RealDate.now() + OFFSET);
+            else super(...args);
+          }
+          static now() {
+            return RealDate.now() + OFFSET;
+          }
+        }
+        window.Date = MockDate;
+
+        function setOne(key, value) {
+          LS.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+          return true;
+        }
+
+        window.puter = {
+          env: 'web',
+          auth: {
+            isSignedIn: () => true,
+            getUser: async () => ({ uuid: 'demo-uuid', username: 'alex', email: 'alex@northwind.co' }),
+            signIn: async () => true,
+            signOut: async () => {},
+          },
+          perms: { request: async () => true },
+          kv: {
+            set: async (key, value) => {
+              if (Array.isArray(key)) {
+                for (const e of key) setOne(e.key, e.value);
+                return true;
+              }
+              return setOne(key, value);
+            },
+            get: async (key) => LS.getItem(key),
+            del: async (key) => (LS.removeItem(key), true),
+            list: async (pattern, returnValues) => {
+              const prefix = String(pattern).replace(/\*$/, '');
+              const out = [];
+              for (let i = 0; i < LS.length; i++) {
+                const key = LS.key(i);
+                if (!key.startsWith(prefix)) continue;
+                out.push(returnValues ? { key, value: LS.getItem(key) } : key);
+              }
+              return out;
+            },
+          },
+        };
+
+        // ---- Seed fresh on every load so each scene starts identical.
+        LS.clear();
+
+        const today = new MockDate();
+        const Y = today.getFullYear();
+        const M = today.getMonth();
+        const D = today.getDate();
+        // Day-of-month helpers anchored on the current month.
+        const at = (day, h, m) => new RealDate(Y, M, day, h, m).getTime();
+        const allDayOn = (day) => new RealDate(Y, M, day, 0, 0).getTime();
+        const MON = 1, TUE = 2, WED = 3, THU = 4, FRI = 5;
+
+        // The weekly series start back in January so every month of the year
+        // view has events; occurrences land on the same weekdays regardless.
+        const januaryStart = (dow, h, m) => {
+          const jan1 = new RealDate(Y, 0, 1);
+          const day = 1 + ((dow - jan1.getDay() + 7) % 7);
+          return new RealDate(Y, 0, day, h, m).getTime();
+        };
+
+        let n = 0;
+        const put = (ev) => setOne('cal:evt:' + String(n++).padStart(2, '0') + '-seed', ev);
+        const task = (t) => setOne('cal:task:' + String(n++).padStart(2, '0') + '-seed', t);
+
+        const me = 'alex@northwind.co';
+
+        // ---- Weekly series: the backbone of a working month.
+        const series = [
+          ['Team standup', [MON, WED, FRI], 9, 0, 9, 15, 'indigo', 'Zoom'],
+          ['Marketing sync', [MON], 10, 0, 10, 45, 'orange', 'Room 2B'],
+          ['Design critique', [MON], 14, 0, 15, 0, 'violet', 'Studio'],
+          ['Product sync', [TUE], 14, 0, 15, 0, 'blue', 'Room 4A'],
+          ['1:1 with Maya Chen', [WED], 11, 30, 12, 0, 'teal', 'Room 1C'],
+          ['Sprint planning', [THU], 9, 30, 11, 0, 'blue', 'Room 4A'],
+          ['Demo day', [FRI], 10, 30, 11, 30, 'violet', 'All hands room'],
+          ['Weekly wrap-up', [FRI], 16, 0, 16, 30, 'graphite', ''],
+        ];
+        for (const [title, days, sh, sm, eh, em, color, location] of series) {
+          const startMs = januaryStart(days[0], sh, sm);
+          const ev = {
+            title,
+            start: startMs,
+            end: startMs + ((eh - sh) * 60 + (em - sm)) * 60_000,
+            color,
+            location,
+            recurrence: { freq: 'weekly', interval: 1, byWeekday: days },
+            reminders: title === 'Team standup' ? [5] : [],
+          };
+          // Sprint planning is the event the editor screenshots open: a real
+          // series with notifications and guests, so one shot covers recurrence,
+          // reminders and invitations at once.
+          if (title === 'Sprint planning') {
+            ev.description = 'Groom the backlog and commit the sprint scope.';
+            ev.reminders = [10];
+            ev.organizer = { email: me };
+            ev.guests = [
+              { email: 'maya@northwind.co', name: 'Maya Chen', status: 'accepted' },
+              { email: 'devin@northwind.co', name: 'Devin Park', status: 'needs-action' },
+            ];
+          }
+          put(ev);
+        }
+
+        // ---- Late July, so the first month-view row is not a blank band.
+        put({ title: 'Q2 retrospective', start: at(D - 14, 14, 0), end: at(D - 14, 15, 0), color: 'graphite', location: 'Room 2B' });
+        put({ title: 'Planning offsite', start: at(D - 13, 10, 0), end: at(D - 13, 16, 0), color: 'blue', location: 'Sausalito' });
+        put({ title: 'Vertex renewal', start: at(D - 12, 11, 0), end: at(D - 12, 11, 30), color: 'green' });
+
+        // ---- Today: a full, believable day, including one overlapping pair.
+        // An invitation TO me (organizer is someone else, my status is unanswered)
+        // so the details card offers the Going? Yes / No / Maybe chips.
+        put({
+          title: 'Onboarding review',
+          start: at(D, 9, 30),
+          end: at(D, 10, 30),
+          color: 'violet',
+          location: 'Studio',
+          description: 'Walk through the redesigned first-run experience and agree on what ships in 3.2.',
+          organizer: { email: 'maya@northwind.co', name: 'Maya Chen' },
+          guests: [
+            { email: 'maya@northwind.co', name: 'Maya Chen', status: 'accepted' },
+            { email: me, status: 'needs-action' },
+            { email: 'devin@northwind.co', name: 'Devin Park', status: 'accepted' },
+          ],
+        });
+        put({
+          title: 'Q3 roadmap planning',
+          start: at(D, 10, 0),
+          end: at(D, 11, 0),
+          color: 'blue',
+          location: 'Room 4A · Zoom',
+          description:
+            'Lock the Q3 shortlist: onboarding revamp, calendar sharing, and the reporting API. Bring your top three.',
+          reminders: [10, 60],
+          organizer: { email: me },
+          guests: [
+            { email: 'maya@northwind.co', name: 'Maya Chen', status: 'accepted' },
+            { email: 'devin@northwind.co', name: 'Devin Park', status: 'accepted' },
+            { email: 'priya@northwind.co', name: 'Priya Raman', status: 'tentative' },
+          ],
+        });
+        put({ title: 'Lunch with Priya', start: at(D, 12, 30), end: at(D, 13, 30), color: 'orange', location: 'Cafe Loma' });
+        put({
+          title: 'Northwind check-in',
+          start: at(D, 14, 0),
+          end: at(D, 15, 0),
+          color: 'green',
+          location: 'Zoom',
+          description: 'Renewal check-in and a walkthrough of the new reporting views.',
+        });
+        put({ title: 'Frontend interview', start: at(D, 16, 0), end: at(D, 16, 45), color: 'pink', location: 'Room 1C' });
+        put({ title: 'Yoga class', start: at(D, 18, 30), end: at(D, 19, 30), color: 'red', location: 'Mission Studio' });
+
+        // ---- The rest of the week, so week and 4-day views read as a real week.
+        put({ title: 'Long run', start: at(D - 3, 8, 0), end: at(D - 3, 9, 30), color: 'green' });
+        put({ title: 'Meal prep', start: at(D - 3, 17, 0), end: at(D - 3, 18, 0), color: 'orange' });
+        put({ title: 'Vendor call: Figma', start: at(D - 2, 15, 30), end: at(D - 2, 16, 0), color: 'teal', location: 'Zoom' });
+        put({
+          title: 'User research #2',
+          start: at(D - 1, 11, 0),
+          end: at(D - 1, 12, 30),
+          color: 'pink',
+          location: 'Research lab',
+          description: 'Moderated sessions with three admins from mid-market accounts.',
+        });
+        put({ title: 'Board deck review', start: at(D - 1, 16, 0), end: at(D - 1, 17, 0), color: 'graphite' });
+        put({ title: 'Design systems talk', start: at(D + 1, 12, 0), end: at(D + 1, 13, 0), color: 'teal', location: 'All hands room' });
+        put({ title: 'Security review', start: at(D + 1, 14, 30), end: at(D + 1, 15, 30), color: 'red', location: 'Room 2B' });
+        put({ title: 'Team happy hour', start: at(D + 1, 17, 0), end: at(D + 1, 18, 30), color: 'orange', location: 'The Alembic' });
+        put({ title: 'Payments go/no-go', start: at(D + 2, 13, 0), end: at(D + 2, 14, 0), color: 'red', location: 'Room 4A' });
+        put({ title: 'Dinner at Kokkari', start: at(D + 3, 19, 0), end: at(D + 3, 21, 0), color: 'pink', location: '200 Jackson St' });
+
+        // ---- Later in the month: all-day spans, a birthday, an OOO block.
+        put({
+          title: 'Design Systems Conf',
+          start: allDayOn(D + 7),
+          end: allDayOn(D + 9) + 86_400_000 - 1,
+          allDay: true,
+          color: 'blue',
+          location: 'Lisbon Congress Centre',
+        });
+        put({ title: 'Leadership review', start: at(D + 6, 11, 0), end: at(D + 6, 12, 0), color: 'blue', location: 'Room 4A' });
+        put({ title: "Priya's birthday", start: allDayOn(D + 12), end: allDayOn(D + 12) + 86_400_000 - 1, allDay: true, color: 'pink' });
+        put({ title: 'Quarterly review', start: at(D + 13, 10, 0), end: at(D + 13, 12, 0), color: 'graphite', location: 'All hands room' });
+        put({ title: 'Vertex Labs call', start: at(D + 14, 15, 0), end: at(D + 14, 16, 0), color: 'green', location: 'Zoom' });
+        put({
+          title: 'Out of office — PTO',
+          start: allDayOn(D + 16),
+          end: allDayOn(D + 16) + 86_400_000 - 1,
+          allDay: true,
+          color: 'graphite',
+          ooo: true,
+        });
+        put({ title: 'Marin Headlands hike', start: at(D - 4, 9, 0), end: at(D - 4, 13, 0), color: 'green' });
+        put({ title: 'User research #1', start: at(D - 8, 11, 0), end: at(D - 8, 12, 30), color: 'pink', location: 'Research lab' });
+        put({ title: 'Farmers market', start: at(D - 11, 10, 0), end: at(D - 11, 11, 0), color: 'green' });
+
+        // ---- Tasks live alongside events.
+        task({ title: 'Send Q3 report', due: at(D, 17, 0), color: 'red' });
+        task({ title: 'Onboarding copy', due: allDayOn(D), allDay: true, color: 'blue' });
+        task({ title: 'Approve tokens PR', due: allDayOn(D + 1), allDay: true, color: 'violet' });
+        task({ title: 'Renew team domain', due: allDayOn(D + 2), allDay: true, color: 'orange' });
+        task({ title: 'Draft perf reviews', due: allDayOn(D + 5), allDay: true, color: 'graphite' });
+        task({ title: 'Book Lisbon flights', due: allDayOn(D + 4), allDay: true, color: 'blue', done: true });
+
+        // Light theme only, 12-hour clock, week starting Sunday.
+        setOne('cal:settings', {
+          theme: 'light',
+          weekStartsOn: 0,
+          hour12: true,
+          defaultView: 'month',
+          hiddenColors: [],
+          secondaryTz: '',
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app" aria-busy="true"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

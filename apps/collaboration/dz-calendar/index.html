@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <title>DZ-Calendar | التقويم والمواعيد السيادي الجزائري</title>
+    <meta
+      name="description"
+      content="التقويم والمواعيد السيادي الجزائري: عرض شهري، أسبوعي، يومي، مواعيد متكررة، تذكيرات، أعياد وطنية جزائرية، وحفظ محلي آمن 100% دون إنترنت."
+    />
+    <meta
+      name="keywords"
+      content="calendar, تقويم, مواعيد, أعياد جزائرية, algeria calendar, dz open source, offline-first"
+    />
+    <meta name="author" content="Algeria Open Source Community" />
+    <link rel="icon" href="./icon-128.png" />
+    <meta name="theme-color" content="#15803d" />
+
+    <!-- Google Fonts: Cairo & JetBrains Mono for Sovereign Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Sovereign Offline Runtime Bridge (100% Offline IndexedDB & LocalStorage) -->
+    <link rel="stylesheet" href="../../../packages/dz-runtime/dz-runtime.css" />
+    <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
+
+    <!-- Pre-paint theme detection -->
+    <script>
+      (function () {
+        try {
+          var blob = JSON.parse(localStorage.getItem('cal:snapshot') || 'null');
+          var raw = blob && blob.entries && blob.entries['cal:settings'];
+          var settings = typeof raw === 'string' ? JSON.parse(raw) : raw;
+          var theme = settings && settings.theme;
+          if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+        } catch (_e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app" aria-busy="true"></div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

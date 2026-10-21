@@ -1,0 +1,82 @@
+/* =========================================================================
+   Offline mode: the read-only banner. Everything here is scoped to
+   `html.is-offline`, so it has ZERO effect on the normal (online) layout.
+   ========================================================================= */
+
+:root {
+  --offline-banner-h: 34px;
+}
+
+.offline-banner {
+  position: fixed;
+  inset: 0 0 auto 0; /* top, full width */
+  z-index: 40; /* above the header (30) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  height: var(--offline-banner-h);
+  padding-top: env(safe-area-inset-top, 0px);
+  box-sizing: content-box; /* the safe-area inset extends the bar, not squeezes it */
+  background: var(--surface-3);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: var(--fs-sm, 13px);
+  font-weight: 550;
+  user-select: none;
+}
+
+.offline-banner__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e0900d;
+  box-shadow: 0 0 0 0 rgba(224, 144, 13, 0.5);
+  animation: offline-pulse 2s ease-out infinite;
+}
+
+@keyframes offline-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(224, 144, 13, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(224, 144, 13, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(224, 144, 13, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offline-banner__dot {
+    animation: none;
+  }
+}
+
+/* Make room for the banner by shrinking + shifting the full-height app root.
+   Scoped to offline only, so the online grid is untouched. */
+html.is-offline #app {
+  --offline-offset: calc(var(--offline-banner-h) + env(safe-area-inset-top, 0px));
+  height: calc(100% - var(--offline-offset));
+  margin-top: var(--offline-offset);
+}
+
+/* The phone-width sidebar drawer is position: fixed with top: var(--header-h)
+   (viewport coordinates), so the #app margin above doesn't move it — without
+   this, the banner pushes the header down over the drawer's top ~34px and the
+   "Create" button underneath is half-hidden and unclickable. On desktop
+   widths the sidebar is a static grid child, where `top` is inert. */
+html.is-offline .sidebar {
+  top: calc(var(--header-h) + var(--offline-banner-h) + env(safe-area-inset-top, 0px));
+}
+
+/* The account popover is position: fixed and JS-anchored at the avatar's
+   bottom, which the #app margin above shifts down by the banner offset. Its
+   max-height (layout.css) only budgets for --header-h, so offline it runs the
+   banner's height past the viewport bottom on a short viewport (landscape
+   phone) — and with body overflow hidden, "Sign out" is clipped unreachably.
+   Match the shift so the whole menu stays on screen. */
+html.is-offline .popover {
+  max-height: calc(100vh - var(--header-h) - var(--offline-banner-h) - env(safe-area-inset-top, 0px) - 16px);
+  max-height: calc(100dvh - var(--header-h) - var(--offline-banner-h) - env(safe-area-inset-top, 0px) - 16px);
+}

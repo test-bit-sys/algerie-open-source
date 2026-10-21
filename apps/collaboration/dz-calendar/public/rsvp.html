@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f7f9">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#101216">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<title>RSVP — Puter Calendar</title>
+<style>
+  /* Status colors are picked per scheme for WCAG AA contrast (≥4.5:1) as
+     16px text on the card and banner backgrounds — not shared across modes. */
+  :root { color-scheme: light dark;
+    --bg: #f6f7f9; --card: #ffffff; --text: #1a1d21; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #3b82f6; --ok: #0f6b34; --no: #b91c1c; --maybe: #b45309; }
+  @media (prefers-color-scheme: dark) { :root {
+    --bg: #101216; --card: #1a1e24; --text: #e8eaed; --muted: #9aa1ab; --line: #2a2f37;
+    --ok: #4ade80; --no: #f87171; --maybe: #fbbf24; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
+    display: flex; justify-content: center; padding: 24px 16px; min-height: 100vh; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 28px; max-width: 460px; width: 100%; height: fit-content;
+    box-shadow: 0 8px 30px rgba(0,0,0,.06); }
+  .kicker { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 6px; }
+  h1 { font-size: 24px; margin: 0 0 16px; overflow-wrap: anywhere; }
+  .row { margin: 10px 0; overflow-wrap: anywhere; }
+  .row b { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--muted); margin-bottom: 2px; }
+  .row .strong { font-weight: 600; }
+  .desc { white-space: pre-wrap; }
+  .banner { border-radius: 10px; padding: 10px 14px; margin: 0 0 16px; font-weight: 600;
+    background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--ok); }
+  /* Plain text color: muted-on-muted lands just under AA in light mode (4.06:1
+     at this size and weight; book.html made the same correction). */
+  .banner--ended { background: color-mix(in srgb, var(--muted) 14%, transparent); color: var(--text); }
+  .banner--err { background: color-mix(in srgb, var(--no) 12%, transparent); color: var(--no); }
+  .answer { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }
+  .ask { font-weight: 600; margin: 0 0 10px; }
+  .choices { display: flex; gap: 10px; }
+  .choices button { flex: 1; padding: 10px 0; font: inherit; font-weight: 600; cursor: pointer;
+    border-radius: 10px; border: 1.5px solid var(--line); background: transparent; color: var(--text); }
+  .choices button:hover:not(:disabled) { border-color: var(--accent); }
+  .choices button:disabled { opacity: .6; cursor: default; }
+  .choices button[data-current='1'] { border-width: 2px; }
+  .choices button[data-status='accepted'][data-current='1'] { border-color: var(--ok); color: var(--ok);
+    background: color-mix(in srgb, var(--ok) 8%, transparent); }
+  .choices button[data-status='declined'][data-current='1'] { border-color: var(--no); color: var(--no);
+    background: color-mix(in srgb, var(--no) 8%, transparent); }
+  .choices button[data-status='tentative'][data-current='1'] { border-color: var(--maybe); color: var(--maybe);
+    background: color-mix(in srgb, var(--maybe) 8%, transparent); }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  textarea { width: 100%; margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+    border: 1.5px solid var(--line); background: transparent; color: inherit; font: inherit;
+    resize: vertical; min-height: 60px; }
+  textarea:focus { outline: none; border-color: var(--accent); }
+  .notebar { display: flex; justify-content: flex-end; margin-top: 8px; }
+  .notebar[hidden] { display: none; }
+  .notebar button { padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer;
+    border-radius: 10px; border: 1.5px solid var(--line); background: transparent; color: var(--text); }
+  .notebar button:hover:not(:disabled) { border-color: var(--accent); }
+  .notebar button:disabled { opacity: .6; cursor: default; }
+  .who { margin-top: 14px; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+  .suggest { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }
+  .suggest__hint { margin: 0 0 4px; font-size: 13px; color: var(--muted); }
+  .suggest__row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+    font-size: 14px; margin: 8px 0; overflow-wrap: anywhere; }
+  .suggest__wait { color: var(--muted); white-space: nowrap; flex: none; font-size: 13px; }
+  .suggest input { width: 100%; margin-top: 8px; padding: 10px 12px; border-radius: 10px;
+    border: 1.5px solid var(--line); background: transparent; color: inherit; font: inherit; }
+  /* A ring, not just a tinted border: the invalid rule below repaints the
+     border red at the same specificity, so a focused invalid field looked
+     exactly like an unfocused one (book.html fixed the same thing). */
+  .suggest input:focus { outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 32%, transparent); }
+  .suggest input[aria-invalid='true'] { border-color: var(--no); }
+  .suggest input[aria-invalid='true']:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--no) 32%, transparent); }
+  .suggest__bar { display: flex; justify-content: flex-end; margin-top: 8px; }
+  .suggest__bar button { padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer;
+    border-radius: 10px; border: 1.5px solid var(--line); background: transparent; color: var(--text); }
+  .suggest__bar button:hover:not(:disabled) { border-color: var(--accent); }
+  .suggest__bar button:disabled { opacity: .6; cursor: default; }
+  .suggest__msg { margin: 8px 0 0; font-size: 13px; font-weight: 600; }
+  .suggest__msg--ok { color: var(--ok); }
+  .suggest__msg--err { color: var(--no); }
+  .retry { margin-top: 12px; padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer;
+    border-radius: 10px; border: 1.5px solid var(--line); background: transparent; color: var(--text); }
+  .foot { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+  .foot a { color: inherit; display: inline-flex; align-items: center; gap: 6px; }
+  .foot img { width: 18px; height: 18px; border-radius: 4px; display: block; }
+</style>
+</head>
+<body>
+<main class="card" id="rsvp-root">
+  <p class="kicker">Invitation</p>
+  <h1>Loading…</h1>
+</main>
+<script>
+/**
+ * Standalone RSVP page. The guest lands here from a worker link
+ * (…puter.work/rsvp/<token> redirects to /rsvp.html#w=<worker>&t=<token>);
+ * everything below talks to the worker's JSON API (GET/POST /api/rsvp/<token>)
+ * — the worker itself serves no HTML. Needs no Puter sign-in and no SDK.
+ *
+ * All data is rendered with textContent (never markup), so nothing the host
+ * or a guest typed can inject into this page.
+ */
+(function () {
+  'use strict';
+
+  var STATUSES = ['accepted', 'declined', 'tentative'];
+  var LABEL = { accepted: 'Yes', declined: 'No', tentative: 'Maybe' };
+  var SENTENCE = {
+    accepted: 'You said you are going.',
+    declined: 'You said you are not going.',
+    tentative: 'You said maybe.',
+  };
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  function init(opts) {
+    var root = opts.root;
+    var fetchFn = opts.fetchFn;
+    var params = new URLSearchParams(String(opts.hash || '').replace(/^#/, ''));
+    var worker = params.get('w') || '';
+    var token = params.get('t') || '';
+    var justSaved = params.get('s') === '1';
+
+    // This page must never become a relay to arbitrary origins: only https
+    // Puter workers, and only well-formed tokens, are ever contacted.
+    if (!/^https:\/\/[a-z0-9][a-z0-9-]*\.puter\.work$/.test(worker) || !/^[0-9a-f]{40}$/.test(token)) {
+      renderGone();
+      return;
+    }
+    var api = worker + '/api/rsvp/' + token;
+
+    // One-click arrivals carry &s=1 so the first paint says "Response saved";
+    // drop it from the address so a reload (or a bookmark) doesn't keep
+    // claiming a save that just happened once. Only when this page's real
+    // location is the hash we were initialized with (never in tests).
+    if (
+      justSaved &&
+      typeof history !== 'undefined' &&
+      typeof location !== 'undefined' &&
+      location.hash === String(opts.hash || '')
+    ) {
+      try {
+        params.delete('s');
+        history.replaceState(null, '', '#' + params.toString());
+      } catch (e) {
+        /* cosmetic only */
+      }
+    }
+
+    load(justSaved);
+
+    function load(saved) {
+      fetchFn(api)
+        .then(function (res) {
+          if (res.status === 404) return renderGone();
+          if (!res.ok) throw new Error('http ' + res.status);
+          return res.json().then(function (data) {
+            render(data, saved);
+          });
+        })
+        .catch(function () {
+          renderError();
+        });
+    }
+
+    /** The inline "couldn't save" banner, shown above the choices. A failed
+     *  ANSWER must never tear down the card the way a failed LOAD does:
+     *  the invitation is still on screen and the guest's typed note is
+     *  irreplaceable — keep both, say what happened, let them press again. */
+    function showSubmitError() {
+      var box = root.querySelector('.answer');
+      if (!box) return;
+      var banner = box.querySelector('.banner--err');
+      if (!banner) {
+        banner = el('div', 'banner banner--err');
+        banner.setAttribute('role', 'alert');
+        box.insertBefore(banner, box.firstChild);
+      }
+      banner.textContent = "Couldn't save your response — check your connection and try again.";
+    }
+
+    function clearSubmitError() {
+      var banner = root.querySelector('.answer .banner--err');
+      if (banner) banner.remove();
+    }
+
+    function submit(data, status, comment, sourceBtn) {
+      // Only the ANSWER controls freeze: the suggest section below runs its
+      // own requests, and un-disabling its mid-flight button from here (on a
+      // failed answer) would unlock duplicate suggestion posts.
+      var buttons = root.querySelectorAll('.answer button');
+      for (var i = 0; i < buttons.length; i++) buttons[i].disabled = true;
+      var restLabel = sourceBtn ? sourceBtn.textContent : '';
+      if (sourceBtn) {
+        sourceBtn.textContent = 'Saving…';
+        sourceBtn.setAttribute('aria-busy', 'true');
+      }
+      clearSubmitError();
+      // URL-encoded body on purpose: it keeps the cross-origin POST a CORS
+      // "simple request" (no preflight), so answering never depends on how
+      // the worker platform handles OPTIONS. The worker parses both forms.
+      fetchFn(api, {
+        method: 'POST',
+        body: new URLSearchParams({ status: status, comment: comment }),
+      })
+        .then(function (res) {
+          if (res.status === 404) return renderGone();
+          if (res.status === 410) return load(false); // just ended — re-render read-only
+          if (!res.ok) throw new Error('http ' + res.status);
+          return res.json().then(function (out) {
+            data.response = out.response;
+            // The whole card is rebuilt below; whatever the guest has typed
+            // into "Want to bring someone?" rides across the rebuild.
+            data.suggestDraft = suggestDraft();
+            render(data, true);
+            // Keep a keyboard user where they were: on the answer they chose.
+            var chosen = root.querySelector('.choices button[data-status="' + status + '"]');
+            if (chosen) chosen.focus();
+          });
+        })
+        .catch(function () {
+          for (var j = 0; j < buttons.length; j++) buttons[j].disabled = false;
+          if (sourceBtn) {
+            sourceBtn.textContent = restLabel;
+            sourceBtn.removeAttribute('aria-busy');
+          }
+          showSubmitError();
+        });
+    }
+
+    /** What the guest has typed into the suggest form, if anything — so a
+     *  rebuild of the card (a saved answer) can hand it back rather than
+     *  throw it away. Null when the form isn't on the page. */
+    function suggestDraft() {
+      var email = root.querySelector('.suggest input[type="email"]');
+      var name = root.querySelector('.suggest input[type="text"]');
+      if (!email && !name) return null;
+      return { email: email ? email.value : '', name: name ? name.value : '' };
+    }
+
+    function render(data, saved) {
+      var ev = data.event || {};
+      var answer = data.response || { status: 'needs-action', comment: '' };
+      if (ev.title) document.title = ev.title + ' — RSVP';
+      root.replaceChildren();
+      root.append(el('p', 'kicker', "You're invited"));
+      root.append(el('h1', null, ev.title || '(Untitled event)'));
+
+      if (ev.ended) {
+        var suffix = SENTENCE[answer.status] ? ' — ' + SENTENCE[answer.status].toLowerCase() : '';
+        root.append(el('div', 'banner banner--ended', 'This event has ended' + suffix));
+      } else if (saved) {
+        var confirmText =
+          'Response saved.' + (SENTENCE[answer.status] ? ' ' + SENTENCE[answer.status] : '');
+        var confirm = el('div', 'banner', confirmText);
+        // The card is rebuilt on every save — role="status" makes the
+        // confirmation audible to screen readers, not just visible.
+        confirm.setAttribute('role', 'status');
+        root.append(confirm);
+      }
+
+      // The date is what the guest decides on — it carries the extra weight.
+      row('When', ev.when, ev.recurrence, true);
+      row('Where', ev.location);
+      joinRow(ev.meetingUrl);
+      row('Invited by', ev.organizer);
+      if (ev.description) {
+        var details = el('div', 'row');
+        details.append(el('b', null, 'Details'));
+        details.append(el('div', 'desc', ev.description));
+        root.append(details);
+      }
+
+      if (!ev.ended) {
+        var box = el('div', 'answer');
+        box.append(el('p', 'ask', 'Are you going?'));
+        var choices = el('div', 'choices');
+        var note = el('textarea');
+        note.maxLength = 500;
+        note.placeholder = 'Add a note for the organizer (optional)';
+        note.value = answer.comment || '';
+        note.setAttribute('aria-label', 'Note for the organizer (optional)');
+        STATUSES.forEach(function (status) {
+          var btn = el('button', null, LABEL[status] + (answer.status === status ? ' ✓' : ''));
+          btn.type = 'button';
+          btn.dataset.status = status;
+          btn.setAttribute('aria-pressed', String(answer.status === status));
+          if (answer.status === status) btn.dataset.current = '1';
+          btn.addEventListener('click', function () {
+            submit(data, status, note.value, btn);
+          });
+          choices.append(btn);
+        });
+        box.append(choices);
+        box.append(note);
+        // A guest who already answered and then edits their note has nothing
+        // to press — re-clicking "Yes ✓" is not an affordance anyone finds.
+        // Offer an explicit save the moment the note diverges from the
+        // stored one (only once an answer exists; before that, the note
+        // rides along with whichever status button they press).
+        var noteBar = el('div', 'notebar');
+        var noteSave = el('button', null, 'Save note');
+        noteSave.type = 'button';
+        noteBar.hidden = true;
+        noteSave.addEventListener('click', function () {
+          submit(data, answer.status, note.value, noteSave);
+        });
+        noteBar.append(noteSave);
+        note.addEventListener('input', function () {
+          var answered = STATUSES.indexOf(answer.status) !== -1;
+          noteBar.hidden = !(answered && note.value !== (answer.comment || ''));
+        });
+        box.append(noteBar);
+        root.append(box);
+        var who = el('p', 'who');
+        var guestEmail = (data.guest && data.guest.email) || '';
+        var guestName = (data.guest && data.guest.name) || '';
+        who.append(document.createTextNode('Responding as '));
+        who.append(el('b', null, guestName ? guestName + ' (' + guestEmail + ')' : guestEmail));
+        who.append(document.createTextNode(". This link is personal — please don't forward it."));
+        root.append(who);
+        // `suggestions` is the v11 tell: a worker that hasn't been upgraded
+        // yet (each host's worker upgrades when THEY next open the calendar)
+        // omits it, and offering a form its API would 404 helps nobody.
+        if (Array.isArray(data.suggestions)) root.append(suggestSection(data, null));
+      }
+      foot();
+    }
+
+    /**
+     * "Want to bring someone?" — the sanctioned alternative to forwarding the
+     * invitation from a mail client (which would invite from the GUEST's
+     * account and leave the organizer's calendar in the dark). A suggestion
+     * only queues a proposal on the worker; the organizer reviews it in their
+     * calendar and their approval is what sends the real invitation. `note`
+     * is a one-shot confirmation/status line carried through a rebuild.
+     */
+    function suggestSection(data, note) {
+      var section = el('div', 'suggest');
+      section.append(el('p', 'ask', 'Want to bring someone?'));
+      section.append(
+        el(
+          'p',
+          'suggest__hint',
+          'Suggest a guest — the organizer reviews suggestions and sends the invitations.',
+        ),
+      );
+      (data.suggestions || []).forEach(function (s) {
+        var sugRow = el('div', 'suggest__row');
+        sugRow.append(el('span', null, s.name ? s.name + ' (' + s.email + ')' : s.email));
+        sugRow.append(el('span', 'suggest__wait', 'Waiting for the organizer'));
+        section.append(sugRow);
+      });
+
+      var email = el('input');
+      email.type = 'email';
+      email.maxLength = 254;
+      email.autocomplete = 'off';
+      email.placeholder = 'Their email';
+      email.setAttribute('aria-label', 'Email of the guest to suggest');
+      var name = el('input');
+      name.type = 'text';
+      name.maxLength = 200;
+      name.autocomplete = 'off';
+      name.placeholder = 'Their name (optional)';
+      name.setAttribute('aria-label', 'Name of the guest to suggest (optional)');
+      var bar = el('div', 'suggest__bar');
+      var send = el('button', null, 'Suggest guest');
+      send.type = 'button';
+      bar.append(send);
+      // Seed a draft the last render carried over (see submit), once: a later
+      // rebuild of this section alone — after a suggestion is sent — starts
+      // clean, as the guest expects.
+      if (data.suggestDraft) {
+        email.value = data.suggestDraft.email || '';
+        name.value = data.suggestDraft.name || '';
+        data.suggestDraft = null;
+      }
+      section.append(email);
+      section.append(name);
+      section.append(bar);
+      if (note) section.append(note);
+
+      function say(text, ok) {
+        var old = section.querySelector('.suggest__msg');
+        if (old) old.remove();
+        var msg = el('p', 'suggest__msg ' + (ok ? 'suggest__msg--ok' : 'suggest__msg--err'), text);
+        msg.setAttribute('role', ok ? 'status' : 'alert');
+        section.append(msg);
+        return msg;
+      }
+
+      var inFlight = false; // closure-held: DOM disabled-state can be flipped by other flows
+
+      function submitSuggestion() {
+        if (inFlight) return; // Enter fires this too — never race a send in progress
+        var address = email.value.trim();
+        email.removeAttribute('aria-invalid');
+        // Same shape check the worker (and the app) applies — a doomed
+        // address should fail here, not after a network round trip.
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address)) {
+          email.setAttribute('aria-invalid', 'true');
+          say('Enter a valid email address.', false);
+          return;
+        }
+        inFlight = true;
+        send.disabled = true;
+        send.textContent = 'Sending…';
+        send.setAttribute('aria-busy', 'true');
+        var reset = function () {
+          inFlight = false;
+          send.disabled = false;
+          send.textContent = 'Suggest guest';
+          send.removeAttribute('aria-busy');
+        };
+        fetchFn(api + '/guests', {
+          method: 'POST',
+          body: new URLSearchParams({ email: address, name: name.value.trim() }),
+        })
+          .then(function (res) {
+            if (res.status === 410) return load(false); // just ended — read-only now
+            return res.json().catch(function () { return null; }).then(function (out) {
+              // 404 means "link revoked" ONLY when the worker itself said so
+              // (its JSON error code). A bare platform 404 is a worker that
+              // doesn't serve this route yet — the invitation is fine.
+              if (res.status === 404) {
+                if (out && out.error === 'not_found') return renderGone();
+                reset();
+                say("This invitation doesn't support suggestions yet.", false);
+                return;
+              }
+              if (res.ok && out && out.ok && out.suggestion) {
+                var kept = (data.suggestions || []).filter(function (s) {
+                  return s.email !== out.suggestion.email;
+                });
+                kept.push(out.suggestion);
+                data.suggestions = kept;
+                // Rebuild just this section: the answer box above may hold an
+                // unsaved note, which a full re-render would throw away.
+                var confirm = el(
+                  'p',
+                  'suggest__msg suggest__msg--ok',
+                  'Suggestion sent — the organizer will take it from here.',
+                );
+                confirm.setAttribute('role', 'status');
+                var next = suggestSection(data, confirm);
+                section.replaceWith(next);
+                // The button that held focus is gone — keep a keyboard user in
+                // the section, ready to suggest the next person.
+                var nextInput = next.querySelector('input');
+                if (nextInput) nextInput.focus();
+                return;
+              }
+              reset();
+              if (out && out.error === 'already_invited') say('They are already invited.', false);
+              else if (out && out.error === 'invalid_email') {
+                email.setAttribute('aria-invalid', 'true');
+                say('Enter a valid email address.', false);
+              } else if (out && out.error === 'suggestion_limit') {
+                say('The suggestion list for this event is full — contact the organizer directly.', false);
+              } else {
+                say("Couldn't send your suggestion — check your connection and try again.", false);
+              }
+            });
+          })
+          .catch(function () {
+            reset();
+            say("Couldn't send your suggestion — check your connection and try again.", false);
+          });
+      }
+
+      send.addEventListener('click', submitSuggestion);
+      var onEnter = function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          submitSuggestion();
+        }
+      };
+      email.addEventListener('keydown', onEnter);
+      name.addEventListener('keydown', onEnter);
+      return section;
+    }
+
+    function row(label, value, extra, strong) {
+      if (!value) return;
+      var node = el('div', 'row');
+      node.append(el('b', null, label));
+      if (strong) node.append(el('span', 'strong', value));
+      else node.append(document.createTextNode(value));
+      if (extra) node.append(el('div', null, extra));
+      root.append(node);
+    }
+
+    /** A "Join" row rendering the event's meeting link as a real anchor. The
+     *  worker only serves exact Puter Meetings room links, and this page (which
+     *  must never become a relay to arbitrary origins) re-checks the shape
+     *  before turning worker data into an href. */
+    function joinRow(url) {
+      if (typeof url !== 'string' || url.length > 100) return;
+      if (!/^https:\/\/meetings\.puter\.com\/#\/m\/(?:[a-z]{3}-[a-z]{4}-[a-z]{3}|[a-z]{4}-[a-z]{4}-[a-z]{4})$/.test(url)) return;
+      var node = el('div', 'row');
+      node.append(el('b', null, 'Join'));
+      var a = el('a', null, url);
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      node.append(a);
+      root.append(node);
+    }
+
+    function renderGone() {
+      root.replaceChildren();
+      root.append(el('p', 'kicker', 'Invitation'));
+      root.append(el('h1', null, "This link isn't active"));
+      root.append(
+        el(
+          'div',
+          'row',
+          "This invitation link is invalid or has been withdrawn. If you think that's a mistake, ask the event organizer for a fresh link.",
+        ),
+      );
+      foot();
+    }
+
+    function renderError() {
+      root.replaceChildren();
+      root.append(el('p', 'kicker', 'Invitation'));
+      root.append(el('h1', null, 'Could not load the invitation'));
+      root.append(el('div', 'banner banner--err', 'Check your connection and try again.'));
+      var retry = el('button', 'retry', 'Try again');
+      retry.type = 'button';
+      retry.addEventListener('click', function () {
+        load(false);
+      });
+      root.append(retry);
+      foot();
+    }
+
+    function foot() {
+      var foot = el('p', 'foot');
+      foot.append(document.createTextNode('Sent with'));
+      var link = el('a');
+      // The app icon ships alongside this page (public/), so the path is
+      // same-origin wherever the page is hosted. Decorative: the link's own
+      // text already names the app.
+      var mark = el('img');
+      mark.src = '/favicon-48x48.png';
+      mark.alt = '';
+      mark.width = 18;
+      mark.height = 18;
+      link.append(mark);
+      link.append(document.createTextNode('Puter Calendar'));
+      link.href = 'https://puter.com/app/calendar';
+      link.rel = 'noopener';
+      foot.append(link);
+      root.append(foot);
+    }
+  }
+
+  window.__rsvpPageInit = init;
+  if (!window.__RSVP_PAGE_TEST__) {
+    init({
+      root: document.getElementById('rsvp-root'),
+      hash: location.hash,
+      fetchFn: function (url, options) {
+        return fetch(url, options);
+      },
+    });
+  }
+})();
+</script>
+</body>
+</html>

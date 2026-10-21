@@ -1,0 +1,1408 @@
+/* =========================================================================
+   Calendar views: month grid + week/day time grid + agenda + events.
+   ========================================================================= */
+
+.view {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+}
+
+/* Structural chrome — weekday/date headers, day numbers, the time axis, and
+   agenda date labels — is UI, not copyable content. Disabling text selection
+   keeps click-drags (create/move events, range-select) from leaving stray
+   highlight on these labels. Event titles/descriptions stay selectable. */
+.month__dow,
+.month__daynum,
+.timegrid__head,
+.timegrid__allday-label,
+.timegrid__hour-label,
+.agenda__date {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---- Month view ------------------------------------------------------- */
+.month {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+.month__dow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+.month__dow-cell {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  text-align: right;
+}
+.month__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  min-height: 0;
+}
+.month__cell {
+  border-right: 1px solid var(--grid-line);
+  border-bottom: 1px solid var(--grid-line);
+  padding: var(--sp-1);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  cursor: default;
+  transition: background var(--dur-fast) var(--ease);
+  position: relative;
+}
+.month__cell:nth-child(7n) {
+  border-right: none;
+}
+.month__cell.is-othermonth {
+  background: var(--surface-2);
+}
+.month__cell.is-othermonth .month__daynum {
+  color: var(--text-3);
+}
+.month__cell.is-weekend:not(.is-othermonth) {
+  background: color-mix(in srgb, var(--surface-2) 55%, transparent);
+}
+/* The day a dragged chip would land on. Declared after the weekend /
+   other-month fills so it wins at equal specificity. A month chip is a flow
+   child of its cell and stays put during the drag (unlike the time grid, which
+   floats a ghost under the pointer), so this ring is the gesture's only
+   feedback — and the only way to read the drop day after an edge auto-page has
+   swapped the whole grid. */
+.month__cell.is-drop-target {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.month__daynum {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  margin: 2px;
+  border-radius: var(--r-full);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-2);
+}
+.month__cell.is-today .month__daynum {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.month__events {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+/* Sized exactly like a chip (same font, line-height and vertical padding):
+   the month view counts it as one chip row when deciding how many chips fit. */
+.month__more {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-3);
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-xs);
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+/* Hover styles are gated to devices that can hover: on a touch screen a tap
+   leaves :hover stuck on the row until the next tap, so a chip or list row
+   stayed highlighted after its card was closed. (Rules that neutralize a
+   hover — a dot keeping its color, an OOO block dropping the filter — are
+   left ungated; they only ever cancel one of these.) */
+@media (hover: hover) {
+  .month__more:hover {
+    background: var(--surface-3);
+    color: var(--text);
+  }
+}
+
+/* Month event chip */
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-xs);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  cursor: grab;
+  white-space: nowrap;
+  overflow: hidden;
+  /* No text selection / iOS long-press callout on a draggable chip. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition: filter var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease),
+    opacity var(--dur-fast) var(--ease);
+  color: var(--text);
+}
+.chip--drag-source {
+  opacity: 0.4;
+}
+/* Ring INSIDE the chip: a chip fills its wrap edge to edge, and both the wrap
+   and the cell clip overflow, so the global ring — drawn 2px outside — was cut
+   off on every side; a cell with a single chip showed no focus at all. Filled
+   chips draw it in their ink, so it reads on the colored ground. */
+.chip:focus-visible,
+.month__more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.chip--filled:focus-visible {
+  outline-color: var(--ev-fg, #fff);
+}
+@media (hover: hover) {
+  .chip:hover {
+    background: var(--surface-3);
+  }
+}
+.chip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--chip-color);
+}
+.chip__time {
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+.chip__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+/* Filled variant for all-day / multi-day */
+.chip--filled {
+  background: var(--chip-color);
+  /* Per-color ink (see colors.js): white on every fill but amber, where it
+     would sit at 2.2:1 and no text-shadow rescues that. */
+  color: var(--ev-fg, #fff);
+}
+@media (hover: hover) {
+  .chip--filled:hover {
+    filter: brightness(0.94);
+    background: var(--chip-color);
+  }
+}
+.chip--filled .chip__dot {
+  display: none;
+}
+/* Full ink, not a dilution: every white-ink fill in the palette is pitched to
+   4.6–4.8:1 against its ink, so 85% or 90% of that ink lands under AA. The
+   smaller size already carries the hierarchy. */
+.chip--filled .chip__time {
+  color: var(--ev-fg, #fff);
+}
+
+/* ---- Time grid (week + day) ------------------------------------------ */
+.timegrid {
+  /* A flex column, not a 2-row grid: the view appends a VARIABLE number of top
+     children (all-day rail?, tasks rail?, header, scroll body). With
+     grid-template-rows: auto 1fr the flexible track landed on whichever child
+     happened to be second — so with BOTH an all-day rail and a tasks rail, the
+     tasks rail (an overflow:auto element whose min-content is 0) took the 1fr
+     track and collapsed to ~1px, hiding its chips. A flex column sizes every
+     rail/header to content and lets only the scroll body grow, for any count. */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.timegrid__allday {
+  display: grid;
+  grid-template-columns: var(--gutter, 60px) 1fr;
+  border-bottom: 1px solid var(--border);
+  max-height: 96px;
+  overflow-y: auto;
+  flex: none;
+  /* A rail is its own scroll container, so it reserves its own gutter rather
+     than borrowing the header's padding — but only once it overflows, which
+     would put its columns a scrollbar wide of the body's on every ordinary
+     day. `stable` reserves the space either way, matching the body. */
+  scrollbar-gutter: stable;
+}
+.timegrid__allday-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  text-align: right;
+  padding: var(--sp-2) var(--sp-2) 0 0;
+  border-right: 1px solid var(--grid-line);
+}
+.timegrid__allday-cols {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+.timegrid__allday-col {
+  border-right: 1px solid var(--grid-line);
+  padding: var(--sp-1);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.timegrid__allday-col:last-child {
+  border-right: none;
+}
+/* The same tint .timegrid__col.is-today gives the hour grid, so today reads as
+   one unbroken stripe instead of starting below the rails — which left today's
+   own all-day events and tasks sitting outside their column. */
+.timegrid__allday-col.is-today {
+  background: color-mix(in srgb, var(--accent-soft) 40%, transparent);
+}
+
+/* Column headers (weekday + date) */
+.timegrid__head {
+  display: grid;
+  grid-template-columns: var(--gutter, 60px) 1fr;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex: none;
+  /* Hold back exactly what the hour scroller's scrollbar takes from the body
+     (measured in afterMount), so this grid's 1fr resolves against the same
+     width the day columns do and the separators line up. 0 where scrollbars
+     are overlays. The border-bottom is outside the padding, so the rule under
+     the dates still runs the full width. */
+  padding-right: var(--sbw, 0px);
+}
+.timegrid__head-gutter {
+  border-right: 1px solid var(--grid-line);
+}
+.timegrid__head-cols {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+.timegrid__head-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--sp-2) 0;
+  border-right: 1px solid var(--grid-line);
+  cursor: pointer;
+}
+.timegrid__head-col:last-child {
+  border-right: none;
+}
+.timegrid__dow {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+.timegrid__datenum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+.timegrid__head-col.is-today .timegrid__datenum {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.timegrid__head-col.is-today .timegrid__dow {
+  color: var(--accent);
+}
+
+/* Scrollable body */
+.timegrid__scroll {
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1;
+}
+.timegrid__body {
+  display: grid;
+  grid-template-columns: var(--gutter, 60px) 1fr;
+  position: relative;
+}
+.timegrid__axis {
+  border-right: 1px solid var(--grid-line);
+}
+.timegrid__hour {
+  height: var(--hour-h, 52px);
+  position: relative;
+}
+.timegrid__hour-label {
+  position: absolute;
+  top: -7px;
+  right: var(--sp-2);
+  font-size: 10px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* Secondary time-zone column: sits to the left of the local column. */
+.timegrid__hour-label--secondary {
+  right: auto;
+  left: var(--sp-2);
+  color: var(--text-3);
+}
+.timegrid__head-gutter {
+  position: relative;
+}
+.timegrid__tz-abbr {
+  position: absolute;
+  bottom: var(--sp-1);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.timegrid__tz-abbr--secondary {
+  left: var(--sp-2);
+}
+.timegrid__tz-abbr--local {
+  right: var(--sp-2);
+}
+.timegrid__cols {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  position: relative;
+}
+.timegrid__col {
+  position: relative;
+  border-right: 1px solid var(--grid-line);
+  /* Long-press-to-create is a drag: don't let iOS raise a selection callout. */
+  -webkit-touch-callout: none;
+}
+.timegrid__col:last-child {
+  border-right: none;
+}
+.timegrid__col.is-today {
+  background: color-mix(in srgb, var(--accent-soft) 40%, transparent);
+}
+.timegrid__slot {
+  height: var(--hour-h, 52px);
+  border-bottom: 1px solid var(--grid-line);
+  cursor: default;
+}
+
+/* Now-indicator */
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--danger);
+  z-index: 6;
+  pointer-events: none;
+}
+.now-line::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+/* Positioned timed event */
+.tevent {
+  position: absolute;
+  border-radius: var(--r-sm);
+  padding: 3px 6px;
+  overflow: hidden;
+  cursor: grab;
+  /* No text selection / iOS long-press callout on a draggable event. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  font-size: var(--fs-sm);
+  line-height: 1.3;
+  background: var(--ev-fill);
+  color: var(--ev-fg, #fff); /* per-color ink — see colors.js */
+  border: 1px solid color-mix(in srgb, var(--ev-fill) 70%, #000);
+  box-shadow: var(--shadow-sm);
+  z-index: 5;
+  transition: filter var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  /* Own container, so the label rules below can query the block's real width
+     rather than the day column's — two overlapping events halve it. */
+  container-type: inline-size;
+}
+/* Hover lift only where a pointer can hover: on touch the tapped block
+   otherwise keeps its raised look after the card closes. */
+@media (hover: hover) {
+  .tevent:hover {
+    filter: brightness(1.04);
+    box-shadow: var(--shadow-md);
+    z-index: 7;
+  }
+}
+/* The event left behind while its ghost is dragged. */
+.tevent--drag-source {
+  opacity: 0.4;
+}
+/* Full-width preview that tracks the pointer during a drag. */
+.tevent--ghost {
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.95;
+  box-shadow: var(--shadow-lg);
+  transition: none;
+}
+
+/* Drag-to-create selection: a live preview of the event being blocked out. */
+.tg-draft {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: var(--r-sm);
+  padding: 3px 6px;
+  overflow: hidden;
+  background: var(--draft-fill, var(--accent));
+  color: var(--ev-fg, #fff);
+  border: 1px solid color-mix(in srgb, var(--draft-fill, var(--accent)) 70%, #000);
+  box-shadow: var(--shadow-lg);
+  opacity: 0.92;
+  z-index: 20;
+  pointer-events: none;
+}
+.tg-draft__time {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.95;
+  font-variant-numeric: tabular-nums;
+}
+
+/* While a drag is in flight, force the grab cursor everywhere and kill the
+   text selection a drag across the page would otherwise leave behind. */
+body.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+body.is-dragging * {
+  cursor: grabbing !important;
+}
+/* Edge-resize zones: invisible grab strips along a timed event's edges. The
+   ns-resize cursor is the only affordance — no drawn handle to clutter the
+   block. */
+.tevent__resize {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 7px;
+  z-index: 9;
+  cursor: ns-resize;
+}
+/* Thinner zones on short blocks so the body stays clickable/draggable. */
+.tevent.is-short .tevent__resize {
+  height: 5px;
+}
+.tevent__resize--top {
+  top: 0;
+}
+.tevent__resize--bottom {
+  bottom: 0;
+}
+/* Keep the resize cursor (not the global grab cursor) while resizing. */
+body.is-dragging .tevent--resizing,
+body.is-dragging .tevent--resizing * {
+  cursor: ns-resize !important;
+}
+.tevent--resizing {
+  filter: brightness(1.04);
+  box-shadow: var(--shadow-md);
+  z-index: 8;
+}
+
+.tevent__title {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+/* A time is only readable whole: allowed to wrap, it splits at the space
+   inside its own value — "3" over "PM", in a block one line tall — so it is
+   pinned to a single line and ellipsised instead. On a short block it gives up
+   no width at all (below); the title, which still reads truncated, is what
+   absorbs a narrow column. */
+.tevent__time {
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tevent.is-short {
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 6px;
+}
+.tevent.is-short .tevent__title {
+  flex: 1 1 auto;
+}
+.tevent.is-short .tevent__time {
+  font-size: 10px;
+  flex: none;
+}
+/* Past the point where the title would be squeezed to nothing, the time is the
+   half to drop: a block with no name says less than one with no time, and the
+   editor and tooltip both still carry it. Queried against the block itself
+   (`container-type` above), so it answers the real column width — overlap
+   packing and all. */
+@container (max-width: 108px) {
+  .tevent.is-short .tevent__time {
+    display: none;
+  }
+}
+
+/* All-day chip inside timegrid */
+.allday-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-xs);
+  font-size: var(--fs-sm);
+  font-weight: 550;
+  background: var(--chip-color);
+  color: var(--ev-fg, #fff); /* per-color ink — see colors.js */
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .allday-chip:hover {
+    filter: brightness(0.95);
+  }
+}
+.allday-chip__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Compact due-time suffix that trails the task title inside the same ellipsized
+   run (see buildTaskChip): the ", " separator lives here so the drag ghost can
+   overwrite just the time text and keep it. */
+.allday-chip__time {
+  font-variant-numeric: tabular-nums;
+  color: var(--ev-fg, #fff);
+}
+.allday-chip__time::before {
+  content: ', ';
+}
+
+/* ---- Tasks (to-dos) -------------------------------------------------- */
+/* Round checkbox shared by month chips and the time-grid task rail. */
+.chip__check {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  border: 2px solid var(--chip-color);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ev-fg, #fff); /* the check glyph sits on --chip-color when checked */
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.chip__check.is-checked {
+  background: var(--chip-color);
+}
+/* A 15px ring is not a finger target, and everything around it opens the
+   card instead — extend the hit area invisibly on touch screens (the ring
+   itself keeps its size, so nothing else in the chip moves). */
+@media (pointer: coarse) {
+  .chip__check,
+  .agenda__task-check {
+    position: relative;
+  }
+  .chip__check::before,
+  .agenda__task-check::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+  }
+}
+.chip__check .icon {
+  width: 11px;
+  height: 11px;
+}
+.chip--task {
+  cursor: pointer;
+}
+.chip--task.is-done .chip__title {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+/* Time-grid task rail: outlined so tasks read differently from filled all-day events. */
+.task-chip {
+  background: var(--surface-2);
+  color: var(--text);
+  text-shadow: none;
+  border: 1px solid var(--border);
+}
+@media (hover: hover) {
+  .task-chip:hover {
+    filter: none;
+    background: var(--surface-3);
+  }
+}
+.task-chip .allday-chip__time {
+  color: var(--text-3);
+}
+.task-chip.is-done .allday-chip__title {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+/* A timed task pinned to the hour grid at its due time (top/left/width set
+   inline). Sits above events at rest (z 6) so it isn't hidden, and below a
+   hovered event (z 7); the shadow lifts it off whatever it overlaps. */
+.task-chip--grid {
+  position: absolute;
+  z-index: 6;
+  box-shadow: var(--shadow-sm);
+  /* Tighter than the rail chip so a packed column leaves the title as much room
+     as possible; the title takes the lead and truncates (with the time) last. */
+  gap: var(--sp-1);
+  padding: 2px 5px;
+}
+.task-chip--grid .allday-chip__title {
+  flex: 1;
+  min-width: 0;
+}
+/* A timed task being dragged: dim the original, float a preview that tracks the
+   pointer (mirrors .tevent--drag-source / .tevent--ghost). */
+.task-chip--drag-source {
+  opacity: 0.4;
+}
+.task-chip--ghost {
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.95;
+  box-shadow: var(--shadow-lg);
+  transition: none;
+}
+
+/* ---- Out of office & declined --------------------------------------- */
+/* A muted, hatched "away" look that reads distinctly from normal events —
+   built out of the *picked* color rather than a fixed grey, so an OOO block
+   still answers the color swatch the editor offers it. Graphite is the mode's
+   default, so the familiar grey hatch is what you get unless you change it.
+   Views inject the color under two different names (see colors.js); alias both
+   to one so the shared rule below can stay single-source. */
+.chip.is-ooo,
+.allday-chip.is-ooo {
+  --ooo-color: var(--chip-color);
+}
+.tevent.is-ooo {
+  --ooo-color: var(--ev-fill);
+}
+.chip.is-ooo,
+.allday-chip.is-ooo,
+.tevent.is-ooo {
+  /* A wash this pale keeps the block reading as "away" (never as a solid,
+     attention-grabbing event) while still separating red from green at a
+     glance; the stripes carry most of the hue. */
+  background-color: color-mix(in srgb, var(--ooo-color) 10%, var(--surface-2));
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 6px,
+    color-mix(in srgb, var(--ooo-color) 26%, transparent) 6px,
+    color-mix(in srgb, var(--ooo-color) 26%, transparent) 12px
+  );
+  color: var(--text-2);
+  text-shadow: none;
+}
+.tevent.is-ooo {
+  border: 1px dashed color-mix(in srgb, var(--ooo-color) 50%, var(--border));
+}
+.tevent.is-ooo:hover {
+  filter: none;
+}
+.chip__ooo-icon,
+.allday-chip__icon,
+.agenda__event-icon {
+  display: inline-flex;
+  flex: none;
+  /* On an agenda row the plane stands in for the color dot, so it has to carry
+     the color itself — there is no hatched ground there to carry it. It picks
+     up --ooo-color by inheritance inside a chip, and from its own inline
+     --chip-color in the agenda (see buildRow). */
+  color: var(--ooo-color, var(--text-3));
+}
+.agenda__event-icon {
+  --ooo-color: var(--chip-color);
+  width: 20px;
+  justify-content: center;
+}
+/* Declined: kept on the calendar but greyed out (matches Google's behavior). */
+.is-declined {
+  opacity: 0.5;
+}
+.chip.is-declined .chip__title,
+.tevent.is-declined .tevent__title,
+.allday-chip.is-declined .allday-chip__title,
+.agenda__event.is-declined .agenda__event-title {
+  text-decoration: line-through;
+}
+
+/* ---- Public holidays ---------------------------------------------------
+   A holiday is context for the day, not an item on the user's list — so the
+   treatment is deliberately quiet: a muted pill with no palette color. It IS
+   clickable, though — it opens the read-only details card, the only way to
+   read a clipped name on touch — so it keeps the pointer cursor and a hover
+   response like every other chip. Carrying no palette color, the doubled
+   class names below are what let these rules beat the `--chip-color` /
+   `--ev-fg` defaults on the base chip, whose var() fallbacks would otherwise
+   leave white text on a light ground. The flag glyph is what tells a holiday
+   apart at chip size, where a muted pill on its own just reads as an event
+   whose color failed to load. */
+.chip.chip--holiday,
+.allday-chip.allday-chip--holiday {
+  background: var(--surface-3);
+  color: var(--text-2);
+  font-weight: 500;
+  /* Opens, but never drags: not the base chip's grab hand. */
+  cursor: pointer;
+}
+.chip.chip--holiday:hover,
+.allday-chip.allday-chip--holiday:hover {
+  background: var(--surface-3);
+  filter: brightness(0.95);
+}
+.chip__holiday-icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-3);
+}
+/* Doubled to beat the base row on specificity: `.agenda__event--holiday`
+   alone TIES with `.agenda__event`, and the base rule is declared further
+   down the file, so the later declaration would win. */
+.agenda__event.agenda__event--holiday {
+  color: var(--text-2);
+}
+/* The flag stands in for the color dot, so it has to sit in the dot's slot:
+   the shared icon box is 20px, which pushed a holiday's time and title 10px
+   right of every other row's and left the list visibly out of true wherever a
+   holiday sat among events. The glyph keeps its full 16px while the negative
+   margins pull the layout box back to the dot's 10px, on the same centre line
+   — the 3px either side falls in the row's own padding and flex gap, so
+   nothing clips or collides. */
+.agenda__event--holiday .agenda__event-icon {
+  width: 16px;
+  margin: 0 -3px;
+  color: var(--text-3);
+}
+.agenda__event--holiday .agenda__event-time,
+.agenda__event--holiday .agenda__event-title {
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+/* ---- Agenda view ------------------------------------------------------ */
+.agenda {
+  height: 100%;
+  overflow-y: auto;
+  padding: var(--sp-4) 0;
+}
+.agenda__inner {
+  /* An explicit width: the auto cross-axis margins opt this flex item out of
+     stretch sizing, and shrink-to-fit would otherwise size it by the grid's
+     min-content — wider than a phone viewport, pushing rows offscreen. */
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 var(--sp-5);
+}
+.agenda__day {
+  display: grid;
+  /* minmax(0, …): a bare 1fr's auto minimum tracks the events' min-content,
+     so the day grid could never shrink to the viewport. */
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--border);
+}
+.agenda__date {
+  position: sticky;
+  top: 0;
+}
+.agenda__date-num {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  line-height: 1;
+}
+.agenda__date-num.is-today {
+  color: var(--accent);
+}
+.agenda__date-dow {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.agenda__events {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.agenda__event {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .agenda__event:hover {
+    background: var(--surface-2);
+  }
+}
+.agenda__event-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--chip-color);
+}
+.agenda__event-time {
+  width: 128px;
+  flex: none;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-base);
+}
+.agenda__event-title {
+  /* Fill the rest of the row and allow shrinking below content width — a
+     flex item's automatic min-size otherwise keeps a long title at full
+     content width, pushing the row past the viewport instead of engaging
+     the ellipsis below. */
+  flex: 1;
+  min-width: 0;
+  font-weight: 550;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agenda__task-check {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 2px solid var(--chip-color);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ev-fg, #fff); /* the check glyph sits on --chip-color when checked */
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.agenda__task-check.is-checked {
+  background: var(--chip-color);
+}
+.agenda__task-check .icon {
+  width: 13px;
+  height: 13px;
+}
+.agenda__task.is-done .agenda__task-title {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+
+/* ---- Search overlay (command palette) -------------------------------- */
+.search-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: var(--overlay-scrim);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 11vh var(--sp-4) var(--sp-4);
+  animation: fade-in var(--dur) var(--ease);
+}
+.search__panel {
+  width: 100%;
+  max-width: 560px;
+  max-height: min(70vh, 560px);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: modal-in var(--dur-slow) var(--ease);
+}
+.search__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  flex: none;
+}
+.search__icon {
+  display: inline-flex;
+  color: var(--text-3);
+  flex: none;
+}
+.search__input {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  border: none;
+  outline: none;
+  background: none;
+  color: var(--text);
+  font-size: var(--fs-lg);
+}
+.search__input::placeholder {
+  color: var(--text-3);
+}
+.search__esc {
+  flex: none;
+  font-size: var(--fs-xs);
+  font-family: inherit;
+  color: var(--text-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xs);
+  padding: 1px 6px;
+  line-height: 1.5;
+}
+.search__results {
+  overflow-y: auto;
+  padding: var(--sp-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+}
+.search__result {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+.search__result[aria-selected='true'] {
+  background: var(--surface-3);
+}
+/* --text-3 on --surface-3 is 4.2:1 in the light theme; step the meta up on
+   the row that carries that fill. */
+.search__result[aria-selected='true'] .search__meta {
+  color: var(--text-2);
+}
+.search__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--chip-color);
+}
+/* Task marker: the same ring-with-check the calendar chips use, sized to sit
+   where the event colour dot does so rows stay aligned. Display only — the
+   row opens the task; checking off happens on the card. */
+.search__check {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--chip-color);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ev-fg, #fff); /* the check glyph sits on --chip-color when checked */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.search__check.is-checked {
+  background: var(--chip-color);
+}
+.search__check .icon {
+  width: 10px;
+  height: 10px;
+}
+.search__result--task.is-done .search__title {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+.search__text {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.search__title {
+  font-weight: 550;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search__title mark {
+  background: color-mix(in srgb, var(--accent) 26%, transparent);
+  color: inherit;
+  border-radius: 2px;
+}
+.search__meta {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search__badge {
+  display: inline-flex;
+  color: var(--text-3);
+  flex: none;
+}
+.search__empty {
+  padding: var(--sp-8) var(--sp-4);
+  text-align: center;
+  color: var(--text-3);
+}
+
+@media (max-width: 520px) {
+  .search-scrim {
+    padding: var(--sp-6) var(--sp-3) var(--sp-3);
+  }
+}
+
+/* ---- Year view -------------------------------------------------------- */
+/* A scrollable grid of twelve mini-months. `.view` is flex-column by default;
+   override to a plain scroll container so the month grid can center + wrap. */
+.year {
+  display: block;
+  overflow-y: auto;
+  padding: var(--sp-5);
+}
+.year__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+  gap: var(--sp-6) var(--sp-4);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.year__month {
+  min-width: 0;
+}
+.year__month-name {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: var(--fs-md);
+  font-weight: 650;
+  color: var(--accent);
+  padding: 0 2px var(--sp-2);
+}
+@media (hover: hover) {
+  .year__month-name:hover {
+    text-decoration: underline;
+  }
+}
+.year__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+.year__dow {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-3);
+  padding: 2px 0;
+  text-transform: uppercase;
+}
+.year__day {
+  aspect-ratio: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-xs);
+  color: var(--text);
+  background: none;
+  border-radius: 50%;
+  position: relative;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+button.year__day {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  button.year__day:hover {
+    background: var(--surface-3);
+  }
+}
+/* Muted, not faint: at half opacity these dates read 2:1 and the month
+   lost its shape. The muted ink is the de-emphasis (book.html made the same
+   correction for the same reason). */
+.year__day.is-muted {
+  color: var(--text-3);
+}
+.year__day.is-today {
+  color: var(--accent);
+  font-weight: 700;
+}
+.year__day.is-selected {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-weight: 650;
+}
+.year__day.is-selected.is-today {
+  color: var(--text-on-accent);
+}
+.year__day.has-events::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.7;
+}
+.year__day.is-selected.has-events::after {
+  background: var(--text-on-accent);
+}
+
+/* ---- Responsive ------------------------------------------------------- */
+@media (max-width: 1200px) {
+  /* The full header — brand text, Today + arrows + title, search, the
+     6-button view switcher, avatar — needs ~990px of min-content, but that
+     figure assumes a short title; the longest ones ("Wednesday, August 12",
+     "August 2026 and beyond") need ~1200px before they stop painting under
+     the pinned tools. Below that, only .header__nav could shrink
+     (min-width: 0), so the title and nav painted under them. Give the band
+     the same treatment the ≤720 layout already uses: drop the brand text
+     (the mark stays), let the title ellipsize, and tighten the switcher
+     buttons. */
+  .header__brand {
+    min-width: 0;
+    gap: var(--sp-2);
+  }
+  .brand-name {
+    display: none;
+  }
+  /* Clip, don't paint over: whatever the nav can't fit must never render
+     under the search / view-switcher buttons. The 4px padding/negative-margin
+     pair moves the clip edge just past the 2px-offset focus outline, so
+     keyboard focus rings on Today / the arrows aren't cut off. */
+  .header__nav {
+    overflow: hidden;
+    padding: 4px;
+    margin: -4px;
+  }
+  .header__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .header__tools .segmented button {
+    padding: 0 var(--sp-2);
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --sidebar-w: 240px;
+  }
+  .header__title {
+    min-width: 120px;
+    font-size: var(--fs-lg);
+  }
+}
+
+@media (max-width: 720px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: var(--header-h) 1fr auto;
+    grid-template-areas:
+      'header'
+      'main'
+      'tabbar';
+  }
+  .tabbar {
+    display: grid;
+  }
+  .header__tools .segmented {
+    display: none;
+  }
+  .menu-toggle {
+    display: inline-flex;
+  }
+  .sidebar {
+    position: fixed;
+    /* Sit below the header (which paints above the drawer) so the "Create
+       event" button at the top of the sidebar isn't hidden and unclickable —
+       and above the tab bar (25) and its own scrim (26), which the desktop
+       value of 20 put it under: the bar covered the drawer's last rows. */
+    z-index: 27;
+    top: var(--header-h);
+    bottom: 0;
+    left: 0;
+    width: min(84vw, 320px);
+    /* Installed on a notched phone, the drawer's last rows (the booking links,
+       New booking link) sat under the home indicator with no way to scroll
+       them out; landscape puts its left edge under the sensor housing. The
+       tab bar, toaster and modal already clear these. */
+    padding-bottom: calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
+    padding-left: max(var(--sp-4), env(safe-area-inset-left, 0px));
+    transform: translateX(-102%);
+    /* Off screen is not enough: a translated drawer is still in the tab order
+       and the accessibility tree, so Tab from the header disappeared into some
+       fifty invisible controls (Create, 42 mini-calendar days, the category
+       rows) before reaching the calendar, and a screen reader read the whole
+       drawer as present. Hide it once the slide-out has finished — the
+       visibility flip is delayed by the transform's duration on close and
+       immediate on open, so the slide animates both ways. */
+    visibility: hidden;
+    transition:
+      transform var(--dur-slow) var(--ease),
+      visibility 0s linear var(--dur-slow);
+    box-shadow: var(--shadow-lg);
+  }
+  .app.sidebar-open .sidebar {
+    transform: translateX(0);
+    visibility: visible;
+    transition:
+      transform var(--dur-slow) var(--ease),
+      visibility 0s;
+  }
+  .header__brand {
+    min-width: 0;
+    gap: var(--sp-2);
+  }
+  .brand-name {
+    display: none;
+  }
+  .header__title {
+    font-size: var(--fs-md);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* Month chips shrink to color bars */
+  .chip__time {
+    display: none;
+  }
+  .month__daynum {
+    min-width: 20px;
+    height: 20px;
+    font-size: var(--fs-xs);
+  }
+  .month__dow-cell {
+    padding: var(--sp-1);
+    font-size: 10px;
+  }
+  /* Agenda: the desktop 96px date column + 128px time column left event
+     titles — the most important field — only ~70px on a 390px phone.
+     Tighten both fixed columns so titles keep the lion's share. */
+  .agenda__day {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: var(--sp-2);
+  }
+  .agenda__event-time {
+    width: 104px;
+    font-size: var(--fs-sm);
+  }
+}
+
+@media (max-width: 520px) {
+  /* The "Today" button carries .hide-xs; it lives in .header__nav, so the
+     old .header__tools-scoped rule never matched. Hide it here to free the
+     header on phones (the mini-calendar and nav arrows remain). */
+  .hide-xs {
+    display: none;
+  }
+  .header__title {
+    font-size: var(--fs-base);
+  }
+  /* Month cells: dot indicators instead of chips to stay legible */
+  .month__events {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3px;
+    /* Room for a focused dot's ring on every side (the wrap clips). */
+    padding: 2px;
+  }
+  .chip {
+    padding: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--chip-color);
+    overflow: visible;
+  }
+  /* A 7px dot has no inside to draw a ring in: hug it from outside. */
+  .chip:focus-visible,
+  .chip--filled:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 0;
+  }
+  .chip:hover {
+    background: var(--chip-color);
+  }
+  .chip__dot,
+  .chip__time,
+  .chip__title,
+  /* Later-added chip children must collapse too: a task's 15px checkbox ring
+     and an out-of-office plane icon otherwise spill out of the 7px dot and
+     overlap the neighbouring dots. */
+  .chip__check,
+  .chip__ooo-icon,
+  .chip__holiday-icon {
+    display: none;
+  }
+  /* A holiday has no --chip-color to collapse into, and its pale pill ground
+     all but vanishes at 7px — give the dot the muted ink instead. */
+  .chip.chip--holiday,
+  .chip.chip--holiday:hover {
+    background: var(--text-3);
+  }
+  .chip--filled {
+    background: var(--chip-color);
+  }
+  /* The hatched OOO texture is noise at 7px — render a plain (graphite) dot. */
+  .chip.is-ooo {
+    background: var(--chip-color);
+  }
+  .month__more {
+    padding: 0;
+    font-size: 10px;
+  }
+}

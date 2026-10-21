@@ -1,0 +1,2006 @@
+/* =========================================================================
+   App shell: header, sidebar, mini-calendar, popovers, modal, toasts.
+   ========================================================================= */
+
+.app {
+  display: grid;
+  grid-template-rows: var(--header-h) 1fr;
+  /* minmax(0, …) lets the main column shrink below its content's min-size so a
+     wide header/grid never forces horizontal overflow of the viewport. */
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  grid-template-areas:
+    'header header'
+    'sidebar main';
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ---- Header ----------------------------------------------------------- */
+.header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 max(var(--sp-4), env(safe-area-inset-right, 0px)) 0
+    max(var(--sp-4), env(safe-area-inset-left, 0px));
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  z-index: 30;
+}
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-width: calc(var(--sidebar-w) - var(--sp-4) - var(--sp-3));
+}
+.brand-mark {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+.brand-name {
+  font-size: var(--fs-lg);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 0; /* allow the title to ellipsize instead of forcing overflow */
+}
+.header__title {
+  font-size: var(--fs-xl);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  min-width: 168px;
+  white-space: nowrap;
+  /* Current-period label ("July 2026") is nav chrome, not copyable text. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+.header__title .muted {
+  color: var(--text-3);
+  font-weight: 500;
+}
+.nav-arrows {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.header__spacer {
+  flex: 1;
+}
+.header__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Avatar / user button */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0; /* the profile picture must fill the whole circle */
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-weight: 650;
+  font-size: var(--fs-md);
+  border: 1px solid transparent;
+  transition: box-shadow var(--dur-fast) var(--ease);
+  text-transform: uppercase;
+  overflow: hidden; /* clip the profile picture to the circle */
+  flex-shrink: 0; /* a fixed circle even when header tools get crowded */
+}
+/* Hover styles are gated to devices that can hover — see views.css. */
+@media (hover: hover) {
+  .avatar:hover {
+    box-shadow: 0 0 0 3px var(--ring);
+  }
+}
+/* Profile picture (replaces the letter when the account has one). */
+.avatar__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  /* Keep the button itself the pointer target in browsers. The popover's
+     outside-pointerdown check in app.js additionally tolerates the <img> as
+     target — both layers are deliberate; neither alone covers every caller. */
+  pointer-events: none;
+}
+
+/* ---- Sidebar ---------------------------------------------------------- */
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-4);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  z-index: 20;
+}
+/* A scroll container must not also squeeze what it holds. This is a column
+   flex box, so every child defaults to flex-shrink: 1 with a min-height of
+   auto — free to compress all the way down to its own text. The moment the
+   content is taller than the column (a short window, the offline banner, or
+   just a few booking links) that flattened the Create button from its 44px
+   pill to barely more than its label, and squashed the mini month's rows with
+   it. Overflowing is what the scrollbar above is for. */
+.sidebar > * {
+  flex-shrink: 0;
+}
+.sidebar__create {
+  height: 44px;
+  font-size: var(--fs-md);
+  border-radius: var(--r-lg);
+}
+
+/* Mini calendar */
+.mini {
+  user-select: none;
+}
+.mini__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+}
+.mini__title {
+  font-size: var(--fs-md);
+  font-weight: 650;
+}
+.mini__nav {
+  display: inline-flex;
+  gap: 2px;
+}
+.mini__nav .icon-btn {
+  width: 28px;
+  height: 28px;
+}
+.mini__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+.mini__dow {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  padding: var(--sp-1) 0;
+  text-transform: uppercase;
+}
+.mini__cell {
+  aspect-ratio: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-sm);
+  border-radius: 50%;
+  color: var(--text);
+  transition: background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+  position: relative;
+}
+@media (hover: hover) {
+  .mini__cell:hover {
+    background: var(--surface-3);
+  }
+}
+.mini__cell.is-muted {
+  color: var(--text-3);
+}
+.mini__cell.is-today {
+  color: var(--accent);
+  font-weight: 700;
+}
+.mini__cell.is-selected {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-weight: 650;
+}
+.mini__cell.is-selected.is-today {
+  color: var(--text-on-accent);
+}
+.mini__cell.has-events::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.7;
+}
+.mini__cell.is-selected.has-events::after {
+  background: var(--text-on-accent);
+}
+
+/* Sidebar sections */
+.side-section__title {
+  font-size: var(--fs-sm);
+  font-weight: 650;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--sp-2);
+}
+/* A collapsible section's heading is its disclosure button (the button lives
+   inside the <h2>, which is why it inherits all of the above). The negative
+   inline margin lets the hover surface reach past the text without indenting
+   it: the label stays on the same left edge as the Create button, the mini
+   month and the other section titles, which an added padding-left would have
+   pushed it off. It bleeds 8px into the sidebar's own 16px padding, so nothing
+   overflows and no horizontal scrollbar appears. */
+.side-section__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  /* Full section width plus the 8px it bleeds either side, so the caret sits
+     at the right edge and the whole row is the target. */
+  width: calc(100% + 2 * var(--sp-2));
+  margin: 0 calc(-1 * var(--sp-2));
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--r-sm);
+  text-align: left;
+  /* Chrome's UA sheet resets text-transform on form controls, so the heading's
+     uppercase does not reach a button inside it on its own. */
+  text-transform: inherit;
+  transition: background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .side-section__toggle:hover {
+    background: var(--surface-3);
+    color: var(--text-2);
+  }
+}
+/* "2 hidden", shown only while the section is folded: the count of colors the
+   filter is currently keeping off the calendar. Lower case on purpose — it is
+   a state, not part of the heading. */
+.side-section__note {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-3);
+}
+.side-section__caret {
+  margin-left: auto;
+  transition: transform var(--dur-fast) var(--ease);
+}
+/* Down when folded, up when open — the caret points the way the section will
+   move, as it does in the account menu and every other calendar's sidebar. */
+.side-section__toggle[aria-expanded='true'] .side-section__caret {
+  transform: rotate(180deg);
+}
+/* Nothing below the heading to space away from. */
+.side-section.is-collapsed .side-section__title {
+  margin-bottom: 0;
+}
+.cal-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+/* Row = the show/hide checkbox + a rename pencil beside it (not inside it:
+   interactive content in a role="checkbox" is neither valid nor operable). */
+.cal-filter__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+.cal-filter__toggle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+/* Keyed off the row, not the checkbox: the pencil is a sibling, so a
+   `.cal-filter__toggle:hover` highlight dropped out the moment the pointer
+   crossed onto it — the row flickering out from under the control the pointer
+   was reaching for. */
+@media (hover: hover) {
+  .cal-filter__item:hover .cal-filter__toggle {
+    background: var(--surface-3);
+  }
+}
+/* Six pencils standing in a column outweigh the names they belong to, so the
+   pencil waits for the row (hover) or the keyboard (focus-within). It stays in
+   the tab order either way; only its paint is deferred — and only where a
+   pointer can hover: a touch screen has no way to discover a hidden
+   affordance, so there the pencils simply show. */
+.cal-filter__rename {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  transition: opacity var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .cal-filter__rename {
+    opacity: 0;
+  }
+  .cal-filter__item:hover .cal-filter__rename,
+  .cal-filter__item:focus-within .cal-filter__rename {
+    opacity: 1;
+  }
+}
+.cal-filter__check {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--r-xs);
+  border: 2px solid var(--dot-color, var(--gray-400));
+  background: var(--dot-color, transparent);
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ev-fg, #fff); /* the palette's ink for this fill — dark on orange */
+  transition: background var(--dur-fast) var(--ease),
+    opacity var(--dur-fast) var(--ease);
+}
+.cal-filter__toggle[aria-checked='false'] .cal-filter__check {
+  background: transparent;
+}
+.cal-filter__toggle[aria-checked='false'] .cal-filter__check .icon {
+  opacity: 0;
+}
+.cal-filter__label {
+  min-width: 0;
+  font-size: var(--fs-md);
+  color: var(--text);
+  /* A renamed category is the one label here that can be long. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Main ------------------------------------------------------------- */
+.main {
+  grid-area: main;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg);
+}
+
+.main.is-file-drop-target::after {
+  content: 'Drop a calendar file to import';
+  position: absolute;
+  inset: var(--sp-3);
+  z-index: 25;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-4);
+  border: 2px dashed var(--accent);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  color: var(--text);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ---- Popover (user menu, etc.) --------------------------------------- */
+.popover {
+  position: fixed;
+  z-index: 80;
+  min-width: 220px;
+  padding: var(--sp-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  animation: pop-in var(--dur) var(--ease);
+  transform-origin: top right;
+  /* Anchored just below the header; on a short viewport (landscape phone) the
+     ~390px of content otherwise runs past the bottom with nothing scrollable
+     (body overflow is hidden), leaving Import/Sign out unreachable. */
+  max-height: calc(100vh - var(--header-h) - 16px);
+  max-height: calc(100dvh - var(--header-h) - 16px);
+  overflow-y: auto;
+}
+.popover__header {
+  padding: var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--sp-2);
+}
+.popover__name {
+  font-weight: 650;
+}
+.popover__meta {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+  color: var(--text);
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .menu-item:hover {
+    background: var(--surface-3);
+  }
+}
+.menu-item .icon {
+  color: var(--text-3);
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+
+/* ---- Modal ------------------------------------------------------------ */
+.modal-scrim {
+  position: fixed;
+  inset: 0;
+  /* Track the *visible* viewport (dvh), not the URL-bar-hidden large viewport a
+     bare 100vh/inset:0 gives on mobile Safari — otherwise a tall modal is
+     centered against an oversized area and its header/footer end up behind the
+     browser toolbars. */
+  height: 100dvh;
+  background: var(--overlay-scrim);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Keep the modal clear of the notch / home indicator (viewport-fit=cover). */
+  padding: max(var(--sp-4), env(safe-area-inset-top)) var(--sp-4)
+    max(var(--sp-4), env(safe-area-inset-bottom));
+  animation: fade-in var(--dur) var(--ease);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.modal {
+  width: 100%;
+  max-width: 480px;
+  /* Fill the padded, dvh-sized scrim at most; the body scrolls within. */
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  animation: modal-in var(--dur-slow) var(--ease);
+  overflow: hidden;
+}
+/* A card rebuilt while the dialog is already open (refreshView in modal.js:
+   RSVP answers landing, a task toggled) — no entrance animation. */
+.modal--settled {
+  animation: none;
+}
+/* The event/task/out-of-office editor pins its top edge on open (see anchorTop
+   in modal.js) so switching type changes the height from the bottom instead of
+   re-centering and making the whole dialog jump. `--modal-anchor-top` is the
+   margin that reproduces the opened centered position; it also caps max-height
+   so a taller variant scrolls its body rather than overflowing the footer.
+   Other .modal-scrim users (the recurrence / scope dialogs) keep the default
+   centering. */
+.modal-scrim--anchored {
+  align-items: flex-start;
+}
+.modal-scrim--anchored .modal {
+  margin-top: var(--modal-anchor-top, 0px);
+  max-height: calc(100% - var(--modal-anchor-top, 0px));
+}
+.modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+}
+.modal__title {
+  font-size: var(--fs-lg);
+  font-weight: 650;
+}
+.modal__body {
+  /* Vertical padding matters: the body scrolls (overflow-y:auto, which also
+     clips overflow-x), so with 0 top/bottom padding the first field's focus
+     ring and the last field's selected-swatch ring — box-shadows drawn a few px
+     outside their boxes — get clipped at the scroll edges. The padding keeps
+     those rings inside the visible area. */
+  padding: var(--sp-2) var(--sp-4);
+  overflow-y: auto;
+  /* Allow the body to shrink below its content height inside the flex column so
+     it scrolls, keeping the header and footer pinned instead of overflowing the
+     modal and clipping them. */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.modal__foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  margin-top: var(--sp-2);
+}
+.modal__foot .spacer {
+  flex: 1;
+}
+.modal__mode {
+  align-self: stretch;
+  display: flex;
+}
+/* The three create-mode choices share the control's width evenly. */
+.modal__mode button {
+  flex: 1;
+}
+.modal__tz-hint {
+  font-weight: 500;
+  color: var(--text-3);
+}
+
+/* ---- Compact editor layout (the event / out-of-office / task form) -----
+   Labels sit in a fixed left column with their control beside them, so the
+   form reads as aligned rows instead of a tall stack of label-over-field
+   blocks — roughly half the height, no internal scrolling on a laptop.
+   Scoped to .modal--editor: the details card and the recurrence / scope /
+   import dialogs keep the stacked .field default. */
+.modal--editor {
+  --editor-label-w: 92px;
+}
+.modal--editor .modal__body {
+  gap: var(--sp-3);
+}
+.modal--editor .modal__foot {
+  margin-top: 0;
+}
+.modal--editor .field {
+  display: grid;
+  grid-template-columns: var(--editor-label-w) minmax(0, 1fr);
+  column-gap: var(--sp-3);
+  row-gap: var(--sp-2);
+  align-items: start;
+}
+/* The label marks the control's FIRST row; extra control rows (guest rows,
+   the add-notification button, hints) stack in the control column under it.
+   min-height centers it against a standard 38px input without dragging it
+   to the middle of taller blocks (the notes textarea, a grown guest list).
+   :first-child keeps in-column .field__label hints (e.g. the reminders
+   permission hint) out of the label column. */
+.modal--editor .field > .field__label:first-child {
+  grid-row: 1;
+  grid-column: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+}
+.modal--editor .field > :not(.field__label:first-child) {
+  grid-column: 2;
+  min-width: 0;
+}
+/* Title has no visible label — a single prominent, underline-style input. */
+.modal--editor .field--title {
+  display: block;
+}
+.modal--editor .input--title {
+  height: 44px;
+  padding: 0 1px;
+  border: 0;
+  border-bottom: 1.5px solid var(--border-strong);
+  border-radius: 0;
+  background: transparent;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+.modal--editor .input--title:focus {
+  box-shadow: none;
+  border-bottom-color: var(--accent);
+}
+/* Switch rows (All day / Completed) share the label column. */
+.modal--editor .inline-field {
+  display: grid;
+  grid-template-columns: var(--editor-label-w) minmax(0, 1fr);
+  column-gap: var(--sp-3);
+  align-items: center;
+}
+.modal--editor .inline-field .switch {
+  justify-self: start;
+}
+/* Swatches center against the same 38px row rhythm as the inputs. */
+.modal--editor .swatches {
+  min-height: 38px;
+  align-items: center;
+  align-content: center;
+}
+/* Grid items stretch by default, which would center these buttons' content
+   mid-column; pin them to the control column's left edge instead. */
+.modal--editor .reminders__add,
+.modal--editor .meeting__add {
+  justify-self: start;
+}
+/* The attached meeting link: URL (truncated, it's long) + copy/remove. Centered
+   against the same 38px row rhythm as the inputs beside it. */
+.modal--editor .meeting__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-height: 38px;
+  min-width: 0;
+}
+.modal--editor .meeting__url {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Slightly tighter rows: a 34px ghost button dwarfs the 20px text beside it.
+   (The pointer:coarse block below restores a full-size tap target.) */
+.modal--editor .reminders__remove,
+.modal--editor .guests__copy,
+.modal--editor .meeting__action {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+/* The details card's meeting URL, shown under "Join meeting" for anyone who
+   wants to copy it — long, so it truncates rather than wraps the card wide. */
+.modal--view .view__join-url {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.modal--editor .textarea {
+  min-height: 64px;
+}
+/* Body-level notes (secondary-zone times, the save error) line up with the
+   control column, tying them to the inputs they describe. Direct children of
+   the body only: the booking editor puts its save error INSIDE the weekly-hours
+   .field, where the grid already places it in the control column — the indent
+   would then apply twice and push the message clear of the rows it is about. */
+.modal--editor .modal__body > .modal__tz-hint,
+.modal--editor .modal__body > .modal__error {
+  margin-left: calc(var(--editor-label-w) + var(--sp-3));
+}
+.modal--editor .modal__tz-hint {
+  margin-top: calc(-1 * var(--sp-1));
+}
+/* Full-bleed hairline between the schedule block and the details block. */
+.modal--editor .modal__sep {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: var(--sp-1) calc(-1 * var(--sp-4));
+}
+/* Narrow screens: back to stacked label-over-field rows — a 92px label
+   column plus two date/time inputs doesn't fit a phone width. */
+@media (max-width: 520px) {
+  .modal--editor .field {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .modal--editor .field > .field__label:first-child {
+    min-height: 0;
+    grid-row: auto;
+  }
+  .modal--editor .field > :not(.field__label:first-child) {
+    grid-column: 1;
+  }
+  .modal--editor .swatches {
+    min-height: 0;
+  }
+  .modal--editor .modal__body > .modal__tz-hint,
+  .modal--editor .modal__body > .modal__error {
+    margin-left: 0;
+  }
+}
+
+/* ---- Item details card (read-only view mode) --------------------------
+   Clicking an existing event/task opens this compact card; the editor is an
+   explicit step behind its pencil action. Shares the .modal shell. */
+.modal--view {
+  max-width: 424px;
+}
+.modal__head--view {
+  gap: var(--sp-1);
+  padding-bottom: 0;
+}
+.view__kind {
+  margin-right: auto;
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.view__body {
+  gap: var(--sp-3);
+  /* The card usually has no footer, so give the body its own bottom air. */
+  padding-bottom: var(--sp-5);
+}
+.view__title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-1);
+}
+.view__color {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--r-xs);
+  /* Optically center on the title's first line. */
+  margin-top: 5px;
+}
+.view__title-main {
+  min-width: 0;
+}
+/* A public holiday has no palette color: the flag it wears on its chip takes
+   the swatch's slot, so the card's title row lines up with an event's. */
+.view__color--holiday {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  margin-top: 4px;
+  color: var(--text-3);
+  background: none;
+  border-radius: 0;
+}
+.view__title {
+  font-size: var(--fs-xl);
+  font-weight: 650;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.view__badges {
+  display: flex;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+}
+.view__badge {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 1px 8px;
+}
+.view__row {
+  display: flex;
+  gap: var(--sp-3);
+  font-size: var(--fs-md);
+}
+.view__row-icon {
+  flex: none;
+  color: var(--text-3);
+  margin-top: 1px;
+}
+.view__row-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* A location is most often a meeting URL, and a booking line carries an
+     email: unbreakable runs that overflowed the row, gave the card body a
+     horizontal scrollbar and ran off a phone's card edge. */
+  overflow-wrap: anywhere;
+}
+.view__muted {
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+.view__desc {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+/* URLs/emails auto-detected in user text (see linkify in dom.js). Focus uses
+   the global :focus-visible outline. */
+.linkified {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.linkified:hover {
+  color: var(--accent-hover);
+}
+.modal__foot--view {
+  justify-content: flex-start;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* ---- Guests / RSVP ----------------------------------------------------- */
+/* Editor guest rows (mirrors the reminders rows' rhythm). */
+.guests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.guests:empty {
+  display: none;
+}
+.guests__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.guests__email {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.guests__status {
+  flex: none;
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+.input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+/* Focus on an invalid field: this rule outranks .input:focus's accent border
+   (same specificity, loaded later), which left only the 2.3:1 translucent
+   ring to mark focus. Draw the solid ring around the red border instead. */
+.input[aria-invalid='true']:focus {
+  box-shadow: none;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Contact suggestions, floated over whatever follows the guest field. The
+   wrapper is the positioning context so the list hangs off the input itself. */
+.guests__entry {
+  position: relative;
+}
+.guests__suggest {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 216px;
+  overflow-y: auto;
+  padding: var(--sp-1);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-lg);
+}
+.guests__suggest[hidden] {
+  display: none;
+}
+.guests__suggestion {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.guests__suggestion[aria-selected='true'] {
+  background: var(--surface-3);
+}
+.guests__suggestion[aria-selected='true'] .guests__suggestion-meta {
+  color: var(--text-2);
+}
+/* A face per suggestion — the contact's initial, or a mail glyph for the row
+   that stands for the address being typed in. */
+.guests__face {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-full);
+  background: var(--accent-soft);
+  color: var(--accent-ink-on-soft);
+  font-size: var(--fs-sm);
+  font-weight: 650;
+  text-transform: uppercase;
+  line-height: 1;
+}
+/* The row that stands for the address being typed is an action, not somebody we
+   know anything about — a quieter face than a contact's. */
+.guests__suggestion--typed .guests__face {
+  background: var(--surface-3);
+  color: var(--text-3);
+}
+.guests__suggestion-text {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.guests__suggestion-name,
+.guests__suggestion-meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.guests__suggestion-name {
+  font-weight: 550;
+}
+.guests__suggestion-meta {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+/* Time field: a text box whose dropdown of quarter-hour choices opens scrolled
+   to the field's own time. Styled like the guest suggestions. Without the
+   Popover API (see [popover] below) the list hangs inside the wrapper, which
+   is then its positioning context. */
+.time-field {
+  position: relative;
+}
+.time-field[hidden] {
+  display: none;
+}
+.time-field__list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  left: 0;
+  /* At least the input's width; wider when an end field's span labels need it. */
+  min-width: 100%;
+  max-height: 216px;
+  overflow-y: auto;
+  padding: var(--sp-1);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-lg);
+}
+.time-field__list[hidden] {
+  display: none;
+}
+/* With the Popover API the list renders in the top layer, so no scrolling
+   dialog body can clip it; the field sets top/left/width from the input's
+   rect. Undo the UA popover defaults (inset:0, margin:auto, system colors). */
+.time-field__list[popover] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  color: var(--text);
+}
+.time-field__option {
+  flex: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* An end field's choices carry the span they make from the start ("1 hr 30
+   min"), set off to the right so the times still line up as a column. */
+.time-field__duration {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+.time-field__option[aria-selected='true'] {
+  background: var(--surface-3);
+}
+
+/* Details-card guest list. */
+.view__guests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-top: var(--sp-1);
+}
+.view__guest {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.view__guest-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.view__guest-who {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+/* A note the guest left via their RSVP link. */
+.view__guest-note {
+  overflow-wrap: anywhere;
+}
+/* Per-guest "copy RSVP link" (editor rows + details card). */
+.guests__copy {
+  flex: none;
+}
+/* Guest suggestions awaiting the host (a guest proposed adding someone from
+   their RSVP page). Set off from the guest list proper — these people are
+   NOT on the list until the host approves. */
+.view__suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+  padding: var(--sp-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-md);
+}
+/* Each suggestion: who (full first line), then its own compact action pair —
+   a long address must never squeeze the buttons into wrapping mid-label. */
+.view__suggestion {
+  flex-wrap: wrap;
+}
+.view__suggestion .view__guest-main {
+  flex: 1 1 100%;
+}
+.view__suggestion .btn {
+  flex: none;
+  height: 28px;
+  padding: 0 var(--sp-3);
+  font-size: var(--fs-sm);
+}
+
+/* The host's actions under the guest list: email the invitations, copy the
+   links. One wrapping row — a vertical stack of ghost buttons read as links. */
+.view__guest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+/* Whether a guest has been emailed the invitation they hold now. Never wraps
+   or shrinks: it sits between the address (which may be long) and the copy
+   button, and a half-wrapped "Update pending" reads as a broken row. */
+.view__guest-sent {
+  flex: none;
+  white-space: nowrap;
+}
+/* Per-guest response state: hollow ring = awaiting, filled = answered. */
+.view__rsvp-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-3);
+}
+.view__rsvp-dot[data-status='accepted'] {
+  background: var(--success);
+  border-color: var(--success);
+}
+.view__rsvp-dot[data-status='declined'] {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+.view__rsvp-dot[data-status='tentative'] {
+  background: var(--warning);
+  border-color: var(--warning);
+}
+
+/* "Going?" chips on the details card. */
+.view__going-label {
+  font-weight: 600;
+  color: var(--text-2);
+  margin-right: var(--sp-2);
+}
+.view__going button {
+  min-width: 56px;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+/* Form rows inside modal */
+.form-row {
+  display: flex;
+  gap: var(--sp-3);
+}
+.form-row > * {
+  flex: 1;
+  min-width: 0;
+}
+.inline-field {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.inline-field .field__label {
+  margin: 0;
+}
+
+/* Color swatches */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  position: relative;
+  transition: transform var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .swatch:hover {
+    transform: scale(1.12);
+  }
+}
+.swatch[aria-checked='true'] {
+  border-color: var(--surface);
+  box-shadow: 0 0 0 2px var(--swatch-color);
+}
+.swatch[aria-checked='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  /* A clean white dot with a faint dark ring so it reads on light swatches.
+     (mix-blend-mode: difference produced arbitrary muddy colors per swatch.) */
+  background: #fff;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.18);
+}
+
+/* Reminders (notifications) editor */
+.reminders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.reminders:empty {
+  display: none;
+}
+.reminders__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.reminders__row .select {
+  flex: 1;
+  min-width: 0;
+}
+.reminders__remove {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  color: var(--text-3);
+}
+@media (hover: hover) {
+  .reminders__remove:hover {
+    color: var(--danger);
+    background: var(--danger-soft);
+  }
+}
+.reminders__add {
+  align-self: flex-start;
+  height: 32px;
+  padding: 0 var(--sp-2);
+  gap: 6px;
+  color: var(--text-2);
+}
+.reminders__add .icon {
+  color: var(--text-3);
+}
+.reminders__hint {
+  color: var(--text-3);
+  font-weight: 500;
+}
+
+/* Enlarge the smallest controls on touch devices for comfortable tapping
+   (no effect on mouse/desktop). */
+@media (pointer: coarse) {
+  /* The editor's Save / Cancel / Delete are 36px tall; the sidebar's Create
+     and the tab bar's buttons are already 44. */
+  .modal__foot .btn {
+    min-height: 44px;
+  }
+  .swatch {
+    width: 34px;
+    height: 34px;
+  }
+  .modal--editor .reminders__remove,
+  .modal--editor .guests__copy,
+  .modal--editor .meeting__action {
+    width: 34px;
+    height: 34px;
+  }
+  .mini__nav .icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .book-item__copy {
+    width: 34px;
+    height: 34px;
+  }
+  .mail-item__actions .icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+  /* No hover to reveal it with, so on touch the pencil is simply always there. */
+  .cal-filter__rename {
+    width: 34px;
+    height: 34px;
+    opacity: 1;
+  }
+  /* A 12px heading is a 20px tap target; this is a real control now. */
+  .side-section__toggle {
+    min-height: 34px;
+  }
+  .bk-day__add {
+    height: 34px;
+  }
+}
+
+/* ---- Recurrence dialogs (nested over the event modal) ---------------- */
+.dialog-scrim {
+  z-index: 130; /* above the event modal (100) */
+}
+.rr-modal {
+  max-width: 440px;
+}
+.rr-scope {
+  max-width: 420px;
+}
+/* "Send invitations?" — one question, two buttons. */
+.invite-ask {
+  max-width: 420px;
+}
+/* "Rename category" — one field, with the color it belongs to beside it. */
+.cat-rename {
+  max-width: 400px;
+}
+.cat-rename__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.cat-rename__dot {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--r-xs);
+}
+.cat-rename__hint {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.rr-every {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.rr-num {
+  width: 84px;
+  flex: none;
+}
+.rr-every .select {
+  flex: 1;
+}
+
+.rr-weekdays {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.rr-weekday {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-sm);
+  font-weight: 650;
+  color: var(--text-2);
+  background: var(--surface-3);
+  border: 1px solid transparent;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .rr-weekday:hover {
+    color: var(--text);
+  }
+}
+.rr-weekday[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.rr-weekday:focus-visible {
+  /* The global ring (solid accent, 7:1): the translucent --ring it replaced
+     reached 2.3:1 on the surface and was this control's only focus signal. */
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.rr-ends-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-1) 0;
+  cursor: pointer;
+}
+.rr-ends-row input[type='radio'] {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.rr-ends-line {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.rr-ends-line .input {
+  width: auto;
+}
+.rr-ends-line .input[type='date'] {
+  min-width: 150px;
+}
+.rr-ends-line .rr-num {
+  width: 76px;
+}
+.rr-ends-row .input:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---- Import / export dialog ------------------------------------------ */
+.io-modal {
+  max-width: 460px;
+}
+.io-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.io-hint {
+  color: var(--text-2);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+}
+.io-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-1);
+}
+.io__status {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-2);
+}
+.io__status[data-variant='success'] {
+  color: var(--success-ink);
+}
+/* data-io.js emits 'warn' for the soft cases ("no events", offline) — unstyled
+   it read as plain body text, indistinguishable from a neutral message. */
+.io__status[data-variant='warn'] {
+  color: var(--warning);
+}
+.io__status[data-variant='danger'] {
+  color: var(--danger-ink);
+}
+/* Import progress: writes are paced to respect puter.kv's rate limit, so a
+   large file takes a while — the bar shows it's working, not hung. */
+.io-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-top: var(--sp-1);
+}
+.io-progress__track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  overflow: hidden;
+}
+.io-progress__fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width var(--dur-fast) var(--ease);
+}
+.io-progress__text {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+/* ---- Context menu (fallback, mirrors puter.ui.contextMenu) ----------- */
+.ctx-menu {
+  position: fixed;
+  z-index: 120;
+  min-width: 180px;
+  padding: var(--sp-1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-pop);
+  animation: pop-in var(--dur-fast) var(--ease);
+  transform-origin: top left;
+}
+.ctx-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+  color: var(--text);
+  text-align: left;
+  white-space: nowrap;
+}
+.ctx-menu__item:hover,
+.ctx-menu__item.is-focused {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.ctx-menu__item.is-danger:hover,
+.ctx-menu__item.is-danger.is-focused {
+  background: var(--danger-ink);
+}
+.ctx-menu__item[aria-disabled='true'] {
+  color: var(--text-3);
+  pointer-events: none;
+}
+.ctx-menu__sep {
+  height: 1px;
+  margin: var(--sp-1) var(--sp-2);
+  background: var(--border);
+}
+.ctx-menu__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: none;
+}
+
+/* ---- Toasts ----------------------------------------------------------- */
+.toaster {
+  position: fixed;
+  /* Clear the home-indicator zone on a notch phone running as an installed
+     app — every other bottom-anchored surface already does. */
+  bottom: calc(var(--sp-5) + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 140;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  pointer-events: none;
+}
+@media (max-width: 720px) {
+  /* Above the tab bar, not over it: a "Task rescheduled — Undo" toast used to
+     sit on the view switcher for its four seconds. */
+  .toaster {
+    bottom: calc(var(--tabbar-h) + var(--sp-3) + env(safe-area-inset-bottom, 0px));
+  }
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--gray-900);
+  color: var(--gray-0);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--fs-md);
+  pointer-events: auto;
+  animation: toast-in var(--dur) var(--ease);
+  max-width: min(92vw, 460px);
+}
+/* A flex child needs min-width: 0 to shrink below its content, and a
+   rescheduling toast can carry a guest's email — an unbreakable run that
+   painted past the pill's edge, white on white in the light theme. */
+.toast__msg {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+/* An inline wrapper is a full line box tall, and the icon inside sits on its
+   baseline — floating the check above the text's optical center. Flex sizes
+   the wrapper to the icon so align-items: center actually centers it. */
+.toast__icon {
+  display: flex;
+  flex: none;
+}
+:root[data-theme='dark'] .toast,
+.toast {
+  border: 1px solid var(--border);
+}
+.toast.is-leaving {
+  animation: toast-out var(--dur) var(--ease) forwards;
+}
+.toast__action {
+  /* The toast surface is inverted (--gray-900): dark in light theme, light in
+     dark theme. --accent-hover was low-contrast on both. Use a light-blue
+     action on the (light-theme) dark toast and a dark-blue one in dark theme. */
+  color: #7fa8ff;
+  font-weight: 650;
+  padding: 0 var(--sp-1);
+}
+:root[data-theme='dark'] .toast__action {
+  color: #0043ec;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .toast__action {
+    color: #0043ec;
+  }
+}
+.toast--danger .icon {
+  color: var(--danger);
+}
+.toast--success .icon {
+  color: var(--success);
+}
+/* Same inversion as .toast__action: the dark palette's feedback colors are
+   lifted for dark grounds, and on the dark theme's LIGHT toast they fade to
+   2.6:1 (danger) and 2.0:1 (success) — a glyph needs 3:1. */
+:root[data-theme='dark'] .toast--danger .icon {
+  color: #d13438;
+}
+:root[data-theme='dark'] .toast--success .icon {
+  color: #1f8a56;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .toast--danger .icon {
+    color: #d13438;
+  }
+  :root:not([data-theme='light']) .toast--success .icon {
+    color: #1f8a56;
+  }
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* ---- Auth / loading screens ------------------------------------------ */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-6);
+  background: var(--bg);
+  z-index: 60;
+}
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.auth-card__logo {
+  width: 56px;
+  height: 56px;
+}
+.auth-card__title {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.auth-card__sub {
+  color: var(--text-2);
+  line-height: var(--lh-normal);
+  max-width: 34ch;
+}
+.auth-card .btn {
+  height: 44px;
+  margin-top: var(--sp-2);
+}
+.loading-screen {
+  flex-direction: column;
+  gap: var(--sp-4);
+  color: var(--text-3);
+}
+
+/* ---- Empty state (agenda) -------------------------------------------- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  height: 100%;
+  color: var(--text-3);
+  text-align: center;
+}
+.empty > .icon {
+  width: 40px;
+  height: 40px;
+  opacity: 0.6;
+}
+
+/* Backdrop for mobile sidebar */
+/* Above the tab bar (25): the drawer it backs is a fixed panel that must
+   cover the bar, and the bar must be dimmed and untappable while the drawer
+   is open — it used to paint over both, hiding the drawer's last rows and
+   switching the view underneath an open drawer. */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-scrim);
+  z-index: 26;
+  animation: fade-in var(--dur) var(--ease);
+}
+.menu-toggle {
+  display: none;
+}
+
+/* ---- Mobile bottom tab bar (view switcher) --------------------------- */
+.tabbar {
+  display: none;
+  grid-area: tabbar;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--sp-1);
+  padding: 6px max(6px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px))
+    max(6px, env(safe-area-inset-left, 0px));
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 25;
+}
+.tabbar__btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  border-radius: var(--r-md);
+  color: var(--text-3);
+  font-size: 10px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.tabbar__btn.is-active {
+  color: var(--accent-ink-on-soft);
+  background: var(--accent-soft);
+}
+.tabbar__btn:active {
+  background: var(--surface-3);
+}
+
+/* ---- Booking links (sidebar section + editor dialog) -------------------- */
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.book-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+.book-item__open {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: var(--sp-2);
+  border-radius: var(--r-sm);
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .book-item__open:hover {
+    background: var(--surface-3);
+  }
+}
+.book-item__title {
+  max-width: 100%;
+  font-size: var(--fs-md);
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.book-item__meta {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+/* "Not accepting bookings", said in the space an 11px meta line has: the same
+   state-pill recipe as the details card's .view__badge. */
+.book-item__off {
+  margin-left: var(--sp-1);
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-weight: 600;
+}
+.book-item__copy {
+  flex: none;
+  width: 30px;
+  height: 30px;
+}
+.book-item__copy:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.book-new {
+  justify-content: flex-start;
+  margin-top: 2px;
+}
+
+/* The editor: wider than the event editor so a weekly-hours row — two native
+   time inputs (~125px each with a 12-hour "09:00 AM" value), the dash, and
+   the remove button — fits without clipping the AM/PM segment. */
+.modal--booking {
+  max-width: 600px;
+  /* Wide enough for "Accepting bookings" (117px at 12px/600), the longest label
+     here: at 104px it and "Puter Meetings link" were the only two rows in the
+     form whose label wrapped, which pushed those switches out of the rhythm the
+     other twelve rows keep. Costs the interval row 9px per time input, which
+     still leaves a 12-hour "09:00 AM" and its picker indicator room. */
+  --editor-label-w: 122px;
+}
+.bk-hours {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.bk-day {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  column-gap: var(--sp-3);
+  align-items: start;
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--grid-line);
+}
+.bk-day:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.bk-day__head {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 38px;
+  cursor: pointer;
+}
+.bk-day__name {
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: var(--text);
+}
+.bk-day__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+.bk-day__off {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  font-size: var(--fs-base);
+  color: var(--text-3);
+}
+.bk-day__add {
+  align-self: flex-start;
+  padding: var(--sp-1) var(--sp-2);
+  height: 30px;
+  font-size: var(--fs-sm);
+}
+.bk-interval {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.bk-interval .bk-time {
+  flex: 1;
+  min-width: 0;
+}
+.bk-interval .bk-time .input {
+  /* Tighter than the stock 12px input padding: a 12-hour time value needs the
+     room, and clipping it hides whether 9:00 is AM or PM. */
+  padding: 0 var(--sp-2);
+}
+/* Touch browsers (where the field is the native time input) open the picker
+   from the field itself, so the dropdown indicator only eats width the 16px
+   mobile font needs. */
+@media (pointer: coarse) {
+  .bk-interval .bk-time .input::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+}
+.bk-interval__dash {
+  color: var(--text-3);
+  flex: none;
+}
+.bk-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+.bk-two__cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+.bk-hint {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+/* Profile-picture row: the switch, then what it publishes. Keeps the 38px row
+   rhythm the inputs above it set, so the label column stays aligned. */
+.bk-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 38px;
+  min-width: 0;
+}
+.bk-avatar {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden; /* clip the picture to the circle */
+  flex: none;
+}
+.bk-avatar:empty {
+  display: none; /* nothing known to preview: no empty hole in the row */
+}
+.bk-avatar__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bk-share {
+  display: flex;
+  gap: var(--sp-2);
+}
+.bk-share__url {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+.bk-share__pending {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  font-size: var(--fs-base);
+  color: var(--text-3);
+}
+/* Stack day name over its intervals wherever the 16px mobile control font
+   applies (base.css bumps inputs at the same 720px) — the two-column day row
+   can't hold two 16px time inputs. */
+@media (max-width: 720px) {
+  .bk-day {
+    grid-template-columns: 1fr;
+    row-gap: var(--sp-1);
+  }
+}
+
+/* ---- Mail-detected invitations (sidebar section + dialog) --------------- */
+.mail-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.mail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-2);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+.mail-item__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--text);
+}
+.mail-item__meta {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+/* Why this row offers no primary action — a claim the calendar could not tie
+   to the event's own organizer. */
+.mail-item__warn {
+  color: var(--danger);
+}
+/* Same state-pill recipe as .view__badge / .book-item__off. */
+.mail-item__pill {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 1px 8px;
+}
+.mail-item__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-top: var(--sp-1);
+}
+/* Block asks for a second press instead of a dialog — this is what the first
+   press looks like while it waits for the second. */
+.mail-item__actions .icon-btn.is-confirm {
+  color: var(--danger-ink);
+  background: var(--danger-soft);
+}
+.mail-dialog__state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+}
