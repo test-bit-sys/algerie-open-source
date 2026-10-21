@@ -67,6 +67,11 @@ function applyTheme() {
   saveSettings();
 }
 
+function applySound() {
+  $('soundBtn').textContent = settings.muted ? '🔇' : '🔊';
+  $('soundBtn').classList.toggle('muted', settings.muted);
+}
+
 // ---------------------------------------------------------------- game flow
 function newMatch(skipConfirm = false) {
   if (!skipConfirm && state && !confirm(t().confirmNew)) return;
@@ -161,8 +166,12 @@ function renderHand() {
 
   const canDraw = state.turn === 0 && legal.some((m) => m.type === 'draw');
   const canPass = state.turn === 0 && legal.some((m) => m.type === 'pass');
+  const hasRoundEnded = !!state.roundResult && !state.gameOver;
   $('drawBtn').disabled = !canDraw;
   $('passBtn').disabled = !canPass;
+  $('drawBtn').style.display = hasRoundEnded ? 'none' : 'inline-block';
+  $('passBtn').style.display = hasRoundEnded ? 'none' : 'inline-block';
+  $('nextRoundBtn').style.display = hasRoundEnded ? 'inline-block' : 'none';
 }
 
 function chooseEnd(tile, options) {
@@ -246,7 +255,7 @@ function bindEvents() {
   $('soundBtn').onclick = () => {
     settings.muted = !settings.muted;
     sfx.setMuted(settings.muted);
-    $('soundBtn').classList.toggle('muted', settings.muted);
+    applySound();
     saveSettings();
   };
   document.querySelectorAll('.lang-btn').forEach((b) => {
@@ -260,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
   applyLanguage(settings.lang);
   applyTheme();
-  $('soundBtn').classList.toggle('muted', settings.muted);
+  applySound();
   newMatch(true);
 });
 

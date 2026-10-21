@@ -35,6 +35,8 @@ export const I18N = {
     confirmNew: 'بدء مباراة جديدة؟ سيتم فقدان النتيجة الحالية.',
     theme: 'المظهر',
     sound: 'الصوت',
+    close: 'إغلاق',
+    home: 'الرئيسية',
     hint: 'انقر حجراً من يدك يطابق أحد طرفي السلسلة'
   },
   fr: {
@@ -69,6 +71,8 @@ export const I18N = {
     confirmNew: 'Nouvelle partie ? Le score actuel sera perdu.',
     theme: 'Thème',
     sound: 'Son',
+    close: 'Fermer',
+    home: 'Accueil',
     hint: 'Cliquez sur un domino de votre main qui correspond à une extrémité'
   },
   en: {
@@ -103,6 +107,8 @@ export const I18N = {
     confirmNew: 'Start a new match? The current score will be lost.',
     theme: 'Theme',
     sound: 'Sound',
+    close: 'Close',
+    home: 'Home',
     hint: 'Click a tile from your hand that matches either chain end'
   }
 };

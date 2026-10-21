@@ -51,6 +51,18 @@ function applyTheme() {
   saveSettings();
 }
 
+function applySound() {
+  $('soundBtn').textContent = settings.muted ? '🔇' : '🔊';
+  $('soundBtn').classList.toggle('muted', settings.muted);
+}
+
+function playEndSound(winStatus) {
+  if (config.mode !== 'ai') return sfx.win();
+  const winner = winStatus === 'win-1' ? 1 : 2;
+  if (winner === config.humanColor) sfx.win();
+  else sfx.lose();
+}
+
 function statusText() {
   if (lastRes && lastRes.win) {
     const winner = lastRes.status === 'win-1' ? t().redWins : t().yellowWins;
@@ -79,7 +91,7 @@ function playColumn(col) {
   lastRes = res;
 
   sfx.move();
-  if (res.win) (config.mode !== 'ai' || state.turn === config.humanColor) ? sfx.win() : sfx.lose();
+  if (res.win) playEndSound(res.status);
   if (res.status === 'draw') sfx.draw();
 
   renderAll();
@@ -101,10 +113,8 @@ function maybeAI() {
     lastRes = outcome;
 
     sfx.move();
-    if (outcome.win) {
-      if (state.turn === config.humanColor) sfx.lose();
-      else sfx.win();
-    } else if (outcome.status === 'draw') sfx.draw();
+    if (outcome.win) playEndSound(outcome.status);
+    else if (outcome.status === 'draw') sfx.draw();
 
     renderAll();
   }, 400);
@@ -190,7 +200,7 @@ function bindEvents() {
   $('soundBtn').onclick = () => {
     settings.muted = !settings.muted;
     sfx.setMuted(settings.muted);
-    $('soundBtn').classList.toggle('muted', settings.muted);
+    applySound();
     saveSettings();
   };
   document.querySelectorAll('.lang-btn').forEach((b) => {
@@ -221,10 +231,11 @@ document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
   applyLanguage(settings.lang);
   applyTheme();
+  applySound();
   $('modeSelect').value = config.mode;
   $('colorSelect').value = String(config.humanColor);
   $('diffSelect').value = config.difficulty;
-  $('soundBtn').classList.toggle('muted', settings.muted);
   renderAll();
+  maybeAI();
 });
 

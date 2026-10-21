@@ -52,6 +52,11 @@ function applyTheme() {
   saveSettings();
 }
 
+function applySound() {
+  $('soundBtn').textContent = settings.muted ? '🔇' : '🔊';
+  $('soundBtn').classList.toggle('muted', settings.muted);
+}
+
 function statusText() {
   const s = gameStatus(state);
   if (s === 'win-black') return t().blackWins;
@@ -113,6 +118,7 @@ function maybeAI() {
       else sfx.lose();
     }
     renderAll();
+    if (!isGameOver() && isAITurn()) maybeAI();
   }, 420);
 }
 
@@ -211,7 +217,7 @@ function bindEvents() {
   $('soundBtn').onclick = () => {
     settings.muted = !settings.muted;
     sfx.setMuted(settings.muted);
-    $('soundBtn').classList.toggle('muted', settings.muted);
+    applySound();
     saveSettings();
   };
   document.querySelectorAll('.lang-btn').forEach((b) => {
@@ -239,10 +245,11 @@ document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
   applyLanguage(settings.lang);
   applyTheme();
+  applySound();
   $('modeSelect').value = config.mode;
   $('colorSelect').value = String(config.humanColor);
   $('diffSelect').value = config.difficulty;
-  $('soundBtn').classList.toggle('muted', settings.muted);
   renderAll();
+  maybeAI();
 });
 

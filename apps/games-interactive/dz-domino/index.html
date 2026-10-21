@@ -23,6 +23,7 @@
       </div>
       <button id="themeBtn" class="icon-btn" data-i18n-title="theme" title="المظهر"></button>
       <button id="soundBtn" class="icon-btn" data-i18n-title="sound" title="الصوت"></button>
+      <a href="/" class="icon-btn" data-i18n-title="home" title="الرئيسية" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">🏠</a>
     </div>
   </header>
 
@@ -103,7 +104,7 @@
   <div id="gameOver" class="banner">
     <div class="banner-card">
       <h2 id="bannerText">—</h2>
-      <button class="btn primary" onclick="document.getElementById('gameOver').classList.remove('active')">OK</button>
+      <button class="btn primary" id="bannerClose" data-i18n="close" onclick="document.getElementById('gameOver').classList.remove('active')">إغلاق</button>
     </div>
   </div>
 

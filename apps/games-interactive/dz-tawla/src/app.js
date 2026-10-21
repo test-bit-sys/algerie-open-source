@@ -55,6 +55,11 @@ function applyTheme() {
   saveSettings();
 }
 
+function applySound() {
+  $('soundBtn').textContent = settings.muted ? '🔇' : '🔊';
+  $('soundBtn').classList.toggle('muted', settings.muted);
+}
+
 // ---------------------------------------------------------------- flow
 const isGameOver = () => gameStatus(state).over;
 const isAITurn = () => config.mode === 'ai' && state.turn !== config.humanColor;
@@ -68,6 +73,7 @@ function newGame(skipConfirm = false) {
   busy = false;
   sfx.click();
   renderAll();
+  if (isAITurn()) window.setTimeout(() => roll(), 600);
 }
 
 function roll() {
@@ -371,7 +377,7 @@ function bindEvents() {
   $('soundBtn').onclick = () => {
     settings.muted = !settings.muted;
     sfx.setMuted(settings.muted);
-    $('soundBtn').classList.toggle('muted', settings.muted);
+    applySound();
     saveSettings();
   };
   document.querySelectorAll('.lang-btn').forEach((b) => {
@@ -397,11 +403,12 @@ document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
   applyLanguage(settings.lang);
   applyTheme();
+  applySound();
   $('modeSelect').value = config.mode;
   $('colorSelect').value = config.humanColor;
   $('diffSelect').value = config.difficulty;
-  $('soundBtn').classList.toggle('muted', settings.muted);
   renderAll();
+  if (isAITurn()) window.setTimeout(() => roll(), 600);
 });
 
 
