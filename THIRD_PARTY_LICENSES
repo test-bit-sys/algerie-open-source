@@ -1,0 +1,75 @@
+# Third-Party Software Licenses & Notices
+
+This file documents the open-source software, libraries, and components integrated or reused within the DZ Open Source project, along with their respective origins, copyright holders, and licenses.
+
+---
+
+## 1. Core Sovereign Workspace & Runtime
+- **Repository**: DZ Open Source
+- **License**: MIT License
+- **Copyright**: (c) 2026 Algeria Open Source Community
+
+---
+
+## 2. Integrated Upstream Applications & Components
+
+### 2.1 HeyPuter / Everything Components
+- **Origin**: [https://github.com/HeyPuter/everything](https://github.com/HeyPuter/everything)
+- **License**: MIT License
+- **Copyright**: (c) 2026 Puter Technologies Inc.
+- **Components Adapted**:
+  - `apps/productivity/dz-notes` (derived from `notes`)
+  - `apps/productivity/dz-tasks` (derived from `tasks`)
+  - `apps/productivity/dz-time` (derived from `time-tracking / hourly`)
+  - `apps/office-suite/dz-signature` (derived from `signatures`)
+  - `apps/multimedia/dz-audio` (derived from `audio-studio`)
+- **License Terms**:
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+### 2.2 Icons & Graphical Design
+- **Lucide Icons**:
+  - **Origin**: [https://github.com/lucide-icons/lucide](https://github.com/lucide-icons/lucide)
+  - **License**: ISC License
+  - **Copyright**: (c) 2026 Lucide Contributors
+
+### 2.3 Document & Media Libraries
+- **PDF-Lib**:
+  - **Origin**: [https://github.com/Hopding/pdf-lib](https://github.com/Hopding/pdf-lib)
+  - **License**: MIT License
+  - **Copyright**: (c) 2019 Andrew Dillon
+- **PDF.js**:
+  - **Origin**: [https://github.com/mozilla/pdf.js](https://github.com/mozilla/pdf.js)
+  - **License**: Apache-2.0 License
+  - **Copyright**: (c) Mozilla Foundation
+- **Lamejs**:
+  - **Origin**: [https://github.com/breezystack/lamejs](https://github.com/breezystack/lamejs)
+  - **License**: LGPL-3.0 License
+- **Perfect Freehand**:
+  - **Origin**: [https://github.com/steveruizok/perfect-freehand](https://github.com/steveruizok/perfect-freehand)
+  - **License**: MIT License
+  - **Copyright**: (c) 2021 Steve Ruiz
+
+---
+
+## 3. Approved External Candidates (Pending Integration)
+
+### 3.1 Zero-Share
+- **Origin**: [https://github.com/ntsd/zero-share](https://github.com/ntsd/zero-share)
+- **License**: MIT License
+- **Copyright**: (c) 2023 Jirawat Boonkumnerd
+
+### 3.2 SQL.js (SQLite WebAssembly)
+- **Origin**: [https://github.com/sql-js/sql.js](https://github.com/sql-js/sql.js)
+- **License**: MIT License
+- **Copyright**: (c) 2017 sql.js authors
+
+### 3.3 Excalidraw Core
+- **Origin**: [https://github.com/excalidraw/excalidraw](https://github.com/excalidraw/excalidraw)
+- **License**: MIT License
+- **Copyright**: (c) 2020 Excalidraw
+
+### 3.4 Tesseract.js (Offline Multilingual OCR)
+- **Origin**: [https://github.com/naptha/tesseract.js](https://github.com/naptha/tesseract.js)
+- **License**: Apache-2.0 License
+- **Copyright**: (c) Jerome Wu / Tesseract.js Contributors
