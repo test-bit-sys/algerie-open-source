@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Sales CRM (mock dev)</title>
+  <!-- public/ is served at the root, so the ./public/ prefix 404s and Vite
+       warns about it on every load. -->
+  <link rel="icon" type="image/png" href="./icon-192.png" />
+  <script>
+    (() => {
+      try {
+        const t = localStorage.getItem('crm:theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    })();
+  </script>
+  <script src="./dev/puter-mock.js"></script>
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <div id="app" class="app"></div>
+</body>
+</html>

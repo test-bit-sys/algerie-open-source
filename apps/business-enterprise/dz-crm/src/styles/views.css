@@ -1,0 +1,1969 @@
+/* ---------- Intro / auth ---------- */
+
+.auth-view {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 24px calc(32px + var(--safe-b));
+  max-width: 460px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.auth-logo {
+  width: 84px;
+  height: 84px;
+  margin-bottom: 6px;
+}
+
+.auth-title {
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.auth-title-sm {
+  font-size: 22px;
+}
+
+.auth-sub {
+  color: var(--ink-2);
+  font-size: 15px;
+  max-width: 340px;
+}
+
+.auth-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 18px 0 6px;
+  width: 100%;
+  text-align: start;
+}
+
+.auth-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.auth-feature svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.auth-cta {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  margin-top: 12px;
+}
+
+.auth-note {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+/* ---------- Onboarding ---------- */
+
+.onboard-hero {
+  padding: 10px 8px 18px;
+}
+
+/* The app icon is its own rounded tile - no accent-wash circle around it. */
+.onboard-mark {
+  border-radius: 14px;
+  margin-bottom: 4px;
+}
+
+.onboard-h {
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.onboard-p {
+  color: var(--ink-2);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* ---------- Detail pages ---------- */
+
+.detail-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+}
+
+.detail-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.detail-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  overflow-wrap: anywhere;
+}
+
+/* Job title and company (a lead), industry and size (a company): free text
+   a spreadsheet filled in, sitting one line under a title that already
+   breaks. Left unbreakable it did to the whole page what a long email
+   address used to do lower down - header, cards and every row dragged
+   sideways on a phone. */
+.detail-sub {
+  color: var(--ink-2);
+  font-size: 13.5px;
+  margin: 2px 0 8px;
+  overflow-wrap: anywhere;
+}
+
+.detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.detail-notes {
+  font-size: 14px;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  font-size: 14px;
+}
+
+.info-row .row-ic {
+  color: var(--ink-3);
+}
+
+/* The email and the phone number are the only values on a detail page with
+   no spaces to break at, and a long corporate address is wider than a
+   phone. Unwrapped it pushed the whole page sideways - the header, the
+   cards, every row - so a lead whose address happened to be long made
+   their own page scroll. Break it instead: it is a value to be read and
+   copied, and .detail-notes above already takes the same way out. */
+.info-row > :not(.row-ic) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The mailto and tel links on a lead page are the app's only bare anchors,
+   and they carried neither an underline nor a hover - accent-coloured text
+   that gave no sign it would open anything. */
+.info-row a:hover,
+.auth-note a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.info-row + .detail-notes {
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+}
+
+@media (max-width: 560px) {
+  .detail-head {
+    flex-wrap: wrap;
+  }
+
+  .detail-actions {
+    width: 100%;
+    justify-content: flex-end;
+    order: 3;
+    margin-top: -6px;
+  }
+}
+
+/* Deal detail figures */
+.deal-figures {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 4px 0 10px;
+}
+
+.deal-detail-value {
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.deal-detail-prob {
+  font-size: 13px;
+  color: var(--ink-3);
+  font-weight: 550;
+}
+
+/* What a recurring deal comes to in full, beside its rate. */
+.deal-detail-contract {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-2);
+}
+
+/* Stage stepper: one button per stage, reads as a path. */
+.stage-stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stage-step {
+  flex: 1 1 auto;
+  min-width: 88px;
+  padding: 9px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-align: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.stage-step:hover {
+  background: var(--surface-2);
+}
+
+.stage-step.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.stage-step.active[data-stage="won"] {
+  background: var(--good);
+  border-color: var(--good);
+  color: var(--page);
+}
+
+.stage-step.active[data-stage="lost"] {
+  background: var(--ink-2);
+  border-color: var(--ink-2);
+  color: var(--page);
+}
+
+/* Stage journey: a rail of transitions with how long each one held. */
+.stage-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.stage-timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0 8px 14px;
+  position: relative;
+  font-size: 13px;
+}
+
+/* The rail runs between the dots of consecutive rows, so it has to line up
+   with them: the row's 14px of padding plus half a 9px dot. Anywhere else
+   and it reads as a stray line beside the journey rather than the thread
+   through it. */
+.stage-timeline-row::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 18px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--hairline-strong);
+}
+
+.stage-timeline-row:first-child::before { top: 50%; }
+.stage-timeline-row:last-child::before { bottom: 50%; }
+.stage-timeline-row:only-child::before { display: none; }
+
+/* The rail passes behind the dots, and a positioned pseudo-element would
+   otherwise paint over its in-flow siblings - drawing a hairline straight
+   across every dot on the way down. */
+.stage-timeline-row .stage-badge {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.stage-timeline-date {
+  flex: none;
+  color: var(--ink-3);
+  font-size: 12.5px;
+}
+
+.stage-timeline-days {
+  flex: none;
+  min-width: 88px;
+  text-align: end;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}
+
+.stage-timeline-row.current .stage-timeline-days {
+  color: var(--ink);
+}
+
+/* ---------- Pipeline board ---------- */
+
+/* Filters shared by both layouts: search grows, close window sits beside. */
+.deal-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.deal-controls .search-box {
+  flex: 1 1 220px;
+  margin-bottom: 0;
+}
+
+.close-window {
+  flex: 0 1 220px;
+}
+
+.deal-controls + .filter-row {
+  margin-top: 10px;
+}
+
+.view-toggle {
+  flex: none;
+}
+
+@media (max-width: 520px) {
+  /* The label would push the primary action off the row; icons carry it. */
+  .view-toggle .seg {
+    padding-inline: 10px;
+    font-size: 0;
+    gap: 0;
+  }
+
+  /* Same trade for a header button so marked: the icon carries the action
+     (the text keeps naming it for assistive tech), and the page title gets
+     its room back instead of truncating. */
+  .page-actions .label-hide-sm {
+    font-size: 0;
+    gap: 0;
+    padding-inline: 11px;
+  }
+}
+
+/* Sortable table of deals */
+.list-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 16px 0;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.list-summary-value {
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.list-summary .btn-inline {
+  margin-inline-start: auto;
+  font-size: 13px;
+}
+
+.deal-table th,
+.deal-table td {
+  vertical-align: middle;
+}
+
+.deal-table thead th {
+  padding: 0;
+}
+
+.th-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+  padding: 9px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: var(--r-sm);
+}
+
+.data-table th.num .th-sort {
+  justify-content: flex-end;
+}
+
+.th-sort:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.th-sort.active {
+  color: var(--ink);
+}
+
+.th-arrow {
+  display: inline-flex;
+  width: 13px;
+}
+
+.deal-tr {
+  cursor: pointer;
+}
+
+.deal-tr:hover {
+  background: var(--surface-2);
+}
+
+.deal-tr th {
+  max-width: 340px;
+  white-space: normal;
+}
+
+.deal-tr-name {
+  color: inherit;
+  font-weight: 600;
+}
+
+.deal-tr .age-pill {
+  margin-inline-start: 8px;
+  font-size: 11px;
+  padding: 2px 7px;
+}
+
+.col-menu {
+  width: 44px;
+  padding-block: 2px !important;
+}
+
+.text-critical {
+  color: var(--critical-ink);
+  font-weight: 600;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .deal-table .col-updated { display: none; }
+}
+
+@media (max-width: 720px) {
+  .deal-table .col-link { display: none; }
+}
+
+@media (max-width: 560px) {
+  .deal-table .col-close { display: none; }
+}
+
+/* The figures above are viewport widths, and above 900px the viewport stops
+   being what this table has to live in: the sidebar arrives and takes 240px
+   of it, plus another 32px of page padding. So crossing 900px on the way up
+   *shrinks* the table's own width by 272px while handing it back a column,
+   and a laptop at 1000px got both a Deal column squeezed to one word per
+   line and a horizontal scrollbar under it. The same columns go again, at
+   the widths where the table really has the room the figures above mean. */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .deal-table .col-updated { display: none; }
+}
+
+@media (min-width: 900px) and (max-width: 1079px) {
+  .deal-table .col-link { display: none; }
+}
+
+.board {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(248px, 1fr);
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  /* Columns own their height; the page scrolls, the board pans. */
+  align-items: start;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.board-col {
+  scroll-snap-align: start;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 8px;
+  min-height: 180px;
+  border: 1px dashed transparent;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.board-col.drop-target {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.col-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 10px;
+}
+
+.col-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-2);
+  background: var(--surface-3);
+  border-radius: var(--r-full);
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.col-total {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.col-fold {
+  width: 26px;
+  height: 26px;
+  margin: -4px -4px -4px 0;
+}
+
+/* Collapsed terminal column: the history is one line until asked for. */
+.board-col.collapsed {
+  padding: 0;
+  background: transparent;
+  border: 1px dashed var(--hairline-strong);
+}
+
+/* Restated for the collapsed column, which is the same specificity as
+   .drop-target and sits after it - so its transparent background and its
+   `border` shorthand (border-color and all) simply won. A card dragged over
+   Won or Lost got no highlight at all, and those two are collapsed by
+   default in the Open view: the drop the board is least sure of was the one
+   with no feedback. */
+.board-col.collapsed.drop-target {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.col-collapsed {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  border-radius: var(--r-md);
+  text-align: start;
+  transition: background 0.15s;
+}
+
+.col-collapsed:hover {
+  background: var(--surface-2);
+}
+
+/* A collapsed column fills its board-col to the edge (that column drops its
+   padding), and the board is a scroll container - so the default ring, drawn
+   2px outside the button, had its top 3px shaved off by the board's clip.
+   Tabbing to Won or Lost showed three sides of a rectangle. Drawn just
+   inside instead, the whole ring is visible and nothing moves. */
+.col-collapsed:focus-visible {
+  outline-offset: -2px;
+}
+
+.col-collapsed-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.col-collapsed-head .stage-badge {
+  flex: 1;
+  min-width: 0;
+}
+
+.col-collapsed-sum {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.col-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.col-empty {
+  padding: 18px 8px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  border: 1px dashed var(--hairline-strong);
+  border-radius: var(--r-sm);
+}
+
+.deal-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  cursor: grab;
+  transition: border-color 0.15s, transform 0.15s var(--ease-spring), opacity 0.15s;
+}
+
+.deal-card:hover {
+  border-color: var(--hairline-strong);
+}
+
+.deal-card.dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+
+.deal-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 11px 34px 11px 12px;
+  color: inherit;
+  border-radius: inherit;
+}
+
+.deal-card-name {
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.deal-card-value {
+  font-weight: 700;
+  font-size: 14.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The contract total riding along after a rate: present, not competing. */
+.deal-card-term {
+  font-weight: 550;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.deal-card-sub {
+  font-size: 12px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deal-card-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.deal-card-pills:empty {
+  display: none;
+}
+
+.deal-card-pills:not(:empty) {
+  margin-top: 5px;
+}
+
+.deal-card-move {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 4px;
+  width: 28px;
+  height: 28px;
+}
+
+/* ---------- Dashboard ---------- */
+
+/* minmax(0, …) rather than a bare 1fr: a 1fr track floors at its content's
+   min-content width, and the widest thing in the Recent activity card is a
+   link chip carrying a whole deal name ("Atlas Freight - full fleet
+   expansion"), which cannot wrap. So the track refused to go under about
+   352px, both cards grew past the page, and the phone scrolled sideways at
+   every width up to 375 - and again at exactly 900px, where the sidebar
+   arrives and the columns split in the same breath. Capped, the cards fit
+   their column and the chips ellipsize as they were written to. */
+.two-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 14px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .two-col {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.upnext {
+  border-top: 1px solid var(--hairline);
+  margin: 4px 16px 0;
+  padding-top: 8px;
+}
+
+.upnext .task-list,
+.deal-list.flush {
+  padding-inline: 0;
+}
+
+.deal-list.flush {
+  padding-bottom: 0;
+}
+
+/* Rows keep their own inline padding - that padding is the hover target - so
+   the sub-list has to give it back. Without this every sub-list stepped
+   further in than the label above it (follow-ups by 6px, deal rows by 10px)
+   on a card whose title, primary list, and section labels all sit on one
+   16px gutter, and the left edge came out ragged down the page. */
+.upnext .task-list {
+  margin-inline: -6px;
+}
+
+.upnext .deal-list.flush {
+  margin-inline: -10px;
+}
+
+.upnext-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Going cold: lead rows with the two actions that revive them. */
+.cold-list {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 10px 10px;
+}
+
+.cold-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 6px;
+  border-radius: var(--r-sm);
+}
+
+.cold-row:hover {
+  background: var(--surface-2);
+}
+
+.cold-row > a {
+  color: inherit;
+}
+
+.cold-row .icon-btn {
+  flex: none;
+}
+
+/* Stage magnitude bars (dashboard + forecast breakdown) */
+.stage-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 2px 16px 14px;
+  /* The row below asks how much room it actually got, not how wide the
+     window is: the same three columns sit full-bleed on the forecast page
+     and in a half-width dashboard card, and it is the card that decides
+     whether they fit. */
+  container-type: inline-size;
+}
+
+/* On the forecast page the bars sit inside .settings-body, which already
+   carries the card padding. */
+.settings-body .stage-bars {
+  padding: 2px 0 0;
+}
+
+.stage-bar-row {
+  display: grid;
+  grid-template-columns: 110px minmax(40px, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Below this the three columns stop working: 110px of label plus a figure
+   like "$3,460 of $34.6K" that cannot wrap left the bar 47px wide on a
+   375px phone and 49px in the dashboard's half-width card, and under about
+   345px the row spilled past the card and took the page sideways with it.
+   Hand the bar its own line, where it has the whole width to compare
+   something with, and keep the label and the figure on the line above. */
+@container (max-width: 300px) {
+  .stage-bar-row,
+  .wl-bar-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 7px;
+  }
+
+  /* Label, then bar, then figure in the markup; label and figure share the
+     first line and the bar spans the second. */
+  .stage-bar-row > :nth-child(1),
+  .wl-bar-row > :nth-child(1) { grid-area: 1 / 1; }
+
+  .stage-bar-row > :nth-child(2),
+  .wl-bar-row > :nth-child(2) { grid-area: 2 / 1 / 3 / -1; }
+
+  .stage-bar-row > :nth-child(3),
+  .wl-bar-row > :nth-child(3) { grid-area: 1 / 2; }
+}
+
+.stage-bar-track {
+  height: 14px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.stage-bar-fill {
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  background: var(--accent);
+  min-width: 0;
+}
+
+.stage-bar-value {
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.stage-bar-sub {
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+.dashboard .card {
+  margin-bottom: 14px;
+}
+
+/* ---------- Follow-up calendar ----------
+   A month is a 7-column grid of whole weeks; a week is the same grid with
+   one row and taller cells. Both are what a list can't be: a shape you can
+   see Thursday in. */
+
+.cal-card {
+  padding-bottom: 4px;
+}
+
+.cal-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 12px 8px;
+}
+
+.cal-title {
+  font-size: 15px;
+  font-weight: 650;
+  margin: 0 4px;
+  white-space: nowrap;
+}
+
+.cal-head,
+.cal-cells {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  padding: 0 12px;
+}
+
+.cal-head {
+  padding-bottom: 6px;
+}
+
+.cal-weekday {
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.cal-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 96px;
+  padding: 6px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  min-width: 0;
+}
+
+.cal-cell.weekend {
+  background: var(--surface-2);
+}
+
+.cal-cell.past {
+  border-style: dashed;
+}
+
+.cal-cell.outside {
+  opacity: 0.55;
+}
+
+.cal-cell.today {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.cal-cell.drop-target {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.cal-cell-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-day {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ink-2);
+}
+
+.cal-cell.today .cal-day {
+  color: var(--accent-strong);
+}
+
+/* How full the day is, before the morning it arrives. */
+.cal-count {
+  margin-inline-start: auto;
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.cal-cell.weekend .cal-count {
+  background: var(--surface);
+}
+
+.cal-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.cal-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  border-radius: 5px;
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.cal-chip-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  width: 100%;
+  padding: 4px 6px;
+  color: inherit;
+  text-align: start;
+  border-radius: inherit;
+}
+
+.cal-chip.cal-deal {
+  padding: 4px 6px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.cal-chip.overdue {
+  background: var(--critical-wash);
+  color: var(--critical-ink);
+}
+
+.cal-chip.dragging {
+  opacity: 0.45;
+}
+
+.cal-chip-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cal-chip-time {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+}
+
+.cal-chip-ic {
+  flex: none;
+  display: inline-flex;
+}
+
+.cal-more {
+  align-self: flex-start;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--ink-3);
+  padding: 2px 4px;
+  border-radius: 5px;
+}
+
+.cal-more:hover {
+  color: var(--accent-strong);
+  background: var(--accent-wash);
+}
+
+.cal-note {
+  padding: 10px 16px 12px;
+}
+
+/* A week is one row, so each cell can be a real column of its day. */
+.cal-grid.week .cal-cells {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.cal-grid.week .cal-cell {
+  min-height: 132px;
+}
+
+/* Below the month breakpoint only the week grid is offered, and seven
+   columns of a phone are too narrow to read - so the week becomes a
+   stack of days, which is the shape a week strip actually wants. */
+@media (max-width: 719px) {
+  .cal-grid.week .cal-cells {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cal-grid.week .cal-cell {
+    min-height: 0;
+  }
+
+  .cal-grid.week .cal-cell:not(.today):not(:has(.cal-chip)) {
+    opacity: 0.6;
+  }
+}
+
+.cal-toggle {
+  margin-bottom: 12px;
+  align-self: flex-start;
+  width: fit-content;
+}
+
+/* ---------- Funnel (conversion report) ----------
+   One row per stage: the bar's width is how many deals reached it, the
+   filled part how many advanced. Both readings survive at phone width
+   because the row is a stack, not a grid. */
+
+.funnel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.funnel-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.funnel-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.funnel-count {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.funnel-track {
+  height: 16px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+/* The reached-count bar; its fill is the share that advanced. */
+.funnel-bar {
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  background: var(--viz-upside);
+  min-width: 0;
+}
+
+.funnel-bar-fill {
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  background: var(--viz-weighted);
+}
+
+.funnel-words {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.tip-swatch[data-kind="advanced"] { background: var(--viz-weighted); }
+.tip-swatch[data-kind="stalled-here"] { background: var(--viz-upside); }
+
+/* The headline pair over the funnel: entry-to-won, and where deals die. */
+.funnel-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin-bottom: 14px;
+}
+
+.funnel-summary-item {
+  min-width: 0;
+}
+
+.funnel-summary-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Forecast chart ---------- */
+
+.forecast-chart {
+  position: relative;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-bottom: 14px;
+}
+
+.legend-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink-2);
+}
+
+.tip-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+}
+
+.tip-swatch[data-kind="weighted"] { background: var(--viz-weighted); }
+.tip-swatch[data-kind="upside"] { background: var(--viz-upside); }
+.tip-swatch[data-kind="won"] { background: var(--viz-won); }
+
+.chart-plot-row {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+  border-bottom: 1px solid var(--hairline-strong);
+}
+
+/* Monthly goal: a reference line across the plot, never a data series. */
+.chart-goal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1.5px dashed var(--ink-3);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.chart-goal-label {
+  position: absolute;
+  inset-inline-end: 0;
+  top: -8px;
+  padding: 1px 6px;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.legend-goal {
+  width: 14px;
+  height: 0;
+  flex: none;
+  border-top: 1.5px dashed var(--ink-3);
+}
+
+/* No top padding: the goal line is positioned against the plot height, so
+   anything above the plot inside a column offsets the bars away from the
+   reference line they exist to be compared with. */
+.chart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+}
+
+.chart-col:hover {
+  background: var(--surface-2);
+}
+
+.col-plot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+
+.col-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px; /* the surface gap between stacked segments */
+}
+
+.col-seg {
+  width: 22px;
+}
+
+.col-seg.top {
+  border-radius: 4px 4px 0 0;
+}
+
+.col-seg.weighted { background: var(--viz-weighted); }
+.col-seg.upside { background: var(--viz-upside); }
+.col-seg.won { background: var(--viz-won); }
+
+.col-zero {
+  width: 22px;
+  height: 2px;
+  background: var(--surface-3);
+}
+
+.col-cap-label {
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--ink-2);
+  padding-bottom: 4px;
+  white-space: nowrap;
+}
+
+.col-month {
+  padding: 7px 0 5px;
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--ink-3);
+}
+
+.chart-tip {
+  position: absolute;
+  top: 22px;
+  z-index: 5;
+  min-width: 150px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  pointer-events: none;
+}
+
+.tip-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.tip-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 1.5px 0;
+  font-size: 12.5px;
+}
+
+.tip-label {
+  color: var(--ink-2);
+  flex: 1;
+}
+
+.tip-value {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.tip-sub {
+  margin-top: 5px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+/* ---------- Pipeline trends ---------- */
+
+/* 12 months of grouped bars: scroll sideways before squeezing to mush. */
+.trend-chart {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.trend-chart .trend-plot {
+  min-width: 540px;
+  gap: 2px;
+}
+
+/* A month column fills its chart to the edge, and the chart is a scroll
+   container - so the default ring, drawn 2px outside the button, was cut off
+   by the chart's clip on whichever sides it touched. The plot row sits at the
+   very top of a mini trend (no legend above it), so tabbing there showed a
+   ring with no top edge at all. Drawn just inside instead, the whole ring is
+   visible and nothing moves - the same trade the collapsed board column makes
+   above. */
+.trend-chart .chart-col:focus-visible {
+  outline-offset: -2px;
+}
+
+.trend-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.trend-seg {
+  width: 9px;
+  border-radius: 3px 3px 0 0;
+}
+
+.trend-seg.added { background: var(--viz-weighted); }
+.trend-seg.won { background: var(--viz-won); }
+.trend-seg.lost { background: var(--stage-lost); }
+
+.trend-seg.zero {
+  height: 2px;
+  border-radius: 0;
+  background: var(--surface-3);
+}
+
+.tip-swatch[data-kind="added"] { background: var(--viz-weighted); }
+.tip-swatch[data-kind="lost"] { background: var(--stage-lost); }
+
+.trend-chart .col-month {
+  font-size: 11px;
+}
+
+/* minmax(0, …) plus min-width on the cells: a bare 1fr track floors at its
+   content's min-content width, and the chart inside carries min-width: 540px
+   to keep 12 months readable. So the track refused to go under 540px, each
+   mini pushed past the card, and the page itself scrolled sideways - at
+   every width, with the newest month (the one that matters) off the edge.
+   Capped instead, the chart is the scroller it was written to be. */
+.trend-minis {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  margin-top: 20px;
+}
+
+.trend-minis > * {
+  min-width: 0;
+}
+
+@media (min-width: 760px) {
+  .trend-minis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+}
+
+.mini-seg {
+  width: 14px;
+  background: var(--viz-weighted);
+}
+
+.mini-cap {
+  font-size: 10.5px;
+}
+
+/* ---------- Win/loss analysis ---------- */
+
+.wl-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+
+@media (min-width: 760px) {
+  .wl-cols {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+}
+
+.wl-col-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13.5px;
+  font-weight: 650;
+}
+
+.wl-col-count {
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--ink-3);
+}
+
+/* Same magnitude bar as the stage breakdown, with a wrapping text label
+   in place of the badge. */
+.wl-bar-row {
+  display: grid;
+  grid-template-columns: minmax(72px, 116px) minmax(30px, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.wl-bar-label {
+  font-size: 13px;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+
+.stage-bar-fill.won { background: var(--stage-won); }
+.stage-bar-fill.lost { background: var(--stage-lost); }
+
+.wl-averages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 32px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+}
+
+.wl-average {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.wl-average-value {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.wl-table + .wl-table {
+  margin-top: 20px;
+}
+
+.table-wrap.flush {
+  padding: 0;
+}
+
+.card-empty.flush {
+  padding: 4px 0 0;
+}
+
+/* ---------- CSV import wizard ---------- */
+
+.sheet-note {
+  padding: 0 10px 6px;
+}
+
+.csv-mapping {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.csv-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .csv-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.csv-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.csv-field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.csv-field .select {
+  min-height: 38px;
+  padding-block: 7px;
+  font-size: 13.5px;
+}
+
+.csv-merge {
+  padding: 12px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+
+.csv-preview-title {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-2);
+  margin-bottom: -6px;
+}
+
+.csv-preview .data-table {
+  font-size: 12.5px;
+}
+
+.csv-preview td {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.csv-preview .field-hint {
+  margin-top: 8px;
+}
+
+.csv-results {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.csv-result-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 2px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.csv-result-row:last-child {
+  border-bottom: 0;
+}
+
+.csv-result-value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.csv-result-value.good { color: var(--good-ink); }
+.csv-result-value.muted { color: var(--ink-3); }
+
+/* ---------- Settings ---------- */
+
+/* Stage editor: one row per open stage, terminals pinned below. The row
+   wraps on narrow screens so the name keeps a usable width. */
+.stage-edit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.stage-edit-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+}
+
+.stage-edit-row.static {
+  background: var(--surface-2);
+  border-color: transparent;
+  padding-block: 11px;
+}
+
+.stage-edit-dot {
+  flex: none;
+}
+
+.stage-name-input {
+  flex: 1 1 130px;
+  width: auto;
+  min-height: 36px;
+  padding: 6px 10px;
+  font-weight: 600;
+}
+
+.stage-edit-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: auto;
+}
+
+.stage-prob-field {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-inline-end: 4px;
+}
+
+/* ---------- Custom fields (Settings editor) ----------
+   Same row shell as a stage: name, a control, the reorder/remove trio -
+   plus a full-width second line for a choice list and the value count. */
+
+.field-edit-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.field-name-input {
+  flex: 1 1 120px;
+  width: auto;
+  min-height: 36px;
+  padding: 6px 10px;
+  font-weight: 600;
+}
+
+.field-type-wrap {
+  flex: 0 1 132px;
+  min-width: 108px;
+}
+
+.field-type-wrap .select {
+  min-height: 36px;
+  padding-block: 6px;
+}
+
+.field-edit-options {
+  flex: 1 0 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.field-options-input {
+  flex: 1 1 200px;
+  width: auto;
+  min-height: 34px;
+  padding: 5px 10px;
+}
+
+.field-edit-note {
+  flex: 1 0 100%;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* A yes/no field in a form: the label and its switch on one line. */
+.field-switch {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.custom-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Field values on a detail page: name over value, wrapping into columns. */
+.detail-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px 18px;
+  margin: 0;
+}
+
+.detail-field {
+  min-width: 0;
+}
+
+.detail-field-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.detail-field-value {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+
+.stage-move,
+.stage-remove {
+  width: 32px;
+  height: 32px;
+}
+
+.stage-move:disabled,
+.stage-remove:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.stage-remove:not(:disabled):hover {
+  color: var(--critical-ink);
+  background: var(--critical-wash);
+}
+
+.calendar-btn {
+  align-self: flex-start;
+}
+
+/* ---------- Playbooks ----------
+   One step per block: what to do on the first line, when and which email
+   on the second, so a phone gets the same shape as a desktop. */
+
+.playbook-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.playbook-step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+}
+
+.playbook-step-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.playbook-step-meta .select-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.playbook-offset {
+  width: 68px;
+}
+
+.playbook-preview {
+  border-top: 1px solid var(--hairline);
+  padding-top: 12px;
+}
+
+/* The dates a playbook would create, in the editor and the apply preview. */
+.playbook-dates {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.playbook-dates li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 13.5px;
+}
+
+.playbook-date {
+  flex: none;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}
+
+.goal-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.goal-currency {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-3);
+}
+
+.goal-input {
+  width: 150px;
+  min-height: 40px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.threshold-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.threshold-field + .threshold-field {
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+}
+
+.threshold-field .field-hint {
+  flex: 1 0 100%;
+}
+
+.stage-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Weekly touch counts: narrower than a percentage, same shape. */
+.touch-input {
+  width: 68px;
+}
+
+/* Per-type targets, side by side rather than four stacked rows. */
+.touch-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 10px 14px;
+  margin-top: 6px;
+}
+
+.touch-type {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.touch-type .touch-input {
+  width: 100%;
+  text-align: start;
+}
+
+.prob-input {
+  width: 76px;
+  text-align: end;
+  padding: 7px 10px;
+  min-height: 36px;
+}
+
+/* Contract term, beside the billing select in the deal form. */
+.term-input {
+  width: 82px;
+}
+
+.term-field[hidden] {
+  display: none;
+}
+
+/* The derived figures under the billing row ("$2,000/mo · $24,000 over
+   12 months"): a hint that belongs to the field above it. */
+.billing-hint {
+  margin-top: -6px;
+}
+
+.prob-unit {
+  color: var(--ink-3);
+  font-size: 13px;
+  font-weight: 600;
+}
