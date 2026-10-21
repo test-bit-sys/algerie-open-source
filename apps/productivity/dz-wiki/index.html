@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>DZ-Wiki | الموسوعة والتوثيق المؤسساتي السيادي (بديل Notion & Obsidian)</title>
+  <meta name="description" content="منصة توثيق وإدارة المعرفة للمؤسسات والفرق والمشاريع الجزائرية: صفحات، وثائق، قواعد بيانات، وجداول، مع حفظ محلي آمن 100% دون خوادم سحابية." />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" href="./favicon-16x16.png" type="image/png" sizes="16x16" />
+  <link rel="icon" href="./favicon-32x32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="./favicon-48x48.png" type="image/png" sizes="48x48" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" sizes="180x180" />
+  <!-- Sovereign Offline Runtime Styles & Cairo Typography -->
+  <link rel="stylesheet" href="/packages/dz-runtime/dz-runtime.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" />
+  <script>
+    (() => {
+      let t = 'system';
+      try { t = localStorage.getItem('wiki:theme') || 'system'; } catch {}
+      const dark = t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.dataset.theme = t;
+      document.documentElement.dataset.themeResolved = dark ? 'dark' : 'light';
+    })();
+  </script>
+  <!-- Native browser Import Map for offline ESM modules -->
+  <script type="importmap">
+  {
+    "imports": {
+      "lucide": "/packages/vendor/lucide.js",
+      "yjs": "/packages/vendor/yjs.js"
+    }
+  }
+  </script>
+  <!-- Sovereign DZ Runtime (100% Local, zero remote telemetry) -->
+  <script src="/packages/dz-runtime/dz-runtime.js"></script>
+  <script type="module" src="./src/main.js"></script>
+</head>
+<body>
+  <div id="app" aria-busy="true"></div>
+  <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
