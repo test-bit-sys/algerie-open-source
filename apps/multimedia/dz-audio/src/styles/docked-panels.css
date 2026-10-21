@@ -1,0 +1,153 @@
+/* Docked panel parts shared by several panels: in-panel tabs and
+   collapsible property sections. */
+
+.subtabs-host {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.subtabs {
+  display: flex;
+  flex: none;
+  gap: 2px;
+  flex-wrap: wrap;
+  padding: 4px 8px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.subtab {
+  position: relative;
+  flex: none;
+  padding: 4px 8px 6px;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.subtab:hover {
+  color: var(--text);
+}
+
+.subtab[aria-selected='true'] {
+  color: var(--text-strong);
+}
+
+.subtab[aria-selected='true']::after {
+  position: absolute;
+  right: 6px;
+  bottom: -1px;
+  left: 6px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--text-strong);
+  content: '';
+}
+
+.subtab:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.subtab-panes {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.subtab-pane {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+}
+
+.subtab-pane[hidden] {
+  display: none !important;
+}
+
+/* Properties: the file or session named on top, collapsible sections. */
+.properties-panel {
+  container-type: inline-size;
+}
+
+.prop-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  margin: -2px 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+.prop-header .icon {
+  flex: none;
+  color: var(--text-dim);
+}
+
+.prop-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prop-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin: 0;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.prop-toggle .icon {
+  flex: none;
+  color: var(--text-dim);
+  transition: transform 0.12s;
+}
+
+.prop-toggle[aria-expanded='false'] .icon {
+  transform: rotate(-90deg);
+}
+
+.prop-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.prop-section.collapsed .prop-heading {
+  margin-bottom: 0;
+}
+
+.prop-section.collapsed + .prop-section {
+  margin-top: 6px;
+}
+
+.prop-body[hidden] {
+  display: none;
+}
+
+/* Narrow frames: labels above values. */
+@container (max-width: 260px) {
+  .properties-panel .prop-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 2px 0;
+  }
+}

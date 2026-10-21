@@ -1,0 +1,1813 @@
+/* ---------- Auth / intro ---------- */
+
+.auth-view {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px 24px calc(32px + var(--safe-b));
+  max-width: 440px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.auth-title {
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.auth-sub {
+  color: var(--ink-2);
+  font-size: 15.5px;
+  max-width: 360px;
+}
+
+.auth-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 14px 0 6px;
+  width: 100%;
+  text-align: start;
+}
+
+.auth-feature {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 15px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.auth-feature svg {
+  color: var(--accent);
+  flex: none;
+}
+
+.auth-cta {
+  width: 100%;
+  padding: 14px;
+  font-size: 15.5px;
+  margin-top: 8px;
+}
+
+.auth-note {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.dot-sep::before {
+  content: '·';
+  margin: 0 7px;
+}
+
+/* ---------- Onboarding ---------- */
+
+.onboard-hero {
+  text-align: center;
+  padding: 10px 8px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.onboard-title {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.onboard-sub,
+.onboard-p {
+  color: var(--ink-2);
+  font-size: 14px;
+  max-width: 360px;
+}
+
+.onboard-h {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 6px 0 8px;
+}
+
+.onboard-p {
+  margin-bottom: 16px;
+}
+
+/* ---------- Timer view ---------- */
+
+.timer-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: 18px;
+}
+
+.timer-card.running {
+  border-color: var(--accent);
+}
+
+.timer-idle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .timer-idle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.timer-idle-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-start {
+  padding: 11px 26px;
+  font-size: 15px;
+}
+
+.btn-stop {
+  padding: 11px 26px;
+  font-size: 15px;
+}
+
+.timer-empty {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px;
+  color: var(--ink-2);
+}
+
+.timer-running-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.timer-live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  margin-top: 7px;
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.timer-running-title {
+  font-weight: 650;
+  font-size: 15.5px;
+}
+
+.timer-running-sub {
+  color: var(--ink-3);
+  font-size: 13px;
+}
+
+.entry-task {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.timer-clock {
+  font-size: clamp(44px, 12vw, 64px);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  margin: 10px 0 14px;
+}
+
+.timer-running-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ---------- Entry rows ---------- */
+
+.entry-row {
+  display: flex;
+  align-items: center;
+}
+
+.entry-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  text-align: start;
+  transition: background 0.15s;
+}
+
+.entry-main:hover {
+  background: var(--surface-2);
+}
+
+/* The card clips to its rounded corners, so an outset ring on a full-width
+   row would be cut away on three sides; drawn inside, it stays whole. */
+.entry-main:focus-visible {
+  outline-offset: -2px;
+}
+
+/* A row that only reports something (a recorded payment) uses the same
+   geometry without the affordances of a button it is not. */
+.entry-main-static {
+  cursor: default;
+}
+
+.entry-main-static:hover {
+  background: transparent;
+}
+
+.entry-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-title {
+  font-weight: 600;
+  font-size: 14.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entry-sub {
+  color: var(--ink-3);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Clock times sit in the row's sub line, tabular so a column of them
+   lines up as the eye runs down a day. */
+.entry-times {
+  font-variant-numeric: tabular-nums;
+}
+
+.entry-nums {
+  text-align: end;
+  flex: none;
+}
+
+.entry-duration {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.entry-amount {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.entry-resume {
+  margin-inline-end: 8px;
+  color: var(--accent);
+  flex: none;
+}
+
+/* The row's own button ends where this one begins, so on touch this pad
+   grows into its 8px margin instead of over the neighbour: a tap just
+   short of the play icon must still open the entry, not start a timer. */
+@media (pointer: coarse) {
+  .entry-resume::after {
+    inset: -4px -8px -4px 0;
+  }
+}
+
+/* ---------- Timesheet ---------- */
+
+.page-title-range {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The range title opens a native date picker to jump anywhere. */
+.title-jump {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  border-radius: var(--r-sm);
+}
+
+.title-jump:hover .title-jump-ic {
+  color: var(--ink);
+}
+
+/* The range title opens the date picker, and it is a line of text tall
+   like the slim buttons beside it. Same invisible 44px pad, vertical only:
+   nothing tappable sits above or below it. */
+@media (pointer: coarse) {
+  .title-jump::after {
+    content: '';
+    position: absolute;
+    inset: -5px 0;
+  }
+}
+
+/* Search mode: the title is a heading, not a date-range picker. */
+.title-jump:disabled {
+  cursor: default;
+}
+
+.title-jump:disabled .title-jump-ic {
+  display: none;
+}
+
+.title-jump-ic {
+  color: var(--ink-3);
+  transition: color 0.15s;
+}
+
+.jump-input {
+  position: absolute;
+  inset: auto 0 0 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  border: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* On a phone this header wraps, putting the week/month options directly
+   above Previous, Today and Next. Both carry hit areas taller than
+   themselves on touch, which met in the 8px seam, so the row gap grows to
+   keep every tap on the control it was aimed at. */
+@media (pointer: coarse) {
+  .week-nav {
+    row-gap: 12px;
+  }
+}
+
+/* Previous / Today / Next stay together when the header wraps. */
+.date-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------- Weekly grid ---------- */
+
+.grid-wrap {
+  margin-bottom: 22px;
+}
+
+/* Nine columns never fit a phone, so the grid scrolls inside itself
+   rather than dragging the page sideways. */
+.grid-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+.grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.grid-table th,
+.grid-table td {
+  border-bottom: 1px solid var(--hairline);
+  padding: 0;
+}
+
+.grid-table tbody tr:last-child th,
+.grid-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.grid-project-head,
+.grid-total-head,
+.grid-day-head {
+  padding: 9px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: var(--surface-2);
+  white-space: nowrap;
+}
+
+.grid-day-head {
+  text-align: center;
+  min-width: 74px;
+}
+
+/* The day column, and its cells, carry the same tint today does
+   everywhere else in the app. */
+.grid-day-head.today {
+  color: var(--accent);
+}
+
+.grid-day-name {
+  display: block;
+}
+
+.grid-day-num {
+  display: block;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid-total-head,
+.grid-row-total,
+.grid-week-total {
+  text-align: end;
+}
+
+/* The project column is the row's label: it stays legible and does not
+   give away its width to nine numeric columns. */
+.grid-project {
+  text-align: start;
+  padding: 8px 10px;
+  font-weight: 600;
+  min-width: 170px;
+  max-width: 240px;
+  display: table-cell;
+}
+
+.grid-project .color-dot {
+  margin-inline-end: 8px;
+  vertical-align: middle;
+}
+
+.grid-project-text {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  min-width: 0;
+}
+
+.grid-project-name {
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grid-project-client {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.grid-cell.today,
+.grid-col-total.today {
+  background: var(--accent-wash);
+}
+
+/* The cell is the input: a border of its own inside a ruled table would
+   read as a box in a box, so it only shows one on focus. */
+.grid-input {
+  width: 100%;
+  min-width: 68px;
+  border: none;
+  background: transparent;
+  padding: 10px 8px;
+  font: inherit;
+  color: var(--ink);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  border-radius: 0;
+}
+
+.grid-input:hover {
+  background: var(--surface-2);
+}
+
+.grid-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: var(--surface);
+}
+
+/* A cell one number cannot honestly stand for: it reads as a number but
+   acts as a link into the day. */
+.grid-locked {
+  width: 100%;
+  padding: 10px 8px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+.grid-locked:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.grid-row-total,
+.grid-col-total,
+.grid-week-total {
+  padding: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.grid-table tfoot th,
+.grid-table tfoot td {
+  border-top: 1.5px solid var(--hairline-strong);
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--surface-2);
+}
+
+.grid-col-total {
+  text-align: center;
+}
+
+.grid-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.grid-picker {
+  max-width: 260px;
+  flex: none;
+}
+
+.grid-hint {
+  flex: 1;
+  min-width: 220px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+/* ---------- Entry search ---------- */
+
+.icon-btn.active-toggle {
+  background: var(--accent-wash);
+  color: var(--accent);
+  border-color: transparent;
+}
+
+.search-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 4px 0 6px;
+}
+
+.search-input {
+  max-width: 520px;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+  max-width: 520px;
+}
+
+.search-row .search-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: 520px;
+}
+
+/* Bulk-edit bar over search results; sticky so the actions stay in
+   reach while scrolling a long selection. */
+.bulk-bar {
+  position: sticky;
+  top: 8px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-top: 12px;
+}
+
+.bulk-count {
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  margin-inline-end: 4px;
+}
+
+.bulk-note {
+  font-size: 12px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.bulk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-inline-start: auto;
+}
+
+/* Six slim buttons wrap here, 6px apart, and on touch each carries a hit
+   area 4px taller than itself at each end: without the extra row gap, a
+   tap meant for "Non-billable" could land on "Delete" in the row below. */
+@media (pointer: coarse) {
+  .bulk-actions {
+    row-gap: 12px;
+  }
+}
+
+/* Selection checkbox on entry rows in bulk-edit mode. */
+.entry-check {
+  width: 18px;
+  height: 18px;
+  margin-inline-start: 14px;
+  accent-color: var(--accent);
+  flex: none;
+  cursor: pointer;
+}
+
+.entry-check:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.search-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 6px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.day-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin: 16px 0 4px;
+  padding: 14px 12px 10px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+}
+
+.day-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: inherit;
+}
+
+.day-col-hours {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  min-height: 15px;
+}
+
+.day-col-bar-track {
+  display: flex;
+  align-items: flex-end;
+  height: 56px;
+  width: 100%;
+  max-width: 34px;
+}
+
+.day-col-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  background: var(--accent);
+  min-height: 2px;
+  transition: height 0.25s var(--ease-spring);
+}
+
+.day-col:not(.today) .day-col-bar {
+  opacity: 0.75;
+}
+
+.day-col-name {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.day-col.today .day-col-name {
+  color: var(--accent);
+}
+
+/* Month overview: calendar grid, intensity = hours (single hue). */
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin: 16px 0 4px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+}
+
+.month-grid-head {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--ink-3);
+  padding-bottom: 2px;
+}
+
+.month-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: var(--surface-2);
+  transition: border-color 0.15s;
+}
+
+.month-cell:hover {
+  border-color: var(--hairline-strong);
+}
+
+.month-cell.blank {
+  background: transparent;
+}
+
+.month-cell.today {
+  border-color: var(--accent);
+}
+
+.month-cell-day {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.month-cell.today .month-cell-day {
+  color: var(--accent);
+}
+
+/* A day with time is tinted with the accent in proportion to its hours, so
+   the busiest days carry the deepest tint: on those the day number, in
+   secondary ink, fell to 3.8:1, and today's, drawn in the accent itself,
+   to 3.7:1 in dark. The number takes full ink on a tinted cell, which
+   holds in both themes; today is still marked by its accent border. */
+.month-cell.has-time .month-cell-day,
+.month-cell.today.has-time .month-cell-day {
+  color: var(--ink);
+}
+
+.month-cell-hours {
+  font-size: 10.5px;
+  font-weight: 650;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 480px) {
+  .month-cell {
+    min-height: 40px;
+  }
+
+  .month-cell-hours {
+    font-size: 9.5px;
+  }
+}
+
+.day-section {
+  scroll-margin-top: 12px;
+}
+
+.day-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.day-head .section-title {
+  margin: 0;
+}
+
+.day-head {
+  margin: 22px 0 10px;
+}
+
+.day-head-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.day-total {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.day-empty {
+  color: var(--ink-3);
+  font-size: 13.5px;
+  padding: 4px 2px 8px;
+}
+
+/* ---------- Reports ---------- */
+
+.report-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+/* A stacking column stretches its children, which pulled the date-range
+   control out to the full width of the content: on a desktop its five
+   options sat at the left end of a 916px pill with 425px of empty track
+   after them, while every other segmented control on the screen hugged
+   its options. It hugs them too. Narrow screens are unchanged: the row
+   still fills the column and wraps when it runs out of room. */
+.report-controls > .segmented {
+  align-self: flex-start;
+}
+
+.group-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* A label and the control it names stay together when the row wraps. */
+.group-pair {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.group-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.custom-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 420px;
+}
+
+/* Two native date fields will not shrink past the date they hold, so on a
+   phone the pair pushed the whole page sideways: picking "Custom" left the
+   report scrolling horizontally with the second date off the edge. The
+   second date wraps to its own line instead, keeping "to" at the end of
+   the first line where it still reads as one range, and the page holds
+   still. The fields drop their full width for this, or each would claim a
+   line of its own and leave "to" stranded on a third. */
+@media (max-width: 480px) {
+  .custom-range {
+    flex-wrap: wrap;
+  }
+
+  .custom-range .input {
+    width: auto;
+    flex: 1 1 auto;
+  }
+}
+
+.range-sep {
+  color: var(--ink-3);
+  font-size: 13px;
+}
+
+.report-list {
+  padding: 6px 0;
+}
+
+.report-row {
+  padding: 10px 16px;
+}
+
+.report-row-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.report-row-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.report-row-label {
+  font-weight: 600;
+  font-size: 14.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.report-row-sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.report-row-nums {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex: none;
+}
+
+.report-row-hours {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.report-row-amount {
+  font-size: 13px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  min-width: 64px;
+  text-align: end;
+}
+
+/* Bars share one track height; 2px surface gap comes from row padding. */
+.report-bar-track {
+  height: 6px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  margin: 7px 0 2px 20px;
+  overflow: hidden;
+}
+
+.report-bar {
+  height: 100%;
+  border-radius: var(--r-full);
+  transition: width 0.3s var(--ease-spring);
+}
+
+/* ---------- Insights (Reports sibling tab) ---------- */
+
+.report-mode {
+  margin-bottom: 14px;
+}
+
+/* 12-month strip: tracked as a light tint of the accent, billable
+   overlaid in the full accent. Lightness carries the difference; the
+   legend and the role="img" summary carry the names. */
+.insight-chart {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 6px;
+  padding: 16px 12px 10px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+}
+
+.insight-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.insight-col-track {
+  position: relative;
+  height: 96px;
+  width: 100%;
+  max-width: 30px;
+}
+
+.insight-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.insight-bar.tracked {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+}
+
+.insight-bar.billable {
+  background: var(--accent);
+}
+
+.insight-col-name {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.insight-legend {
+  display: flex;
+  gap: 16px;
+  margin: 10px 4px 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.insight-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.legend-dot.tracked {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border: 1px solid var(--hairline-strong);
+}
+
+.legend-dot.billable {
+  background: var(--accent);
+}
+
+@media (max-width: 520px) {
+  .insight-chart {
+    gap: 3px;
+    padding: 12px 8px 8px;
+  }
+
+  .insight-col-name {
+    font-size: 9px;
+  }
+
+  .insight-col-track {
+    height: 72px;
+  }
+}
+
+/* Invoiced-entry lock note and summary (entry sheet) */
+.locked-note {
+  display: flex;
+  gap: 11px;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  background: var(--accent-wash);
+  margin-bottom: 14px;
+}
+
+.locked-note-ic {
+  color: var(--accent);
+  display: grid;
+  place-items: start;
+  padding-top: 2px;
+}
+
+.locked-note-title {
+  font-weight: 650;
+  font-size: 14px;
+}
+
+.locked-note-sub {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.entry-summary {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  padding: 4px 14px;
+  margin-bottom: 14px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  padding: 9px 0;
+  font-size: 14px;
+}
+
+.summary-row + .summary-row {
+  border-top: 1px solid var(--hairline);
+}
+
+.summary-label {
+  color: var(--ink-3);
+  flex: none;
+}
+
+.summary-value {
+  font-weight: 600;
+  text-align: end;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.report-mark {
+  flex: none;
+  color: var(--accent);
+}
+
+/* ---------- Projects ---------- */
+
+.client-card {
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.client-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.client-name {
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.client-sub {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.client-unbilled {
+  text-align: end;
+  margin-inline-end: 2px;
+}
+
+/* On a phone this head has no room for a name and a money column side by
+   side, and flex hands the name whatever is left over: a client called
+   "Acme Studio" came out stacked two words tall, and a longer one ran to
+   six lines down a 60px gutter while the unbilled figures beside it kept
+   their full width. The figures take their own line instead and the name
+   gets the width, which is the way round these two matter. */
+@media (max-width: 480px) {
+  .client-head {
+    flex-wrap: wrap;
+  }
+
+  .client-unbilled {
+    order: 1;
+    flex-basis: 100%;
+    margin-inline-end: 0;
+  }
+}
+
+.client-unbilled-amt {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-size: 15px;
+}
+
+/* The age of the oldest unbilled entry, quiet until it is not: past the
+   threshold it takes the warning ink, and the words say it either way. */
+.client-unbilled-age.stale {
+  color: var(--ink-warning);
+  font-weight: 650;
+}
+
+.client-unbilled-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.project-list {
+  margin-top: 10px;
+  border-top: 1px solid var(--hairline);
+}
+
+.project-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 2px;
+}
+
+.project-row + .project-row {
+  border-top: 1px solid var(--hairline);
+}
+
+.project-name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.project-sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.add-project {
+  margin-top: 10px;
+}
+
+/* Project budget progress; the words carry the state, the color repeats it. */
+.budget-line {
+  margin-top: 7px;
+  max-width: 420px;
+}
+
+.budget-track {
+  height: 5px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.budget-bar {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  transition: width 0.3s var(--ease-spring);
+}
+
+.budget-bar.warn {
+  background: var(--warning);
+}
+
+.budget-bar.over {
+  background: var(--critical);
+}
+
+.budget-text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-flag.warn {
+  color: var(--warning);
+}
+
+.budget-flag.over {
+  color: var(--critical);
+}
+
+.archive-toggle {
+  margin: 6px 0 14px;
+}
+
+/* ---------- Import wizard ---------- */
+
+.import-map {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 4px 0 14px;
+}
+
+.import-invalid {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  padding: 11px 13px;
+  margin-bottom: 14px;
+}
+
+/* The words carry the state; the warning color only marks the icon
+   (as text it falls short of 4.5:1 on light surfaces). */
+.import-invalid-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-2);
+}
+
+.import-invalid-title > span {
+  display: grid;
+  place-items: center;
+  color: var(--warning);
+}
+
+.import-invalid-list {
+  margin: 6px 0 0;
+  padding-inline-start: 18px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.small-note {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+
+/* ---------- Invoice page ---------- */
+
+/* Full-screen overlay holding the printable sheet. The sheet itself is
+   deliberately paper-white with dark ink in every app theme: what you
+   see is exactly what prints. */
+.invoice-view {
+  position: fixed;
+  inset: 0;
+  /* Below dialogs (60) and toasts (70): the void confirm and its toast
+     must stack on top of the invoice page. */
+  z-index: 55;
+  overflow-y: auto;
+  background: var(--scrim);
+  padding: 16px;
+}
+
+/* The page takes focus by script so it is announced as a dialog; no ring. */
+.invoice-view:focus-visible {
+  outline: none;
+}
+
+/* The page scrolls itself, so the app behind it must not. */
+body.invoice-open {
+  overflow: hidden;
+}
+
+.invoice-toolbar {
+  display: flex;
+  align-items: center;
+  /* Three buttons that will not shrink (their labels never wrap) ran off
+     the end of the bar on a phone, taking "Print or save as PDF" with
+     them. They drop to a second line instead. */
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 780px;
+  margin: 0 auto 12px;
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+}
+
+/* Wrapped, Print lands under Back, and on touch both reach a few pixels
+   past themselves: the row gap keeps those hit areas apart. */
+@media (pointer: coarse) {
+  .invoice-toolbar {
+    row-gap: 12px;
+  }
+}
+
+.invoice-sheet {
+  max-width: 780px;
+  margin: 0 auto 24px;
+  background: #fff;
+  color: #17171a;
+  border-radius: 6px;
+  padding: 44px 48px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.invoice-head {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* Branding prints at a fixed height whatever the source image was, so a
+   tall logo can never push the header off the first page. */
+.invoice-logo {
+  display: block;
+  max-height: 56px;
+  max-width: 240px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.invoice-business-name {
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+
+.invoice-title-block {
+  text-align: end;
+  flex: none;
+}
+
+.invoice-doc-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #67676e;
+}
+
+.invoice-number {
+  font-size: 22px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+/* PAID / OVERDUE, in the title block under the number. Border and ink
+   only: it has to survive a printer that drops backgrounds. */
+.invoice-stamp {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 9px;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.invoice-stamp.paid {
+  color: #0a7a33;
+}
+
+.invoice-stamp.overdue {
+  color: #b3261e;
+}
+
+.invoice-address {
+  white-space: pre-line;
+  font-size: 13px;
+  color: #45454b;
+  margin-top: 4px;
+}
+
+.invoice-meta-line {
+  font-size: 12.5px;
+  color: #67676e;
+  margin-top: 3px;
+}
+
+.invoice-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #67676e;
+  margin-bottom: 4px;
+}
+
+.invoice-billto {
+  margin-top: 30px;
+}
+
+.invoice-billto-name {
+  font-weight: 650;
+  font-size: 15px;
+}
+
+/* Line items scroll here rather than widening the sheet; paper is always
+   wide enough, so print gets the whole table back. */
+.invoice-table-wrap {
+  overflow-x: auto;
+}
+
+.invoice-table {
+  width: 100%;
+  margin-top: 28px;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.invoice-table th {
+  text-align: start;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #67676e;
+  padding: 0 10px 8px;
+  border-bottom: 1.5px solid #d5d5d8;
+}
+
+.invoice-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #ececef;
+  vertical-align: top;
+}
+
+.invoice-table .desc {
+  padding-inline-start: 0;
+}
+
+.invoice-table th.num,
+.invoice-table td.num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Printable timesheet ---------- */
+
+/* A day is a heading inside the table: ruled above, bold, with its own
+   subtotal on the same line, so a client can scan days before lines. */
+.timesheet-table .ts-day td {
+  padding-top: 14px;
+  font-weight: 700;
+  border-bottom: 1px solid #d5d5d8;
+}
+
+.timesheet-table .ts-entry td {
+  border-bottom: 1px solid #f2f2f4;
+}
+
+/* The work sits under its day rather than beside it: an indent reads as
+   belonging, and leaves the description column its full width. */
+.timesheet-table .ts-entry .desc {
+  padding-inline-start: 16px;
+}
+
+/* The clock span leads its line, in the muted register of the meta text:
+   the work is what the reader is scanning for. */
+.timesheet-table .ts-time {
+  color: #45454b;
+  font-variant-numeric: tabular-nums;
+}
+
+.timesheet-table .ts-note {
+  display: block;
+  color: #67676e;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.timesheet-table .ts-flag {
+  color: #67676e;
+}
+
+.timesheet-table tfoot .ts-total td {
+  border-top: 1.5px solid #17171a;
+  border-bottom: none;
+  padding-top: 10px;
+  font-weight: 750;
+}
+
+/* Footnote under the line items (a tax exclusion), in the register of the
+   meta lines rather than the body copy. */
+.invoice-note {
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: #67676e;
+}
+
+.invoice-totals {
+  margin-top: 14px;
+  margin-inline-start: auto;
+  max-width: 300px;
+  font-size: 13.5px;
+}
+
+.invoice-total-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 5px 10px 5px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The invoice total once money has come in: still the summing line, but
+   no longer the number the client acts on, so it carries weight without
+   the heavy rule above the amount actually due. */
+.invoice-total-row.sum {
+  border-top: 1px solid #d5d5d8;
+  margin-top: 4px;
+  padding-top: 8px;
+  font-weight: 650;
+}
+
+.invoice-total-row.total {
+  border-top: 1.5px solid #17171a;
+  margin-top: 4px;
+  padding-top: 9px;
+  font-weight: 750;
+  font-size: 15px;
+}
+
+/* Payment instructions read as their own block, with the label style the
+   Billed-to block uses, and keep the line breaks they were typed with. */
+.invoice-pay-text {
+  white-space: pre-line;
+  color: #17171a;
+}
+
+.invoice-foot {
+  margin-top: 36px;
+  padding-top: 14px;
+  border-top: 1px solid #ececef;
+  font-size: 12.5px;
+  color: #45454b;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+@media (max-width: 560px) {
+  .invoice-sheet {
+    padding: 22px 16px;
+  }
+
+  .invoice-head {
+    flex-direction: column;
+  }
+
+  .invoice-title-block {
+    text-align: start;
+  }
+
+  /* Hours, rate, and amount never wrap, so below about 400px the line
+     items pushed the sheet wider than the screen and the amount column,
+     the one a client checks first, was the part that fell off the edge.
+     A notch of type and cell padding buys back the ~50px it needs. */
+  .invoice-table {
+    font-size: 12.5px;
+  }
+
+  .invoice-table th,
+  .invoice-table td {
+    padding-inline: 5px;
+  }
+
+  .invoice-table .desc {
+    padding-inline-start: 0;
+  }
+
+  /* Under real pressure the description gives way before the money does:
+     a project name broken over two lines still reads, an amount scrolled
+     out of sight does not. Nothing breaks while the row fits, and the
+     column heading is left whole. */
+  .invoice-table td.desc {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* ---------- Print (invoice-ready report summary) ---------- */
+
+@media print {
+  /* Paper is white whatever the app theme is, so the printout has to use
+     the light palette: the dark theme's white ink lands on white paper and
+     the whole page comes out blank. The theme stamps are matched here so
+     this wins over them at equal specificity (this file loads last), and
+     the invoice sheet keeps its own explicit paper colors regardless. */
+  :root,
+  :root[data-theme="dark"],
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f2f2f4;
+    --surface-3: #e5e5e9;
+    --ink: #0b0b0c;
+    --ink-2: #45454b;
+    --ink-3: #67676e;
+    --hairline: rgba(11, 11, 12, 0.1);
+    --hairline-strong: rgba(11, 11, 12, 0.17);
+    --accent: #5428e1;
+    --accent-strong: #4521b9;
+    --accent-ink: #ffffff;
+    --accent-wash: rgba(84, 40, 225, 0.1);
+    --critical: #d03b3b;
+    --critical-strong: #b32f2f;
+    --critical-ink: #ffffff;
+    --warning: #e08e00;
+    --good: #0ca30c;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --series-4: #eda100;
+    --series-5: #e87ba4;
+    --series-6: #008300;
+    --series-7: #4a3aa7;
+    --series-8: #e34948;
+  }
+
+  .sidebar,
+  .tabbar,
+  .fab,
+  .skip-link,
+  .sample-banner,
+  .offline-banner,
+  .report-controls,
+  .report-mode,
+  .report-mark,
+  .invoice-filter-row,
+  .page-head .row,
+  .toast-root {
+    display: none !important;
+  }
+
+  /* With a printable page open, that page is the entire printout, and
+     when one covers another only the top one prints. */
+  body.invoice-open .shell,
+  body.invoice-open .modal-root,
+  .invoice-view.covered,
+  .invoice-toolbar {
+    display: none !important;
+  }
+
+  .invoice-view {
+    position: static;
+    overflow: visible;
+    background: #fff;
+    padding: 0;
+  }
+
+  .invoice-sheet {
+    box-shadow: none;
+    border-radius: 0;
+    max-width: none;
+    padding: 0;
+  }
+
+  .invoice-table-wrap {
+    overflow-x: visible;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .shell {
+    display: block;
+  }
+
+  .main {
+    padding: 0;
+    max-width: none;
+  }
+
+  .view {
+    animation: none;
+  }
+
+  .card,
+  .stat-tile {
+    border-color: #d5d5d8;
+    break-inside: avoid;
+  }
+
+  .report-bar-track {
+    display: none;
+  }
+}

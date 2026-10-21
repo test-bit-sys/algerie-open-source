@@ -1,0 +1,22 @@
+{
+  "name": "hourly",
+  "version": "1.0.0",
+  "description": "Timesheets and time tracking. Track billable hours by client, project, or task, on Puter.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "lucide": "^1.28.0"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "vite": "^8.2.0",
+    "vitest": "^4.0.18"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "dz-recorder",
+  "version": "1.0.0",
+  "description": "DZ-Recorder: Sovereign Screen & Webcam Studio for Algerian Educators & Content Creators",
+  "type": "module",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -l 3018 .",
+    "dev": "npx serve -l 3018 ."
+  },
+  "keywords": ["screen-recorder", "webcam", "algeria-open-source", "video-montage"],
+  "author": "Algeria Open Source Community",
+  "license": "MIT"
+}

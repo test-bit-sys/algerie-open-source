@@ -1,0 +1,32 @@
+{
+  "name": "signatures",
+  "version": "1.0.0",
+  "description": "Send documents for signature and manage them, powered by Puter",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "deploy:email-worker": "puter worker deploy src/workers/email-worker.js signatures-email"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HeyPuter/signatures.git"
+  },
+  "homepage": "https://github.com/HeyPuter/signatures#readme",
+  "dependencies": {
+    "lucide": "^1.28.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.4.149"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.10",
+    "jsdom": "^29.1.1",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.10"
+  }
+}

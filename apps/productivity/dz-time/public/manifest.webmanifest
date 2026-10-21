@@ -1,0 +1,31 @@
+{
+  "name": "Hourly",
+  "short_name": "Hourly",
+  "description": "Track billable hours by client, project, or task.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8f8f9",
+  "theme_color": "#5428e1",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Log time",
+      "short_name": "Log time",
+      "description": "Add a time entry without hunting for the button",
+      "url": "./#/?action=log",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Stop timer",
+      "short_name": "Stop",
+      "description": "Stop the running timer and log the time",
+      "url": "./#/?action=stop",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

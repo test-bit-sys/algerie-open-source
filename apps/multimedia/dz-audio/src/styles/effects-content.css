@@ -1,0 +1,687 @@
+/* Effects: per-effect dialog content (layout.js building blocks, generators,
+   effect-specific graphs). The shared dialog chrome lives in effects.css. */
+
+/* ------------------------------------------------------- layout blocks */
+
+.fx-group {
+  min-width: 0;
+  margin: 0;
+  padding: 6px 10px 10px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+}
+
+.fx-group-title {
+  padding: 0 4px;
+  color: var(--text-dim);
+}
+
+.fx-group > .fx-params,
+.fx-group > .fx-plot {
+  margin-top: 4px;
+}
+
+.fx-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.fx-tablist {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.fx-tab {
+  padding: 4px 1px 5px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--text-dim);
+  font: inherit;
+  cursor: pointer;
+}
+
+.fx-tab[aria-selected='true'] {
+  border-bottom-color: var(--text-strong);
+  color: var(--text-strong);
+}
+
+.fx-tab:disabled {
+  color: var(--text-faint);
+  cursor: default;
+}
+
+.fx-tab:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.fx-tab-panel[hidden] {
+  display: none;
+}
+
+.fx-vfader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 56px;
+}
+
+.fx-vfader-label {
+  color: var(--text-dim);
+  text-align: center;
+}
+
+input[type='range'].slider.fx-vrange {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 18px;
+  min-width: 0;
+  height: 140px;
+}
+
+input[type='range'].slider.fx-vrange::-webkit-slider-runnable-track {
+  width: 3px;
+  height: 100%;
+}
+
+input[type='range'].slider.fx-vrange::-webkit-slider-thumb {
+  margin-top: 0;
+  margin-left: -4.5px;
+}
+
+input[type='range'].slider.fx-vrange::-moz-range-track {
+  width: 3px;
+  height: 100%;
+}
+
+.fx-vfader-value .hot {
+  min-width: 0;
+}
+
+.fx-radio-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fx-radios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+.fx-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+/* Icon radios: segmented buttons with a glyph instead of text. */
+.fx-radios.fx-segmented {
+  gap: 2px;
+}
+
+.fx-radio-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 26px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+}
+
+.fx-radio-icon input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fx-radio-icon:has(input:checked) {
+  border-color: var(--border);
+  background: var(--bg-editor);
+  color: var(--accent-strong);
+}
+
+.fx-radio-icon:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+}
+
+.fx-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fx-disclosure > summary {
+  padding: 4px 0;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.fx-disclosure-body {
+  padding: 4px 0 2px 14px;
+}
+
+.fx-disabled {
+  opacity: 0.5;
+}
+
+.fx-readout {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------- generators */
+
+.dialog.fx-dialog.gen-tones {
+  width: min(960px, 100%);
+  max-width: min(960px, 100%);
+}
+
+.dialog.fx-dialog.gen-noise {
+  width: min(760px, 100%);
+  max-width: min(760px, 100%);
+}
+
+.gen-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.gen-columns {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.gen-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.gen-col-narrow {
+  flex: 0 0 150px;
+}
+
+.gen-columns > .fx-group:has(.gen-comps) {
+  flex: 0 0 auto;
+}
+
+.gen-wave {
+  height: 110px;
+}
+
+.gen-comps {
+  display: grid;
+  grid-template-columns: max-content repeat(5, 70px);
+  gap: 0 6px;
+  align-items: start;
+}
+
+.gen-comp,
+.gen-comp-labels {
+  display: grid;
+  grid-template-rows: 28px 196px 24px 28px;
+  align-items: center;
+  justify-items: center;
+}
+
+.gen-comp-labels {
+  justify-items: end;
+  color: var(--text-dim);
+}
+
+.gen-comp-labels .gen-comp-amp {
+  align-self: start;
+  padding-top: 70px;
+}
+
+.gen-comp .fx-check {
+  gap: 0;
+}
+
+.gen-comp-freq {
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}
+
+.gen-noise-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  align-items: center;
+}
+
+.gen-noise-top > .fx-params {
+  flex: 1 1 320px;
+}
+
+.gen-psd {
+  height: 230px;
+}
+
+.gen-columns > .fx-group:has(.gen-psd) {
+  flex: 1 1 auto;
+}
+
+.gen-faders {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 760px) {
+  .gen-columns {
+    flex-wrap: wrap;
+  }
+
+  .gen-comps {
+    overflow-x: auto;
+  }
+}
+
+/* ----------------------------------------------------- effect layouts */
+
+.fx-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.fx-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.fx-split.fx-split-even {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.fx-checks {
+  display: flex;
+  gap: 16px;
+  padding-left: 8px;
+}
+
+.fx-response {
+  height: 200px;
+}
+
+/* Mastering band table under the EQ graph. */
+.ms-bands {
+  display: grid;
+  gap: 2px;
+  margin-top: 6px;
+}
+
+.ms-band {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) repeat(3, minmax(64px, max-content));
+  align-items: center;
+  gap: 10px;
+}
+
+.ms-band-head {
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+}
+
+/* Doppler path graph. */
+.dp-graph-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dp-graph {
+  height: 260px;
+}
+
+.dp-status {
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 720px) {
+  .fx-split,
+  .fx-split.fx-split-even {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.fx-dialog-body [hidden] {
+  display: none !important;
+}
+
+.fx-bypass {
+  margin-top: 4px;
+}
+
+/* Distortion: two curve graphs with link and copy tools between them. */
+.dist-graphs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.dist-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dist-link[aria-pressed='true'] {
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+.fx-plot.dist-graph {
+  height: auto;
+  aspect-ratio: 1;
+  max-height: 300px;
+}
+
+.fx-plot.dist-graph.dist-mirrored {
+  opacity: 0.55;
+}
+
+.dist-caption {
+  min-height: 1.4em;
+  margin: 2px 0;
+  font-size: var(--fs-sm);
+}
+
+.fx-group .fx-plot.dist-graph {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Noise Reduction: print tools, graph and legend. */
+.nr-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.nr-status {
+  margin-left: 6px;
+  color: var(--text-dim);
+}
+
+.nr-graph {
+  height: 240px;
+  cursor: copy;
+}
+
+.nr-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-sm);
+}
+
+.nr-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-left: 8px;
+}
+
+.nr-print {
+  background: var(--wave);
+}
+
+.nr-threshold {
+  background: var(--hot);
+}
+
+/* Hiss Reduction: noise floor graph and its scale/channel bar. */
+.hr-graph .fx-plot {
+  height: 220px;
+}
+
+.hr-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hr-bar .fx-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hr-spacer {
+  flex: 1;
+}
+
+.fx-split.rs-focus {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.fx-spectrum {
+  height: 170px;
+}
+
+/* Center Channel Extractor and Graphic Phase Shifter. */
+.fx-split.cce-split {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.cce-levels {
+  display: flex;
+  gap: 12px;
+  padding-top: 6px;
+}
+
+.fx-plot.gps-plot {
+  height: 260px;
+}
+
+/* Time and Pitch views. */
+.sp-durations {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content max-content;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 4px 0;
+}
+
+.sp-ratio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.pb-graph .fx-envelope {
+  height: 180px;
+}
+
+.pb-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+}
+
+.fx-split.apc-split {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.apc-side {
+  display: grid;
+  grid-template-columns: auto 28px;
+  grid-template-rows: auto 200px;
+  gap: 6px;
+  min-width: 170px;
+}
+
+.apc-text {
+  grid-column: 1 / -1;
+  font-variant-numeric: tabular-nums;
+}
+
+.apc-scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+}
+
+.apc-meter {
+  position: relative;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--bg-editor);
+}
+
+.apc-zero {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--grid-strong);
+}
+
+.apc-fill {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  height: 0;
+}
+
+/* Reverb views. */
+.fx-split.rv-split {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.rv-faders {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+.rv-checks {
+  margin-top: 10px;
+  gap: 4px;
+}
+
+.rv-impulse {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rv-impulse > .fx-controls {
+  flex: 1;
+  min-width: 0;
+}
+
+.rv-surround {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .rv-surround,
+  .fx-split.rv-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.gen-columns > .gen-col:first-child {
+  flex: 1 1 360px;
+  min-width: 340px;
+}
+
+.gen-comps {
+  grid-template-columns: max-content repeat(5, 62px);
+}
+
+.dialog.fx-dialog.gen-tones {
+  width: min(1000px, 100%);
+  max-width: min(1000px, 100%);
+}
+
+/* Parametric Equalizer: master gain fader beside the curve, options under the bands. */
+.peq-top {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.peq-top .fx-vrange {
+  height: 200px;
+}
+
+.peq-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+/* Normalize: switch, target and unit on one row. */
+.nm-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 28px;
+}
+
+.nm-target .hot {
+  min-width: 64px;
+}
+
+/* Pitch Shifter: precision choices in a narrow column, splicing settings beside them. */
+.fx-split.ps-split {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.fx-radios.fx-radios-v {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ps-auto {
+  min-height: 1.4em;
+  font-size: var(--fs-sm);
+}
+
+.dist-caption-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}

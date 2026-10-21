@@ -1,0 +1,145 @@
+/* Design tokens. Dark is the default look of a pro audio workspace; light keeps
+   the same hierarchy with inverted surfaces. data-theme-resolved is set by
+   theme.js before first paint (see index.html). */
+
+:root {
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --fs-xs: 10px;
+  --fs-sm: 11px;
+  --fs-md: 12px;
+  --fs-lg: 14px;
+  --fs-xl: 18px;
+  --radius-sm: 3px;
+  --radius: 4px;
+  --radius-lg: 8px;
+  --row: 24px;
+  --control: 22px;
+  --tab: 30px;
+  --gap: 6px;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+:root,
+:root[data-theme-resolved='dark'] {
+  color-scheme: dark;
+  --bg-app: #161616;
+  --bg-panel: #232323;
+  --bg-panel-alt: #1e1e1e;
+  --bg-raised: #2c2c2c;
+  --bg-input: #191919;
+  --bg-hover: #303030;
+  --bg-active: #3a3a3a;
+  --bg-editor: #050505;
+  --bg-track: #1c1c1c;
+  --bg-track-alt: #202020;
+  --bg-ruler: #1a1a1a;
+  --border: #111111;
+  --border-soft: #2f2f2f;
+  --divider: #383838;
+  --text: #d6d6d6;
+  --text-strong: #f2f2f2;
+  --text-dim: #a3a3a3;
+  --text-faint: #6f6f6f;
+  --accent: #2d8ceb;
+  --accent-strong: #4aa3f5;
+  --accent-text: #ffffff;
+  --accent-soft: rgba(45, 140, 235, 0.22);
+  --hot: #4ea6f2;
+  --focus: #5aaeff;
+  --wave: #3fe0a5;
+  --wave-2: #6cb6ff;
+  --wave-3: #f2b04c;
+  --wave-4: #e47ad6;
+  --wave-dim: #227a5b;
+  --wave-sel: #b7ffe4;
+  --wave-center: #1b3d31;
+  --grid: rgba(255, 255, 255, 0.06);
+  --grid-strong: rgba(255, 255, 255, 0.12);
+  --wave-grid: rgba(52, 199, 89, 0.16);
+  --sel-bg: rgba(255, 255, 255, 0.22);
+  --sel-edge: rgba(255, 255, 255, 0.55);
+  --playhead: #e8483c;
+  --cti: #3d8ff0;
+  --marker: #e3c24a;
+  --marker-range: rgba(227, 194, 74, 0.18);
+  --record: #e5484d;
+  --danger: #ef5f5f;
+  --warning: #e6a23c;
+  --success: #3fbf7f;
+  --meter-green: #2fbf57;
+  --meter-yellow: #d6c33a;
+  --meter-red: #e5484d;
+  --meter-bg: #0d0d0d;
+  --envelope-vol: #e5d14a;
+  --envelope-pan: #4aa3f5;
+  --clip-header: rgba(255, 255, 255, 0.09);
+  --overlay: rgba(0, 0, 0, 0.55);
+  --scrollbar: #444;
+}
+
+:root[data-theme-resolved='light'] {
+  color-scheme: light;
+  --bg-app: #d4d4d4;
+  --bg-panel: #ececec;
+  --bg-panel-alt: #e4e4e4;
+  --bg-raised: #f7f7f7;
+  --bg-input: #ffffff;
+  --bg-hover: #dddddd;
+  --bg-active: #d0d0d0;
+  --bg-editor: #fbfbfb;
+  --bg-track: #f3f3f3;
+  --bg-track-alt: #eeeeee;
+  --bg-ruler: #e6e6e6;
+  --border: #c2c2c2;
+  --border-soft: #d6d6d6;
+  --divider: #c8c8c8;
+  --text: #2a2a2a;
+  --text-strong: #111111;
+  --text-dim: #555555;
+  --text-faint: #6b6b6b;
+  --accent: #1473e6;
+  --accent-strong: #0d66d0;
+  --accent-text: #ffffff;
+  --accent-soft: rgba(20, 115, 230, 0.16);
+  --hot: #0d66d0;
+  --focus: #1473e6;
+  --wave: #0f9e6c;
+  --wave-2: #2f6fd0;
+  --wave-3: #b8730a;
+  --wave-4: #a83c9a;
+  --wave-dim: #8fd3b9;
+  --wave-sel: #04573a;
+  --wave-center: #bfe3d4;
+  --grid: rgba(0, 0, 0, 0.06);
+  --grid-strong: rgba(0, 0, 0, 0.14);
+  --wave-grid: rgba(15, 158, 108, 0.14);
+  --sel-bg: rgba(20, 115, 230, 0.16);
+  --sel-edge: rgba(20, 115, 230, 0.6);
+  --playhead: #d93a2f;
+  --cti: #1473e6;
+  --marker: #b8900f;
+  --marker-range: rgba(184, 144, 15, 0.16);
+  --record: #d7373f;
+  --danger: #c9252d;
+  --warning: #b8700f;
+  --success: #12805c;
+  --meter-green: #1f9e47;
+  --meter-yellow: #b8a21a;
+  --meter-red: #d7373f;
+  --meter-bg: #d9d9d9;
+  --envelope-vol: #a68a00;
+  --envelope-pan: #0d66d0;
+  --clip-header: rgba(0, 0, 0, 0.07);
+  --overlay: rgba(0, 0, 0, 0.32);
+  --scrollbar: #b0b0b0;
+}
+
+@media (pointer: coarse) {
+  :root {
+    --row: 36px;
+    --control: 32px;
+    --tab: 40px;
+    --fs-md: 13px;
+  }
+}

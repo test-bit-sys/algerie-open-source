@@ -382,8 +382,14 @@
   }
 ];
 
+  if (typeof globalThis !== 'undefined') {
+    globalThis.DZ_WORD_TEMPLATES = TEMPLATES;
+  }
   if (typeof window !== 'undefined') {
     window.DZ_WORD_TEMPLATES = TEMPLATES;
+  }
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { TEMPLATES };
   }
 })();
 

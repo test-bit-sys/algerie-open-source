@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>DZ-Time | منظومة تتبع الوقت وساعات العمل الجزائري</title>
+  <meta name="description" content="تتبع ساعات العمل، المشاريع، والمهام وفق قانون العمل الجزائري 90-11، محلياً 100% دون خوادم سحابية." />
+  <meta name="theme-color" content="#f8f8f9" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="DZ-Time" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16.png" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../../packages/dz-runtime/dz-runtime.css" />
+  <script>
+    // Apply the saved theme before first paint to avoid a flash.
+    (() => {
+      try {
+        const t = localStorage.getItem('hourly:theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    })();
+  </script>
+  <style>
+    /* Boot splash, styled inline so it is correct before the bundle loads.
+       The logo stays invisible for the first 250ms: fast boots go straight
+       to the app with no flash, slow boots get a pulsing logo that fades
+       out (.done) instead of vanishing. */
+    #boot-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      background: #f8f8f9;
+      transition: opacity 0.3s ease;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:where(:not([data-theme="light"])) #boot-splash { background: #0e0e10; }
+    }
+    :root[data-theme="dark"] #boot-splash { background: #0e0e10; }
+    #boot-splash.done {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #boot-splash .boot-mark {
+      opacity: 0;
+      animation:
+        boot-appear 0.3s ease 0.25s forwards,
+        boot-pulse 1.4s ease-in-out 0.55s infinite;
+    }
+    @keyframes boot-appear {
+      to { opacity: 1; }
+    }
+    @keyframes boot-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(0.94); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #boot-splash .boot-mark { animation: boot-appear 0.01ms linear 0.25s forwards; }
+      #boot-splash { transition: none; }
+    }
+  <link rel="stylesheet" href="./src/styles/index.css" />
+  <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
+  <script type="module" src="./src/main.js"></script>
+</head>
+<body>
+  <div id="app" class="app">
+    <div class="boot-splash" id="boot-splash" aria-hidden="true">
+      <img class="boot-mark" src="./icons/icon-192.png" width="64" height="64" alt="" />
+    </div>
+  </div>
+</body>
+</html>

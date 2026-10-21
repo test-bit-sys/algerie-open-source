@@ -1,0 +1,146 @@
+/* The command icons (src/lib/glass-icons.js), in the glass idiom shared with the Spreadsheet app
+   (src/spreadsheet/src/styles/icons.css; keep the tokens and stroke weights identical): rounded ink
+   outlines over top-lit gradient fills in the system palette. The gradients live once in index.html
+   (#ico-g-*) and read these tokens; each fill names a flat fallback colour for documents without
+   them. Strokes keep their width at any size. Dark tokens follow the app theme (data-theme-resolved). */
+:root {
+  --ico-ink: #2c2c2e;
+  --ico-line: #636366;
+  --ico-glass-rim: #ffffff;
+  --ico-knock: var(--bg-card, #ffffff);
+  --ico-paper: #eceef3;
+  --ico-paper-top: #ffffff;
+  --ico-blue: #007aff;
+  --ico-blue-soft: #b9d8ff;
+  --ico-blue-soft-top: #e6f1ff;
+  --ico-blue-top: #4ea3ff;
+  --ico-blue-deep: #0064d9;
+  --ico-green: #1fa34a;
+  --ico-green-soft: #b6ecc6;
+  --ico-green-soft-top: #e5f8ea;
+  --ico-green-top: #5bd77d;
+  --ico-green-deep: #1f9a45;
+  --ico-red: #e8352b;
+  --ico-red-soft: #ffc0bb;
+  --ico-red-soft-top: #ffe8e6;
+  --ico-red-top: #ff6c62;
+  --ico-red-deep: #de2419;
+  --ico-yellow: #f2b600;
+  --ico-yellow-soft: #ffe58a;
+  --ico-yellow-soft-top: #fff7d1;
+  --ico-yellow-top: #ffdb4d;
+  --ico-yellow-deep: #f2b100;
+  --ico-amber: #ea8600;
+  --ico-amber-soft: #ffd59c;
+  --ico-amber-soft-top: #fff1dd;
+  --ico-amber-top: #ffb340;
+  --ico-amber-deep: #ef7f00;
+  --ico-purple: #a845d6;
+  --ico-purple-soft: #e5c2f7;
+  --ico-purple-soft-top: #f7ebfd;
+  --ico-purple-top: #cb83f2;
+  --ico-purple-deep: #9a3bcc;
+}
+
+:root[data-theme-resolved="dark"] {
+  --ico-ink: #e5e5ea;
+  --ico-line: #aeaeb2;
+  --ico-glass-rim: #6a6a70;
+  --ico-paper: #2b2b2f;
+  --ico-paper-top: #424247;
+  --ico-blue: #4ea1ff;
+  --ico-blue-soft: #1d3f68;
+  --ico-blue-soft-top: #2f5a8f;
+  --ico-blue-top: #5fb0ff;
+  --ico-blue-deep: #0a72e6;
+  --ico-green: #3ad763;
+  --ico-green-soft: #18422a;
+  --ico-green-soft-top: #29613f;
+  --ico-green-top: #5fe285;
+  --ico-green-deep: #21a648;
+  --ico-red: #ff6b62;
+  --ico-red-soft: #4d1f1d;
+  --ico-red-soft-top: #713230;
+  --ico-red-top: #ff8077;
+  --ico-red-deep: #e2352c;
+  --ico-yellow: #ffd60a;
+  --ico-yellow-soft: #4f4213;
+  --ico-yellow-soft-top: #6f5d1c;
+  --ico-yellow-top: #ffe35a;
+  --ico-yellow-deep: #e6b800;
+  --ico-amber: #ffa733;
+  --ico-amber-soft: #4f3514;
+  --ico-amber-soft-top: #71501f;
+  --ico-amber-top: #ffbd5c;
+  --ico-amber-deep: #e88a00;
+  --ico-purple: #d58cff;
+  --ico-purple-soft: #43264f;
+  --ico-purple-soft-top: #613a72;
+  --ico-purple-top: #de9dff;
+  --ico-purple-deep: #a64fdb;
+}
+
+svg.ico {
+  color: var(--ico-ink);
+  flex: none;
+  overflow: visible;
+}
+button:disabled svg.ico,
+[aria-disabled="true"] svg.ico { opacity: 0.4; filter: saturate(0.6); }
+svg.ico * { stroke-width: 0.9; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+svg.ico .thick { stroke-width: 1.3; }
+svg.ico .grip { stroke-width: 1.9; }
+svg.ico .dash { stroke-dasharray: 1.5 1.5; stroke-linecap: butt; }
+svg.ico .ln { opacity: 0.35; }
+svg.ico .o { fill: none; stroke: currentColor; }
+svg.ico .of { fill: url(#ico-g-paper) var(--ico-paper); stroke: var(--ico-line); }
+svg.ico .s { fill: currentColor; stroke: none; }
+svg.ico .w { fill: none; stroke: var(--ico-paper-top); }
+svg.ico .tx { fill: currentColor; stroke: none; }
+svg.ico .txb { fill: url(#ico-g-blue-solid) var(--ico-blue); stroke: none; }
+svg.ico .txb2 { fill: var(--ico-blue); stroke: none; }
+svg.ico .txw { fill: #fff; stroke: none; }
+/* Badges: a ring of the surface colour cuts the badge out of the drawing; its sign is white. */
+svg.ico .knock { fill: var(--ico-knock); stroke: none; }
+svg.ico .wh { fill: none; stroke: #fff; }
+svg.ico .glint { fill: #fff; stroke: none; opacity: 0.85; }
+/* Layers that let what lies under them show through, as stacked glass does. */
+svg.ico .glassy { fill-opacity: 0.78; }
+/* Framed shapes take a hairline; outlines and signs keep the full weight. */
+svg.ico .of, svg.ico .bf, svg.ico .gf, svg.ico .rf, svg.ico .yf, svg.ico .nf, svg.ico .pf { stroke-width: 0.75; }
+svg.ico .b { fill: none; stroke: var(--ico-blue); }
+svg.ico .bf { fill: url(#ico-g-blue-soft) var(--ico-blue-soft); stroke: var(--ico-blue); }
+svg.ico .bs { fill: url(#ico-g-blue-solid) var(--ico-blue); stroke: none; }
+svg.ico .bw { fill: url(#ico-g-blue-soft) var(--ico-blue-soft); stroke: none; }
+svg.ico .g { fill: none; stroke: var(--ico-green); }
+svg.ico .gf { fill: url(#ico-g-green-soft) var(--ico-green-soft); stroke: var(--ico-green); }
+svg.ico .gs { fill: url(#ico-g-green-solid) var(--ico-green); stroke: none; }
+svg.ico .gw { fill: url(#ico-g-green-soft) var(--ico-green-soft); stroke: none; }
+svg.ico .r { fill: none; stroke: var(--ico-red); }
+svg.ico .rf { fill: url(#ico-g-red-soft) var(--ico-red-soft); stroke: var(--ico-red); }
+svg.ico .rs { fill: url(#ico-g-red-solid) var(--ico-red); stroke: none; }
+svg.ico .rw { fill: url(#ico-g-red-soft) var(--ico-red-soft); stroke: none; }
+svg.ico .n { fill: none; stroke: var(--ico-amber); }
+svg.ico .nf { fill: url(#ico-g-amber-soft) var(--ico-amber-soft); stroke: var(--ico-amber); }
+svg.ico .ns { fill: url(#ico-g-amber-solid) var(--ico-amber); stroke: none; }
+svg.ico .nw { fill: url(#ico-g-amber-soft) var(--ico-amber-soft); stroke: none; }
+svg.ico .p { fill: none; stroke: var(--ico-purple); }
+svg.ico .pf { fill: url(#ico-g-purple-soft) var(--ico-purple-soft); stroke: var(--ico-purple); }
+svg.ico .ps { fill: url(#ico-g-purple-solid) var(--ico-purple); stroke: none; }
+svg.ico .pw { fill: url(#ico-g-purple-soft) var(--ico-purple-soft); stroke: none; }
+svg.ico .y { fill: none; stroke: var(--ico-yellow); stroke-width: 2.5; }
+svg.ico .yf { fill: url(#ico-g-yellow-soft) var(--ico-yellow-soft); stroke: var(--ico-amber); }
+svg.ico .ys { fill: url(#ico-g-yellow-solid) var(--ico-yellow); stroke: none; }
+
+/* Notes additions. Pens draw their tip, band or body in the pen's ink. */
+svg.ico .ink { fill: var(--pen-color, currentColor); stroke: none; }
+svg.ico .inkf { fill: var(--pen-color, currentColor); stroke: currentColor; }
+/* A ring of the surface colour under a line drawn across other shapes. */
+svg.ico .halo { fill: none; stroke: var(--ico-knock); stroke-width: 3; }
+/* Badges cut out with the colour of the surface they sit on. */
+.titlebar { --ico-knock: var(--bg-chrome); }
+.menu { --ico-knock: var(--bg-menu); }
+.rb-gallery { --ico-knock: var(--bg-input); }
+@media (forced-colors: active) {
+  svg.ico { forced-color-adjust: auto; }
+}

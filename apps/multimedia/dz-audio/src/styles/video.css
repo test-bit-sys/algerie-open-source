@@ -1,0 +1,198 @@
+/* Video track lane in the multitrack editor and the Video panel. */
+
+/* ------------------------------------------------------------ video lane */
+
+.mt.has-video {
+  grid-template-rows: 34px 26px auto minmax(0, 1fr);
+}
+
+.mt-video-row {
+  display: grid;
+  grid-template-columns: var(--mt-header-w) 4px minmax(0, 1fr) 12px;
+  height: 56px;
+  min-width: 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.mt-video-row[hidden] {
+  display: none;
+}
+
+.mt-video-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 0 4px 0 8px;
+  border-right: 1px solid var(--border);
+  background: var(--bg-track);
+  font-size: var(--fs-sm);
+}
+
+.mt-video-glyph {
+  display: flex;
+  color: var(--text-dim);
+}
+
+.mt-video-label {
+  color: var(--text-strong);
+  font-size: var(--fs-md);
+}
+
+.mt-video-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-dim);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mt-video-gap,
+.mt-video-corner {
+  background: var(--bg-panel);
+}
+
+.mt-video-lane {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--bg-track);
+  touch-action: none;
+  outline: none;
+}
+
+.mt-video-lane:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.mt-video-lane canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+[data-layout='phone'] .mt-video-row {
+  height: 44px;
+}
+
+[data-layout='phone'] .mt-video-name {
+  display: none;
+}
+
+/* ------------------------------------------------------------ video panel */
+
+.video-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--bg-panel);
+}
+
+.video-stage {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #000;
+}
+
+.video-stage[hidden],
+.video-info[hidden],
+.video-empty[hidden] {
+  display: none;
+}
+
+.video-frame {
+  position: relative;
+  flex: none;
+  container-type: size;
+  /* Centered while it fits, scrollable from its top-left corner when zoomed past the panel. */
+  margin: auto;
+}
+
+.video-panel[data-zoom='fit'] .video-frame {
+  width: 100%;
+  height: 100%;
+}
+
+.video-el {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Outside the video clip the picture is black, as on a monitor with no signal. */
+.video-frame.outside .video-el {
+  visibility: hidden;
+}
+
+.video-timecode {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  padding: 0.05em 0.4em;
+  border-radius: var(--radius-sm);
+  background: var(--tc-bg, rgba(0, 0, 0, 0.65));
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  /* Preferences > Video: size is a share of the frame's smaller side. */
+  font-size: max(9px, calc(var(--tc-size, 0.3) * 20cqmin));
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.video-timecode[data-pos^='t'] {
+  top: 8px;
+  bottom: auto;
+}
+
+.video-timecode[data-pos^='m'] {
+  top: 50%;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+}
+
+.video-timecode[data-pos$='l'] {
+  left: 8px;
+  transform: none;
+}
+
+.video-timecode[data-pos$='r'] {
+  left: auto;
+  right: 8px;
+  transform: none;
+}
+
+.video-timecode[data-pos='ml'],
+.video-timecode[data-pos='mr'] {
+  transform: translateY(-50%);
+}
+
+.video-timecode:empty {
+  display: none;
+}
+
+.video-info {
+  flex: none;
+  padding: 3px 8px;
+  overflow: hidden;
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.video-empty p {
+  max-width: 34em;
+  margin: 0;
+}

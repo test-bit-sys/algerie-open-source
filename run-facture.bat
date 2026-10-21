@@ -1,0 +1,19 @@
+@echo off
+title DZ-Facture & POS — The Algerian Sovereign Invoicing & Cash Register Suite
+cd /d "%~dp0\apps\business-enterprise\dz-facture"
+
+echo ================================================================
+echo DZ-Facture & POS — Sovereign Invoicing & Point of Sale Suite
+echo Starting local native server on port 3000...
+echo ================================================================
+
+:: Start node server in background if not already running on port 3000
+powershell -Command "if (!(Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue)) { Start-Process node -ArgumentList 'server.js' -WindowStyle Hidden }"
+
+:: Wait 1 second for port to bind
+timeout /t 1 /nobreak >nul
+
+:: Launch as a Standalone Native Windows Desktop App Window (without browser URL bar)
+start "" msedge.exe --app="http://localhost:3000" --window-size=1440,900 || start "" chrome.exe --app="http://localhost:3000" || start http://localhost:3000
+
+exit

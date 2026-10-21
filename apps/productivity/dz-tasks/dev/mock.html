@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Tasks — dev mock</title>
+  <meta name="theme-color" content="#f7f7f9" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0e0e11" media="(prefers-color-scheme: dark)" />
+  <script>
+    (() => {
+      try {
+        const t = localStorage.getItem('tasks:theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    })();
+  </script>
+  <script src="./puter-mock.js"></script>
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <div id="app" class="app"></div>
+</body>
+</html>

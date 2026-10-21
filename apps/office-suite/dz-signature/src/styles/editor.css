@@ -1,0 +1,445 @@
+/* Prepare/editor view */
+
+/* The side tools precede the pages in the DOM so one-column layouts show
+   them first; desktop pins each part to its column explicitly. */
+.editor-grid {
+  display: grid;
+  /* minmax(0, ...) so a long signer address or field label can't widen the
+     column past the viewport (see .detail-grid). */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+@media (min-width: 980px) {
+  .editor-grid {
+    grid-template-columns: minmax(0, 1fr) 330px;
+    align-items: start;
+  }
+  .editor-main { grid-column: 1; grid-row: 1; }
+  .editor-side {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 26px;
+    max-height: calc(100dvh - 52px);
+    overflow-y: auto;
+  }
+}
+
+.title-input {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: var(--r-sm);
+}
+.title-input:hover { background: var(--surface-2); }
+.title-input:focus-visible { outline: 2px solid var(--accent); background: var(--surface); }
+
+/* Recipient editor rows */
+.recipient-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 0;
+}
+.recipient-row + .recipient-row { border-top: 1px solid var(--hairline); }
+.recipient-row .inputs { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.recipient-row .input { padding: 7px 10px; font-size: 14px; }
+.recipient-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: var(--r-full);
+  flex-shrink: 0;
+}
+.recipient-dot.c1 { background: var(--signer-1); }
+.recipient-dot.c2 { background: var(--signer-2); }
+.recipient-dot.c3 { background: var(--signer-3); }
+.recipient-dot.c4 { background: var(--signer-4); }
+.recipient-dot.c5 { background: var(--signer-5); }
+.recipient-dot.c6 { background: var(--signer-6); }
+
+/* Field palette */
+.palette { display: flex; flex-direction: column; gap: 7px; }
+.palette-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  border: 1px dashed var(--hairline-strong);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  text-align: left;
+}
+.palette-btn:hover { background: var(--surface-2); }
+.palette-btn[aria-pressed="true"] {
+  border: 1.5px solid var(--accent);
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+  padding: 9.5px 11.5px;
+}
+.palette-hint { font-size: 12.5px; color: var(--ink-3); margin-top: 8px; }
+
+/* Signer picker for placement */
+.assignee-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+.assignee-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--hairline-strong);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  max-width: 100%;
+}
+.assignee-chip .truncate { max-width: 140px; }
+.assignee-chip[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: var(--surface-2); }
+
+/* Placement surface */
+/* Jumping from the rail lands the page below the floating toolbar, not under it. */
+.editor-pages .page-frame { touch-action: pan-y; scroll-margin-top: 66px; }
+.editor-pages .page-frame.armed { cursor: crosshair; }
+
+/* Field boxes on pages (editor + read-only preview) */
+.field-box {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1.5px dashed var(--fc, var(--signer-1));
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--fc, var(--signer-1)) 12%, transparent);
+  color: var(--fc, var(--signer-1));
+  font-size: 11px;
+  font-weight: 650;
+  overflow: hidden;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  /* Size container: values inside scale with the box (cqh) at any zoom. */
+  container-type: size;
+}
+
+/* Rubber-band preview while drawing a new field to size. */
+.field-box.ghost {
+  pointer-events: none;
+  border-style: solid;
+}
+.field-box.c1 { --fc: var(--signer-1); }
+.field-box.c2 { --fc: var(--signer-2); }
+.field-box.c3 { --fc: var(--signer-3); }
+.field-box.c4 { --fc: var(--signer-4); }
+.field-box.c5 { --fc: var(--signer-5); }
+.field-box.c6 { --fc: var(--signer-6); }
+.field-box svg { flex-shrink: 0; }
+.field-box .fb-label { overflow: hidden; text-overflow: ellipsis; }
+
+/* Field boxes always sit on white paper: use the LIGHT signer palette there
+   even in dark mode, so contrast against the page holds. */
+.page-frame .field-box.c1 { --fc: #4f46e5; }
+.page-frame .field-box.c2 { --fc: #0f766e; }
+.page-frame .field-box.c3 { --fc: #c2410c; }
+.page-frame .field-box.c4 { --fc: #be185d; }
+.page-frame .field-box.c5 { --fc: #15803d; }
+.page-frame .field-box.c6 { --fc: #7c3aed; }
+
+/* touch-action: none, or a finger drag pans the page (the frame allows
+   pan-y) and pointercancel kills the move mid-drag.
+   overflow stays visible here: the box's overflow:hidden would clip the
+   corner resize handle to an unusable inside sliver (labels ellipsize
+   themselves, so nothing else can spill). */
+.field-box.editable { cursor: grab; touch-action: none; overflow: visible; }
+.field-box.editable:active { cursor: grabbing; }
+.field-box.selected {
+  border-style: solid;
+  outline: 2px solid color-mix(in srgb, var(--fc) 35%, transparent);
+}
+.field-box .resize-handle {
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  width: 15px;
+  height: 15px;
+  border-radius: var(--r-full);
+  background: var(--fc);
+  border: 2.5px solid var(--paper);
+  cursor: nwse-resize;
+  touch-action: none;
+}
+/* The 15px dot is a hard target even with a mouse, and a near-miss moves the
+   field or deselects it. Grow the grab area invisibly, mostly outward so
+   small fields (checkboxes) stay grabbable for moving. */
+.field-box .resize-handle::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -10px;
+  bottom: -10px;
+}
+/* A 15px handle is nearly impossible to grab with a finger. */
+@media (pointer: coarse) {
+  .field-box .resize-handle {
+    right: -12px;
+    bottom: -12px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Completed values rendered into boxes (read-only preview + signing) */
+.field-box.filled {
+  border-style: solid;
+  border-color: transparent;
+  background: transparent;
+}
+.field-box.filled img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.field-box.filled .fb-text {
+  color: #14141f;
+  font-size: 13px;
+  font-size: clamp(9px, 62cqh, 26px);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* The rail and the field toolbar travel together at the top of the pages
+   column. The rail is in flow (it has height); the toolbar's anchor is
+   zero-height inside the same sticky block, so the toolbar floats over the
+   pages just under the rail without either measuring the other, and
+   appearing never pushes the document down (the field just clicked would
+   jump away from the pointer). */
+.editor-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 31;
+}
+.field-toolbar-anchor {
+  position: relative;
+  z-index: 30;
+  height: 0;
+}
+.field-toolbar-anchor .field-toolbar { margin-top: 8px; }
+.field-toolbar {
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: 0 6px 20px rgba(16, 16, 18, 0.12);
+}
+.field-toolbar .ft-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.field-toolbar .select { padding: 6px 30px 6px 10px; font-size: 13px; width: auto; }
+.field-toolbar .ft-row [aria-expanded="true"] svg { transform: rotate(180deg); }
+
+/* The disclosure: what the signer is asked for, and what the sender already
+   knows. Two columns where there is room, one on a phone. */
+.ft-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 11px;
+  padding-top: 11px;
+  border-top: 1px solid var(--hairline);
+}
+@media (min-width: 620px) {
+  .ft-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.ft-field > label {
+  display: block;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--ink-2);
+  margin-bottom: 4px;
+}
+.ft-field .select-wrap .select { width: 100%; }
+.ft-field .small { margin-top: 4px; }
+.ft-field .field-error { font-size: 12px; }
+.input-sm { padding: 7px 10px; font-size: 13.5px; }
+
+/* Upload dropzone */
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 44px 20px;
+  border-radius: var(--r-lg);
+  border: 1.5px dashed var(--hairline-strong);
+  color: var(--ink-2);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  width: 100%;
+}
+.dropzone:hover, .dropzone.over { border-color: var(--accent); background: var(--accent-wash); }
+.dropzone svg { color: var(--ink-3); }
+.dropzone .dz-title { font-weight: 650; color: var(--ink); }
+.dropzone .dz-sub { font-size: 13px; color: var(--ink-3); }
+
+/* Sequential signing: position badges and the reorder arrows */
+.order-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  color: var(--ink-2);
+  font-size: 11.5px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.order-arrows { display: flex; flex-direction: column; flex-shrink: 0; }
+.order-arrows .icon-btn { width: 26px; height: 22px; border-radius: 6px; }
+/* One chevron asset, pointed both ways: the pair reads as a spinner control. */
+.order-arrows .order-up svg { transform: rotate(180deg); }
+@media (pointer: coarse) {
+  .order-arrows .icon-btn { width: 34px; height: 30px; }
+}
+.order-toggle {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+}
+
+/* Files being merged into one document */
+.file-list { display: flex; flex-direction: column; margin-top: 12px; }
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+}
+.file-row + .file-row { border-top: 1px solid var(--hairline); }
+.file-row .file-icon { color: var(--ink-3); flex-shrink: 0; }
+.file-row.bad .file-icon { color: var(--danger); }
+.file-row .file-name {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-row .file-meta { font-size: 12.5px; color: var(--ink-3); }
+.file-row.bad .file-meta { color: var(--danger); }
+
+/* The page rail: thumbnails for jumping around, and page fixes on a draft */
+.page-rail {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+}
+.rail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+.rail-title {
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+}
+.rail-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  /* Room for the focus ring on a thumbnail at either end. */
+  padding: 4px;
+  margin: -4px;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+.rail-item { flex-shrink: 0; width: 76px; }
+.rail-jump { display: block; width: 100%; text-align: center; }
+/* A fixed box, not a fixed aspect: a page rotated to landscape must not make
+   its own thumbnail (and the numbers and tools under it) a different height
+   from every other one. The page letterboxes inside instead. */
+.rail-thumb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 98px;
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.rail-thumb canvas { width: auto; height: auto; max-width: 100%; max-height: 100%; }
+.rail-item.active .rail-thumb {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-wash);
+}
+.rail-num { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-3); margin-top: 3px; }
+.rail-item.active .rail-num { color: var(--accent-strong); }
+.rail-tools {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-top: 2px;
+}
+.rail-tools .icon-btn { width: 19px; height: 24px; border-radius: 5px; }
+.rail-tools .icon-btn.danger { color: var(--danger); }
+.rail-tools .icon-btn svg { width: 13px; height: 13px; }
+@media (pointer: coarse) {
+  .rail-item { width: 92px; }
+  .rail-thumb { height: 116px; }
+  .rail-tools .icon-btn { width: 23px; height: 30px; }
+}
+
+/* The size readout, live while resizing */
+.ft-size {
+  font-variant-numeric: tabular-nums;
+  padding: 2px 7px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+
+/* A field lined up on another one, or on the grid */
+.snap-guide {
+  position: absolute;
+  background: var(--accent);
+  pointer-events: none;
+  z-index: 5;
+}
+.snap-guide.x { top: 0; bottom: 0; width: 1px; }
+.snap-guide.y { left: 0; right: 0; height: 1px; }
+
+/* Several fields at once: every one ringed, the reference one more strongly */
+.field-box.selected:not(.primary) {
+  border-style: solid;
+  outline: 2px dashed color-mix(in srgb, var(--fc) 45%, transparent);
+}
+.field-box.selected.primary {
+  outline: 2px solid color-mix(in srgb, var(--fc) 55%, transparent);
+}
+/* Only the reference field shows a resize handle: dragging a group's handle
+   would beg the question of which one it resizes. */
+.field-box.selected:not(.primary) .resize-handle { display: none; }
+
+/* The rail collapses to its own header, so a phone keeps its screen */
+.page-rail.collapsed .rail-strip { display: none; }
+.page-rail .rail-collapse svg { transition: transform 0.15s ease; }
+.page-rail.collapsed .rail-collapse svg { transform: rotate(-90deg); }

@@ -1,0 +1,110 @@
+/**
+ * DZ Sovereign UI Design System & Topbar Styles
+ * الأنماط البصرية الموحدة للمنظومة الجزائرية المفتوحة المصدر
+ */
+
+:root {
+  --dz-primary: #006233;
+  --dz-primary-light: #008746;
+  --dz-primary-dark: #004524;
+  --dz-accent-red: #d21034;
+  --dz-accent-gold: #eab308;
+  --dz-bg-dark: #0b1322;
+  --dz-bg-card: #152238;
+  --dz-text-main: #f8fafc;
+  --dz-text-muted: #94a3b8;
+  --dz-border: rgba(255, 255, 255, 0.12);
+  --dz-font-arabic: 'Cairo', 'Amiri', system-ui, -apple-system, sans-serif;
+  --dz-font-mono: 'JetBrains Mono', monospace;
+}
+
+#dz-sovereign-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  background: linear-gradient(90deg, #062215 0%, #0a192f 50%, #062215 100%);
+  border-bottom: 2px solid #008746;
+  color: #ffffff;
+  font-family: var(--dz-font-arabic);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  user-select: none;
+}
+
+.dz-topbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dz-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.dz-flag {
+  font-size: 20px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.dz-title-ar {
+  letter-spacing: 0.3px;
+  color: #f1f5f9;
+}
+
+.dz-badge-sovereign {
+  background: rgba(0, 98, 51, 0.4);
+  border: 1px solid #00a854;
+  color: #4ade80;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.dz-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dz-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--dz-border);
+  color: #f8fafc;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dz-btn:hover {
+  background: rgba(0, 135, 70, 0.3);
+  border-color: #008746;
+  color: #ffffff;
+}
+
+.dz-btn-home {
+  background: #006233;
+  border-color: #008746;
+}
+
+.dz-btn-home:hover {
+  background: #008746;
+}

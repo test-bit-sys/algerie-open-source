@@ -1,0 +1,403 @@
+/* Documents list */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: 13px 15px;
+  text-align: left;
+  transition: border-color 0.15s ease;
+}
+.stat-tile:hover { border-color: var(--hairline-strong); }
+.stat-tile .num { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.stat-tile .lbl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+  margin-top: 1px;
+}
+.stat-tile[aria-pressed="true"] { border-color: var(--accent); }
+.stat-tile[aria-pressed="true"] .lbl { color: var(--accent-strong); }
+
+.search-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+.search-wrap svg {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
+  pointer-events: none;
+}
+.search-wrap .input { padding-left: 40px; border-radius: var(--r-md); }
+
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 0;
+  list-style: none;
+}
+.doc-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  text-align: left;
+  width: 100%;
+}
+.doc-row:hover { border-color: var(--hairline-strong); background: var(--surface-2); }
+.doc-row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  flex-shrink: 0;
+}
+.doc-row-title {
+  font-size: 15px;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.doc-row-meta {
+  font-size: 13px;
+  color: var(--ink-3);
+  margin-top: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  /* A block, not a flex container: text-overflow has nothing to ellipsize in
+     a flex container, so the line was cut mid-character ("Updated 5h a")
+     while the title right above it ellipsized. */
+  text-overflow: ellipsis;
+}
+.doc-row-side {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+@media (max-width: 560px) {
+  .doc-row-side .avatar-stack { display: none; }
+  /* Icon-only status chip: the row's accessible name still carries the
+     status, and the meta line carries the progress. */
+  .doc-row-side .chip span { display: none; }
+  .doc-row-side .chip { padding: 5px 6px; }
+}
+
+/* Document detail */
+
+.detail-grid {
+  display: grid;
+  /* minmax(0, ...), not 1fr: a plain 1fr column is at least as wide as its
+     widest min-content (a long address, a nowrap button label), which pushes
+     the whole page wider than the phone it is on. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+/* One column: what you came for (status, actions, signers) reads first,
+   then the pages, then the long tail (message, activity, danger zone).
+   The side column dissolves so its cards can be ordered around the pages;
+   the grid gap replaces their stacking margins. */
+@media (max-width: 979px) {
+  .detail-side { display: contents; }
+  .detail-side > * { order: 3; }
+  .detail-side > .detail-top { order: 1; }
+  .detail-main { order: 2; }
+  .detail-side .card + .card { margin-top: 0; }
+  .detail-side > .sample-banner { margin-bottom: 0; }
+}
+@media (min-width: 980px) {
+  .detail-grid {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    align-items: start;
+  }
+  .detail-side { position: sticky; top: 26px; }
+}
+
+.signer-row {
+  display: flex;
+  align-items: center;
+  /* Tight row gap: when the actions wrap they should read as part of this
+     signer's block, not as a row of their own. */
+  gap: 4px 11px;
+  padding: 11px 0;
+  /* In a 340px column the chip and the per-signer actions leave the address
+     ~90px, i.e. "priya.nair@..."; let the actions drop to their own line
+     instead of squeezing the one thing that identifies the signer. */
+  flex-wrap: wrap;
+}
+.signer-row + .signer-row { border-top: 1px solid var(--hairline); }
+/* A basis (not 0) is what makes the line wrap at all: with flex-basis 0 the
+   row has no width to overflow and everything stays crammed on one line. */
+.signer-row .who { flex: 1 1 130px; min-width: 0; }
+.signer-row .who .nm { font-size: 14px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.signer-row .who .em { font-size: 12.5px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* A timestamp ellipsized mid-value ("Signed Aug 19, 2026, 3:...") loses the
+   part that matters, so this line wraps instead of truncating. */
+.signer-row .who .em.when { white-space: normal; }
+.signer-row .acts { display: flex; gap: 2px; margin-left: auto; }
+
+.audit-list { list-style: none; margin: 0; padding: 0; }
+.audit-item {
+  position: relative;
+  padding: 0 0 16px 22px;
+  font-size: 13.5px;
+}
+.audit-item::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-full);
+  background: var(--ink-3);
+}
+.audit-item.ok::before { background: var(--ok); }
+.audit-item.danger::before { background: var(--danger); }
+.audit-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 16px;
+  bottom: 2px;
+  width: 1px;
+  background: var(--hairline-strong);
+}
+.audit-item .when { color: var(--ink-3); font-size: 12px; margin-top: 1px; }
+
+.decline-note {
+  margin-top: 6px;
+  padding: 9px 12px;
+  border-radius: var(--r-sm);
+  background: var(--danger-wash);
+  color: var(--danger);
+  font-size: 13px;
+}
+
+/* Page preview strip (detail + editor share page frames) */
+.pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.page-frame {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: 4px;
+  width: 100%;
+  /* The paper is white in both themes; without this, dark mode renders the
+     native controls inside field boxes (checkboxes) dark-on-white. */
+  color-scheme: light;
+}
+/* The frame's aspect-ratio matches the page, so filling it keeps the canvas
+   and the overlay's fraction-positioned field boxes aligned through resizes. */
+.page-frame canvas { width: 100%; height: 100%; border-radius: 3px; }
+.page-num {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  transform: translateY(-100%);
+  padding: 2px 4px;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+/* Settings */
+
+.settings-list { display: flex; flex-direction: column; }
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 2px;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+}
+.settings-row:hover { text-decoration: none; }
+.settings-row + .settings-row { border-top: 1px solid var(--hairline); }
+.settings-row .title { font-size: 14.5px; font-weight: 600; }
+.settings-row .sub { font-size: 13px; color: var(--ink-3); }
+
+.sig-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 74px;
+  padding: 10px;
+  border-radius: var(--r-md);
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+}
+.sig-preview img { max-height: 60px; }
+
+.onboard-h { font-size: 19px; margin-bottom: 8px; }
+.onboard-p { color: var(--ink-2); font-size: 14px; margin-bottom: 16px; }
+
+/* Templates: rows in the new-document sheet and the manage dialog */
+
+.tpl-list { display: flex; flex-direction: column; gap: 8px; }
+.tpl-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.tpl-row:hover { border-color: var(--hairline-strong); background: var(--surface-2); }
+.tpl-use {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  text-align: left;
+}
+.tpl-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+  flex-shrink: 0;
+}
+.tpl-name {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tpl-meta {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tpl-go { color: var(--ink-3); flex-shrink: 0; }
+.tpl-acts { display: flex; gap: 1px; padding-right: 6px; flex-shrink: 0; }
+/* The row is the primary target; the chevron would read as a second one. */
+.tpl-acts + .tpl-use .tpl-go, .tpl-row:has(.tpl-acts) .tpl-go { display: none; }
+
+/* "or upload a PDF" divider between the two ways to start a document */
+.or-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+.or-rule::before, .or-rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--hairline);
+}
+
+/* One role's people fields in the "new from template" sheet */
+.role-row {
+  padding: 12px 0;
+}
+.role-row + .role-row { border-top: 1px solid var(--hairline); }
+.role-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+.role-head .role-name {
+  font-size: 14px;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.role-inputs { display: flex; flex-direction: column; gap: 9px; }
+
+/* Sequential signing: the "in order / waiting on X" line */
+.order-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: -4px 0 8px;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink-3);
+}
+.order-note svg { flex-shrink: 0; margin-top: 2px; }
+.signer-row .order-badge { margin-right: -4px; }
+
+/* The document fingerprint: a digest is read in groups, not as prose. */
+.fingerprint {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  word-break: break-all;
+}
+.signer-row .em.when.evidence {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ink-3);
+}
+.signer-row .em.when.evidence svg { flex-shrink: 0; }
+
+/* "Email me when" rows: a checkbox with a two-line label */
+.notify-row {
+  align-items: flex-start;
+  gap: 11px;
+  padding: 10px 0;
+}
+.notify-row + .notify-row { border-top: 1px solid var(--hairline); }
+.notify-row input { margin-top: 2px; }
+.notify-row .title { display: block; font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.notify-row .sub { display: block; font-size: 12.5px; color: var(--ink-3); }
+
+/* Timing card: deadline and reminder schedule */
+.timing-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 5px 0;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+.timing-row svg { flex-shrink: 0; margin-top: 2px; color: var(--ink-3); }

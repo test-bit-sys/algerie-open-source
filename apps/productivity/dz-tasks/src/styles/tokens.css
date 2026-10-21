@@ -1,0 +1,180 @@
+/* Design tokens — light is the default; dark overrides via media query
+   (system) and via [data-theme] stamps set by the in-app theme toggle,
+   which must win in both directions. Flat surfaces separated by hairlines;
+   no gradients, no box shadows. */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces & ink (cool neutrals) */
+  --page: #f7f7f9;
+  --surface: #fdfdfe;
+  --surface-2: #efeff3;
+  --surface-3: #e5e5ea;
+  --ink: #121216;
+  --ink-2: #4f4f58;
+  --ink-3: #6b6b75; /* tertiary text: must hold 4.5:1 on page + surface */
+  --hairline: rgba(18, 18, 22, 0.1);
+  --hairline-strong: rgba(18, 18, 22, 0.18);
+  --scrim: rgba(18, 18, 22, 0.44);
+
+  /* Accent (brand purple, from the app icon). --accent-text is the same hue
+     darkened to hold 4.5:1 as small text on --page and --surface; fills and
+     white-on-accent buttons use the exact brand value. */
+  --accent: #af2aff;
+  --accent-strong: #9814ec;
+  --accent-text: #9814ec;
+  --accent-ink: #ffffff;
+  --accent-wash: rgba(175, 42, 255, 0.1);
+  /* Text selection needs far more contrast than a decorative wash: at the
+     wash's alpha, selected text sat ~1.3:1 against the page and read as
+     unselected. ~1.8:1 here, with body text still above 9:1 on top. */
+  --select-bg: rgba(175, 42, 255, 0.38);
+
+  /* Swipe-to-complete hint. Its own green, not --ok: --ok is tuned to be
+     read as text on the page, and in dark mode it is light enough that
+     the hint's white icon fell to 2.45:1 on it. These two are fixed in
+     both themes so the white icon clears 3:1 armed and un-armed. */
+  --swipe-ok: #1c7c33;
+  --swipe-ok-soft: #5ca16c;
+
+  /* Status */
+  --danger: #b02a2a;
+  --danger-wash: rgba(176, 42, 42, 0.09);
+  --ok: #1c7c33;
+
+  /* Priority (always paired with a flag icon or label, never color alone) */
+  --p3: #c03535;
+  --p2: #a36407;
+  --p1: #2a6fc4;
+  --p0: #6b6b75;
+  --p3-wash: rgba(192, 53, 53, 0.1);
+  --p2-wash: rgba(163, 100, 7, 0.12);
+  --p1-wash: rgba(42, 111, 196, 0.1);
+  --p0-wash: rgba(107, 107, 117, 0.1);
+
+  /* List color slots (match Lucide-stroke swatches in both themes) */
+  --slot-1: #af2aff;
+  --slot-2: #b3438f;
+  --slot-3: #1b8a68;
+  --slot-4: #b26a00;
+  --slot-5: #2a6fc4;
+  --slot-6: #c03535;
+  --slot-7: #4f52c9;
+  --slot-8: #4b7a1f;
+
+  /* Shape */
+  --r-sm: 9px;
+  --r-md: 13px;
+  --r-lg: 18px;
+  --r-full: 999px;
+
+  /* Type */
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Layout */
+  --sidebar-w: 250px;
+  --content-max: 860px;
+  --tabbar-h: 62px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+  /* Landscape on a notched phone puts the sensor housing and the rounded
+     corners over the left/right edges; viewport-fit=cover means the page
+     must inset itself. */
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Dark values, applied by OS preference unless the app stamped light. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0e0e11;
+    --surface: #19191e;
+    --surface-2: #232329;
+    --surface-3: #2d2d34;
+    --ink: #f4f4f6;
+    --ink-2: #b9b9c2;
+    --ink-3: #94949e;
+    --hairline: rgba(244, 244, 246, 0.1);
+    --hairline-strong: rgba(244, 244, 246, 0.2);
+    --scrim: rgba(0, 0, 0, 0.6);
+
+    --accent: #c678ff;
+    --accent-strong: #d49aff;
+    --accent-text: #c678ff;
+    --accent-ink: #14061f;
+    --accent-wash: rgba(198, 120, 255, 0.16);
+    --select-bg: rgba(198, 120, 255, 0.38);
+    --swipe-ok-soft: #1b602d;
+
+    --danger: #e57373;
+    --danger-wash: rgba(229, 115, 115, 0.12);
+    --ok: #58b96c;
+
+    --p3: #e57373;
+    --p2: #d9a04a;
+    --p1: #6ea8e8;
+    --p0: #94949e;
+    --p3-wash: rgba(229, 115, 115, 0.13);
+    --p2-wash: rgba(217, 160, 74, 0.14);
+    --p1-wash: rgba(110, 168, 232, 0.13);
+    --p0-wash: rgba(148, 148, 158, 0.13);
+
+    --slot-1: #c678ff;
+    --slot-2: #dc7ab8;
+    --slot-3: #3fb391;
+    --slot-4: #d99a3d;
+    --slot-5: #6ea8e8;
+    --slot-6: #e57373;
+    --slot-7: #898cf0;
+    --slot-8: #8ab55c;
+  }
+}
+
+/* Explicit in-app toggle: dark stamp wins over OS-light. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e0e11;
+  --surface: #19191e;
+  --surface-2: #232329;
+  --surface-3: #2d2d34;
+  --ink: #f4f4f6;
+  --ink-2: #b9b9c2;
+  --ink-3: #94949e;
+  --hairline: rgba(244, 244, 246, 0.1);
+  --hairline-strong: rgba(244, 244, 246, 0.2);
+  --scrim: rgba(0, 0, 0, 0.6);
+
+  --accent: #c678ff;
+  --accent-strong: #d49aff;
+  --accent-text: #c678ff;
+  --accent-ink: #14061f;
+  --accent-wash: rgba(198, 120, 255, 0.16);
+  --select-bg: rgba(198, 120, 255, 0.38);
+  --swipe-ok-soft: #1b602d;
+
+  --danger: #e57373;
+  --danger-wash: rgba(229, 115, 115, 0.12);
+  --ok: #58b96c;
+
+  --p3: #e57373;
+  --p2: #d9a04a;
+  --p1: #6ea8e8;
+  --p0: #94949e;
+  --p3-wash: rgba(229, 115, 115, 0.13);
+  --p2-wash: rgba(217, 160, 74, 0.14);
+  --p1-wash: rgba(110, 168, 232, 0.13);
+  --p0-wash: rgba(148, 148, 158, 0.13);
+
+  --slot-1: #c678ff;
+  --slot-2: #dc7ab8;
+  --slot-3: #3fb391;
+  --slot-4: #d99a3d;
+  --slot-5: #6ea8e8;
+  --slot-6: #e57373;
+  --slot-7: #898cf0;
+  --slot-8: #8ab55c;
+}

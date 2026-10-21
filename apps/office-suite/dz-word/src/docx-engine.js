@@ -74,7 +74,7 @@ class MiniZip {
       v.setUint16(6, 0x0800, true);     // flags (UTF-8 filename)
       v.setUint16(8, 0, true);          // compression method: 0 (Store)
       v.setUint16(10, dosTime, true);
-      v.setUint12(12, dosDate, true);
+      v.setUint16(12, dosDate, true);
       v.setUint32(14, f.crc, true);
       v.setUint32(18, f.size, true);    // compressed size
       v.setUint32(22, f.size, true);    // uncompressed size
@@ -459,6 +459,9 @@ function generateDocxBlob(htmlContent, options = {}) {
   return zip.buildBlob();
 }
 
+  if (typeof globalThis !== 'undefined') {
+    globalThis.generateDocxBlob = generateDocxBlob;
+  }
   if (typeof window !== 'undefined') {
     window.generateDocxBlob = generateDocxBlob;
   }

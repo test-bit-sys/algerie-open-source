@@ -231,11 +231,18 @@ export class DZBoardsApp {
     });
 
     // Add Checklist item inside modal
-    document.getElementById('btnAddChecklistInputBtn')?.addEventListener('click', () => {
+    const handleAddChecklist = () => {
       const inp = document.getElementById('newChecklistInput');
       if (inp && inp.value.trim()) {
         this.addModalChecklistItem(inp.value.trim());
         inp.value = '';
+      }
+    };
+    document.getElementById('btnAddChecklistInputBtn')?.addEventListener('click', handleAddChecklist);
+    document.getElementById('newChecklistInput')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleAddChecklist();
       }
     });
 

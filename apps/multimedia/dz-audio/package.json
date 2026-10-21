@@ -1,0 +1,29 @@
+{
+  "name": "audio-studio",
+  "version": "2.0.0",
+  "description": "Audio Studio: a waveform and multitrack audio editor on Puter. Record, edit, restore, mix and master audio in the browser, stored in your own cloud.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build:wasm": "node tools/build-wasm.mjs",
+    "check:licenses": "node tools/check-licenses.mjs",
+    "prebuild": "npm run check:licenses"
+  },
+  "dependencies": {
+    "@breezystack/lamejs": "1.2.7",
+    "lucide": "1.54.0"
+  },
+  "devDependencies": {
+    "jsdom": "30.1.2",
+    "vite": "8.3.4",
+    "vitest": "5.0.3"
+  }
+}

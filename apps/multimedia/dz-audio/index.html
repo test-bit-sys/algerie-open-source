@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" data-theme-resolved="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Resolve the theme before first paint to avoid a flash.
+      try {
+        var t = (JSON.parse(localStorage.getItem('audio-studio:prefs') || '{}').theme) || 'system';
+        var dark = t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.themeResolved = dark ? 'dark' : 'light';
+      } catch (e) {}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#161616" />
+    <title>DZ-Audio Studio | استوديو الهندسة الصوتية والتسجيل الجزائري</title>
+    <meta name="description" content="استوديو متكامل لهندسة الصوت، التسجيل، الميكساج، المؤثرات، وتحرير المسارات المتعددة، محلياً 100% دون خوادم خارجية." />
+    <meta name="keywords" content="audio editor, multitrack, algeria open source, صوتيات الجزائر, هندسة صوتية" />
+    <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="./favicon-16x16.png" type="image/png" sizes="16x16" />
+    <link rel="icon" href="./favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="./favicon-48x48.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="../../../packages/dz-runtime/dz-runtime.css" />
+    <link rel="stylesheet" href="./src/styles/tokens.css" />
+    <link rel="stylesheet" href="./src/styles/base.css" />
+    <link rel="stylesheet" href="./src/styles/shell.css" />
+    <link rel="stylesheet" href="./src/styles/panels.css" />
+    <link rel="stylesheet" href="./src/styles/editor.css" />
+    <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
+  </head>
+  <body>
+    <div id="app" class="app"></div>
+    <noscript>Audio Studio needs JavaScript to run.</noscript>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

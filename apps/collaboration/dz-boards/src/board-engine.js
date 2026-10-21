@@ -115,13 +115,27 @@ export class BoardEngine {
   }
 
   deleteCard(columnId, cardId) {
-    const col = this.board.columns.find(c => c.id === columnId);
-    if (!col) return;
-    const idx = col.cards.findIndex(c => c.id === cardId);
-    if (idx !== -1) {
-      col.cards.splice(idx, 1);
-      this.saveToStorage();
+    if (columnId) {
+      const col = this.board.columns.find(c => c.id === columnId);
+      if (col) {
+        const idx = col.cards.findIndex(c => c.id === cardId);
+        if (idx !== -1) {
+          col.cards.splice(idx, 1);
+          this.saveToStorage();
+          return true;
+        }
+      }
     }
+    // Fallback: search across all columns
+    for (const col of this.board.columns) {
+      const idx = col.cards.findIndex(c => c.id === cardId);
+      if (idx !== -1) {
+        col.cards.splice(idx, 1);
+        this.saveToStorage();
+        return true;
+      }
+    }
+    return false;
   }
 
   moveCard(cardId, fromColumnId, toColumnId, targetIndex = -1) {
@@ -236,9 +250,9 @@ export class BoardEngine {
     return JSON.stringify(this.board, null, 2);
   }
 
-  importJSON(jsonString) {
+  importJSON(jsonInput) {
     try {
-      const data = JSON.parse(jsonString);
+      const data = typeof jsonInput === 'string' ? JSON.parse(jsonInput) : jsonInput;
       if (data && data.columns && Array.isArray(data.columns)) {
         this.board = data;
         this.saveToStorage();

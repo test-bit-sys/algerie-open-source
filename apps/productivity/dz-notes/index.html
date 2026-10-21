@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>DZ-Notes | المفكرة والسبورة الرقمية الجزائرية</title>
+  <meta name="description" content="مفكرة رقمية سيادية: دفاتر، أقسام، صفحات، رسوم حرة، وسوم، وقوائم مهام، مع حفظ محلي آمن 100% دون خوادم سحابية." />
+  <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1c1c1c" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../../packages/dz-runtime/dz-runtime.css" />
+  <link rel="stylesheet" href="./src/styles/tokens.css" />
+  <link rel="stylesheet" href="./src/styles/icons.css" />
+  <link rel="stylesheet" href="./src/styles/components.css" />
+  <link rel="stylesheet" href="./src/styles/shell.css" />
+  <link rel="stylesheet" href="./src/styles/page.css" />
+  <link rel="stylesheet" href="./src/styles/features.css" />
+  <script>
+    // Apply the saved theme before first paint so there is no flash.
+    (() => {
+      let t = 'system';
+      try { t = localStorage.getItem('notes:theme') || 'system'; } catch {}
+      const dark = t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+      const root = document.documentElement;
+      root.dataset.theme = t;
+      root.dataset.themeResolved = dark ? 'dark' : 'light';
+    })();
+  </script>
+  <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
+  <script type="module" src="./src/main.js"></script>
+</head>
+<body>
+  <!-- Glass fills for the command icons (src/styles/icons.css, shared with the Spreadsheet app): top-lit gradients whose stops are the
+       --ico-* tokens, so every theme retints them. Not display:none, which would disable the gradients. -->
+  <svg class="ico-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <linearGradient id="ico-g-paper" x1="0" y1="0" x2="0" y2="1"><stop offset="0.25" style="stop-color:var(--ico-paper-top)"/><stop offset="1" style="stop-color:var(--ico-paper)"/></linearGradient>
+      <linearGradient id="ico-g-blue-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-glass-rim)"/><stop offset="0.3" style="stop-color:var(--ico-blue-soft-top)"/><stop offset="1" style="stop-color:var(--ico-blue-soft)"/></linearGradient>
+      <linearGradient id="ico-g-blue-solid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-blue-top)"/><stop offset="1" style="stop-color:var(--ico-blue-deep)"/></linearGradient>
+      <linearGradient id="ico-g-green-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-glass-rim)"/><stop offset="0.3" style="stop-color:var(--ico-green-soft-top)"/><stop offset="1" style="stop-color:var(--ico-green-soft)"/></linearGradient>
+      <linearGradient id="ico-g-green-solid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-green-top)"/><stop offset="1" style="stop-color:var(--ico-green-deep)"/></linearGradient>
+      <linearGradient id="ico-g-red-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-glass-rim)"/><stop offset="0.3" style="stop-color:var(--ico-red-soft-top)"/><stop offset="1" style="stop-color:var(--ico-red-soft)"/></linearGradient>
+      <linearGradient id="ico-g-red-solid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-red-top)"/><stop offset="1" style="stop-color:var(--ico-red-deep)"/></linearGradient>
+      <linearGradient id="ico-g-yellow-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-glass-rim)"/><stop offset="0.3" style="stop-color:var(--ico-yellow-soft-top)"/><stop offset="1" style="stop-color:var(--ico-yellow-soft)"/></linearGradient>
+      <linearGradient id="ico-g-yellow-solid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-yellow-top)"/><stop offset="1" style="stop-color:var(--ico-yellow-deep)"/></linearGradient>
+      <linearGradient id="ico-g-amber-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-glass-rim)"/><stop offset="0.3" style="stop-color:var(--ico-amber-soft-top)"/><stop offset="1" style="stop-color:var(--ico-amber-soft)"/></linearGradient>
+      <linearGradient id="ico-g-amber-solid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-amber-top)"/><stop offset="1" style="stop-color:var(--ico-amber-deep)"/></linearGradient>
+      <linearGradient id="ico-g-purple-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-glass-rim)"/><stop offset="0.3" style="stop-color:var(--ico-purple-soft-top)"/><stop offset="1" style="stop-color:var(--ico-purple-soft)"/></linearGradient>
+      <linearGradient id="ico-g-purple-solid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ico-purple-top)"/><stop offset="1" style="stop-color:var(--ico-purple-deep)"/></linearGradient>
+    </defs>
+  </svg>
+  <div id="app" class="app" aria-busy="true"></div>
+  <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

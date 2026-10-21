@@ -1,0 +1,492 @@
+/* Buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: var(--r-md);
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active:not(:disabled) { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.btn-primary:hover:not(:disabled) { filter: brightness(1.06); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--hairline-strong);
+}
+.btn-ghost:hover:not(:disabled) { background: var(--surface-2); }
+
+.btn-soft {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.btn-soft:hover:not(:disabled) { background: var(--surface-3); }
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border-color: var(--hairline-strong);
+}
+.btn-danger:hover:not(:disabled) { background: var(--danger-wash); border-color: var(--danger); }
+
+.btn-block { display: flex; width: 100%; }
+.btn-sm { padding: 6px 12px; font-size: 13px; border-radius: var(--r-sm); }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  transition: background 0.15s ease, color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.icon-btn:hover:not(:disabled) { background: var(--surface-2); color: var(--ink); }
+
+/* On touch, 36px is under the 44px comfortable-tap minimum. */
+@media (pointer: coarse) {
+  .icon-btn { width: 44px; height: 44px; }
+}
+
+/* Form fields */
+
+.field { margin-bottom: 14px; }
+.field > label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 5px;
+}
+
+.input, .select, .textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 15px;
+}
+.input::placeholder, .textarea::placeholder { color: var(--ink-3); }
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  border-color: transparent;
+}
+.textarea { resize: vertical; min-height: 70px; }
+/* A disabled control has to LOOK disabled: your own email row in the signer
+   list, or the message field while a send is in flight, were pixel-identical
+   to editable ones and only revealed themselves when typing did nothing. */
+.input:disabled, .select:disabled, .textarea:disabled {
+  background: var(--surface-2);
+  color: var(--ink-2);
+  -webkit-text-fill-color: var(--ink-2);
+  border-color: var(--hairline);
+  cursor: not-allowed;
+}
+
+.select-wrap { position: relative; }
+.select { appearance: none; padding-right: 34px; }
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  width: 8px; height: 8px;
+  border-right: 1.6px solid var(--ink-3);
+  border-bottom: 1.6px solid var(--ink-3);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.field-error {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: var(--danger);
+}
+
+/* Checkbox row */
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.check-row input { width: 17px; height: 17px; accent-color: var(--accent); margin: 0; }
+.check-row:has(input:disabled) { cursor: default; }
+
+/* Segmented control */
+.seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  gap: 2px;
+}
+.seg button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.seg button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  padding: 5px 12px;
+}
+
+/* Chips (status) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chip.neutral { background: var(--surface-2); color: var(--ink-2); }
+.chip.info { background: var(--info-wash); color: var(--info); }
+.chip.ok { background: var(--ok-wash); color: var(--ok); }
+.chip.warn { background: var(--warn-wash); color: var(--warn); }
+.chip.danger { background: var(--danger-wash); color: var(--danger); }
+
+/* Filter chips */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  /* The focus ring extends 4px past a chip (2px outline + 2px offset);
+     anything less gets clipped by this scroll container. */
+  padding: 4px;
+  margin: -2px;
+  scrollbar-width: none;
+}
+.filter-row::-webkit-scrollbar { display: none; }
+.filter-chip {
+  padding: 6px 14px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--hairline-strong);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.filter-chip[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--page);
+}
+
+/* Avatars */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1.5px solid var(--surface);
+}
+.avatar.c1 { background: var(--signer-1); color: var(--paper); }
+.avatar.c2 { background: var(--signer-2); color: var(--paper); }
+.avatar.c3 { background: var(--signer-3); color: var(--paper); }
+.avatar.c4 { background: var(--signer-4); color: var(--paper); }
+.avatar.c5 { background: var(--signer-5); color: var(--paper); }
+.avatar.c6 { background: var(--signer-6); color: var(--paper); }
+:root[data-theme="dark"] .avatar[class*="c"] { color: var(--page); }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .avatar[class*="c"] { color: var(--page); }
+}
+.avatar-stack { display: inline-flex; }
+.avatar-stack .avatar:not(:first-child) { margin-left: -9px; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: 18px;
+}
+.card + .card { margin-top: 14px; }
+.card-title {
+  font-size: 13px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+
+/* Modal: bottom sheet on mobile, centered dialog on desktop */
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  animation: fade-in 0.2s ease;
+}
+.modal-panel {
+  position: relative;
+  width: 100%;
+  max-height: calc(100dvh - 40px - var(--safe-t));
+  overflow-y: auto;
+  /* A panel scrolled to its end must not hand the rest of the gesture to the
+     page behind it. */
+  overscroll-behavior: contain;
+  background: var(--surface);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  padding: 6px 18px calc(18px + var(--safe-b));
+  animation: sheet-up 0.28s var(--ease-spring);
+}
+.sheet-handle {
+  width: 38px;
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--hairline-strong);
+  margin: 6px auto 2px;
+}
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0 14px;
+}
+.modal-title { font-size: 17px; font-weight: 650; }
+.modal-message { color: var(--ink-2); font-size: 14px; margin-bottom: 18px; }
+.modal-root.closing .modal-panel { animation: sheet-down 0.2s ease forwards; }
+.modal-root.closing .modal-scrim { animation: fade-out 0.2s ease forwards; }
+
+@media (min-width: 640px) {
+  .modal-root { align-items: center; padding: 24px; }
+  .modal-panel {
+    width: 440px;
+    max-height: calc(100dvh - 80px);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--hairline);
+    padding: 4px 22px 22px;
+    animation: dialog-in 0.22s var(--ease-spring);
+  }
+  .modal-panel.wide { width: 720px; }
+  .sheet-handle { display: none; }
+  .modal-head { padding-top: 16px; }
+  .modal-root.closing .modal-panel { animation: fade-out 0.15s ease forwards; }
+}
+
+@keyframes sheet-up { from { transform: translateY(100%); } }
+@keyframes sheet-down { to { transform: translateY(100%); } }
+@keyframes dialog-in { from { opacity: 0; transform: scale(0.97); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+
+body.modal-open { overflow: hidden; }
+
+/* Toasts */
+.toast-root {
+  position: fixed;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+}
+@media (min-width: 900px) {
+  .toast-root { bottom: 24px; }
+}
+/* Signing screens keep a fixed footer (progress + Finish); toasts land on
+   top of it otherwise, covering the very controls the toast talks about.
+   sign.html mounts the footer at the bottom edge; in-shell self-signing
+   stacks it above the mobile tab bar (see .shell .sign-footer). The offset
+   clears the footer at its tallest, which is when the progress row wraps
+   above the buttons on a narrow screen. */
+body:has(.sign-footer) .toast-root { bottom: calc(118px + var(--safe-b)); }
+body:has(.shell .sign-footer) .toast-root { bottom: calc(var(--tabbar-h) + var(--safe-b) + 118px); }
+@media (min-width: 900px) {
+  body:has(.shell .sign-footer) .toast-root { bottom: 92px; }
+}
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 16px;
+  border-radius: var(--r-full);
+  background: var(--ink);
+  color: var(--page);
+  font-size: 13.5px;
+  font-weight: 550;
+  max-width: 100%;
+  animation: toast-in 0.25s var(--ease-spring);
+}
+.toast svg { flex-shrink: 0; }
+.toast.leaving { animation: toast-out 0.2s ease forwards; }
+.toast-action {
+  font-weight: 700;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-left: 2px;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(6px); } }
+
+/* Menus (kebab dropdowns) */
+.menu-wrap { position: relative; }
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  /* Above the mobile tab bar (50), which otherwise covers a menu opened on
+     one of the last rows; still below dialogs and toasts. */
+  z-index: 55;
+  min-width: 210px;
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-md);
+  padding: 5px;
+  animation: dialog-in 0.15s ease;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 11px;
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--ink);
+  text-align: left;
+}
+.menu-item:hover { background: var(--surface-2); }
+.menu-item.danger { color: var(--danger); }
+.menu-item svg { color: var(--ink-3); flex-shrink: 0; }
+.menu-item.danger svg { color: var(--danger); }
+.menu-sep { height: 1px; background: var(--hairline); margin: 5px 8px; }
+/* Opened on a row near the bottom of the screen, the menu flips above its
+   trigger rather than hanging off the end of the page. */
+.menu.up { top: auto; bottom: calc(100% + 6px); }
+
+/* Empty states */
+.empty {
+  text-align: center;
+  padding: 44px 20px;
+  color: var(--ink-2);
+}
+.empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+.empty h3 { color: var(--ink); margin-bottom: 6px; }
+.empty p { font-size: 14px; max-width: 340px; margin: 0 auto; }
+
+/* Sample data banner */
+.sample-banner {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  padding: 9px 14px;
+  border-radius: var(--r-md);
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+  font-size: 13.5px;
+  font-weight: 550;
+}
+.sample-banner button {
+  font-weight: 700;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+
+/* Skeleton shimmer for loading rows */
+.skeleton {
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  animation: boot-pulse 1.4s ease-in-out infinite;
+}
+
+/* Access codes: one row per signer while sending, and once after */
+.code-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+.code-row + .code-row { border-top: 1px solid var(--hairline); }
+.code-row > label { font-size: 14px; font-weight: 550; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.code-input {
+  width: 130px;
+  flex-shrink: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 7px 8px;
+}
+.code-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 5px 10px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  user-select: all;
+}

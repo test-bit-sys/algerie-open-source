@@ -1,0 +1,154 @@
+/* Design tokens. Light is the default; dark applies via media query (system)
+   and via [data-theme] stamps set by the in-app toggle, which must win in
+   both directions. Depth comes from hairlines and surface steps, not
+   shadows or gradients. */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces & ink (cool neutrals) */
+  --page: #f8f8f9;
+  --surface: #fdfdfd;
+  --surface-2: #efeff1;
+  --surface-3: #e5e5e9;
+  --ink: #0b0b0c;
+  --ink-2: #505056;
+  /* Tertiary ink carries real text (entry meta, stat labels); it must hold
+     4.5:1 on --page, --surface, and --surface-2. */
+  --ink-3: #67676e;
+  --hairline: rgba(11, 11, 12, 0.1);
+  --hairline-strong: rgba(11, 11, 12, 0.17);
+  --scrim: rgba(11, 11, 12, 0.44);
+
+  /* Accent (brand violet #5428e1; 7.5:1 with white ink, 7.4:1 as text on
+     the light surfaces) */
+  --accent: #5428e1;
+  --accent-strong: #4521b9;
+  --accent-ink: #ffffff;
+  --accent-wash: rgba(84, 40, 225, 0.1);
+
+  /* Status (reserved, never used as series colors). Critical carries ink
+     of its own because a filled destructive button needs 4.5:1 against
+     the fill in both themes, the same way the accent does. */
+  --critical: #d03b3b;
+  --critical-strong: #b32f2f;
+  --critical-ink: #ffffff;
+  --warning: #e08e00;
+  --good: #0ca30c;
+
+  /* The same three states as TEXT. The fills above are tuned to carry ink
+     on top of them, and as ink themselves they fall short of the 4.5:1
+     real text needs on the light surfaces: raw --warning holds 2.6:1, and
+     each state's own chip tint takes its color down to 3.9-4.4:1. A step
+     toward --ink buys the contrast, and since --ink flips with the theme
+     the same expression darkens on paper-light and lightens on dark, so
+     these are declared once. Measured on --page, --surface, and each
+     chip's tint: nothing below 4.9:1. */
+  --ink-warning: color-mix(in srgb, var(--warning) 60%, var(--ink));
+  --ink-critical: color-mix(in srgb, var(--critical) 75%, var(--ink));
+  --ink-good: color-mix(in srgb, var(--good) 60%, var(--ink));
+
+  /* Categorical series slots (validated palette, fixed order); client
+     colors are assigned from these and follow the client, never its rank. */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-8: #e34948;
+
+  /* Shape */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-full: 999px;
+
+  /* Type */
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Layout */
+  --sidebar-w: 244px;
+  --content-max: 980px;
+  --tabbar-h: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Dark values, applied by OS preference unless the app stamped light. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0e0e10;
+    --surface: #1a1a1d;
+    --surface-2: #232327;
+    --surface-3: #2c2c31;
+    --ink: #ffffff;
+    --ink-2: #c2c2c8;
+    --ink-3: #8f8f96;
+    --hairline: rgba(255, 255, 255, 0.1);
+    --hairline-strong: rgba(255, 255, 255, 0.18);
+    --scrim: rgba(0, 0, 0, 0.6);
+
+    /* Brand violet stepped lighter for dark surfaces (6.2:1 on --surface). */
+    --accent: #a18bf0;
+    --accent-strong: #b3a1f4;
+    --accent-ink: #17123c;
+    --accent-wash: rgba(161, 139, 240, 0.16);
+
+    /* Red stepped lighter for dark surfaces, so its ink goes dark too
+       (white on it holds only 3.2:1). */
+    --critical: #e66767;
+    --critical-strong: #f08585;
+    --critical-ink: #2a0e0e;
+    --warning: #eda100;
+    --good: #0ca30c;
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #008300;
+    --series-7: #9085e9;
+    --series-8: #e66767;
+  }
+}
+
+/* Explicit in-app toggle: dark stamp wins over OS-light. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e0e10;
+  --surface: #1a1a1d;
+  --surface-2: #232327;
+  --surface-3: #2c2c31;
+  --ink: #ffffff;
+  --ink-2: #c2c2c8;
+  --ink-3: #8f8f96;
+  --hairline: rgba(255, 255, 255, 0.1);
+  --hairline-strong: rgba(255, 255, 255, 0.18);
+  --scrim: rgba(0, 0, 0, 0.6);
+
+  --accent: #a18bf0;
+  --accent-strong: #b3a1f4;
+  --accent-ink: #17123c;
+  --accent-wash: rgba(161, 139, 240, 0.16);
+
+  --critical: #e66767;
+  --critical-strong: #f08585;
+  --critical-ink: #2a0e0e;
+  --warning: #eda100;
+  --good: #0ca30c;
+
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+}

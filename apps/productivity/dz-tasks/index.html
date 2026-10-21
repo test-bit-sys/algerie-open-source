@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>DZ-Tasks | منظومة تخطيط وإدارة المشاريع والمهام</title>
+  <meta name="description" content="منظومة إدارة المهام والمشاريع: لوحات تفاعلية، تذكيرات متكررة، أولويات، مهام فرعية، وتزامن تقويم محلي 100% دون خوادم سحابية." />
+  <meta name="theme-color" content="#f7f7f9" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0e0e11" media="(prefers-color-scheme: dark)" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="DZ-Tasks" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="../../../packages/dz-runtime/dz-runtime.css" />
+  <link rel="stylesheet" href="./src/styles/index.css" />
+  <script>
+    // Apply the saved theme before first paint to avoid a flash.
+    (() => {
+      try {
+        const t = localStorage.getItem('tasks:theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    })();
+  </script>
+  <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
+  <script type="module" src="./src/main.js"></script>
+</head>
+<body>
+  <div id="app" class="app"></div>
+</body>
+</html>

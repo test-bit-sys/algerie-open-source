@@ -1,0 +1,225 @@
+/* App shell: sidebar on desktop, tab bar on mobile */
+
+.shell {
+  display: flex;
+  min-height: 100dvh;
+}
+
+.sidebar {
+  display: none;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: 2px;
+  padding: 18px 14px;
+  border-right: 1px solid var(--hairline);
+  background: var(--surface);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 4px 10px 18px;
+}
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.app-icon {
+  display: block;
+  user-select: none;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 10px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav-item:hover { background: var(--surface-2); text-decoration: none; }
+.nav-item.active { background: var(--accent-wash); color: var(--accent-strong); }
+.nav-item svg { flex-shrink: 0; }
+.nav-item span { flex: 1; }
+
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sidebar-spacer { flex: 1; }
+
+.sidebar-new { margin: 6px 2px 14px; padding: 11px; }
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 6px 2px;
+  border-top: 1px solid var(--hairline);
+}
+.sidebar-user .name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+/* Main column */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 18px 16px calc(var(--tabbar-h) + var(--safe-b) + 84px);
+}
+.main-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+/* Top bar inside views */
+.view-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+/* Titles come from file names, which can be one long unbroken word;
+   without a break opportunity they force the whole page to pan sideways. */
+.view-head h1 { overflow-wrap: anywhere; }
+/* Only a title that is itself a flex item of the head claims the row: the
+   detail and signing heads nest theirs inside .grow, where a min-width wider
+   than that column pushes the title out under the status chip. */
+.view-head > h1 { flex: 1; min-width: 200px; }
+/* On a phone a chip beside the title leaves it a third of the row, so it
+   takes a line of its own. The wrapper is what claims the line: a chip with
+   flex-basis 100% would stretch into a full-width pill. */
+.view-head-status { display: flex; }
+@media (max-width: 560px) {
+  .view-head-status { flex-basis: 100%; }
+}
+
+/* Mobile tab bar */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  height: calc(var(--tabbar-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  background: var(--surface);
+  border-top: 1px solid var(--hairline);
+}
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-item:hover { text-decoration: none; }
+.tab-item.active { color: var(--accent-strong); }
+
+/* Floating action button (mobile) */
+.fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 16px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-lg);
+  background: var(--accent);
+  color: var(--accent-ink);
+  transition: transform 0.15s var(--ease-spring);
+}
+.fab:active { transform: scale(0.94); }
+
+@media (min-width: 900px) {
+  .sidebar { display: flex; }
+  .tabbar, .fab { display: none; }
+  .main { padding: 26px 32px 60px; }
+}
+
+/* Auth / intro page */
+.auth-view {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 22px;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.auth-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 22px;
+}
+.auth-title { font-size: 27px; margin-bottom: 10px; }
+.auth-sub { color: var(--ink-2); font-size: 15.5px; margin-bottom: 28px; }
+.auth-features {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 100%;
+  margin-bottom: 30px;
+  text-align: left;
+}
+.auth-feature {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 15px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.auth-feature svg { color: var(--accent-strong); flex-shrink: 0; }
+.auth-cta { width: 100%; padding: 13px; font-size: 15px; }
+.auth-note { margin-top: 18px; font-size: 13px; color: var(--ink-3); }

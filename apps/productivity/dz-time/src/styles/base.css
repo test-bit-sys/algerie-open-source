@@ -1,0 +1,307 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* The UA's [hidden] rule loses to any author display rule (flex buttons,
+   grid controls); scripts that set .hidden must always win. */
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Reserve the scrollbar gutter so the bar appearing/disappearing (window
+     resize, modal open) never shifts the centered layout horizontally. */
+  scrollbar-gutter: stable;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--page);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* iOS zooms the page in when a field holding text smaller than 16px takes
+   focus, and leaves it zoomed: tapping the task box on the timer pushed
+   the layout half out of the viewport and left the user pinching their way
+   back before they could read anything. 16px is the size that keeps the
+   page still, and the fields have the room for it. any-pointer rather than
+   pointer, because an iPad with a trackpad reports a fine pointer and
+   still has the touchscreen that does this. */
+@media (any-pointer: coarse) {
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+svg {
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-wash);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- App shell ---------- */
+
+.app {
+  min-height: 100dvh;
+}
+
+/* Visible only while focused; first thing keyboard users reach. */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  inset-inline-start: 10px;
+  z-index: 80;
+  padding: 10px 16px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  transform: translateY(-250%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* The skip target: focus lands here by script, no ring needed. */
+.main:focus-visible {
+  outline: none;
+}
+
+/* The boot splash is styled inline in index.html so it is correct before
+   this stylesheet loads. */
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+.main {
+  padding: calc(12px + var(--safe-t)) 16px calc(var(--tabbar-h) + var(--safe-b) + 88px);
+  max-width: var(--content-max);
+  width: 100%;
+  margin: 0 auto;
+  min-width: 0;
+}
+
+.view {
+  animation: view-in 0.28s var(--ease-spring);
+}
+
+@keyframes view-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Sidebar (desktop) */
+.sidebar {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .shell {
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    padding: 20px 14px;
+    border-inline-end: 1px solid var(--hairline);
+    background: var(--surface);
+  }
+
+  .main {
+    padding: 28px 32px 64px;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px 22px;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-item:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.nav-item.active {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.nav-item svg {
+  flex: none;
+}
+
+.sidebar-spacer {
+  flex: 1;
+}
+
+.sidebar-add {
+  margin: 0 4px 8px;
+}
+
+/* Signed-in user, pinned under the primary action. */
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 4px 0;
+  padding: 12px 6px 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.sidebar-user .user-avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 13.5px;
+}
+
+.sidebar-user .name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bottom tab bar (mobile) */
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  height: calc(var(--tabbar-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--hairline);
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+  transition: color 0.15s, transform 0.1s;
+}
+
+.tab-item:active {
+  transform: scale(0.94);
+}
+
+.tab-item.active {
+  color: var(--accent);
+}
+
+/* Floating action button. A solid accent disc on a hairline ring reads as
+   raised without a shadow. */
+.fab {
+  position: fixed;
+  inset-inline-end: 18px;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 18px);
+  z-index: 41;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent-strong);
+  display: grid;
+  place-items: center;
+  transition: transform 0.15s var(--ease-spring);
+}
+
+.fab:active {
+  transform: scale(0.92);
+}
+
+/* Desktop: sidebar navigation replaces the tab bar + FAB. Kept after their
+   base rules so it wins at equal specificity. */
+@media (min-width: 900px) {
+  .tabbar, .fab {
+    display: none;
+  }
+}

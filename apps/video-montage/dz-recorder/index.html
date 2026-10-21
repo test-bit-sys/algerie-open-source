@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Recorder | استوديو تسجيل الشاشة والدروس الجزائري</title>
+  <meta name="description" content="أداة سيادية جزائرية خفيفة لتسجيل الشاشة، كاميرا الويب، والصوت مع الرسم والشرح المباشر وتصدير الفيديو محلياً 100%.">
+  <link rel="stylesheet" href="../../packages/dz-runtime/dz-runtime.css">
+  <link rel="stylesheet" href="./src/style.css">
+  <script src="../../packages/dz-runtime/dz-runtime.js"></script>
+</head>
+<body class="dz-dark">
+  <header class="app-header">
+    <div class="header-left">
+      <div class="app-logo">🎥</div>
+      <div>
+        <h1 class="app-title">DZ-Recorder <span class="tag">النسخة السيادية</span></h1>
+        <p class="app-subtitle">استوديو تسجيل الشاشة والشروحات المرئية - 100% محلي دون خوادم</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-indicator" id="recStatus">
+        <span class="status-dot"></span>
+        <span class="status-text" id="statusText">جاهز للتسجيل</span>
+        <span class="timer-display" id="timerDisplay">00:00:00</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <!-- لوحة التحكم الجانبية -->
+    <aside class="sidebar">
+      <div class="control-section">
+        <h3>مصادر الإدخال</h3>
+        <div class="source-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="chkScreen" checked>
+            <span>🖥️ شاشة العرض / النافذة</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="chkCamera" checked>
+            <span>📷 كاميرا الويب (PiP)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="chkMic" checked>
+            <span>🎙️ ميكروفون الصوت</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="chkSysAudio" checked>
+            <span>🔊 صوت النظام الداخلي</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <h3>جودة الفيديو</h3>
+        <select id="videoQuality" class="dz-select">
+          <option value="1080">Full HD (1080p 60fps)</option>
+          <option value="720" selected>HD (720p 30fps) - متوازن</option>
+          <option value="480">SD (480p) - حجم خفيف</option>
+        </select>
+      </div>
+
+      <div class="control-section">
+        <h3>أدوات الرسم والشرح</h3>
+        <div class="annotation-tools">
+          <button class="tool-btn active" data-tool="none" title="بدون رسم">👆 مؤشر</button>
+          <button class="tool-btn" data-tool="pen" title="قلم حر">✏️ قلم</button>
+          <button class="tool-btn" data-tool="arrow" title="سهم توضيحي">➡️ سهم</button>
+          <button class="tool-btn" data-tool="rect" title="مستطيل تحديد">⬜ مستطيل</button>
+          <button class="tool-btn" data-tool="clear" id="btnClearCanvas" title="مسح الرسومات">🗑️ مسح</button>
+        </div>
+        <div class="color-picker-row">
+          <button class="color-swatch active" style="background:#ef4444" data-color="#ef4444"></button>
+          <button class="color-swatch" style="background:#10b981" data-color="#10b981"></button>
+          <button class="color-swatch" style="background:#3b82f6" data-color="#3b82f6"></button>
+          <button class="color-swatch" style="background:#f59e0b" data-color="#f59e0b"></button>
+          <button class="color-swatch" style="background:#ffffff" data-color="#ffffff"></button>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button id="btnStart" class="btn btn-record">
+          <span class="icon">⏺</span> بدء التسجيل
+        </button>
+        <button id="btnPause" class="btn btn-pause" disabled>
+          <span class="icon">⏸</span> إيقاف مؤقت
+        </button>
+        <button id="btnStop" class="btn btn-stop" disabled>
+          <span class="icon">⏹</span> إنهاء وحفظ
+        </button>
+      </div>
+    </aside>
+
+    <!-- مساحة العرض والمعاينة المباشرة -->
+    <section class="preview-area">
+      <div class="stage-container" id="stageContainer">
+        <video id="screenVideo" autoplay playsinline muted></video>
+        <video id="cameraVideo" autoplay playsinline muted class="camera-overlay hidden"></video>
+        <canvas id="drawingCanvas"></canvas>
+        <div id="noSourcePlaceholder" class="placeholder">
+          <div class="placeholder-icon">🎥</div>
+          <h2>استوديو التسجيل الجزائري جاهز</h2>
+          <p>اضغط على "بدء التسجيل" لاختيار الشاشة وتصوير الدروس والمحاضرات محلياً</p>
+        </div>
+      </div>
+
+      <!-- مشغل ومعالج المونتاج بعد التسجيل -->
+      <div id="editorPanel" class="editor-panel hidden">
+        <div class="editor-header">
+          <h3>معاينة وتصدير المقطع المسجل</h3>
+          <span class="file-size-badge" id="recordedSize">0 MB</span>
+        </div>
+        <div class="video-preview-wrapper">
+          <video id="playbackVideo" controls class="playback-video"></video>
+        </div>
+        <div class="editor-actions">
+          <div class="trim-controls">
+            <label>قص البداية (ثوانٍ): <input type="number" id="trimStart" value="0" min="0" step="1"></label>
+            <label>قص النهاية (ثوانٍ): <input type="number" id="trimEnd" value="0" min="0" step="1"></label>
+          </div>
+          <div class="export-buttons">
+            <button id="btnDownloadWebM" class="btn btn-success">
+              ⬇️ تحميل الفيديو (WebM)
+            </button>
+            <button id="btnNewRecord" class="btn btn-secondary">
+              🔄 تسجيل مقطع جديد
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./src/app.js"></script>
+</body>
+</html>

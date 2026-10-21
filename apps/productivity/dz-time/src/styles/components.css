@@ -1,0 +1,1274 @@
+/* ---------- Page furniture ---------- */
+
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 6px 0 18px;
+}
+
+.page-head-split {
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.page-sub {
+  color: var(--ink-3);
+  font-size: 13.5px;
+  margin-top: 2px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 650;
+  margin: 22px 0 10px;
+}
+
+.section-title.accent {
+  color: var(--accent);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Three header actions outgrow a phone in one line; they wrap as a unit
+   and keep their end alignment when they do. */
+.head-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.row-end {
+  justify-content: flex-end;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: var(--r-sm);
+  font-weight: 600;
+  font-size: 14.5px;
+  border: 1px solid transparent;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent-strong);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+  border-color: var(--hairline-strong);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+/* A ghost button acting as a toggle shows its state, like the icon-button
+   toggles do: aria-pressed alone is invisible to everyone looking at the
+   screen. Used by the print sheets (Amounts, Notes) and by Select in the
+   timesheet search. */
+.btn.active-toggle {
+  background: var(--accent-wash);
+  color: var(--accent);
+  border-color: transparent;
+}
+
+.btn-danger {
+  background: var(--critical);
+  color: var(--critical-ink);
+  border-color: var(--critical-strong);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--critical-strong);
+}
+
+.btn-danger-ghost {
+  color: var(--critical);
+  border-color: transparent;
+  margin-top: 6px;
+}
+
+.btn-danger-ghost:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--critical) 10%, transparent);
+  color: var(--critical);
+}
+
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+.btn-tall {
+  padding: 13px 16px;
+}
+
+.btn-slim {
+  position: relative;
+  padding: 7px 12px;
+  font-size: 13.5px;
+}
+
+/* A slim button is a line of text tall: comfortable under a cursor, about
+   three quarters of a fingertip under a thumb. Same invisible pad the icon
+   buttons get, out to 44px. Vertical only, because these sit in rows that
+   wrap, where a sideways pad would reach into the button beside it; the
+   rows that wrap take the row gap those pads need. (The pad is measured
+   from the padding box, so the button's 1px border comes off it: 6px here
+   buys 5px past the button.) */
+@media (pointer: coarse) {
+  .btn-slim::after {
+    content: '';
+    position: absolute;
+    inset: -6px 0;
+  }
+}
+
+.btn-dashed {
+  border-style: dashed;
+}
+
+.icon-btn {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  transition: background 0.15s, color 0.15s;
+}
+
+.icon-btn:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.icon-btn.bordered {
+  border: 1px solid var(--hairline-strong);
+}
+
+/* A 36px box is comfortable under a cursor and too small under a
+   fingertip. On touch, grow the hit area rather than the button: an
+   invisible 44x44 pad centred on it moves no pixel of layout, and the
+   icon buttons sit in 8px-and-wider gaps, so no two pads overlap. */
+@media (pointer: coarse) {
+  .icon-btn::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+  }
+}
+
+/* ---------- Forms ---------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Phones stack the pairs. The break used to sit at 420px, which still
+   paired fields on the 421-480px phones, where a half-width select gets
+   some 130px for its text and a native select cuts what does not fit:
+   "Per month (retainer)" and "Monthly, from the 25th" lost their endings
+   on a 430px screen. 480px is where the other phone breakpoints in this
+   stylesheet already sit, and above it a pair leaves each select room
+   for the longest option in the app. */
+@media (max-width: 480px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.field-hint {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+/* A hint that is a caution rather than an explanation: an overlap that is
+   probably a typo but might be the truth. The words carry it; the colour
+   only draws the eye. Warning as ink, not the fill: the raw token holds
+   2.6:1 on these surfaces, which is a caution nobody can read. */
+.field-warn {
+  color: var(--ink-warning);
+}
+
+.field-error {
+  font-size: 13px;
+  color: var(--critical);
+  margin: 6px 0 0;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  color: var(--ink);
+  min-height: 42px;
+}
+
+.input::placeholder {
+  color: var(--ink-3);
+}
+
+.input:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: transparent;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.select-wrap {
+  position: relative;
+}
+
+.select {
+  appearance: none;
+  padding-inline-end: 34px;
+}
+
+.select-wrap::after {
+  content: '';
+  position: absolute;
+  inset-inline-end: 13px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-inline-end: 2px solid var(--ink-3);
+  border-block-end: 2px solid var(--ink-3);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+/* Switch (a real checkbox underneath) */
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.switch-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 28px;
+  flex: none;
+}
+
+.switch-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.switch-thumb {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  border: 1px solid var(--hairline-strong);
+  transition: background 0.18s, border-color 0.18s;
+  pointer-events: none;
+}
+
+.switch-thumb::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  transition: transform 0.18s var(--ease-spring);
+}
+
+.switch-input:checked + .switch-thumb {
+  background: var(--accent);
+  border-color: var(--accent-strong);
+}
+
+.switch-input:checked + .switch-thumb::after {
+  transform: translateX(18px);
+}
+
+.switch-input:focus-visible + .switch-thumb {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Segmented control */
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  gap: 2px;
+}
+
+.segmented button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.segmented button:hover {
+  color: var(--ink);
+}
+
+.segmented button.active {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  padding: 6px 12px;
+}
+
+/* The scrollbar is hidden here by design, which left anything past the
+   right edge both invisible and unhinted: on a phone the range control cut
+   "Last month" mid-word and pushed "Custom", the only route to an
+   arbitrary range, off screen with nothing to say it existed. Wrapping
+   shows every option instead; wrap only engages when a line overflows, so
+   wider screens are untouched, and the scroll stays as a fallback for a
+   single option too wide to wrap. */
+.seg-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-wrap: wrap;
+}
+
+.seg-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* An option is the shortest control in the app, and these are the controls
+   a phone reaches for most: week or month, the report ranges, the theme.
+   The same invisible pad out to 44px, growing up and down where nothing
+   else tappable sits and only a pixel into the 2px gaps between options,
+   so no two pads overlap sideways. The range control needs two changes of
+   its own: its rows sit 2px apart when they wrap, far less than the pads
+   need, and it is the one control here that scrolls, which means it clips,
+   so the pads only have the room its padding gives them. */
+@media (pointer: coarse) {
+  .segmented button::after {
+    content: '';
+    position: absolute;
+    inset: -6px -1px;
+  }
+
+  .seg-scroll {
+    padding-block: 6px;
+    row-gap: 14px;
+  }
+}
+
+/* Color swatches */
+.swatch-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-full);
+  border: 2px solid transparent;
+  transition: transform 0.12s;
+}
+
+.swatch:hover {
+  transform: scale(1.08);
+}
+
+.swatch.active {
+  border-color: var(--ink);
+  outline: 2px solid var(--surface);
+  outline-offset: -4px;
+}
+
+/* The selected swatch draws its inner ring with `outline`, and at that
+   specificity it also beat the global focus ring. The picker is a radio
+   group, so the selected swatch is its only tab stop: keyboard focus
+   landed there with nothing at all to show for it. Focus takes the
+   outline back, and the ink border still says which one is selected. */
+.swatch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.color-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--r-full);
+  flex: none;
+}
+
+/* Chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border-radius: var(--r-full);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.chip-plain {
+  background: var(--surface-2);
+  color: var(--ink-2);
+  margin-inline-start: 8px;
+  padding: 2px 8px;
+  font-size: 11.5px;
+}
+
+.chip-invoiced {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+/* The invoice-state filter sits between the outstanding tiles and the
+   list, with the breathing room a section break needs. */
+.invoice-filter-row {
+  margin: 4px 0 12px;
+}
+
+/* Invoice payment states. The word carries the state; color only
+   reinforces it. */
+.chip-paid {
+  background: color-mix(in srgb, var(--good) 14%, var(--surface));
+  color: var(--ink-good);
+}
+
+.chip-overdue {
+  background: color-mix(in srgb, var(--critical) 14%, var(--surface));
+  color: var(--ink-critical);
+}
+
+.chip-partial {
+  background: color-mix(in srgb, var(--warning) 18%, var(--surface));
+  color: var(--ink-warning);
+}
+
+/* A section heading inside a sheet, above a list the sheet also acts on. */
+.sheet-section {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 18px 0 8px;
+}
+
+.chip-action {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  color: var(--ink-2);
+  padding: 7px 13px;
+  font-size: 13px;
+  transition: background 0.15s, color 0.15s;
+}
+
+/* Resuming yesterday's work is a one-tap job, so the chip that does it
+   gets the same 44px pad. Vertical only, and the row it wraps in gets the
+   gap those pads need. */
+@media (pointer: coarse) {
+  .chip-action::after {
+    content: '';
+    position: absolute;
+    inset: -6px 0;
+  }
+
+  .chip-row {
+    row-gap: 12px;
+  }
+}
+
+.chip-action:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Cards & lists ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+}
+
+/* Rows paint their own hover and selection fills edge to edge, so the card
+   has to clip them: unclipped, the first and last row's square fill sat on
+   top of the card's rounded corners and squared them off. */
+.list-card {
+  overflow: hidden;
+}
+
+.list-card > * + * {
+  border-top: 1px solid var(--hairline);
+}
+
+/* Stat tiles */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0 6px;
+}
+
+.stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Four tiles (reports add utilization); pairs up on narrow screens. */
+.stat-row-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 640px) {
+  .stat-row-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Quiet comparison / context line under a stat value. */
+/* Several currencies in one stat tile: stacked one per line, a notch
+   smaller, so the tile's single-line ellipsis cannot hide an amount.
+   A single currency never gets this treatment. */
+.money-stack {
+  display: flex;
+  flex-direction: column;
+  white-space: normal;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+/* The sub line names what a number is measured against ("−7h 15m vs last
+   week to date"), so clipping it to one line threw away the half that
+   carries the meaning: below desktop every comparison tile read "vs last
+   week t…". It wraps instead. The tiles are grid siblings, so they still
+   come out the same height as each other. */
+.stat-sub {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink-3);
+  margin-top: 3px;
+}
+
+/* Weekly-target progress inside a stat tile: quiet by design. */
+.stat-value-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.target-track {
+  height: 4px;
+  margin-top: 8px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.target-bar {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  transition: width 0.3s var(--ease-spring);
+}
+
+.target-bar.met {
+  background: var(--good);
+}
+
+/* Three money-and-duration tiles stop fitting side by side around 360px:
+   "28h 55m" came out "28h 5…" and a two-currency amount lost the end of
+   both figures, which is the one thing the tile exists to show. Below that
+   they pair up instead, and the odd tile out takes the full width. */
+@media (max-width: 360px) {
+  .stat-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat-row > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-row {
+    gap: 7px;
+  }
+
+  .stat-tile {
+    padding: 10px 11px;
+  }
+
+  /* No nowrap here: three tiles across a phone leave each label about
+     85px, and "Oldest overdue" needs more than that even at this size, so
+     it ran off the tile and was clipped to "OLDEST OVERDU" with nothing to
+     say a word was missing. Wrapping keeps every word; the tiles are grid
+     siblings, so the row stays one height and only the value under a
+     two-line label sits a line lower. */
+  .stat-label {
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+}
+
+/* Empty states */
+.empty {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--ink-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.empty h3 {
+  color: var(--ink);
+  font-size: 17px;
+}
+
+.empty p {
+  max-width: 380px;
+  font-size: 14px;
+}
+
+.empty-slim {
+  padding: 18px;
+  border: 1px dashed var(--hairline-strong);
+  border-radius: var(--r-md);
+}
+
+.empty-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-full);
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+/* Offline banner: the one status that stays put, so it sits at the top of
+   the bottom stack — clear of the FAB, which it otherwise cut across and
+   stole taps from, and clear of the toasts that pass underneath it. */
+.offline-banner {
+  position: fixed;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 84px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100vw - 32px);
+  padding: 8px 14px;
+  border-radius: var(--r-full);
+  background: var(--ink);
+  color: var(--page);
+  font-size: 12.5px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+/* The message is the flex item that has to give, like the toast's is:
+   text-overflow needs a block container, so on the banner itself it
+   clipped the sentence off mid-word with no ellipsis at all. */
+.offline-banner span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* No FAB and no tab bar here, so the banner only has to clear a toast. */
+@media (min-width: 900px) {
+  .offline-banner {
+    bottom: 74px;
+  }
+}
+
+/* Sample-data banner */
+.sample-banner {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 13px;
+  margin-bottom: 14px;
+  border-radius: var(--r-sm);
+  background: var(--accent-wash);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sample-banner button {
+  position: relative;
+  font-weight: 700;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+
+.sample-banner-ic {
+  display: grid;
+  place-items: center;
+}
+
+/* User chip / avatar */
+.user-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  flex: none;
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+}
+
+.user-chip .title {
+  font-weight: 650;
+}
+
+.user-chip .sub,
+.settings-row .sub {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* Settings */
+.settings-group {
+  margin: 0 0 26px;
+}
+
+.settings-group-title {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 10px;
+}
+
+.settings-group .form-grid,
+.settings-group .field {
+  margin-bottom: 12px;
+}
+
+.settings-list {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.settings-list > * + * {
+  border-top: 1px solid var(--hairline);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 13px 14px;
+  text-align: start;
+  transition: background 0.15s;
+}
+
+.settings-row:hover {
+  background: var(--surface-2);
+}
+
+/* The list clips to its rounded corners, so an outset ring on a
+   full-width row is cut away on three sides and reads as a stray
+   underline. Drawn inside, the whole ring survives the clip. */
+.settings-row:focus-visible {
+  outline-offset: -2px;
+}
+
+.settings-row .title {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.settings-row-ic {
+  color: var(--ink-2);
+  display: grid;
+  place-items: center;
+}
+
+.settings-row-chev {
+  color: var(--ink-3);
+}
+
+/* Backup snapshot rows: plain rows with their own action buttons. */
+.backup-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 9px 8px 9px 14px;
+}
+
+.backup-row .title {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.backup-row .sub {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* Invoice logo picker: preview beside its actions, so what will print is
+   visible next to the button that changes it. */
+.logo-field {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+/* The preview sits on white whatever the theme is: a logo drawn for paper
+   often has dark ink and no background of its own, and a dark surface
+   would hide exactly what is about to be printed. */
+.logo-preview {
+  height: 48px;
+  max-width: 170px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 4px;
+  padding: 4px;
+  flex: none;
+}
+
+.logo-empty {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 48px;
+  flex: none;
+  border-radius: 4px;
+  color: var(--ink-3);
+  background: var(--surface-2);
+}
+
+.about-text {
+  color: var(--ink-2);
+  font-size: 13.5px;
+  max-width: 520px;
+}
+
+/* ---------- Modal / bottom sheet ---------- */
+
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  align-items: end;
+  justify-items: stretch;
+}
+
+.modal-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  animation: fade-in 0.2s ease;
+}
+
+.modal-panel {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  padding: 8px 18px calc(18px + var(--safe-b));
+  max-height: min(88dvh, 720px);
+  overflow-y: auto;
+  animation: sheet-up 0.28s var(--ease-spring);
+}
+
+/* The panel takes focus by script so the dialog is announced, exactly like
+   the invoice page does; a ring there traces the whole sheet rather than
+   any control, and on a phone the sheet runs past the viewport, so all
+   that arrives is a stray line across the top. Whatever the user reaches
+   next inside carries its own ring. */
+.modal-panel:focus-visible {
+  outline: none;
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--hairline-strong);
+  margin: 4px auto 6px;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 0 14px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.modal-root.closing .modal-panel {
+  animation: sheet-down 0.2s ease forwards;
+}
+
+.modal-root.closing .modal-scrim {
+  animation: fade-out 0.2s ease forwards;
+}
+
+@media (min-width: 640px) {
+  .modal-root {
+    align-items: center;
+    justify-items: center;
+    padding: 24px;
+  }
+
+  .modal-panel {
+    width: min(460px, 100%);
+    border-radius: var(--r-lg);
+    padding: 10px 22px 22px;
+    animation: dialog-in 0.22s var(--ease-spring);
+  }
+
+  .sheet-handle {
+    display: none;
+  }
+
+  .modal-root.closing .modal-panel {
+    animation: dialog-out 0.18s ease forwards;
+  }
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.confirm-message {
+  color: var(--ink-2);
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(40%); opacity: 0.5; }
+}
+
+@keyframes sheet-down {
+  to { transform: translateY(30%); opacity: 0; }
+}
+
+@keyframes dialog-in {
+  from { transform: scale(0.96) translateY(8px); opacity: 0; }
+}
+
+@keyframes dialog-out {
+  to { transform: scale(0.97); opacity: 0; }
+}
+
+/* ---------- Keyboard shortcuts overlay ---------- */
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+.shortcut-row + .shortcut-row {
+  border-top: 1px solid var(--hairline);
+}
+
+.shortcut-what {
+  color: var(--ink-2);
+}
+
+.shortcut-keys {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  flex: none;
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+.kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 6px;
+  border: 1px solid var(--hairline-strong);
+  border-bottom-width: 2px;
+  background: var(--surface-2);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* ---------- Toasts ---------- */
+
+.toast-root {
+  position: fixed;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+}
+
+/* The FAB owns the bottom-right corner wherever it exists, and a centered
+   stack ran straight under it: the disc vanished behind the toast, and the
+   toast's own Undo button came to rest right on top of the app's primary
+   action. Stop the stack short of that column instead, the same way the
+   offline banner clears the FAB by sitting above it. Toasts still start at
+   the content margin and centre in what is left. */
+@media (max-width: 899px) {
+  .toast-root {
+    left: 16px;
+    right: calc(18px + 56px + 12px);
+    width: auto;
+    max-width: none;
+    transform: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .toast-root {
+    bottom: 22px;
+  }
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 15px;
+  border-radius: var(--r-full);
+  background: var(--ink);
+  color: var(--page);
+  font-size: 13.5px;
+  font-weight: 600;
+  animation: toast-in 0.25s var(--ease-spring);
+  max-width: 100%;
+}
+
+.toast svg {
+  flex: none;
+}
+
+/* A toast is often the only place a result is spelled out ("Sample data
+   loaded, wipe it anytime from the banner", "Deleted 3 entries, 1 invoiced
+   skipped"), and clipped to one line on a phone it lost the half that
+   carries the point. It wraps instead; the stack is short-lived and never
+   long enough to need the room back. */
+.toast span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.toast.leaving {
+  animation: toast-out 0.2s ease forwards;
+}
+
+.toast-action {
+  position: relative;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  flex: none;
+}
+
+/* Both of these are a line of text tall: comfortable under a cursor, half
+   a fingertip under a thumb, and Undo in particular is the one control in
+   the app with a few seconds to live. Same treatment the icon buttons get,
+   an invisible pad out to 44px that moves no pixel of layout. Neither pill
+   holds anything else tappable, so no pad can cover a neighbour. */
+@media (pointer: coarse) {
+  .toast-action::after,
+  .sample-banner button::after {
+    content: '';
+    position: absolute;
+    inset: -13px -8px;
+  }
+}
+
+@keyframes toast-in {
+  from { transform: translateY(12px); opacity: 0; }
+}
+
+@keyframes toast-out {
+  to { transform: translateY(8px); opacity: 0; }
+}

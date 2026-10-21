@@ -1,0 +1,446 @@
+/* Analysis panels: Frequency Analysis, Amplitude Statistics, Phase Meter,
+   Match Loudness. */
+
+.analysis-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.analysis-toolbar {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.analysis-toolbar .select {
+  max-width: 150px;
+}
+
+.analysis-toolbar .btn {
+  height: var(--control);
+  padding: 0 10px;
+}
+
+.analysis-toolbar .btn .icon {
+  margin-right: 4px;
+}
+
+.analysis-toolbar .spacer {
+  flex: 1;
+}
+
+.analysis-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  min-height: 22px;
+  padding: 3px 8px;
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}
+
+.analysis-readout {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.analysis-caption {
+  padding: 4px 8px;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}
+
+.analysis-caption:empty {
+  display: none;
+}
+
+.analysis-progress {
+  height: 3px;
+  background: var(--meter-bg);
+}
+
+.analysis-progress[hidden] {
+  display: none;
+}
+
+.analysis-progress-bar {
+  width: 0;
+  height: 100%;
+  background: var(--accent);
+}
+
+/* Frequency Analysis */
+.freq-plot {
+  position: relative;
+  flex: 1;
+  min-height: 80px;
+  outline: none;
+  cursor: crosshair;
+}
+
+.freq-plot:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.freq-plot canvas,
+.phase-scope canvas,
+.phase-meter canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.freq-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.freq-holds {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 6px;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.freq-holds-label {
+  margin-right: 3px;
+  color: var(--text-dim);
+}
+
+/* A numbered slot with its trace color underneath; filled when it holds a trace. */
+.freq-hold {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--bg-input);
+  color: var(--text-dim);
+  font-size: var(--fs-xs, 10px);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.freq-hold::after {
+  position: absolute;
+  right: 1px;
+  bottom: -4px;
+  left: 1px;
+  height: 2px;
+  background: var(--hold);
+  content: '';
+}
+
+.freq-hold:hover {
+  color: var(--text-strong);
+}
+
+.freq-hold[aria-pressed='true'] {
+  border-color: var(--hold);
+  background: color-mix(in srgb, var(--hold) 30%, var(--bg-input));
+  color: var(--text-strong);
+}
+
+.freq-hold:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.analysis-toolbar .freq-holds + .icon-btn {
+  margin-left: 2px;
+}
+
+.freq-bottom {
+  border-top: 1px solid var(--border-soft);
+}
+
+.freq-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 4px 8px;
+}
+
+.freq-controls + .freq-controls {
+  padding-top: 0;
+}
+
+.freq-controls .spacer {
+  flex: 1;
+}
+
+.freq-controls .select {
+  max-width: 150px;
+}
+
+.freq-adv-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.freq-adv-toggle .icon {
+  transition: transform 0.12s;
+}
+
+.freq-adv-toggle[aria-expanded='true'] .icon {
+  transform: rotate(90deg);
+}
+
+.freq-advanced {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.freq-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.swatch {
+  display: inline-block;
+  width: 12px;
+  height: 3px;
+  border-radius: 1px;
+}
+
+.swatch.dashed {
+  height: 0;
+  border-top: 2px dashed;
+}
+
+/* Amplitude Statistics */
+.amplitude-general,
+.rms-hist-pane {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.amplitude-general .table-scroll {
+  flex: 1;
+}
+
+.amplitude-actions {
+  border-top: 1px solid var(--border-soft);
+  border-bottom: 0;
+}
+
+.amplitude-actions .btn .icon {
+  margin-right: 4px;
+}
+
+.rms-hist {
+  position: relative;
+  flex: 1;
+  min-height: 80px;
+  outline: none;
+}
+
+.rms-hist canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.rms-hist:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.rms-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.rms-width {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rms-width .input {
+  width: 80px;
+}
+
+.rms-ref {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rms-ref legend {
+  margin-bottom: 4px;
+  padding: 0;
+  color: var(--text-dim);
+}
+
+.rms-note:empty {
+  display: none;
+}
+
+.stats-table th[scope='row'] {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Phase Analysis */
+.phase-scope {
+  position: relative;
+  flex: 1;
+  min-height: 80px;
+}
+
+.phase-value {
+  min-width: 42px;
+  color: var(--hot);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* Phase Meter: horizontal bar, or vertical in a tall narrow frame */
+.phase-meter-row {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+  min-height: 0;
+  padding: 6px 8px 4px 2px;
+}
+
+.phase-meter {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: min(100%, 124px);
+  min-height: 28px;
+}
+
+.phase-meter-row > .phase-value {
+  align-self: center;
+}
+
+.phase-meter-panel.vertical .phase-meter-row {
+  flex-direction: column;
+  padding: 2px 6px 6px;
+}
+
+.phase-meter-panel.vertical .phase-meter {
+  width: min(100%, 90px);
+  height: auto;
+  min-height: 0;
+}
+
+.phase-meter-panel.vertical .phase-meter-row > .phase-value {
+  min-width: 0;
+  text-align: center;
+}
+
+/* Match Loudness */
+.match-export {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 4px 8px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.match-export-note {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-sm);
+}
+
+.match-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.match-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.match-field > span {
+  color: var(--text-dim);
+}
+
+.match-table tbody tr {
+  outline: none;
+}
+
+.match-table tbody tr:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.match-table tbody tr[aria-selected='true'] {
+  background: var(--accent-soft);
+}
+
+.loudness-live {
+  font-variant-numeric: tabular-nums;
+}
+
+.loudness-live:empty {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .analysis-toolbar .btn {
+    min-height: 36px;
+  }
+}
+
+.analysis-panel [hidden] {
+  display: none !important;
+}

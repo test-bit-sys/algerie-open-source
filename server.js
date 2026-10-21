@@ -19,11 +19,13 @@ const APP_DIR = path.join(__dirname, 'apps', 'business-enterprise', 'dz-facture'
 const APPS_DIR = path.join(__dirname, 'apps');
 // Shared workspace assets (banner, logos) exposed at /assets/*
 const ROOT_ASSETS = path.join(__dirname, 'assets');
+// Sovereign shared packages runtime
+const PACKAGES_DIR = path.join(__dirname, 'packages');
 
 startStaticServer({
   name: 'DZ Open Source Suite — Flagship & Ecosystem Server',
   port: process.env.PORT || 3000,
-  allowedRoots: [__dirname, APP_DIR, ROOT_ASSETS, APPS_DIR],
+  allowedRoots: [__dirname, APP_DIR, ROOT_ASSETS, APPS_DIR, PACKAGES_DIR],
   mapUrl(pathname) {
     if (pathname === '/' || pathname === '' || pathname === '/index.html') {
       return path.join(__dirname, 'index.html');
@@ -35,6 +37,10 @@ startStaticServer({
     // Workspace-level assets (banner, shared logos, …)
     if (pathname.startsWith('/assets/')) {
       return path.join(ROOT_ASSETS, pathname.slice('/assets/'.length));
+    }
+    // Route shared sovereign packages runtime (dz-runtime, etc.)
+    if (pathname.startsWith('/packages/')) {
+      return path.join(PACKAGES_DIR, pathname.slice('/packages/'.length));
     }
     // Route to any application in apps/ (e.g. /apps/productivity/dz-disk-tree/)
     if (pathname.startsWith('/apps/')) {

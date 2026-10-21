@@ -1,0 +1,1038 @@
+/* Multitrack editor, track headers and the Mixer panel. */
+
+/* ------------------------------------------------------------- layout */
+
+.mt {
+  --mt-header-w: var(--mt-header-user, 236px);
+  display: grid;
+  grid-template-rows: 34px 26px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+  background: var(--bg-panel);
+}
+
+.mt-top,
+.mt-ruler-row,
+.mt-main {
+  display: grid;
+  grid-template-columns: var(--mt-header-w) 4px minmax(0, 1fr) 14px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.mt-top {
+  padding: 4px 0;
+}
+
+.mt-top {
+  padding-left: 6px;
+}
+
+.mt-top .overview {
+  grid-column: 1 / span 3;
+}
+
+.mt-head-tools {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 0 4px;
+  min-width: 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.mt-modes {
+  display: flex;
+  gap: 1px;
+}
+
+.mt-mode-btn[aria-checked='true'] {
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+.mt-splitter-gap {
+  border-bottom: 1px solid var(--border);
+}
+
+.mt-main {
+  padding-bottom: 6px;
+}
+
+.mt-headers {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+}
+
+.mt-headers-inner {
+  will-change: transform;
+}
+
+.mt-reorder-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+.mt-splitter {
+  cursor: col-resize;
+  background: var(--bg-panel);
+  touch-action: none;
+}
+
+.mt-splitter:hover,
+.mt-splitter:focus-visible {
+  background: var(--accent-soft);
+  outline: none;
+}
+
+.mt-lanes {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg-editor);
+  touch-action: none;
+  outline: none;
+}
+
+.mt-lanes:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.mt-lanes canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.mt-vnav {
+  position: relative;
+  min-height: 0;
+  margin: 0 2px 0 3px;
+  touch-action: none;
+  cursor: default;
+}
+
+.mt-vnav-segs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-input);
+}
+
+.mt-vnav-seg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid var(--bg-panel);
+  background: color-mix(in srgb, var(--track-color) 45%, var(--bg-input));
+}
+
+.mt-vnav-thumb {
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  min-height: 10px;
+  border: 1px solid var(--text-dim);
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--bg-panel) 60%, transparent);
+  pointer-events: none;
+}
+
+.mt-vnav:hover .mt-vnav-thumb {
+  border-color: var(--text-strong);
+}
+
+/* ------------------------------------------------------- track header */
+
+.mt-th {
+  --track-color: var(--accent);
+  position: relative;
+  display: grid;
+  grid-template-columns: 5px minmax(0, 1fr) 9px;
+  gap: 0 4px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-track);
+  overflow: hidden;
+  font-size: var(--fs-sm);
+}
+
+.mt-th:nth-child(even) {
+  background: var(--bg-track-alt);
+}
+
+.mt-th.selected {
+  background: var(--bg-active);
+}
+
+.mt-th.master {
+  background: var(--bg-panel-alt);
+}
+
+.mt-th-color {
+  width: 5px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--track-color);
+  cursor: pointer;
+}
+
+.mt-th-color:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -1px;
+}
+
+.mt-th-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 4px 0 4px;
+}
+
+.mt-th-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  min-height: 20px;
+}
+
+.mt-th-grip {
+  display: inline-flex;
+  color: var(--text-faint);
+  cursor: grab;
+  touch-action: none;
+  flex: none;
+}
+
+.mt-th.master .mt-th-grip {
+  cursor: default;
+}
+
+.mt-th-name {
+  flex: 1;
+  min-width: 0;
+  height: 20px;
+  padding: 0 4px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-strong);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+
+.mt-th-name:hover {
+  border-color: var(--divider);
+}
+
+.mt-th-name:focus {
+  border-color: var(--focus);
+  background: var(--bg-input);
+  outline: none;
+}
+
+.mt-th-btns {
+  display: flex;
+  gap: 2px;
+  flex: none;
+}
+
+.mt-tb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--divider);
+  border-radius: 3px;
+  background: var(--bg-raised);
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  flex: none;
+}
+
+.mt-tb:hover {
+  color: var(--text-strong);
+}
+
+/* Buttons set their own display; keep [hidden] hiding them. */
+.mt-th [hidden],
+.mx-strip [hidden] {
+  display: none;
+}
+
+.mt-tb-mute[aria-pressed='true'] {
+  background: var(--warning);
+  border-color: var(--warning);
+  color: #111;
+}
+
+.mt-tb-solo[aria-pressed='true'] {
+  background: var(--meter-yellow);
+  border-color: var(--meter-yellow);
+  color: #111;
+}
+
+.mt-tb-arm[aria-pressed='true'] {
+  background: var(--record);
+  border-color: var(--record);
+  color: #fff;
+}
+
+.mt-tb-invert[aria-pressed='true'] {
+  background: var(--warning);
+  border-color: var(--warning);
+  color: #111;
+}
+
+.mt-tb-monitor[aria-pressed='true'],
+.mt-tb-fx[aria-pressed='true'],
+.mt-tb-power[aria-pressed='true'] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.mt-th-glyph {
+  display: inline-flex;
+  color: var(--text-faint);
+  flex: none;
+}
+
+.mt-th .hot {
+  min-width: 2.6em;
+  font-size: var(--fs-sm);
+}
+
+.knob.automated {
+  color: var(--envelope-vol);
+}
+
+.mt-th-select {
+  height: 20px;
+  min-width: 0;
+  flex: 1;
+  font-size: var(--fs-sm);
+}
+
+.mt-th-io {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+}
+
+.mt-th-io-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+.mt-th-fx {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.mt-th-fxlist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mt-th-fxname {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 4px 1px 2px;
+  border: 1px solid var(--divider);
+  border-radius: 3px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.mt-th-fxname.off .mt-th-fxlabel {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.mt-th-fxlabel {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mt-th-fxpower {
+  display: inline-flex;
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent-strong);
+  cursor: pointer;
+}
+
+.mt-th-fxpower[aria-pressed='false'] {
+  color: var(--text-faint);
+}
+
+.mt-th-fxname.empty {
+  border-color: transparent;
+  color: var(--text-faint);
+}
+
+.btn.sm {
+  height: 20px;
+  padding: 0 6px;
+  gap: 4px;
+  font-size: var(--fs-sm);
+}
+
+.mt-th-autotoggle .icon {
+  transition: transform 120ms var(--ease);
+}
+
+.mt-th-autotoggle.open .icon {
+  transform: rotate(90deg);
+}
+
+.mt-th-mode {
+  flex: 0 1 76px;
+}
+
+.mt-th-param {
+  flex: 0 1 76px;
+}
+
+/* The header mode buttons show one of: inputs/outputs, effects, a send, EQ. */
+.mt-th:not([data-mode='fx']) .mt-th-fx,
+.mt-th[data-mode]:not([data-mode='io']) .mt-th-io,
+.mt-th:not([data-mode='sends']) .mt-th-sendrow,
+.mt-th:not([data-mode='eq']) .mt-th-eqrow {
+  display: none;
+}
+
+.mt-th-sends,
+.mt-th-eq {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+.mt-th-sends .mx-send-target {
+  flex: 1;
+  min-width: 0;
+}
+.mt-th-sends .dim {
+  opacity: 0.45;
+}
+.mt-th-eq .mx-eq-curve {
+  flex: 1;
+  min-width: 40px;
+  width: auto;
+  height: 20px;
+}
+
+.mt-th[data-size='xs'] .mt-th-r2,
+.mt-th[data-size='xs'] .mt-th-r3,
+.mt-th[data-size='xs'] .mt-th-r4,
+.mt-th[data-size='sm'] .mt-th-r3,
+.mt-th[data-size='sm'] .mt-th-r4,
+.mt-th[data-size='md'] .mt-th-r4 {
+  display: none;
+}
+
+/* With the automation lane open the mode controls always show. */
+.mt-th.with-auto .mt-th-r4 {
+  display: flex;
+}
+
+.mt-th .mt-meter {
+  margin: 4px 3px 4px 0;
+}
+
+.mt-th-resize {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 5px;
+  cursor: row-resize;
+  touch-action: none;
+}
+
+.mt-th-resize:hover {
+  background: var(--accent-soft);
+}
+
+.mt-meter {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
+.mt-meter canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* --------------------------------------------------------------- mixer */
+
+.mixer-panel {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg-panel);
+}
+
+.mixer-panel .mx-empty {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.mixer-panel.no-session .mx-empty {
+  display: flex;
+}
+
+.mixer-panel.no-session .mx-strips,
+.mixer-panel.no-session .mx-master {
+  display: none;
+}
+
+.mx-strips {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.mx-master {
+  display: flex;
+  flex: none;
+  border-left: 2px solid var(--border);
+}
+
+.mx-gutter {
+  position: relative;
+  flex: none;
+  width: 20px;
+  border-right: 1px solid var(--border);
+  background: var(--bg-panel-alt);
+}
+
+.mixer-panel.no-session .mx-gutter {
+  display: none;
+}
+
+.mx-gutter-btn {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 1px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.mx-gutter-btn:hover {
+  color: var(--text-strong);
+}
+
+.mx-gutter-btn[hidden] {
+  display: none;
+}
+
+.mx-gutter-btn .icon:first-child {
+  transition: transform 120ms var(--ease);
+}
+
+.mx-gutter-btn[aria-expanded='false'] .icon:first-child {
+  transform: rotate(-90deg);
+}
+
+.mx-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* A collapsed section leaves a thin bar so the strips keep their rhythm. */
+.mixer-panel.mx-hide-io .mx-sec[data-sec='io'] > *,
+.mixer-panel.mx-hide-fx .mx-sec[data-sec='fx'] > *,
+.mixer-panel.mx-hide-sends .mx-sec[data-sec='sends'] > *,
+.mixer-panel.mx-hide-eq .mx-sec[data-sec='eq'] > * {
+  display: none;
+}
+
+.mixer-panel.mx-hide-io .mx-sec[data-sec='io'],
+.mixer-panel.mx-hide-fx .mx-sec[data-sec='fx'],
+.mixer-panel.mx-hide-sends .mx-sec[data-sec='sends'],
+.mixer-panel.mx-hide-eq .mx-sec[data-sec='eq'] {
+  min-height: 26px !important;
+  border-bottom: 1px solid var(--divider);
+}
+
+.mx-io-top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mx-strip .mx-mode {
+  flex: none;
+}
+
+.mx-strip {
+  --track-color: var(--accent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 92px;
+  flex: none;
+  min-height: 0;
+  padding: 6px 5px 0;
+  border-right: 1px solid var(--border);
+  background: var(--bg-track);
+  font-size: var(--fs-sm);
+}
+
+.mx-strip.selected {
+  background: var(--bg-active);
+}
+
+.mx-strip.master {
+  background: var(--bg-panel-alt);
+}
+
+.mx-io {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mx-io-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--text-faint);
+}
+
+.mx-select {
+  height: 20px;
+  min-width: 0;
+  flex: 1;
+  font-size: var(--fs-xs);
+  padding-left: 3px;
+}
+
+.mx-fx-head {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+}
+
+.mx-fx {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 71px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.mx-fx-slot {
+  display: flex;
+  align-items: center;
+  flex: none;
+  height: 17px;
+  padding: 0;
+  border: 1px solid var(--divider);
+  border-radius: 2px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+}
+
+.mx-fx-power {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 16px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid var(--divider);
+  background: transparent;
+  color: var(--accent-strong);
+  cursor: pointer;
+}
+
+.mx-fx-power[aria-pressed='false'] {
+  color: var(--text-faint);
+}
+
+.mx-fx-name {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.mx-fx-slot.empty {
+  border-style: dashed;
+  border-color: var(--divider);
+  background: transparent;
+}
+
+.mx-io-row.placeholder {
+  height: 20px;
+}
+
+.mx-fx-slot.off {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.mx-panrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 28px;
+}
+
+.mx-pan-text {
+  min-width: 2.6em;
+  color: var(--hot);
+  font-variant-numeric: tabular-nums;
+}
+
+.mx-btns {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.mx-level {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px 22px 12px 16px;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  min-height: 90px;
+  padding: 9px 0;
+}
+
+.mx-scale {
+  position: relative;
+  color: var(--text-faint);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mx-mscale {
+  position: relative;
+  color: var(--text-faint);
+  font-size: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mx-mscale span {
+  position: absolute;
+  left: 0;
+  line-height: 1;
+  transform: translateY(50%);
+}
+
+.mx-scale span {
+  position: absolute;
+  right: 0;
+  line-height: 1;
+}
+
+.mx-fader {
+  position: relative;
+  cursor: ns-resize;
+  touch-action: none;
+  outline: none;
+  border-radius: 3px;
+}
+
+.mx-fader:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.mx-fader-track {
+  position: absolute;
+  inset: 0;
+}
+
+.mx-fader-groove {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: var(--meter-bg);
+  border: 1px solid var(--border-soft);
+}
+
+.mx-thumb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 18px;
+  border: 1px solid var(--track-color);
+  border-radius: 3px;
+  background: var(--bg-raised);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--track-color) 35%, transparent);
+}
+
+.mx-thumb::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 8px;
+  height: 2px;
+  background: var(--text-dim);
+}
+
+.mx-fader.automated .mx-thumb::after {
+  background: var(--envelope-vol);
+}
+
+.mx-db {
+  display: flex;
+  justify-content: center;
+}
+
+.mx-name {
+  margin: 0 -5px;
+  padding: 4px 4px 5px;
+  border-top: 3px solid var(--track-color);
+  background: color-mix(in srgb, var(--track-color) 22%, transparent);
+  color: var(--text-strong);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ------------------------------------------------------- effects dialog */
+
+.fx-editor {
+  min-width: min(420px, 80vw);
+}
+
+.prop-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 4px;
+}
+
+/* ----------------------------------------------------- touch and phone */
+
+@media (pointer: coarse) {
+  .mt-tb {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .mt-th-select,
+  .mx-select {
+    height: 30px;
+  }
+
+  .mt-th-row {
+    min-height: 30px;
+  }
+
+  .mx-strip {
+    width: 108px;
+  }
+
+  .mt-th-resize {
+    height: 10px;
+  }
+
+  .mt-splitter {
+    width: 8px;
+  }
+}
+
+[data-layout='phone'] .mt {
+  --mt-header-w: 132px;
+}
+
+[data-layout='phone'] .mt-th-btns .mt-tb-monitor,
+[data-layout='phone'] .mt-th-glyph,
+[data-layout='phone'] .mt-head-tools .mt-modes {
+  display: none;
+}
+
+[data-layout='phone'] .mt-th-r2 .knob {
+  display: none;
+}
+
+[data-layout='phone'] .mt-th-r1 {
+  flex-wrap: wrap;
+}
+
+[data-layout='phone'] .mt-th-grip {
+  display: none;
+}
+
+[data-layout='phone'] .mt-th-name {
+  flex-basis: 100%;
+}
+
+[data-layout='phone'] .mt-th:not(.with-auto) .mt-th-r4 {
+  display: none;
+}
+
+/* Narrow headers: the automation parameter wraps under the mode so both stay readable. */
+[data-layout='phone'] .mt-th-r4 {
+  flex-wrap: wrap;
+}
+
+[data-layout='phone'] .mt-th-mode {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+[data-layout='phone'] .mt-th-param {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* The knobs are hidden on phones: keep the volume and pan glyphs so the two readouts are told apart. */
+[data-layout='phone'] .mt-th-r2 .mt-th-glyph {
+  display: inline-flex;
+}
+
+/* Mixer sends and track EQ */
+.mx-sends,
+.mx-eq {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 3px;
+  border-top: 1px solid var(--divider);
+}
+.mx-select.mx-send-sel {
+  flex: 0 1 auto;
+  width: 44px;
+  height: 18px;
+  padding: 0 13px 0 3px;
+  background-position: calc(100% - 2px) 50%;
+}
+.mx-send-pre {
+  width: auto;
+  padding: 0 3px;
+  font-size: 9px;
+}
+.mx-send-knobs {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.mx-sends .dim {
+  opacity: 0.45;
+}
+.mx-eq-curve {
+  display: block;
+  width: 80px;
+  height: 28px;
+  border: 1px solid var(--divider);
+  border-radius: 2px;
+  cursor: pointer;
+
+/* Remix Properties: sliders between their two ends, and the plan summary. */
+.remix-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.remix-range input[type='range'] {
+  flex: 1 1 auto;
+  min-width: 120px;
+  /* A taller hit area for fingers; the track stays thin. */
+  height: 28px;
+}
+
+.remix-status,
+.remix-summary {
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.remix-summary.warn {
+  color: var(--warning);
+}
+
+.remix-dialog .hot {
+  min-height: 28px;
+}
+
+[data-layout='phone'] .remix-dialog .form-grid {
+  grid-template-columns: minmax(0, 1fr);
+}

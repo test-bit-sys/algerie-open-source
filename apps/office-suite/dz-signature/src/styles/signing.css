@@ -1,0 +1,325 @@
+/* The signing experience: sign.html and in-app self-signing */
+
+.sign-app { min-height: 100dvh; display: flex; flex-direction: column; }
+
+.sign-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--surface);
+  border-bottom: 1px solid var(--hairline);
+  padding: 12px 16px calc(12px);
+}
+.sign-topbar-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sign-doc-title { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.sign-doc-sub { font-size: 12.5px; color: var(--ink-3); }
+
+.sign-main {
+  flex: 1;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 18px 16px 140px;
+}
+
+.sign-note {
+  margin-bottom: 16px;
+  padding: 12px 15px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.sign-note b { color: var(--ink); }
+
+/* Interactive fields for the current signer */
+.field-box.actionable {
+  border-style: solid;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+  font-size: 12px;
+}
+.field-box.actionable:hover { transform: scale(1.02); }
+.field-box.actionable.attention {
+  animation: field-nudge 0.4s ease 2;
+}
+@keyframes field-nudge {
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+.field-box input.fb-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: #14141f;
+  font-size: 13px;
+  font-size: clamp(9px, 62cqh, 26px);
+  padding: 0 4px;
+}
+/* The box carries the focus ring, so the input inside stays chromeless. */
+.field-box input.fb-input:focus-visible { outline: none; }
+.field-box.actionable:has(.fb-input:focus-visible),
+.field-box.actionable:has(.fb-check:focus-visible) {
+  outline: 2px solid var(--fc);
+  outline-offset: 1px;
+}
+/* A value that can never be accepted (an address in an email field): flagged
+   here rather than at submit time, when the worker would refuse it. */
+.field-box.actionable.invalid {
+  border-color: var(--danger);
+  background: rgba(185, 28, 28, 0.08);
+}
+
+/* The sender's help text, anchored under its field. A sibling of the box, so
+   the box can keep clipping its own contents. */
+.fb-help {
+  position: absolute;
+  z-index: 5;
+  max-width: min(280px, 70%);
+  margin-top: 5px;
+  padding: 6px 9px;
+  border-radius: var(--r-sm);
+  background: #14141f;
+  color: #fdfdfc;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  /* Hidden until the field is being used, and never a click target: a bubble
+     over the page must not swallow a tap meant for another field. */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.12s ease, visibility 0.12s ease;
+}
+.field-box:hover + .fb-help,
+.field-box:focus-within + .fb-help {
+  opacity: 1;
+  visibility: visible;
+}
+.field-box input.fb-check {
+  width: 80%;
+  height: 80%;
+  margin: 0;
+  accent-color: var(--fc);
+  cursor: pointer;
+}
+
+/* Sticky action bar */
+.sign-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: var(--surface);
+  border-top: 1px solid var(--hairline);
+  padding: 12px 16px calc(12px + var(--safe-b));
+}
+.sign-footer-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px 14px;
+  /* On a phone the label, the bar, Decline and Finish cannot share a row: the
+     progress column collapsed to ~60px and wrapped "1 of 3 required fields
+     complete" over four lines. Let it claim a row of its own instead. */
+  flex-wrap: wrap;
+}
+/* One group, so the buttons stay together and travel to the next row as a
+   pair; margin-left keeps them at the trailing edge once they get there. */
+.sign-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+/* In-app self-signing renders the footer inside the shell, which keeps its
+   own chrome: the mobile tab bar (fixed, z-index above the footer) and the
+   desktop sidebar. Clear both, or Finish lands under the tab bar and a tap
+   on it hits the tab bar's links instead. sign.html has no shell. */
+.shell .sign-footer {
+  bottom: calc(var(--tabbar-h) + var(--safe-b));
+  padding-bottom: 12px;
+}
+@media (min-width: 900px) {
+  .shell .sign-footer {
+    bottom: 0;
+    left: var(--sidebar-w);
+  }
+  /* Room for the fixed footer under the last page. */
+  .main:has(.sign-footer) { padding-bottom: 110px; }
+}
+
+/* Basis auto, not 0: the row only wraps if the label's own width says it
+   must, so wide footers stay on one line. */
+.sign-progress { flex: 1 1 auto; min-width: 0; }
+.sign-progress .txt {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.progress-track {
+  height: 6px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  transition: width 0.25s var(--ease-spring);
+}
+
+/* Terminal screens (signed / declined / voided / error) */
+.sign-terminal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 22px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.sign-terminal .empty-icon { width: 66px; height: 66px; }
+.sign-terminal .empty-icon.ok { background: var(--ok-wash); color: var(--ok); }
+.sign-terminal .empty-icon.danger { background: var(--danger-wash); color: var(--danger); }
+.sign-terminal h1 { font-size: 22px; margin-bottom: 8px; }
+.sign-terminal p { color: var(--ink-2); font-size: 14.5px; margin-bottom: 20px; }
+
+/* Signature pad modal */
+.sigpad-tabs { margin-bottom: 14px; }
+.sigpad-surface {
+  position: relative;
+  border-radius: var(--r-md);
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  overflow: hidden;
+}
+.sigpad-canvas {
+  width: 100%;
+  height: 190px;
+  touch-action: none;
+  cursor: crosshair;
+}
+.sigpad-line {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 38px;
+  border-bottom: 1.5px dashed rgba(16, 16, 18, 0.25);
+  pointer-events: none;
+}
+.sigpad-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(16, 16, 18, 0.4);
+  pointer-events: none;
+}
+.sigpad-clear {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(16, 16, 18, 0.06);
+  color: rgba(16, 16, 18, 0.65);
+}
+.sigpad-clear:hover:not(:disabled) { background: rgba(16, 16, 18, 0.12); color: rgba(16, 16, 18, 0.9); }
+
+.sigpad-typed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  padding: 10px;
+  border-radius: var(--r-md);
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  margin-top: 12px;
+  overflow: hidden;
+}
+.sigpad-typed span {
+  font-size: 44px;
+  color: #14141f;
+  white-space: nowrap;
+}
+.sigpad-typed .style-cursive { font-family: var(--font-sig); }
+.sigpad-typed .style-plain { font-family: Georgia, "Times New Roman", serif; font-style: italic; }
+
+.sigpad-actions { display: flex; gap: 10px; margin-top: 16px; }
+.sigpad-actions .btn { flex: 1; }
+
+/* No fixed footer on the consent screen, so it needs none of the room the
+   signing screen leaves for one. */
+.sign-main-narrow { padding-bottom: 40px; }
+
+/* The consent step: shown before the document, on the signing page and for
+   in-app self-signing alike. */
+.consent-panel {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+}
+.consent-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 16px;
+}
+.consent-head h2 { font-size: 18px; margin-bottom: 3px; }
+.consent-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--r-md);
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+  flex-shrink: 0;
+}
+.consent-list {
+  margin: 0 0 18px;
+  padding-left: 20px;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.consent-list li + li { margin-top: 7px; }
+.consent-check {
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--hairline-strong);
+  background: var(--surface-2);
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 14px;
+}
+.consent-check:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+.consent-version {
+  margin-top: 14px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  text-align: center;
+}

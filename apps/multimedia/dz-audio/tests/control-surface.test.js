@@ -1,0 +1,49 @@
+import { describe, it, expect } from 'vitest';
+import { decodeMidi, mcuAction, mcuFeedback, mappingKey, learnAction } from '../src/control-surface/protocol.js';
+
+describe('control surface protocol', () => {
+  it('decodes notes, CCs and 14-bit pitch bend', () => {
+    expect(decodeMidi([0x90, 94, 127])).toEqual({ type: 'noteon', channel: 0, number: 94, value: 1 });
+    expect(decodeMidi([0x90, 94, 0]).type).toBe('noteoff');
+    expect(decodeMidi([0xb2, 16, 64])).toMatchObject({ type: 'cc', channel: 2, number: 16, raw: 64 });
+    expect(decodeMidi([0xe3, 0x7f, 0x7f])).toMatchObject({ type: 'pitchbend', channel: 3, value: 1 });
+    expect(decodeMidi([0xf8])).toBe(null);
+  });
+
+  it('maps strips, encoders, buttons, transport and banks', () => {
+    expect(mcuAction(decodeMidi([0xe2, 0, 0x40]))).toEqual({ kind: 'fader', strip: 2, value: 8192 / 16383 });
+    expect(mcuAction(decodeMidi([0xe8, 0, 0]))).toEqual({ kind: 'master', value: 0 });
+    expect(mcuAction(decodeMidi([0xb0, 17, 0x03]))).toEqual({ kind: 'pan', strip: 1, delta: 6 });
+    expect(mcuAction(decodeMidi([0xb0, 17, 0x41]))).toEqual({ kind: 'pan', strip: 1, delta: -2 });
+    expect(mcuAction(decodeMidi([0x90, 18, 127]))).toEqual({ kind: 'toggle', strip: 2, key: 'mute' });
+    expect(mcuAction(decodeMidi([0x90, 9, 127]))).toEqual({ kind: 'toggle', strip: 1, key: 'solo' });
+    expect(mcuAction(decodeMidi([0x90, 27, 127]))).toEqual({ kind: 'select', strip: 3 });
+    expect(mcuAction(decodeMidi([0x90, 94, 127]))).toEqual({ kind: 'command', id: 'transport.play' });
+    expect(mcuAction(decodeMidi([0x90, 47, 127]))).toEqual({ kind: 'bank', delta: 8 });
+    expect(mcuAction(decodeMidi([0x80, 94, 0]))).toBe(null);
+  });
+
+  it('sends lights and fader positions for the bank', () => {
+    const tracks = Array.from({ length: 10 }, (_, i) => ({ volume: 0, mute: i === 8, solo: false, arm: false }));
+    const out = mcuFeedback({ tracks, master: { volume: 0 }, offset: 8, playing: true, recording: false, loop: false, faderPos: () => 0.5 });
+    expect(out).toContainEqual([0x90, 16, 127]); // strip 1 shows track 9 muted
+    expect(out).toContainEqual([0x90, 17, 0]);
+    expect(out).toContainEqual([0xe0, 0, 64]); // half travel: 8192
+    expect(out).toContainEqual([0xe2, 0, 0]); // empty strip parks its fader
+    expect(out).toContainEqual([0x90, 94, 127]);
+  });
+
+  it('runs learned mappings', () => {
+    const map = { 'cc:0:7': 'track.volume', 'note:0:60': 'cmd:transport.toggle', 'cc:0:20': 'cmd:marker.add' };
+    expect(mappingKey(decodeMidi([0xb0, 7, 10]))).toBe('cc:0:7');
+    expect(learnAction(decodeMidi([0xb0, 7, 127]), map)).toEqual({ kind: 'selectedVolume', value: 1 });
+    expect(learnAction(decodeMidi([0x90, 60, 100]), map)).toEqual({ kind: 'command', id: 'transport.toggle' });
+    expect(learnAction(decodeMidi([0xb0, 20, 0]), map)).toBe(null);
+    expect(learnAction(decodeMidi([0xb0, 20, 127]), map)).toEqual({ kind: 'command', id: 'marker.add' });
+    // A knob turned through the top half fires once, again only after coming back down.
+    const last = new Map();
+    const fired = [40, 70, 90, 127, 100, 30, 80].map((v) => learnAction(decodeMidi([0xb0, 20, v]), map, last)).filter(Boolean);
+    expect(fired).toHaveLength(2);
+    expect(learnAction(decodeMidi([0xb0, 99, 127]), map)).toBe(null);
+  });
+});

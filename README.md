@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Architecture: Polyglot Sovereign](https://img.shields.io/badge/Architecture-Polyglot_Rust_Python_CSharp_JS-1e293b.svg?style=for-the-badge&logo=rust&logoColor=F7DF1E)](#-architectural-principles)
-[![Status: 15 Operational Apps](https://img.shields.io/badge/Status-15_Operational_Apps-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-flagship-operational-applications-11-desktop-alternatives)
+[![Status: 21 Operational Apps](https://img.shields.io/badge/Status-21_Operational_Apps-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-flagship-operational-applications-11-desktop-alternatives)
 [![Tracks: 11 Domains](https://img.shields.io/badge/Tracks-11_Specialized_Domains-0284c7.svg?style=for-the-badge)](#-the-11-strategic-software-tracks--directory)
 [![Privacy: 100% Offline](https://img.shields.io/badge/Privacy-100%25_Offline--First-059669.svg?style=for-the-badge&logo=sqlite&logoColor=white)](#-mission--strategic-vision)
 [![Languages: AR · FR · EN](https://img.shields.io/badge/Languages-العربية_%7C_Français_%7C_English-dc2626.svg?style=for-the-badge)](#-internationalization--bidirectionality)
@@ -83,7 +83,7 @@
 | **08** | **Algerian Seismic Engine (DZ-RPA Pro)** | **Robot Structural / ETABS RPA** | 🟢 **Ready** (Web + **Python RPA 99/03**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/engineering/dz-rpa/) | [`apps/engineering/dz-rpa/`](apps/engineering/dz-rpa/) |
 | **03** | **SCF Financial Accounting (DZ-Compta)** | **PC Compta / DLG Compta SCF** | 🟢 **Ready** (Web + **C# .NET 10**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/) | [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) |
 | **03** | **Payroll, CNAS & IRG (DZ-Paie RH)** | **PC Paie / DLG Paie / IRG DGI** | 🟢 **Ready** (Web + **C# .NET 10**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/) | [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) |
-| **11** | **Games & Cultural Heritage** | Commercial casual games | 🟡 *In Design* | — | [`apps/games-interactive/`](apps/games-interactive/) |
+| **11** | **Interactive Heritage Games Suite (Chess, Dama, Domino, Tawla, Puissance 4, Othello)** | Casual & Board Games with Local AI | 🟢 **Ready** (Web :3012-:3017) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/) | [`apps/games-interactive/`](apps/games-interactive/) |
 
 ---
 

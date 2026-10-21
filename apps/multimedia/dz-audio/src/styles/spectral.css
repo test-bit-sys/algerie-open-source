@@ -1,0 +1,93 @@
+/* Spectral Frequency Display: spectrogram lanes under the waveform, the
+   divider between them, the frequency ruler and the settings button. */
+
+.wf-lanes canvas.spec-gl,
+.wf-lanes canvas.spec-overlay {
+  left: 0;
+  pointer-events: none;
+}
+
+.spec-gl[hidden],
+.spec-overlay[hidden],
+.spec-divider[hidden],
+.spec-ruler[hidden],
+.spec-ruler-hit[hidden],
+.spec-settings[hidden],
+.spec-readout[hidden] {
+  display: none;
+}
+
+.spec-divider {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  height: 8px;
+  cursor: row-resize;
+  touch-action: none;
+  outline: none;
+}
+
+.spec-divider::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3px;
+  height: 2px;
+}
+
+.spec-divider:hover::after,
+.spec-divider:focus-visible::after {
+  background: var(--accent);
+}
+
+.spec-divider:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.wf-amp canvas.spec-ruler {
+  inset: auto;
+  left: 0;
+}
+
+.spec-ruler-hit {
+  position: absolute;
+  left: 0;
+  right: 0;
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.icon-btn.spec-settings {
+  position: absolute;
+  right: 3px;
+  z-index: 2;
+}
+
+.spec-readout {
+  position: absolute;
+  right: 6px;
+  z-index: 2;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised);
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  white-space: pre;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+@media (pointer: coarse) {
+  .spec-divider {
+    height: 16px;
+    margin-top: -4px;
+  }
+
+  .spec-divider::after {
+    top: 7px;
+  }
+}

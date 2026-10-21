@@ -1,0 +1,151 @@
+import { describe, it, expect, vi } from 'vitest';
+import { MemDir } from './helpers/mem-opfs.js';
+import { SessionBackupStore, installSessionBackup, backupsToPrune, backupsToOffer, validBackup, BACKUP_DIR } from '../src/storage/session-backup.js';
+import { Session } from '../src/model/session.js';
+import * as S from '../src/model/session-edits.js';
+import { Channel } from '../src/audio/channel.js';
+import { Emitter } from '../src/lib/emitter.js';
+import { DEFAULTS } from '../src/lib/prefs.js';
+import { CATEGORIES } from '../src/ui/preferences.js';
+import { MENUS } from '../src/ui/menus.js';
+
+function fakeApp(prefs = {}) {
+  const app = new Emitter();
+  app.documents = [];
+  const values = { ...DEFAULTS, ...prefs };
+  app.prefs = Object.assign(new Emitter(), { get: (k) => values[k], set: (k, v) => ((values[k] = v), app.prefs.emit('change', k)) });
+  app.notify = vi.fn();
+  app.uniqueName = (n) => n;
+  app.addDocument = (d) => app.documents.push(d);
+  return app;
+}
+
+function sessionWithClip(frames = 4800) {
+  const doc = new Session({ name: 'Song.asesx', sampleRate: 48000, tracks: 1 });
+  const ch = [Channel.fromSamples(new Float32Array(frames).fill(0.25)), Channel.fromSamples(new Float32Array(frames).fill(-0.25))];
+  const id = doc.addSource({ name: 'Take.wav', channels: ch });
+  const clip = S.createClip({ trackId: doc.state.tracks[0].id, sourceId: id, start: 100, length: frames });
+  doc.apply('Add Clip', S.addClips(doc.state, [clip]));
+  return doc;
+}
+
+describe('session backup planning', () => {
+  const m = (key, group, savedAt, o = {}) => ({ version: 1, key, group, tab: group.split('-')[0], savedAt, text: '{}', media: [], dirty: true, ...o });
+
+  it('keeps the newest backups of each session and drops very old ones', () => {
+    const now = 100 * 24 * 3600 * 1000;
+    const list = [m('a1', 't1-s1', now - 3), m('a2', 't1-s1', now - 2), m('a3', 't1-s1', now - 1), m('b1', 't1-s2', 0)];
+    expect(backupsToPrune(list, 2, now).map((x) => x.key).sort()).toEqual(['a1', 'b1']);
+  });
+
+  it('offers the newest backup of sessions from ended tabs that had unsaved changes', () => {
+    const list = [m('a1', 't1-s1', 1), m('a2', 't1-s1', 2), m('b1', 't2-s1', 5), m('c1', 't3-s1', 3, { dirty: false }), m('d1', 't4-s1', 4, { offered: true })];
+    expect(backupsToOffer(list, new Set(['t2'])).map((x) => x.key)).toEqual(['a2']);
+  });
+});
+
+describe('session backups (mock OPFS)', () => {
+  it('backs up changed sessions, shares unchanged media and restores into a new session', async () => {
+    const root = new MemDir();
+    const store = new SessionBackupStore(async () => root);
+    const app = fakeApp();
+    let t = Date.now();
+    const ctl = installSessionBackup(app, { store, tab: 'tab1', now: () => t++ });
+    const doc = sessionWithClip();
+    app.documents.push(doc);
+    await ctl.run();
+    let list = await store.list();
+    expect(list).toHaveLength(1);
+    expect(validBackup(list[0])).toBe(true);
+    expect(list[0]).toMatchObject({ name: 'Song.asesx', dirty: true, tab: 'tab1' });
+    // Nothing changed: no new backup.
+    await ctl.run();
+    expect(await store.list()).toHaveLength(1);
+    // A mix change makes a second backup that reuses the same media file.
+    doc.apply('Volume', S.updateTrack(doc.state, doc.state.tracks[0].id, { volume: -6 }));
+    await ctl.run();
+    list = await store.list();
+    expect(list).toHaveLength(2);
+    expect(new Set(list.map((x) => x.media[0].key)).size).toBe(1);
+    const media = (await root.getDirectoryHandle(BACKUP_DIR)).children.get('media');
+    expect(media.children.size).toBe(1);
+    ctl.destroy();
+
+    // The next launch offers the newest backup and restores it.
+    const app2 = fakeApp();
+    const ctl2 = installSessionBackup(app2, { store, tab: 'tab2' });
+    const offer = await ctl2.check();
+    expect(offer).toHaveLength(1);
+    const restored = await ctl2.restore(offer[0]);
+    expect(restored.kind).toBe('session');
+    expect(restored.dirty).toBe(true);
+    expect(S.findTrack(restored.state, restored.state.tracks[0].id).volume).toBe(-6);
+    const clip = restored.state.clips[0];
+    const src = restored.pool.get(clip.sourceId);
+    expect(src.channels[0].length).toBe(4800);
+    const buf = new Float32Array(4);
+    src.channels[1].read(0, buf, 0, 4);
+    expect(buf[0]).toBeCloseTo(-0.25);
+    await ctl2.markOffered(offer);
+    expect(await ctl2.check()).toEqual([]);
+    ctl2.destroy();
+  });
+
+  it('keeps at most the configured number of backups and deletes unused media', async () => {
+    const root = new MemDir();
+    const store = new SessionBackupStore(async () => root);
+    const app = fakeApp({ sessionBackupMax: 2 });
+    let t = Date.now();
+    const ctl = installSessionBackup(app, { store, tab: 'tab1', now: () => t++ });
+    const doc = sessionWithClip(100);
+    app.documents.push(doc);
+    for (let i = 0; i < 4; i++) {
+      // Replace the source audio each time so each backup has its own media.
+      const id = doc.state.clips[0].sourceId;
+      doc.updateSource(id, { channels: [Channel.fromSamples(new Float32Array(100).fill(i / 10))] });
+      doc.apply('Volume', S.updateTrack(doc.state, doc.state.tracks[0].id, { volume: -i }));
+      await ctl.run();
+    }
+    const list = await store.list();
+    expect(list).toHaveLength(2);
+    const media = (await root.getDirectoryHandle(BACKUP_DIR)).children.get('media');
+    expect(media.children.size).toBe(2);
+    ctl.destroy();
+  });
+
+  it('skips sessions that were never edited and saved sessions are not offered', async () => {
+    const root = new MemDir();
+    const store = new SessionBackupStore(async () => root);
+    const app = fakeApp();
+    let t = Date.now();
+    const ctl = installSessionBackup(app, { store, tab: 'tab1', now: () => t++ });
+    const fresh = new Session({ name: 'Empty.asesx' });
+    app.documents.push(fresh);
+    await ctl.run();
+    expect(await store.list()).toHaveLength(0);
+    const doc = sessionWithClip(10);
+    doc.markSaved();
+    doc.apply('Volume', S.updateTrack(doc.state, doc.state.tracks[0].id, { volume: -1 }));
+    app.documents.push(doc);
+    await ctl.run();
+    doc.apply('Volume', S.updateTrack(doc.state, doc.state.tracks[0].id, { volume: -2 }));
+    doc.markSaved();
+    await ctl.run();
+    const list = await store.list();
+    expect(list.map((m) => m.dirty).sort()).toEqual([false, true]);
+    const ctl2 = installSessionBackup(fakeApp(), { store, tab: 'tab2' });
+    expect(await ctl2.check()).toEqual([]);
+    ctl.destroy();
+    ctl2.destroy();
+  });
+});
+
+describe('session backup settings', () => {
+  it('has defaults, an Auto Save section and a File menu command', () => {
+    expect(DEFAULTS).toMatchObject({ sessionBackup: true, sessionBackupInterval: 3, sessionBackupMax: 10 });
+    const page = CATEGORIES.find((c) => c.id === 'autoSave');
+    const sec = page.sections.find((s) => s.title === 'Multitrack Session Backups');
+    expect(sec.items.filter((i) => i.key).map((i) => i.key)).toEqual(['sessionBackup', 'sessionBackupInterval', 'sessionBackupMax']);
+    expect(MENUS[0].submenu).toContain('file.restoreBackup');
+  });
+});

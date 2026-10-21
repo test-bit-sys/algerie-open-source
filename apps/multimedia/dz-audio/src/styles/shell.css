@@ -1,0 +1,587 @@
+/* App frame: app bar, toolbar, docked workspace, status bar. */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  background: var(--bg-app);
+}
+
+/* -------------------------------------------------------------- app bar */
+
+.appbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 6px;
+  background: var(--bg-panel-alt);
+  border-bottom: 1px solid var(--border);
+  flex: none;
+}
+
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px 0 2px;
+  color: var(--text-strong);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.app-logo {
+  display: inline-flex;
+}
+
+.app-icon {
+  display: block;
+  flex: none;
+  user-select: none;
+}
+
+.app-menu-btn {
+  display: none;
+}
+
+.menubar {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.menubar-item {
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  cursor: default;
+}
+
+.menubar-item:hover,
+.menubar-item.open {
+  background: var(--bg-hover);
+  color: var(--text-strong);
+}
+
+.doc-title {
+  margin-left: 12px;
+  overflow: hidden;
+  color: var(--text-faint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+}
+
+.account-signin {
+  height: 22px;
+}
+
+.account-btn {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar.placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-raised);
+  color: var(--text-dim);
+}
+
+/* -------------------------------------------------------------- toolbar */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 8px;
+  background: var(--bg-panel-alt);
+  border-bottom: 1px solid var(--border);
+  flex: none;
+  min-width: 0;
+}
+
+.toolbar-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: var(--divider);
+  flex: none;
+}
+
+.mode-switch {
+  display: flex;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex: none;
+}
+
+.mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.mode-btn + .mode-btn {
+  border-left: 1px solid var(--divider);
+}
+
+.mode-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-strong);
+}
+
+.mode-btn.on {
+  background: var(--bg-active);
+  color: var(--accent-strong);
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+
+.tool-group .icon-btn {
+  width: 28px;
+  height: 28px;
+}
+
+.workspace-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.workspace-tab {
+  height: 26px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-dim);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.workspace-tab:hover {
+  color: var(--text-strong);
+}
+
+.workspace-tab[aria-selected='true'] {
+  padding-right: 4px;
+  color: var(--accent-strong);
+}
+
+.icon-btn.workspace-menu-btn {
+  width: 20px;
+  height: 22px;
+  margin-right: 6px;
+  color: var(--accent-strong);
+}
+
+.command-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.command-search-wrap > svg {
+  position: absolute;
+  left: 7px;
+}
+
+.command-search {
+  width: 190px;
+  padding-left: 26px;
+}
+
+/* ------------------------------------------------------------ workspace */
+
+.workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  padding: 3px;
+  gap: 0;
+}
+
+.dock-row,
+.dock-col {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.dock-row {
+  flex-direction: row;
+}
+
+.dock-col {
+  flex-direction: column;
+}
+
+.dock-split {
+  flex: none;
+  background: transparent;
+  touch-action: none;
+}
+
+.dock-row > .dock-split {
+  width: 4px;
+  cursor: col-resize;
+}
+
+.dock-col > .dock-split {
+  height: 4px;
+  cursor: row-resize;
+}
+
+.dock-split:hover,
+.dock-split.active,
+.dock-split:focus-visible {
+  background: var(--accent);
+  outline: none;
+}
+
+.panel-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 60px;
+  min-height: 48px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: var(--bg-panel);
+  overflow: hidden;
+}
+
+.panel-group.focused {
+  border-color: var(--accent);
+}
+
+.panel-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--tab);
+  padding: 0 6px;
+  flex: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.panel-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.panel-tab {
+  position: relative;
+  height: 100%;
+  padding: 0 8px;
+  border: 0;
+  background: transparent;
+  color: var(--text-dim);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.panel-tab:hover {
+  color: var(--text-strong);
+}
+
+.panel-tab[aria-selected='true'] {
+  color: var(--text-strong);
+}
+
+.panel-tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 3px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+.panel-menu-btn {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+}
+
+.panel-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.panel {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+}
+
+.dock-ghost {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1200;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-text);
+  pointer-events: none;
+}
+
+.dock-drop {
+  position: fixed;
+  z-index: 1100;
+  display: none;
+  border: 2px solid var(--accent);
+  background: var(--accent-soft);
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------- status bar */
+
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 22px;
+  padding: 0 10px calc(env(safe-area-inset-bottom) * 0) 10px;
+  background: var(--bg-panel-alt);
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  flex: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.status-info {
+  display: flex;
+  gap: 0;
+}
+
+.status-cell {
+  padding: 0 10px;
+  border-left: 1px solid var(--divider);
+}
+
+.drop-hint {
+  position: fixed;
+  inset: 0;
+  z-index: 950;
+  display: none;
+  place-items: center;
+  background: var(--overlay);
+  pointer-events: none;
+}
+
+.drop-hint.on {
+  display: grid;
+}
+
+.drop-hint-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 40px;
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius-lg);
+  background: var(--bg-panel);
+  color: var(--text-strong);
+}
+
+/* ------------------------------------------------------------ responsive */
+
+@media (max-width: 1280px) {
+  .workspace-tabs {
+    display: none;
+  }
+}
+
+[data-layout='tablet'] .command-search {
+  width: 140px;
+}
+
+[data-layout='tablet'] .menubar-item {
+  padding: 0 6px;
+}
+
+[data-layout='phone'] .menubar,
+[data-layout='phone'] .doc-title,
+[data-layout='phone'] .workspace-tabs,
+[data-layout='phone'] .command-search-wrap,
+[data-layout='phone'] .toolbar-sep {
+  display: none;
+}
+
+[data-layout='phone'] .app-menu-btn {
+  display: inline-flex;
+}
+
+[data-layout='phone'] .appbar {
+  height: 40px;
+}
+
+[data-layout='phone'] .toolbar {
+  height: auto;
+  min-height: 40px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+[data-layout='phone'] .mode-btn span {
+  display: none;
+}
+
+[data-layout='phone'] .workspace {
+  padding: 2px;
+}
+
+[data-layout='phone'] .statusbar {
+  display: none;
+}
+
+[data-layout='tablet'] .menubar-item,
+[data-layout='phone'] .menubar-item {
+  font-size: var(--fs-md);
+}
+
+/* Overflow chevron at the end of a clipped tab strip. */
+/* Sticks over the strip's right padding too, so no tab text shows beside it. */
+.panel-tabs-more {
+  position: sticky;
+  right: -6px;
+  flex: none;
+  width: 28px;
+  height: 100%;
+  margin-left: auto;
+  margin-right: -6px;
+  padding-right: 6px;
+  border-radius: 0;
+  border-left: 1px solid var(--border-soft);
+  background: var(--bg-panel);
+}
+
+.panel-tabs-more[hidden] {
+  display: none;
+}
+
+/* Edit Workspaces dialog */
+.ws-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(440px, 82vw);
+}
+.ws-main {
+  display: flex;
+  gap: 6px;
+  min-height: 0;
+}
+.ws-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ws-list {
+  flex: 1;
+  min-width: 0;
+  max-height: 52vh;
+  overflow: auto;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+  outline: none;
+}
+.ws-list:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.ws-group {
+  display: flex;
+  gap: 4px;
+  padding: 6px 10px 4px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.ws-empty {
+  padding: 6px 10px 6px 34px;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: var(--fs-sm);
+}
+.ws-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px 5px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  cursor: grab;
+}
+.ws-row > svg {
+  flex: none;
+  color: var(--text-faint);
+}
+.ws-row[aria-selected='true'] {
+  background: var(--accent-soft);
+  color: var(--text-strong);
+}
+.ws-row.dragging {
+  opacity: 0.5;
+}
+.ws-name {
+  flex: 1;
+  min-width: 0;
+}
+.ws-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}

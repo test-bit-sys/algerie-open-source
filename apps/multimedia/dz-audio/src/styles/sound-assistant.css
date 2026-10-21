@@ -1,0 +1,677 @@
+/* Sound Assistant, Batch Process and Diagnostics panels. */
+
+/* Buttons and rows set their own display; keep [hidden] hiding them. */
+.sa-panel [hidden],
+.batch-panel [hidden],
+.diag-panel [hidden] {
+  display: none !important;
+}
+
+/* ------------------------------------------------------- Sound Assistant */
+
+.sa-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.sa-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 16px;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+.sa-assign {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  overflow: auto;
+}
+
+.sa-assign-text {
+  margin: 0;
+  color: var(--text);
+}
+
+.sa-hint {
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+.sa-types {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.sa-type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 64px;
+  padding: 8px;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.sa-type-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+}
+
+.sa-type-btn .icon {
+  color: var(--accent);
+}
+
+.sa-clear-mixed {
+  align-self: flex-start;
+}
+
+.sa-editor {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.sa-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.sa-head .spacer,
+.sa-foot .spacer {
+  flex: 1;
+}
+
+.sa-type-icon {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+.sa-type-name {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.sa-count {
+  font-size: var(--fs-sm);
+}
+
+.sa-preset {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.sa-preset .select {
+  flex: 1;
+  min-width: 0;
+}
+
+.sa-label {
+  flex: none;
+  min-width: 72px;
+  color: var(--text-dim);
+}
+
+.sa-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.sa-section {
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.sa-section-head {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--row);
+  padding: 2px 8px 2px 2px;
+  background: var(--bg-panel-alt);
+}
+
+.sa-section-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.sa-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px 10px 12px;
+}
+
+.sa-section-body.off {
+  opacity: 0.55;
+}
+
+.sa-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sa-item + .sa-item {
+  padding-top: 6px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.sa-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sa-item-head .check {
+  flex: 1;
+  min-width: 0;
+}
+
+.sa-item-head .select {
+  max-width: 55%;
+}
+
+.sa-slider-row {
+  display: grid;
+  grid-template-columns: 72px minmax(60px, 1fr) 64px;
+  align-items: center;
+  gap: 8px;
+}
+
+.sa-item .sa-slider-row {
+  grid-template-columns: minmax(60px, 1fr) 56px;
+  padding-left: 20px;
+}
+
+.sa-slider {
+  width: 100%;
+}
+
+.sa-value {
+  color: var(--hot);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.sa-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sa-field .select {
+  flex: 1;
+  min-width: 0;
+}
+
+.sa-field-top {
+  align-items: flex-start;
+}
+
+.sa-against {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.sa-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.sa-readout {
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+.sa-seconds {
+  width: 90px;
+}
+
+.sa-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg-panel);
+}
+
+.sa-foot-note {
+  font-size: var(--fs-sm);
+}
+
+.sa-preview.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text-strong);
+}
+
+@container (max-width: 300px) {
+  .sa-slider-row {
+    grid-template-columns: minmax(0, 1fr) 56px;
+  }
+
+  .sa-slider-row .sa-label {
+    display: none;
+  }
+
+  .sa-item-head {
+    flex-wrap: wrap;
+  }
+
+  .sa-item-head .select {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+}
+
+/* -------------------------------------------------------- Batch Process */
+
+.batch-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.batch-panel.drop {
+  outline: 2px dashed var(--accent);
+  outline-offset: -3px;
+}
+
+.batch-toolbar {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.batch-toolbar .spacer {
+  flex: 1;
+}
+
+.batch-list {
+  min-height: 60px;
+}
+
+.batch-table .batch-status-col {
+  width: 34%;
+}
+
+.batch-type,
+.batch-out {
+  max-width: 0;
+  overflow: hidden;
+  color: var(--text-dim);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Narrow frames keep just the file and its status. */
+@container (max-width: 420px) {
+  .batch-table .batch-type-col,
+  .batch-table .batch-out-col,
+  .batch-type,
+  .batch-out {
+    display: none;
+  }
+
+  .batch-table .batch-status-col {
+    width: 45%;
+  }
+}
+
+.batch-name {
+  max-width: 0;
+}
+
+.batch-name .name-cell span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.batch-status {
+  max-width: 0;
+}
+
+.batch-status-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.batch-status.st-done .batch-status-text {
+  color: var(--success);
+}
+
+.batch-status.st-error .batch-status-text {
+  color: var(--danger);
+}
+
+.batch-status.st-cancelled .batch-status-text,
+.batch-status.st-waiting .batch-status-text {
+  color: var(--text-faint);
+}
+
+.batch-progress {
+  height: 3px;
+  margin-bottom: 2px;
+  background: var(--meter-bg);
+}
+
+.batch-progress-bar {
+  height: 100%;
+  background: var(--accent);
+}
+
+.batch-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg-panel);
+}
+
+.batch-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.batch-field .select {
+  flex: 1;
+  min-width: 0;
+}
+
+.batch-label {
+  flex: none;
+  width: 58px;
+  color: var(--text-dim);
+}
+
+.batch-export {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.batch-export-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-note {
+  padding-left: 66px;
+  font-size: var(--fs-sm);
+  color: var(--warning);
+}
+
+.batch-note[hidden] {
+  display: none;
+}
+
+.batch-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.batch-actions .spacer {
+  flex: 1;
+}
+
+.batch-summary {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: min(420px, 80vw);
+}
+
+.batch-settings .form-grid > [hidden],
+.batch-loc > [hidden] {
+  display: none;
+}
+
+.batch-format-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.batch-format-settings:empty::before {
+  content: 'None';
+  color: var(--text-faint);
+}
+
+.batch-setting {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.batch-loc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.batch-dir-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text-dim);
+}
+
+.batch-dir {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-example {
+  font-size: var(--fs-sm);
+}
+
+@container (max-width: 360px) {
+  .batch-toolbar .btn span {
+    display: none;
+  }
+
+  .batch-export {
+    flex-wrap: wrap;
+  }
+}
+
+/* ----------------------------------------------------------- Diagnostics */
+
+.diag-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.diag-top {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 50%;
+  padding: 6px 8px;
+  overflow: auto;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.diag-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.diag-row .select {
+  flex: 1;
+  min-width: 0;
+}
+
+.diag-label {
+  flex: none;
+  width: 48px;
+  color: var(--text-dim);
+}
+
+.diag-settings {
+  padding-top: 4px;
+}
+
+.diag-settings[hidden] {
+  display: none;
+}
+
+.diag-settings-toggle[aria-expanded='true'] {
+  color: var(--accent);
+}
+
+.diag-toolbar {
+  flex-wrap: wrap;
+  gap: 4px;
+  position: static;
+}
+
+.diag-caption {
+  padding: 4px 8px;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}
+
+.diag-caption:empty {
+  display: none;
+}
+
+.diag-note {
+  padding: 4px 8px 0;
+  font-size: var(--fs-sm);
+}
+
+.diag-note[hidden] {
+  display: none;
+}
+
+.diag-list {
+  min-height: 60px;
+}
+
+.diag-table tr.marked td {
+  color: var(--text-dim);
+}
+
+.diag-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.diag-actions .spacer {
+  flex: 1;
+}
+
+.diag-count {
+  font-size: var(--fs-sm);
+}
+
+@container (max-width: 380px) {
+  .diag-settings .fx-params {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .diag-settings .fx-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    align-items: center;
+    gap: 0 8px;
+  }
+
+  .diag-settings .fx-row > .fx-scale {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .diag-settings .fx-row > .fx-choice {
+    grid-column: 2;
+  }
+
+  .diag-settings .fx-bool,
+  .diag-settings .fx-section {
+    grid-column: 1;
+  }
+}
+
+@media (pointer: coarse) {
+  .sa-type-btn {
+    min-height: 76px;
+  }
+
+  .sa-slider-row {
+    min-height: 36px;
+  }
+
+  input[type='range'].sa-slider {
+    height: 32px;
+  }
+}

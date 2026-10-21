@@ -18,6 +18,11 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PACKAGES_ROOT = path.resolve(__dirname, '../packages');
 
 export const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -36,7 +41,17 @@ export const MIME_TYPES = {
   '.woff2': 'font/woff2',
   '.ttf': 'font/ttf',
   '.txt': 'text/plain; charset=utf-8',
-  '.md': 'text/markdown; charset=utf-8'
+  '.md': 'text/markdown; charset=utf-8',
+  '.pdf': 'application/pdf',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  '.mp3': 'audio/mpeg',
+  '.wav': 'audio/wav',
+  '.ogg': 'audio/ogg',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.webmanifest': 'application/manifest+json',
+  '.wasm': 'application/wasm'
 };
 
 /**
@@ -63,7 +78,7 @@ function sendText(res, status, message, extraHeaders = {}) {
  *                      resolve inside one of them, otherwise the request is rejected with 403.
  */
 export function createStaticServer({ mapUrl, allowedRoots = [] }) {
-  const roots = allowedRoots.map((r) => path.resolve(r));
+  const roots = [...allowedRoots.map((r) => path.resolve(r)), PACKAGES_ROOT];
 
   return http.createServer((req, res) => {
     try {
@@ -81,10 +96,14 @@ export function createStaticServer({ mapUrl, allowedRoots = [] }) {
       }
 
       let filePath = null;
-      try {
-        filePath = mapUrl(pathname);
-      } catch {
-        filePath = null;
+      if (pathname.startsWith('/packages/')) {
+        filePath = path.join(PACKAGES_ROOT, pathname.slice('/packages/'.length));
+      } else {
+        try {
+          filePath = mapUrl(pathname);
+        } catch {
+          filePath = null;
+        }
       }
 
       if (filePath && typeof filePath === 'object' && filePath.redirect) {

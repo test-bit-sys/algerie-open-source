@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DZ-Convert | محول العملات، الأراضي والمقاييس الجزائري</title>
+  <meta name="description" content="محول سيادي جزائري شامل: تحويل الدينار، السنتيم، الدورو والتفقيد، مساحات الأراضي الفلاحية، وحدات البناء، وحديد التسليح بدون إنترنت.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../packages/dz-runtime/dz-runtime.css">
+  <style>
+    :root {
+      --bg-base: #09121a;
+      --bg-surface: #0f1c29;
+      --bg-card: #152637;
+      --bg-card-hover: #1c3249;
+      --border-color: #213c54;
+      --border-accent: #0284c7;
+      --text-main: #f0f9ff;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --primary: #0ea5e9;
+      --primary-hover: #0284c7;
+      --primary-glow: rgba(14, 165, 233, 0.2);
+      --gold: #f59e0b;
+      --emerald: #10b981;
+      --font-main: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f0f7fc;
+      --bg-surface: #ffffff;
+      --bg-card: #e4f1fb;
+      --bg-card-hover: #d2e7f8;
+      --border-color: #bcdbf3;
+      --border-accent: #0284c7;
+      --text-main: #0c2136;
+      --text-muted: #385b7c;
+      --text-dim: #6082a3;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-glow: rgba(2, 132, 199, 0.12);
+      --gold: #d97706;
+      --emerald: #059669;
+      --shadow-lg: 0 10px 30px rgba(2, 132, 199, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Header */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-brand-icon {
+      font-size: 2.2rem;
+      background: var(--bg-surface);
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .app-brand h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .app-brand p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .btn-icon {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      border-color: var(--primary);
+      background: var(--bg-card);
+    }
+
+    /* Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      font-family: var(--font-main);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text-main); }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-pane { display: none; }
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Section Cards */
+    .calc-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
+    }
+
+    .calc-card-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .calc-card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Input & Controls */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+    }
+
+    .form-input, .form-select {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      outline: none;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .form-select {
+      font-family: var(--font-main);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--border-accent);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    /* Chips */
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip-btn {
+      font-family: var(--font-main);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .chip-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Result Display */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .result-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      position: relative;
+    }
+
+    .result-box.highlight {
+      border-color: var(--border-accent);
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .result-box .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-box .value {
+      font-family: var(--font-mono);
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--text-main);
+      word-break: break-all;
+    }
+
+    .result-box.highlight .value {
+      color: var(--primary);
+    }
+
+    .copy-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+
+    .copy-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Full width Tafqit box */
+    .tafqit-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .tafqit-box .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .tafqit-box .tafqit-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.8;
+    }
+
+    .tafqit-box .tafqit-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-family: var(--font-mono);
+    }
+
+    @media (max-width: 600px) {
+      .input-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-brand">
+        <div class="app-brand-icon">⚖️</div>
+        <div>
+          <h1>محول العملات والمقاييس الجزائري</h1>
+          <p>DZ-Convert — العملة، السنتيم، الدورو، التفقيد، الأراضي الفلاحية ومواد البناء (100% أوفلاين)</p>
+        </div>
+      </div>
+
+      <div>
+        <button id="themeToggleBtn" class="btn-icon" title="تبديل المظهر">🌓</button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="tab-currency">💰 العملة والتفقيد (DZD / سنتيم / دورو)</button>
+      <button class="tab-btn" data-tab="tab-land">🌾 الأراضي والعقارات (هكتار / آر / زوجة)</button>
+      <button class="tab-btn" data-tab="tab-rebar">🏗️ حديد التسليح والخرسانة (BTP)</button>
+    </nav>
+
+    <!-- Tab 1: Currency & Tafqit -->
+    <div class="tab-pane active" id="tab-currency">
+      <div class="calc-card">
+        <div class="calc-card-title">💵 محول الدينار الجزائري والتفقيد الرسمي</div>
+        <div class="calc-card-desc">تحويل فوري بين الدينار، السنتيم، الدورو، والتفقيد بالأحرف المعتمد للصكوك البريدية CCP والفواتير.</div>
+
+        <div class="form-group">
+          <label class="form-label">أدخل المبلغ المراد تحويله:</label>
+          <div class="input-row">
+            <input type="number" id="currencyInput" class="form-input" value="10000" min="0" step="any" placeholder="مثال: 10000">
+            <select id="currencyUnitSelect" class="form-select">
+              <option value="dzd" selected>دينار جزائري (DZD)</option>
+              <option value="centime">سنتيم (Centimes)</option>
+              <option value="million_centimes">مليون سنتيم</option>
+              <option value="milliard_centimes">مليار سنتيم</option>
+              <option value="doro">دورو (Doro)</option>
+            </select>
+          </div>
+
+          <!-- Quick Chips -->
+          <div class="chips-row">
+            <button class="chip-btn" data-curr="1000" data-unit="dzd">1,000 دج (100 ألف)</button>
+            <button class="chip-btn" data-curr="5000" data-unit="dzd">5,000 دج (500 ألف)</button>
+            <button class="chip-btn" data-curr="10000" data-unit="dzd">10,000 دج (مليون سنتيم)</button>
+            <button class="chip-btn" data-curr="50000" data-unit="dzd">50,000 دج (5 ملايين)</button>
+            <button class="chip-btn" data-curr="100000" data-unit="dzd">100,000 دج (10 ملايين)</button>
+            <button class="chip-btn" data-curr="1000000" data-unit="dzd">1,000,000 دج (100 مليون)</button>
+            <button class="chip-btn" data-curr="10000000" data-unit="dzd">10,000,000 دج (مليار سنتيم)</button>
+          </div>
+        </div>
+
+        <!-- Converted Results Grid -->
+        <div class="results-grid">
+          <div class="result-box highlight">
+            <div class="label">
+              <span>بالدينار الجزائري الرسمي</span>
+              <button class="copy-btn" data-copy="resDzd">📋 نسخ</button>
+            </div>
+            <div class="value" id="resDzd">10,000 دج</div>
+          </div>
+
+          <div class="result-box">
+            <div class="label">
+              <span>بالسنتيم الشعبي</span>
+              <button class="copy-btn" data-copy="resCentimes">📋 نسخ</button>
+            </div>
+            <div class="value" id="resCentimes">1,000,000 سنتيم</div>
+          </div>
+
+          <div class="result-box">
+            <div class="label">
+              <span>بالتعبير الدارج الشائع</span>
+              <button class="copy-btn" data-copy="resPopular">📋 نسخ</button>
+            </div>
+            <div class="value" id="resPopular" style="font-size:1.3rem;">مليون سنتيم</div>
+          </div>
+
+          <div class="result-box">
+            <div class="label">
+              <span>بالدورو الجزائري</span>
+              <button class="copy-btn" data-copy="resDoro">📋 نسخ</button>
+            </div>
+            <div class="value" id="resDoro">50,000 دورو</div>
+          </div>
+        </div>
+
+        <!-- Official Tafqit Box -->
+        <div class="tafqit-box">
+          <div class="label">
+            <span>التفقيد الرسمي للصكوك والفواتير (بالحروف العربية):</span>
+            <button class="copy-btn" data-copy="resTafqitAr">📋 نسخ النص</button>
+          </div>
+          <div class="tafqit-text" id="resTafqitAr">عشرة آلاف دينار جزائري لا غير</div>
+          <div class="tafqit-sub" id="resTafqitFr">Dix mille dinars algériens seulement</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Tab 2: Land & Agriculture -->
+    <div class="tab-pane" id="tab-land">
+      <div class="calc-card">
+        <div class="calc-card-title">🌾 محول الأراضي الفلاحية والمساحات العقارية</div>
+        <div class="calc-card-desc">تحويل رسمي طبقاً لمسح الأراضي والديوان الوطني للترقيم العقاري (متر مربع، آر، هكتار، والوحدات التقليدية كالزوجة).</div>
+
+        <div class="form-group">
+          <label class="form-label">أدخل مساحة الأرض:</label>
+          <div class="input-row">
+            <input type="number" id="landInput" class="form-input" value="10000" min="0" step="any">
+            <select id="landUnitSelect" class="form-select">
+              <option value="m2">متر مربع (م²)</option>
+              <option value="hectare" selected>هكتار (ha)</option>
+              <option value="are">آر (are - 100م²)</option>
+              <option value="zoudja">زوجة تقليدية (~10 هكتار)</option>
+              <option value="faddan">فدان (4200.83 م²)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-box highlight">
+            <div class="label">الصيغة العقارية الرسمية (مسح الأراضي)</div>
+            <div class="value" id="resCadastre" style="font-size:1.25rem;">1 هكتار و 0 آر و 0 سنتيار</div>
+          </div>
+          <div class="result-box">
+            <div class="label">بالمتر المربع (م²)</div>
+            <div class="value" id="resM2">10,000 م²</div>
+          </div>
+          <div class="result-box">
+            <div class="label">بالهكتار (ha)</div>
+            <div class="value" id="resHa">1 هكتار</div>
+          </div>
+          <div class="result-box">
+            <div class="label">بالآر (a)</div>
+            <div class="value" id="resAre">100 آر</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Rebar & Concrete -->
+    <div class="tab-pane" id="tab-rebar">
+      <div class="calc-card">
+        <div class="calc-card-title">🏗️ حاسبة حديد التسليح FeE500 ومكونات الخرسانة</div>
+        <div class="calc-card-desc">حساب الوزن الخطي الإجمالي لحديد التسليح بالمتر الطولي والطن، مع حساب أكياس الإسمنت والرمل والحصى لكل م³ خرسانة.</div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <!-- Rebar -->
+          <div>
+            <h4 style="margin-bottom:12px; color:var(--primary); font-weight:700;">1. حديد التسليح (Rond à Béton)</h4>
+            <div class="form-group">
+              <label class="form-label" style="font-size:0.85rem;">قطر السيخ (Diamètre):</label>
+              <select id="rebarDiaSelect" class="form-select">
+                <option value="6">T6 (6 mm)</option>
+                <option value="8">T8 (8 mm)</option>
+                <option value="10">T10 (10 mm)</option>
+                <option value="12" selected>T12 (12 mm)</option>
+                <option value="14">T14 (14 mm)</option>
+                <option value="16">T16 (16 mm)</option>
+                <option value="20">T20 (20 mm)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" style="font-size:0.85rem;">طول القضيب (متر) والعدد:</label>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <input type="number" id="rebarLength" class="form-input" value="12" style="font-size:1rem;" placeholder="الطول 12م">
+                <input type="number" id="rebarCount" class="form-input" value="10" style="font-size:1rem;" placeholder="العدد">
+              </div>
+            </div>
+
+            <div class="result-box" style="margin-top:12px;">
+              <div class="label">الوزن الإجمالي للحديد</div>
+              <div class="value" id="resRebarWeight">106.5 كغ (0.107 طن)</div>
+            </div>
+          </div>
+
+          <!-- Concrete -->
+          <div>
+            <h4 style="margin-bottom:12px; color:var(--emerald); font-weight:700;">2. مكونات الخرسانة (Béton Armé)</h4>
+            <div class="form-group">
+              <label class="form-label" style="font-size:0.85rem;">حجم الخرسانة المطلوب (م³):</label>
+              <input type="number" id="concreteVolume" class="form-input" value="10" min="0.1" step="0.5">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" style="font-size:0.85rem;">عيار الإسمنت (Dosage kg/m³):</label>
+              <select id="concreteDosage" class="form-select">
+                <option value="350" selected>350 كغ/م³ (خرسانة مسلحة عادية للأساسات والسقف)</option>
+                <option value="400">400 كغ/م³ (خرسانة مسلحة عالية المقاومة)</option>
+                <option value="250">250 كغ/م³ (خرسانة نظافة Gros béton)</option>
+              </select>
+            </div>
+
+            <div class="result-box" style="margin-top:12px;">
+              <div class="label">أكياس الإسمنت (50 كغ) المطلوبة</div>
+              <div class="value" id="resCementBags" style="color:var(--emerald);">70 كيس إسمنت</div>
+              <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;" id="resAggregates">
+                رمل: 4.0 م³ | حصى: 8.0 م³ | ماء: 1750 لتر
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../../../packages/dz-runtime/dz-runtime.js"></script>
+  <script type="module">
+    import {
+      convertAlgerianCurrency,
+      convertLandArea,
+      calculateRebarWeight,
+      calculateConcreteMaterials
+    } from './src/convert-engine.js';
+
+    // 1. Currency
+    const currInput = document.getElementById('currencyInput');
+    const currUnit = document.getElementById('currencyUnitSelect');
+
+    function updateCurrency() {
+      const val = currInput.value;
+      const unit = currUnit.value;
+      const res = convertAlgerianCurrency(val, unit);
+
+      document.getElementById('resDzd').textContent = `${res.dzd.toLocaleString('ar-DZ')} دج`;
+      document.getElementById('resCentimes').textContent = `${res.centimes.toLocaleString('ar-DZ')} سنتيم`;
+      document.getElementById('resPopular').textContent = res.popularSpokenAr;
+      document.getElementById('resDoro').textContent = `${res.doro.toLocaleString('ar-DZ')} دورو`;
+      document.getElementById('resTafqitAr').textContent = res.tafqitAr;
+      document.getElementById('resTafqitFr').textContent = res.tafqitFr;
+    }
+
+    currInput.addEventListener('input', updateCurrency);
+    currUnit.addEventListener('change', updateCurrency);
+
+    document.querySelectorAll('.chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currInput.value = btn.getAttribute('data-curr');
+        currUnit.value = btn.getAttribute('data-unit');
+        updateCurrency();
+      });
+    });
+
+    // 2. Land
+    const landInput = document.getElementById('landInput');
+    const landUnit = document.getElementById('landUnitSelect');
+
+    function updateLand() {
+      const res = convertLandArea(landInput.value, landUnit.value);
+      document.getElementById('resCadastre').textContent = res.officialCadastreFormatted;
+      document.getElementById('resM2').textContent = `${res.m2.toLocaleString('ar-DZ')} م²`;
+      document.getElementById('resHa').textContent = `${res.hectares.toLocaleString('ar-DZ')} هكتار`;
+      document.getElementById('resAre').textContent = `${res.ares.toLocaleString('ar-DZ')} آر`;
+    }
+
+    landInput.addEventListener('input', updateLand);
+    landUnit.addEventListener('change', updateLand);
+
+    // 3. Rebar & Concrete
+    const rebarDia = document.getElementById('rebarDiaSelect');
+    const rebarLen = document.getElementById('rebarLength');
+    const rebarCount = document.getElementById('rebarCount');
+
+    function updateRebar() {
+      const res = calculateRebarWeight(rebarDia.value, rebarLen.value, rebarCount.value);
+      document.getElementById('resRebarWeight').textContent = `${res.totalWeightKg.toLocaleString('ar-DZ')} كغ (${res.totalWeightTonnes} طن)`;
+    }
+
+    rebarDia.addEventListener('change', updateRebar);
+    rebarLen.addEventListener('input', updateRebar);
+    rebarCount.addEventListener('input', updateRebar);
+
+    const concVol = document.getElementById('concreteVolume');
+    const concDosage = document.getElementById('concreteDosage');
+
+    function updateConcrete() {
+      const res = calculateConcreteMaterials(concVol.value, concDosage.value);
+      document.getElementById('resCementBags').textContent = `${res.cementBags50kg} كيس إسمنت (${res.totalCementKg.toLocaleString('ar-DZ')} كغ)`;
+      document.getElementById('resAggregates').textContent = `رمل: ${res.sandVolumeM3} م³ | حصى: ${res.gravelVolumeM3} م³ | ماء: ${res.waterLiters} لتر`;
+    }
+
+    concVol.addEventListener('input', updateConcrete);
+    concDosage.addEventListener('change', updateConcrete);
+
+    // Copy to clipboard
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-copy');
+        const elem = document.getElementById(targetId);
+        if (elem) {
+          navigator.clipboard.writeText(elem.textContent).then(() => {
+            const original = btn.textContent;
+            btn.textContent = '✅ تم النسخ';
+            setTimeout(() => { btn.textContent = original; }, 1500);
+          });
+        }
+      });
+    });
+
+    // Theme toggle
+    document.getElementById('themeToggleBtn').addEventListener('click', () => {
+      const html = document.documentElement;
+      const cur = html.getAttribute('data-theme') || 'dark';
+      html.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+    });
+
+    // Tabs toggle
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+
+    // Run initial
+    updateCurrency();
+    updateLand();
+    updateRebar();
+    updateConcrete();
+  </script>
+</body>
+</html>

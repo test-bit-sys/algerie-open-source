@@ -1,0 +1,175 @@
+import { describe, it, expect } from 'vitest';
+import { Store } from '../src/data/store.js';
+import { memoryBackend } from '../src/data/backend.js';
+
+function allText(backend) {
+  return [...backend.files.values()].map((v) => (typeof v === 'string' ? v : '')).join('\n');
+}
+
+async function setup() {
+  const backend = memoryBackend();
+  const store = new Store(backend, { saveDelay: 0 });
+  await store.load();
+  const nb = store.notebooks[0];
+  const section = store.createSection(nb.id, { name: 'Diary' });
+  const meta = store.createPage(section.id, { title: 'Secret plans', outlines: [{ id: 'o', x: 0, y: 0, html: '<p>The treasure is buried under the oak</p>' }] });
+  await store.flush();
+  return { backend, store, section, meta };
+}
+
+describe('password-protected sections', () => {
+  it('stores titles and text only encrypted', async () => {
+    const { backend, store, section } = await setup();
+    expect(allText(backend)).toContain('treasure');
+    await store.protectSection(section.id, 'correct horse');
+    await store.flush();
+    const text = allText(backend);
+    expect(text).not.toContain('treasure');
+    expect(text).not.toContain('Secret plans');
+    expect(text).toContain('Diary'); // section names stay visible so the locked section can be found
+  });
+
+  it('hides pages after locking and opens them with the right password only', async () => {
+    const { backend, store, section, meta } = await setup();
+    await store.protectSection(section.id, 'correct horse');
+    await store.lockSection(section.id);
+    expect(store.section(section.id).pages).toEqual([]);
+    expect(store.findPage(meta.id)).toBeNull();
+
+    const fresh = new Store(backend, { saveDelay: 0 });
+    await fresh.load();
+    expect(fresh.section(section.id).pages).toEqual([]);
+    expect(await fresh.search('treasure')).toEqual([]);
+    expect(await fresh.unlockSection(section.id, 'wrong')).toBe(false);
+    expect(await fresh.unlockSection(section.id, 'correct horse')).toBe(true);
+    expect(fresh.section(section.id).pages.map((p) => p.title)).toEqual(['Secret plans']);
+    const page = await fresh.loadPage(meta.id);
+    expect(page.outlines[0].html).toContain('treasure');
+    expect((await fresh.search('treasure')).length).toBe(1);
+  });
+
+  it('keeps edits made while unlocked encrypted', async () => {
+    const { backend, store, section, meta } = await setup();
+    await store.protectSection(section.id, 'pw');
+    const page = await store.loadPage(meta.id);
+    page.outlines[0].html = '<p>moved to the cave</p>';
+    store.pageChanged(page);
+    store.createPage(section.id, { title: 'Second secret' });
+    await store.flush();
+    const text = allText(backend);
+    expect(text).not.toContain('cave');
+    expect(text).not.toContain('Second secret');
+  });
+
+  it('encrypts pictures and keeps them readable while unlocked', async () => {
+    const { backend, store, section, meta } = await setup();
+    await store.protectSection(section.id, 'pw');
+    const id = await store.saveAsset(new Blob(['PNGDATA-visible'], { type: 'image/png' }), 'cat.png', { sectionId: section.id });
+    expect(id.endsWith('.sealed')).toBe(true);
+    const stored = backend.files.get(`assets/${id}`);
+    expect(await stored.text()).not.toContain('PNGDATA');
+    expect(await (await store.assetBlob(id)).text()).toBe('PNGDATA-visible');
+    const page = await store.loadPage(meta.id);
+    page.outlines[0].html += `<p><img data-asset="${id}" alt=""></p>`;
+    store.pageChanged(page);
+    await store.flush();
+    // Removing the password turns the picture back into a plain file.
+    await store.unprotectSection(section.id);
+    const plain = page.outlines[0].html.match(/data-asset="([^"]+)"/)[1];
+    expect(plain.endsWith('.sealed')).toBe(false);
+    expect(await (await store.assetBlob(plain)).text()).toBe('PNGDATA-visible');
+    expect(allText(backend)).toContain('treasure');
+  });
+
+  it('changes the password', async () => {
+    const { backend, store, section } = await setup();
+    await store.protectSection(section.id, 'old');
+    await store.protectSection(section.id, 'new');
+    await store.lockSection(section.id);
+    const fresh = new Store(backend, { saveDelay: 0 });
+    await fresh.load();
+    expect(await fresh.unlockSection(section.id, 'old')).toBe(false);
+    expect(await fresh.unlockSection(section.id, 'new')).toBe(true);
+  });
+
+  it('seals deleted pages of a protected section in Deleted Notes', async () => {
+    const { backend, store, section, meta } = await setup();
+    await store.protectSection(section.id, 'pw');
+    const entry = store.deletePage(meta.id);
+    await store.flush();
+    expect(allText(backend)).not.toContain('Secret plans');
+    const fresh = new Store(backend, { saveDelay: 0 });
+    await fresh.load();
+    expect(await fresh.openTrash(entry.id)).toBe(false);
+    await fresh.unlockSection(section.id, 'pw');
+    expect(await fresh.openTrash(entry.id)).toBe(true);
+    fresh.restore(entry.id);
+    expect(fresh.section(section.id).pages.map((p) => p.title)).toEqual(['Secret plans']);
+  });
+});
+
+describe('password-protected sections: edge cases', () => {
+  it('never writes plaintext for a page edited and then deleted', async () => {
+    const { backend, store, section, meta } = await setup();
+    await store.protectSection(section.id, 'pw');
+    const page = await store.loadPage(meta.id);
+    page.outlines[0].html = '<p>last minute secret</p>';
+    store.schedule(`pages/${meta.id}.json`, () => store.pages.get(meta.id), 50);
+    store.deletePage(meta.id);
+    await store.flush();
+    expect(allText(backend)).not.toContain('last minute secret');
+  });
+
+  it('refuses new pages and moves into a locked section', async () => {
+    const { store, section } = await setup();
+    await store.protectSection(section.id, 'pw');
+    await store.lockSection(section.id);
+    expect(() => store.createPage(section.id, { title: 'x' })).toThrow();
+    const other = [...store.sectionsOf(store.notebooks[0])][0];
+    const m = store.createPage(other.id, { title: 'outside' });
+    expect(store.movePage(m.id, { sectionId: section.id })).toBe(false);
+    expect(store.findPage(m.id).section.id).toBe(other.id);
+  });
+
+  it('opens a page moved out of a protected section before it was loaded', async () => {
+    const { backend, store, section, meta } = await setup();
+    await store.protectSection(section.id, 'pw');
+    await store.lockSection(section.id);
+    const fresh = new Store(backend, { saveDelay: 0 });
+    await fresh.load();
+    await fresh.unlockSection(section.id, 'pw');
+    const plain = [...fresh.sectionsOf(fresh.notebooks[0])][0];
+    expect(fresh.movePage(meta.id, { sectionId: plain.id })).toBe(true);
+    const page = await fresh.loadPage(meta.id);
+    expect(page.outlines[0].html).toContain('treasure');
+  });
+
+  it('keeps deleted pages restorable after a password change and after locking', async () => {
+    const { backend, store, section, meta } = await setup();
+    await store.protectSection(section.id, 'old');
+    const entry = store.deletePage(meta.id);
+    await store.flush();
+    await store.protectSection(section.id, 'new');
+    await store.lockSection(section.id);
+    // Another trash write while locked must not empty the entry.
+    store.scheduleTrash();
+    await store.flush();
+    const fresh = new Store(backend, { saveDelay: 0 });
+    await fresh.load();
+    expect(await fresh.unlockSection(section.id, 'new')).toBe(true);
+    expect(await fresh.openTrash(entry.id)).toBe(true);
+    fresh.restore(entry.id);
+    expect((await fresh.loadPage(meta.id)).outlines[0].html).toContain('treasure');
+  });
+});
+
+describe('asset ids', () => {
+  it('only accepts generated names', async () => {
+    const { isAssetId } = await import('../src/data/store.js');
+    const { sanitizeHtml } = await import('../src/lib/sanitize.js');
+    expect(isAssetId('akx81mz2p0qq.png')).toBe(true);
+    expect(isAssetId('s1ab.a2cd.png.sealed')).toBe(true);
+    expect(isAssetId('../notebooks/x.json')).toBe(false);
+    expect(sanitizeHtml('<img data-asset="../notebooks/x.json">')).not.toContain('../');
+  });
+});

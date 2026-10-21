@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Hourly (mock dev)</title>
+  <meta name="theme-color" content="#f8f8f9" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)" />
+  <script>
+    (() => {
+      try {
+        const t = localStorage.getItem('hourly:theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    })();
+  </script>
+  <style>
+    /* Keep in sync with index.html (splash is styled inline there so it is
+       correct before the bundle loads). */
+    #boot-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      background: #f8f8f9;
+      transition: opacity 0.3s ease;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:where(:not([data-theme="light"])) #boot-splash { background: #0e0e10; }
+    }
+    :root[data-theme="dark"] #boot-splash { background: #0e0e10; }
+    #boot-splash.done {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #boot-splash .boot-mark {
+      opacity: 0;
+      animation:
+        boot-appear 0.3s ease 0.25s forwards,
+        boot-pulse 1.4s ease-in-out 0.55s infinite;
+    }
+    @keyframes boot-appear {
+      to { opacity: 1; }
+    }
+    @keyframes boot-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(0.94); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #boot-splash .boot-mark { animation: boot-appear 0.01ms linear 0.25s forwards; }
+      #boot-splash { transition: none; }
+    }
+  </style>
+  <script src="./dev/puter-mock.js"></script>
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <div id="app" class="app">
+    <div class="boot-splash" id="boot-splash" aria-hidden="true">
+      <img class="boot-mark" src="./icons/icon-192.png" width="64" height="64" alt="" />
+    </div>
+  </div>
+</body>
+</html>

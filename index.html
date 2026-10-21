@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DZ Open Source | المنظومة الجزائرية المفتوحة المصدر</title>
-  <meta name="description" content="DZ Open Source: 15 برنامجاً وأداة مفتوحة المصدر مصممة خصيصاً للاحتياجات الجزائرية: الفوترة، المحاسبة، كشوف الرواتب، الهندسة، وأدوات النظام. تعمل مباشرة في المتصفح أو على جهازك بدون إنترنت.">
+  <title>DZ Open Source | المنظومة الجزائرية المفتوحة المصدر (29+ تطبيقاً سيادياً)</title>
+  <meta name="description" content="DZ Open Source: 29 برنامجاً وتطبيقاً مفتوح المصدر مصممة خصيصاً للاحتياجات والسيادة الرقمية الجزائرية: الفوترة، المحاسبة، كشوف الرواتب، مواقيت الصلاة والقبلة، محول العملات، الهندسة، وأدوات النظام. تعمل مباشرة في المتصفح أو على جهازك بدون إنترنت.">
   <link rel="icon" type="image/png" href="assets/dz-open-source-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -519,6 +519,33 @@
       color: #c084fc;
     }
 
+    .icon-office {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    [data-theme="dark"] .icon-office {
+      background: #1e3a8a;
+      color: #93c5fd;
+    }
+
+    .icon-multimedia {
+      background: #fdf2f8;
+      color: #db2777;
+    }
+    [data-theme="dark"] .icon-multimedia {
+      background: #831843;
+      color: #f472b6;
+    }
+
+    .icon-games {
+      background: #ecfdf5;
+      color: #059669;
+    }
+    [data-theme="dark"] .icon-games {
+      background: #064e3b;
+      color: #6ee7b7;
+    }
+
     .card-header-text {
       flex: 1;
     }
@@ -1019,8 +1046,8 @@
       </div>
       <h2 class="hero-title">برمجيات جزائرية حرة.. بسيطة، سريعة، وتعمل بدون إنترنت.</h2>
       <p class="hero-desc">
-        دليل يضم 15 برنامجاً وأداة مفتوحة المصدر تم بناؤها لتلائم القوانين والاحتياجات المحلية في الجزائر:
-        من الفوترة والمحاسبة والرواتب إلى الحسابات الهندسية وإدارة النظام. يمكنك تجربة أي تطبيق مباشرة في متصفحك أو تشغيله على جهازك.
+        دليل المنظومة الوطنية المفتوحة المصدر: 29 برنامجاً وتطبيقاً متكاملاً تم بناؤها لتلائم القوانين والاحتياجات المحلية في الجزائر:
+        من محررات النصوص والجداول والعروض والـ PDF إلى الفوترة والمحاسبة ومواقيت الصلاة ومحول العملات والرواتب وهندسة الزلازل وأدوات النظام والألعاب التراثية. تعمل مباشرة في المتصفح أو على حاسوبك بدون إنترنت.
       </p>
 
       <div class="hero-cta">
@@ -1031,7 +1058,7 @@
             <rect x="14" y="14" width="7" height="7"></rect>
             <rect x="3" y="14" width="7" height="7"></rect>
           </svg>
-          استكشف البرامج (15 تطبيق)
+          استكشف المنظومة (29 تطبيقاً)
         </a>
         <a href="https://github.com/test-bit-sys/algerie-open-source#readme" target="_blank" rel="noopener noreferrer" class="btn-secondary">
           <svg style="width:18px; height:18px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -1086,36 +1113,275 @@
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" id="searchInput" class="search-input" placeholder="ابحث باسم البرنامج أو الميزة (مثال: فواتير، رواتب، زلازل، مساحة، ملفات، ccp...)" autocomplete="off">
+          <input type="text" id="searchInput" class="search-input" placeholder="ابحث باسم البرنامج أو الميزة (مثال: وورد، إكسل، فواتير، رواتب، زلازل، مساحة، ملفات، كانبان...)" autocomplete="off">
         </div>
 
         <div class="categories-bar">
-          <button class="category-btn active" data-cat="all">جميع البرامج (15)</button>
+          <button class="category-btn active" data-cat="all">جميع البرامج (29)</button>
+          <button class="category-btn" data-cat="office">المكتب والإنتاجية (10)</button>
           <button class="category-btn" data-cat="finance">المالية والتجارة (5)</button>
-          <button class="category-btn" data-cat="engineering">الهندسة والبناء (5)</button>
-          <button class="category-btn" data-cat="system">أدوات النظام والملفات (3)</button>
-          <button class="category-btn" data-cat="developer">أدوات المطورين (2)</button>
-          <span class="results-count" id="resultsCount">يظهر 15 برنامجاً</span>
+          <button class="category-btn" data-cat="system">أدوات النظام والملفات (2)</button>
+          <button class="category-btn" data-cat="multimedia">الوسائط والتصميم (4)</button>
+          <button class="category-btn" data-cat="engineering">الهندسة والتطوير (2)</button>
+          <button class="category-btn" data-cat="games">الألعاب التفاعلية (6)</button>
+          <span class="results-count" id="resultsCount">يظهر 29 تطبيقاً</span>
         </div>
       </div>
 
       <!-- Apps Grid -->
       <div class="apps-grid" id="appsGrid">
 
-        <!-- 1. DZ-Facture & POS -->
-        <article class="app-card" data-cat="finance" data-name="dz-facture فوترة نقاط بيع فواتير سند تسليم طابع جبائي timbre fiscal tva">
+        <!-- 1. DZ-WORD PRO -->
+        <article class="app-card" data-cat="office" data-name="dz-word كاتب الجزائر معالج نصوص مستندات docx word libreoffice writer شهادة عمل مراسلة إدارية">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">كاتب الجزائر ومعالج النصوص</h3>
+              <div class="app-subtitle">DZ-WORD PRO</div>
+            </div>
+            <span class="tech-pill">Web ES + DOCX Engine</span>
+          </div>
+          <p class="card-desc">
+            معالج نصوص مكتبي سيادي بديل لمايكروسوفت وورد وغوغل دوكس، مع مسطرة مدرجة بالسنتيمتر، تصدير حقيقي لمستندات DOCX، وقوالب إدارية جزائرية رسمية.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير مباشر لملفات Microsoft Word (.docx) بصيغة OpenXML نقية وبدون إنترنت</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>نماذج إدارية جزائرية: شهادة عمل، استدعاء رسمي، مراسلة وزارية، وجدول بيانات</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>شريط أدوات Ribbon كامل مع تنسيق الخطوط، الجداول، المسطرة، والطباعة القياسية A4</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/office-suite/dz-word/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Word Pro', 'Node.js (Port 3006) / Desktop App', 'npm run start:word', 'يمكنك أيضاً تشغيله كنافذة تطبيق ويندوز مستقلة عبر النقر المزدوج على run-word.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 2. DZ-CALC PRO -->
+        <article class="app-card" data-cat="office" data-name="dz-calc جداول حسابات إكسل مالي ضرائب تفقيد دينار irg tva timbre excel libreoffice calc">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">جداول وحسابات الجزائر</h3>
+              <div class="app-subtitle">DZ-CALC PRO</div>
+            </div>
+            <span class="tech-pill">Web ES + Formula Engine</span>
+          </div>
+          <p class="card-desc">
+            استوديو الجداول الممتدة والحسابات المالية بديل مايكروسوفت إكسل، مع محرك معادلات متقدم ودوال التفقيد بالدينار الجزائري وحسابات الضرائب والأجور.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>محرك معادلات متكامل (SUM, AVERAGE, MIN, MAX, COUNT, IF) ونطاقات الخلايا</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>دوال جزائرية حصرية: التفقيد بالأحرف (Tafqit)، حساب TVA، الطابع الجبائي، وباريم IRG</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير واستيراد فوري لجداول البيانات بصيغة CSV و Excel، مع تنسيق الخلايا والعملة</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/office-suite/dz-calc/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Calc Pro', 'Node.js (Port 3007) / Desktop App', 'npm run start:calc', 'يمكنك أيضاً تشغيله كنافذة تطبيق ويندوز مستقلة عبر النقر المزدوج على run-calc.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 3. DZ-IMPRESS PRO -->
+        <article class="app-card" data-cat="office" data-name="dz-slides dz-impress عروض تقديمية بوربوينت شرائح مذكرات تخرج powerpoint impress slideshow">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">استوديو العروض التقديمية</h3>
+              <div class="app-subtitle">DZ-IMPRESS PRO</div>
+            </div>
+            <span class="tech-pill">Web ES + 16:9 Canvas</span>
+          </div>
+          <p class="card-desc">
+            استوديو متكامل لصناعة وتقديم العروض بديل PowerPoint، بنسبة 16:9، قوالب مذكرات الماستر والليسانس والدكتوراه الجزائرية، ووضع العرض بملء الشاشة.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>مساحة عمل 16:9 قياسية مع معرض أشكال هندسية، أسهم، نصوص، وصور</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قوالب وطنية أكاديمية: مناقشة أطروحة الدكتوراه، مذكرة الماستر، وعرض الشركات الناشئة</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>وضع العرض التقديمي المباشر (Slideshow) مع أزرار التحكم واختصارات لوحة المفاتيح</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/office-suite/dz-slides/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Impress Pro', 'Node.js (Port 3008) / Desktop App', 'npm run start:slides', 'يمكنك أيضاً تشغيله كنافذة تطبيق ويندوز مستقلة عبر النقر المزدوج على run-slides.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 4. DZ-PDF PRO -->
+        <article class="app-card" data-cat="office" data-name="dz-pdf محرر بي دي اف أختام توقيع دمج تقسيم مستندات acrobat reader pdf editor stamps">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><circle cx="10" cy="13" r="2"></circle><path d="m20 17-1.5-1.5"></path></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">محرر وموثق ملفات PDF</h3>
+              <div class="app-subtitle">DZ-PDF PRO</div>
+            </div>
+            <span class="tech-pill">PDF-Lib + Vector Stamps</span>
+          </div>
+          <p class="card-desc">
+            بديل Adobe Acrobat Pro سيادي أوفلاين: 12 ختماً رسمياً جزائرياً معتمداً، 7 نماذج وثائق رسمية، توقيع إلكتروني، تظليل وملاحظات، ودمج وتقسيم الملفات.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>12 ختماً جزائرياً رسمياً: مصادق عليه، سري للغاية، طبق الأصل، مدفوع، مؤشر عليه</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>أدوات التوقيع الرقمي الحي، إضافة الملاحظات، الأشكال، والهايلايتر الشفاف</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>دمج ملفات PDF متعددة في ملف واحد، وتقسيم واستخراج الصفحات أوفلاين 100%</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/office-suite/dz-pdf/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-PDF Pro', 'Node.js (Port 3004) / Desktop App', 'npm run start:pdf', 'يمكنك أيضاً تشغيله كنافذة تطبيق ويندوز مستقلة عبر النقر المزدوج على run-pdf.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 5. DZ-WHITEBOARD PRO -->
+        <article class="app-card" data-cat="office" data-name="dz-whiteboard سبورة بيضاء تفاعلية تدريس مدارس جامعات openboard miro canvas رسم هندسي">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="14" rx="2"></rect><line x1="3" y1="12" x2="21" y2="12"></line><line x1="7" y1="21" x2="17" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">السبورة البيضاء التفاعلية</h3>
+              <div class="app-subtitle">DZ-WHITEBOARD PRO</div>
+            </div>
+            <span class="tech-pill">HTML5 Canvas 60fps</span>
+          </div>
+          <p class="card-desc">
+            سبورة تفاعلية للمدارس والجامعات وقاعات التدريس (بديل OpenBoard و Miro)، لوحة لانهائية، أدوات هندسية، خطوط رسم ناعمة، ومؤشر ليزر تفاعلي.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>أنماط متعددة: سبورة بيضاء، سبورة مدرسية خضراء، سبورة داكنة، وشبكة مربعات هندسية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قلم حبر ناعم (Catmull-Rom)، ممحاة ذكية، أشكال هندسية، وملاحظات لاصقة ملونة</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>مؤشر ليزر تفاعلي للشرح، وإدارة الصفحات المتعددة مع التصدير المباشر لـ PDF و PNG</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/education-academia/dz-whiteboard/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Whiteboard Pro', 'Node.js (Port 3005) / Desktop App', 'npm run start:whiteboard', 'يمكنك أيضاً تشغيله كنافذة تطبيق ويندوز مستقلة عبر النقر المزدوج على run-whiteboard.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 6. DZ-BOARDS PRO -->
+        <article class="app-card" data-cat="office" data-name="dz-boards كانبان مهام مشاريع تريلو جيرا تخرج شركات ناشئة trello jira kanban agile pfe">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">لوحات كانبان وإدارة المشاريع</h3>
+              <div class="app-subtitle">DZ-BOARDS PRO</div>
+            </div>
+            <span class="tech-pill">Web ES + Kanban Engine</span>
+          </div>
+          <p class="card-desc">
+            منصة كانبان وإدارة مهام رشيقة بديلة لـ Trello و Jira، سحب وإفلات تفاعلي، قوالب وطنية لمشاريع التخرج PFE وإطلاق الشركات الناشئة، وتصدير كامل.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>سحب وإفلات سلس للبطاقات بين الأعمدة مع تصنيف الأولويات والوسوم وتواريخ الاستحقاق</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قوالب وطنية جاهزة: مذكرة تخرج PFE، إطلاق شركة ناشئة وتجارة إلكترونية، وسبرنت برمجي</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قوائم تحقق فرعية، شريط متابعة الإنجاز اللحظي، وتصدير كامل بصيغ .dzboard و CSV</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/collaboration/dz-boards/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Boards Pro', 'Node.js (Port 3011) / Desktop App', 'npm run start:boards', 'يمكنك أيضاً تشغيله كنافذة تطبيق ويندوز مستقلة عبر النقر المزدوج على run-boards.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 7. DZ-FACTURE & POS -->
+        <article class="app-card" data-cat="finance" data-name="dz-facture فوترة نقاط بيع فواتير سند تسليم طابع جبائي timbre fiscal tva pos pos80 a4">
           <div class="card-top">
             <div class="app-icon-wrap icon-finance">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                <line x1="2" y1="10" x2="22" y2="10"></line>
-              </svg>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
             </div>
             <div class="card-header-text">
               <h3 class="app-title">الفوترة ونقاط البيع</h3>
               <div class="app-subtitle">DZ-FACTURE & POS</div>
             </div>
-            <span class="tech-pill">Web ES</span>
+            <span class="tech-pill">Web ES Modules</span>
           </div>
           <p class="card-desc">
             برنامج متكامل لإصدار الفواتير وسندات التسليم (Bon de Livraison) وإدارة نقاط البيع، مع حساب الطابع الجبائي ورسم TVA طبقاً للمرسوم التنفيذي 05-468.
@@ -1123,40 +1389,37 @@
           <ul class="card-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حساب آلي للطابع الجبائي 1% على الدفع نقداً (بحد أقصى 10,000 دج)</span>
+              <span>حساب آلي للطابع الجبائي 1% على الدفع نقداً (بحد أقصى 10,000 دج) وتطبيق نسب TVA</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>طباعة قياسية A4 وطباعة حرارية للتذاكر 80mm لنقاط البيع</span>
+              <span>طباعة قياسية A4 وطباعة حرارية للتذاكر 80mm لنقاط البيع والمحلات التجارية</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>توليد كود Barcode 128 و QR للفاتورة وحفظ محلي آمن</span>
+              <span>توليد كود Barcode 128 و QR للفاتورة وحفظ محلي آمن مع التفقيد بالدينار والسنتيم</span>
             </li>
           </ul>
           <div class="card-actions">
-            <a href="apps/finance-accounting/dz-facture/index.html" class="btn-card-launch">
+            <a href="apps/business-enterprise/dz-facture/index.html" class="btn-card-launch">
               <span>جرّب الآن</span>
               <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <button class="btn-card-cmd" onclick="showCmd('الفوترة ونقاط البيع', 'Web ES Modules', 'npm start', 'يعمل التطبيق في المتصفح محلياً دون الحاجة لأي خادم أو اتصال.')">
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Facture & POS', 'Web ES Modules (Port 3000)', 'npm run start:dz-facture', 'يعمل التطبيق في المتصفح محلياً وفورياً، أو عبر run-facture.bat كنافذة سطح مكتب مستقلة.')">
               أمر التشغيل
             </button>
           </div>
         </article>
 
-        <!-- 2. DZ-Compta -->
+        <!-- 8. DZ-COMPTA SCF -->
         <article class="app-card" data-cat="finance" data-name="dz-compta محاسبة مالية قيود يومية عامة ميزانية scf c# dotnet">
           <div class="card-top">
             <div class="app-icon-wrap icon-finance">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-              </svg>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
             </div>
             <div class="card-header-text">
               <h3 class="app-title">المحاسبة المالية العامة</h3>
-              <div class="app-subtitle">DZ-COMPTA</div>
+              <div class="app-subtitle">DZ-COMPTA SCF</div>
             </div>
             <span class="tech-pill">C# .NET 10</span>
           </div>
@@ -1166,15 +1429,15 @@
           <ul class="card-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>دليل الحسابات الوطني الجزائري الكامل (الفئات من 1 إلى 7)</span>
+              <span>دليل الحسابات الوطني الجزائري الكامل (الفئات من 1 إلى 7) مع شجرة الحسابات</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>تحقق فوري من توازن القيد المحاسبي (مدين = دائن)</span>
+              <span>تحقق فوري من توازن القيد المحاسبي (مدين = دائن) وإقفال الفترات المالية</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>محرك مكتبي أصلي بلغة C# .NET 10 مع واجهة ويب خفيفة</span>
+              <span>محرك مكتبي أصلي بلغة C# .NET 10 مع واجهة ويب خفيفة وسريعة</span>
             </li>
           </ul>
           <div class="card-actions">
@@ -1182,44 +1445,39 @@
               <span>جرّب الآن</span>
               <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Compta', 'C# .NET 10', 'cd native/dotnet/dz-compta ; dotnet run', 'يتطلب تثبيت .NET 10 SDK لتشغيل المحرك المكتبي الأصلي.')">
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Compta', 'C# .NET 10', 'dotnet run --project apps/finance-accounting/dz-compta', 'يتطلب تثبيت .NET SDK لتشغيل المحرك المكتبي الأصلي، مع واجهة ويب تفاعلية مدمجة.')">
               أمر التشغيل
             </button>
           </div>
         </article>
 
-        <!-- 3. DZ-Paie -->
-        <article class="app-card" data-cat="finance" data-name="dz-paie أجور رواتب عمال ضمان اجتماعي cnas irg ضريبة c# dotnet">
+        <!-- 9. DZ-PAIE RH -->
+        <article class="app-card" data-cat="finance" data-name="dz-paie أجور رواتب عمال ضمان اجتماعي cnas irg ضريبة c# dotnet قانون العمل 90-11">
           <div class="card-top">
             <div class="app-icon-wrap icon-finance">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
-                <line x1="12" y1="6" x2="12" y2="8"></line>
-                <line x1="12" y1="16" x2="12" y2="18"></line>
-              </svg>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg>
             </div>
             <div class="card-header-text">
               <h3 class="app-title">كشف الأجور والرواتب</h3>
-              <div class="app-subtitle">DZ-PAIE</div>
+              <div class="app-subtitle">DZ-PAIE RH</div>
             </div>
             <span class="tech-pill">C# .NET 10</span>
           </div>
           <p class="card-desc">
-            حساب كشوف الرواتب الشهرية والاشتراكات وفق سلم الضريبة على الدخل الإجمالي (IRG 2022) ونسبة اشتراك الضمان الاجتماعي (CNAS 9%).
+            حساب كشوف الرواتب الشهرية والاشتراكات وفق سلم الضريبة على الدخل الإجمالي (IRG) ونسبة اشتراك الضمان الاجتماعي (CNAS 9%) وقانون العمل 90-11.
           </p>
           <ul class="card-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حساب الضريبة على الدخل IRG وفق الشرائح الرسمية والإعفاءات</span>
+              <span>حساب الضريبة على الدخل IRG وفق الشرائح الرسمية والإعفاءات حتى 30,000 دج</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>توليد قسيمة الراتب الرسمية (Fiche de Paie) جاهزة للطباعة</span>
+              <span>توليد قسيمة الراتب الرسمية (Fiche de Paie) جاهزة للطباعة مع ملخص اشتراكات الضمان</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>محرك مكتبي دقيق بلغة C# .NET 10 لإدارة رواتب المؤسسات</span>
+              <span>محرك مكتبي دقيق بلغة C# .NET 10 لإدارة رواتب الموظفين والمؤسسات</span>
             </li>
           </ul>
           <div class="card-actions">
@@ -1227,341 +1485,26 @@
               <span>جرّب الآن</span>
               <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Paie', 'C# .NET 10', 'cd native/dotnet/dz-paie ; dotnet run', 'يتطلب تثبيت .NET 10 SDK لتشغيل المحرك المكتبي الأصلي.')">
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Paie', 'C# .NET 10', 'dotnet run --project apps/finance-accounting/dz-paie', 'يتطلب تثبيت .NET SDK لتشغيل المحرك المكتبي الأصلي، مع واجهة ويب تفاعلية مدمجة.')">
               أمر التشغيل
             </button>
           </div>
         </article>
 
-        <!-- 4. DZ-Tafqit -->
-        <article class="app-card" data-cat="finance" data-name="dz-tafqit تفقيد مبالغ حروف دينار صك شيك أرقام">
-          <div class="card-top">
-            <div class="app-icon-wrap icon-finance">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <polyline points="4 7 4 4 20 4 20 7"></polyline>
-                <line x1="9" y1="20" x2="15" y2="20"></line>
-                <line x1="12" y1="4" x2="12" y2="20"></line>
-              </svg>
-            </div>
-            <div class="card-header-text">
-              <h3 class="app-title">تفقيد المبالغ المالية بالأحرف</h3>
-              <div class="app-subtitle">DZ-TAFQIT</div>
-            </div>
-            <span class="tech-pill">Web ES</span>
-          </div>
-          <p class="card-desc">
-            تحويل الأرقام والمبالغ النقدية بالدينار الجزائري والسنتيم إلى كلمات عربية وفرنسية وإنجليزية قانونية صالحة للصكوك البريدية والمصرفية.
-          </p>
-          <ul class="card-features">
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>قواعد لغوية عربية فصحى مع قواعد الإعراب والعدد والمعدود</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>صيغة فرنسية رسمية مطابقة لشروط الصكوك (Chèques) في الجزائر</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>نسخ فوري بنقرة واحدة لدمجه المباشر في أي وثيقة</span>
-            </li>
-          </ul>
-          <div class="card-actions">
-            <a href="apps/finance-accounting/dz-tafqit/index.html" class="btn-card-launch">
-              <span>جرّب الآن</span>
-              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Tafqit', 'JavaScript Engine', 'node apps/finance-accounting/dz-tafqit/tafqit.js', 'يمكن استدعاء دالة التفقيد مباشرة في أي كود Node أو متصفح.')">
-              أمر التشغيل
-            </button>
-          </div>
-        </article>
-
-        <!-- 5. DZ-Fiscal -->
-        <article class="app-card" data-cat="finance" data-name="dz-fiscal جباية ضرائب رسم قيمة مضافة tva طابع جبائي tap">
-          <div class="card-top">
-            <div class="app-icon-wrap icon-finance">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
-                <line x1="8" y1="6" x2="16" y2="6"></line>
-                <line x1="8" y1="10" x2="16" y2="10"></line>
-                <line x1="8" y1="14" x2="16" y2="14"></line>
-              </svg>
-            </div>
-            <div class="card-header-text">
-              <h3 class="app-title">الحاسبة الجبائية الوطنية</h3>
-              <div class="app-subtitle">DZ-FISCAL</div>
-            </div>
-            <span class="tech-pill">Web ES</span>
-          </div>
-          <p class="card-desc">
-            حاسبة تفاعلية للضرائب والرسوم الوطنية: حساب سريع للرسم على القيمة المضافة TVA بالنسبتين (9% و 19%)، الطابع الجبائي، والرسم شبه الجبائي.
-          </p>
-          <ul class="card-features">
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حساب فوري من السعر الصافي (HT) إلى الإجمالي (TTC) والعكس</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>قواعد الطابع الجبائي حسب طريقة الدفع (نقداً أو صك)</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>مرجع سريع لمعدلات الرسوم حسب القطاع والنشاط التجاري</span>
-            </li>
-          </ul>
-          <div class="card-actions">
-            <a href="apps/finance-accounting/dz-fiscal/index.html" class="btn-card-launch">
-              <span>جرّب الآن</span>
-              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Fiscal', 'Web ES Modules', 'npm start', 'يعمل في المتصفح محلياً وفورياً.')">
-              أمر التشغيل
-            </button>
-          </div>
-        </article>
-
-        <!-- 6. DZ-RPA Pro -->
-        <article class="app-card" data-cat="engineering" data-name="dz-rpa زلازل هندسة بناء كود جزائري rpa 99 dtr bc 2 48 python">
-          <div class="card-top">
-            <div class="app-icon-wrap icon-engineering">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-              </svg>
-            </div>
-            <div class="card-header-text">
-              <h3 class="app-title">الحسابات الزلزالية للمباني</h3>
-              <div class="app-subtitle">DZ-RPA PRO</div>
-            </div>
-            <span class="tech-pill">Python 3.14</span>
-          </div>
-          <p class="card-desc">
-            حساب القوى الزلزالية وطيف الاستجابة للمنشآت والمباني وفق كود البناء الجزائري المعتمد DTR-BC 2-48 (RPA 99 / 2003).
-          </p>
-          <ul class="card-features">
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>قاعدة بيانات المناطق الزلزالية لكافة الولايات الـ 58 والبلديات</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حساب قوة القص القاعدية (Effort Tranchant V) وطيف التصميم</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>محرك رياضي دقيق مكتوب بلغة Python 3.14 للمهندسين</span>
-            </li>
-          </ul>
-          <div class="card-actions">
-            <a href="apps/engineering/dz-rpa/index.html" class="btn-card-launch">
-              <span>جرّب الآن</span>
-              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-RPA Pro', 'Python 3.14', 'cd native/python ; python -m dz_rpa', 'يتطلب بيئة Python 3.10+ لتشغيل المحرك الحسابي المكتبي.')">
-              أمر التشغيل
-            </button>
-          </div>
-        </article>
-
-        <!-- 7. DZ-Béton -->
-        <article class="app-card" data-cat="engineering" data-name="dz-beton خرسانة مسلحة تسليح روافد أعمدة cba 93 هندسة مدنية">
-          <div class="card-top">
-            <div class="app-icon-wrap icon-engineering">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                <line x1="3" y1="9" x2="21" y2="9"></line>
-                <line x1="9" y1="21" x2="9" y2="9"></line>
-              </svg>
-            </div>
-            <div class="card-header-text">
-              <h3 class="app-title">حسابات الخرسانة المسلحة</h3>
-              <div class="app-subtitle">DZ-BÉTON</div>
-            </div>
-            <span class="tech-pill">Web ES</span>
-          </div>
-          <p class="card-desc">
-            أداة مهنية لحساب مقاطع الخرسانة المسلحة والتسليح للروافد والأعمدة وفق القواعد الفنية المعتمدة في الجزائر (CBA 93).
-          </p>
-          <ul class="card-features">
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حساب حد العزم الأقصى (ELU) وحد التشغيل (ELS)</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>تحديد أقطار وعدد قضبان حديد التسليح المناسبة للمقطع</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>تصدير مذكرة حسابات هندسية بصيغة جاهزة للطباعة</span>
-            </li>
-          </ul>
-          <div class="card-actions">
-            <a href="apps/engineering/dz-beton/index.html" class="btn-card-launch">
-              <span>جرّب الآن</span>
-              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Béton', 'Web ES Modules', 'npm start', 'يعمل التطبيق في المتصفح محلياً دون الحاجة لأي خادم.')">
-              أمر التشغيل
-            </button>
-          </div>
-        </article>
-
-        <!-- 8. DZ-CAD 2D -->
-        <article class="app-card" data-cat="engineering" data-name="dz-cad رسم هندسي مخططات ثنائي أبعاد dxf svg canvas">
-          <div class="card-top">
-            <div class="app-icon-wrap icon-engineering">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-                <path d="M2 12h20"></path>
-              </svg>
-            </div>
-            <div class="card-header-text">
-              <h3 class="app-title">محرر المخططات الهندسية</h3>
-              <div class="app-subtitle">DZ-CAD 2D</div>
-            </div>
-            <span class="tech-pill">HTML5 Canvas</span>
-          </div>
-          <p class="card-desc">
-            برنامج خفيف وسريع لرسم وتعديل المخططات المعمارية والهندسية ثنائية الأبعاد مباشرة داخل المتصفح، مع تصدير بصيغة DXF و SVG.
-          </p>
-          <ul class="card-features">
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>أدوات رسم دقيقة: خطوط، دوائر، أقواس، وتحديد أبعاد (Cotes)</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>طبقات عمل متعددة (Layers) مع نظام الانجذاب المغناطيسي للزوايا</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>تصدير مباشر بصيغة DXF المتوافقة مع برامج CAD المختلفة</span>
-            </li>
-          </ul>
-          <div class="card-actions">
-            <a href="apps/engineering/dz-cad/index.html" class="btn-card-launch">
-              <span>جرّب الآن</span>
-              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-CAD 2D', 'HTML5 Canvas Engine', 'npm start', 'يعمل بالكامل داخل أي متصفح حديث عبر Canvas سريع.')">
-              أمر التشغيل
-            </button>
-          </div>
-        </article>
-
-        <!-- 9. DZ-Topographie -->
-        <article class="app-card" data-cat="engineering" data-name="dz-topographie طبوغرافيا حفر ردم مساحات إحداثيات deblais remblais">
-          <div class="card-top">
-            <div class="app-icon-wrap icon-engineering">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                <polyline points="2 17 12 22 22 17"></polyline>
-                <polyline points="2 12 12 17 22 12"></polyline>
-              </svg>
-            </div>
-            <div class="card-header-text">
-              <h3 class="app-title">الحسابات الطبوغرافية والمساحة</h3>
-              <div class="app-subtitle">DZ-TOPOGRAPHIE</div>
-            </div>
-            <span class="tech-pill">Web ES</span>
-          </div>
-          <p class="card-desc">
-            حساب مناسيب ومكعبات الحفر والردم (Déblais / Remblais) وحساب مساحات القطع الأرضية المعقدة بنظام الإحداثيات المتعامدة والقطبية.
-          </p>
-          <ul class="card-features">
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حساب مساحات الأراضي المضلعة المعقدة بطريقة الإحداثيات (Gauss)</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حساب حجوم الأتربة ومناسيب الحفر والردم للمشاريع الطرقية والمدنية</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>تصدير تقرير القياسات الطبوغرافية بصيغ CSV و PDF للطباعة</span>
-            </li>
-          </ul>
-          <div class="card-actions">
-            <a href="apps/engineering/dz-topographie/index.html" class="btn-card-launch">
-              <span>جرّب الآن</span>
-              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Topographie', 'Web ES Modules', 'npm start', 'يعمل في المتصفح محلياً وفورياً.')">
-              أمر التشغيل
-            </button>
-          </div>
-        </article>
-
-        <!-- 10. DZ-Métrage -->
-        <article class="app-card" data-cat="engineering" data-name="dz-metrage كميات مقايسة أسعار تقديري بناء bps devis bordereau">
-          <div class="card-top">
-            <div class="app-icon-wrap icon-engineering">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <line x1="4" y1="21" x2="4" y2="14"></line>
-                <line x1="4" y1="10" x2="4" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12" y2="3"></line>
-                <line x1="20" y1="21" x2="20" y2="16"></line>
-                <line x1="20" y1="12" x2="20" y2="3"></line>
-              </svg>
-            </div>
-            <div class="card-header-text">
-              <h3 class="app-title">حساب الكميات والأسعار</h3>
-              <div class="app-subtitle">DZ-MÉTRAGE</div>
-            </div>
-            <span class="tech-pill">Web ES</span>
-          </div>
-          <p class="card-desc">
-            إعداد جداول المقايسة والكميات والأسعار لمشاريع البناء والأشغال العمومية (Bordereau des Prix / Devis Quantitatif et Estimatif).
-          </p>
-          <ul class="card-features">
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>قوالب بنود أشغال جاهزة وفق معايير الصفقات العمومية الجزائرية</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حساب تلقائي لبنود الحفريات والخرسانة والبناء والتشطيب</span>
-            </li>
-            <li>
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>تصدير مباشر لملفات Excel و PDF لملفات المناقصات</span>
-            </li>
-          </ul>
-          <div class="card-actions">
-            <a href="apps/engineering/dz-metrage/index.html" class="btn-card-launch">
-              <span>جرّب الآن</span>
-              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Métrage', 'Web ES Modules', 'npm start', 'يعمل في المتصفح محلياً وفورياً.')">
-              أمر التشغيل
-            </button>
-          </div>
-        </article>
-
-        <!-- 11. DZ-DiskTree -->
-        <article class="app-card" data-cat="system" data-name="dz-disktree مساحة قرص فحص ملفات تخزين حجم مجلدات سريع rust">
+        <!-- 10. DZ-DISKTREE -->
+        <article class="app-card" data-cat="system" data-name="dz-disktree مساحة قرص فحص ملفات تخزين حجم مجلدات سريع rust treemap wiztree windirstat">
           <div class="card-top">
             <div class="app-icon-wrap icon-system">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <line x1="6" y1="3" x2="6" y2="15"></line>
-                <circle cx="18" cy="6" r="3"></circle>
-                <circle cx="6" cy="18" r="3"></circle>
-                <path d="M18 9a9 9 0 0 1-9 9"></path>
-              </svg>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>
             </div>
             <div class="card-header-text">
               <h3 class="app-title">محلل مساحة وتخزين الأقراص</h3>
               <div class="app-subtitle">DZ-DISKTREE</div>
             </div>
-            <span class="tech-pill">Rust Native</span>
+            <span class="tech-pill">Rust Native + Treemap</span>
           </div>
           <p class="card-desc">
-            فحص الأقراص الصلبة وتحليل الملفات والمجلدات الضخمة بسرعة فائقة في أجزاء من الثانية بفضل محرك Rust الأصلي المتوازي.
+            فحص الأقراص الصلبة وتحليل الملفات والمجلدات الضخمة بسرعة خارقة بديل WizTree و WinDirStat، مع خريطة شجرية ثلاثية الأبعاد (Cushioned Treemap).
           </p>
           <ul class="card-features">
             <li>
@@ -1570,203 +1513,787 @@
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>مخطط بياني شجري يكشف المجلدات والملفات الأكثر استهلاكاً للسعة</span>
+              <span>خريطة شجرية Cushioned Treemap تفاعلية تكشف المجلدات والملفات الأكثر استهلاكاً</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>نسخة ويب خفيفة تعمل في المتصفح لفحص المجلدات المفتوحة</span>
+              <span>كشف الملفات المكررة، فتح المسارات في Explorer، وإرسال العناصر لسلة المهملات بأمان</span>
             </li>
           </ul>
           <div class="card-actions">
-            <a href="apps/system-utilities/dz-disktree/index.html" class="btn-card-launch">
+            <a href="apps/productivity/dz-disk-tree/index.html" class="btn-card-launch">
               <span>جرّب الآن</span>
               <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-DiskTree', 'Rust Native Engine', 'cd native/rust ; cargo run --bin dz-disktree', 'يتطلب تثبيت Rust (cargo) لتشغيل الأداء الفائق على الحاسوب.')">
+            <button class="btn-card-cmd" onclick="showCmd('DZ-DiskTree', 'Node.js (Port 3001) / Rust Native', 'npm run start:disk-tree', 'يمكنك تشغيل واجهة سطح المكتب المستقلة فوراً عبر النقر المزدوج على run-disktree.bat')">
               أمر التشغيل
             </button>
           </div>
         </article>
 
-        <!-- 12. DZ-Archive -->
-        <article class="app-card" data-cat="system" data-name="dz-archive أرشفة ضغط ملفات zstandard zip تشفير حماية سريع rust">
+        <!-- 11. DZ-ARCHIVE -->
+        <article class="app-card" data-cat="system" data-name="dz-archive أرشفة ضغط ملفات zstandard zip تشفير حماية سريع rust 7zip winrar">
           <div class="card-top">
             <div class="app-icon-wrap icon-system">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <polyline points="21 8 21 21 3 21 3 8"></polyline>
-                <rect x="1" y="3" width="22" height="5"></rect>
-                <line x1="10" y1="12" x2="14" y2="12"></line>
-              </svg>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
             </div>
             <div class="card-header-text">
-              <h3 class="app-title">أرشفة وضغط الملفات</h3>
+              <h3 class="app-title">أرشفة وضغط الملفات السيادي</h3>
               <div class="app-subtitle">DZ-ARCHIVE</div>
             </div>
-            <span class="tech-pill">Rust Native</span>
+            <span class="tech-pill">Rust Native + Zstandard</span>
           </div>
           <p class="card-desc">
-            ضغط وفك ضغط الملفات بتقنيات حديثة وعالية السرعة مع تشفير آمن وخوارزميات Zstandard و Zip، خالية من أي برمجيات إعلانية.
+            ضغط وفك ضغط الملفات بتقنيات حديثة وعالية السرعة بديل 7-Zip و WinRAR، مع تشفير آمن وخوارزميات Zstandard و Zip، خالية من أي برمجيات إعلانية.
           </p>
           <ul class="card-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>خوارزميات ضغط حديثة Zstandard و Deflate فائقة الكفاءة</span>
+              <span>خوارزميات ضغط حديثة Zstandard و Deflate فائقة الكفاءة والسرعة</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>تشفير الأرشيف بكلمة مرور لحماية الملفات والوثائق الحساسة</span>
+              <span>تشفير الأرشيف بكلمة مرور لحماية الملفات والوثائق الحساسة للمؤسسات</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>محرك Rust مكتبي متوازي للملفات الكبيرة وأرشيف المؤسسات</span>
+              <span>محرك Rust مكتبي متوازي للملفات الكبيرة مع واجهة ويب عصرية سريعة</span>
             </li>
           </ul>
           <div class="card-actions">
-            <a href="apps/system-utilities/dz-archive/index.html" class="btn-card-launch">
+            <a href="apps/productivity/dz-archive/index.html" class="btn-card-launch">
               <span>جرّب الآن</span>
               <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Archive', 'Rust Native Engine', 'cd native/rust ; cargo run --bin dz-archive', 'يتطلب تثبيت Rust (cargo) لتشغيل المحرك الأصلي.')">
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Archive', 'Node.js (Port 3002) / Rust Native', 'npm run start:archive', 'يمكنك تشغيل واجهة سطح المكتب المستقلة فوراً عبر النقر المزدوج على run-archive.bat')">
               أمر التشغيل
             </button>
           </div>
         </article>
 
-        <!-- 13. DZ-Sync -->
-        <article class="app-card" data-cat="system" data-name="dz-sync مزامنة نسخ احتياطي مجلدات أقراص خارجية ملفات backup">
+        <!-- 12. DZ-PLAYER PRO -->
+        <article class="app-card" data-cat="multimedia" data-name="dz-player مشغل وسائط فيديو صوتيات ترجمة vlc media player mp4 mkv srt arabizi">
           <div class="card-top">
-            <div class="app-icon-wrap icon-system">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <polyline points="23 4 23 10 17 10"></polyline>
-                <polyline points="1 20 1 14 7 14"></polyline>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-              </svg>
+            <div class="app-icon-wrap icon-multimedia">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
             </div>
             <div class="card-header-text">
-              <h3 class="app-title">مزامنة المجلدات والنسخ الاحتياطي</h3>
-              <div class="app-subtitle">DZ-SYNC</div>
+              <h3 class="app-title">قارئ الوسائط واستوديو الترجمة</h3>
+              <div class="app-subtitle">DZ-PLAYER PRO</div>
             </div>
-            <span class="tech-pill">Web ES</span>
+            <span class="tech-pill">Web Audio + Subtitle Studio</span>
           </div>
           <p class="card-desc">
-            مزامنة فورية ونسخ احتياطي بين المجلدات والأقراص الخارجية مع كشف التغييرات وحماية الملفات من التكرار أو الفقدان.
+            محطة تشغيل وسائط بديلة لـ VLC، عينات وسائط جزائرية أوفلاين، استوديو ترجمة نصوص عربية SRT/VTT بدون أخطاء اتجاه، ومحلل ترددات صوتية VU Meter حي.
           </p>
           <ul class="card-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>مقارنة تفاضلية سريعة (Incremental) تعتمد على تاريخ وحجم الملف</span>
+              <span>مشغل فيديو وصوت احترافي يدعم كافة صيغ الوسائط (MP4, MKV, WebM, MP3, WAV)</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>خيارات مزامنة مرنة: اتجاه واحد (Backup) أو اتجاهين (Mirror)</span>
+              <span>استوديو تعديل وتوليد ملفات الترجمة SRT/VTT مع دعم كامل للنصوص العربية بدون قلب حروف</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>حفظ سجل العمليات وتنبيه تلقائي عند حدوث تعارض بالملفات</span>
+              <span>محلل طيف الترددات الصوتية الحي (Visualizer) وتحكم كامل في مضخم الصوت والسرعة</span>
             </li>
           </ul>
           <div class="card-actions">
-            <a href="apps/system-utilities/dz-sync/index.html" class="btn-card-launch">
+            <a href="apps/multimedia/dz-player/index.html" class="btn-card-launch">
               <span>جرّب الآن</span>
               <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Sync', 'Web ES Modules', 'npm start', 'يعمل التطبيق في المتصفح محلياً وفورياً.')">
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Player Pro', 'Node.js (Port 3003) / Desktop App', 'npm run start:player', 'يمكنك تشغيل واجهة سطح المكتب المستقلة فوراً عبر النقر المزدوج على run-player.bat')">
               أمر التشغيل
             </button>
           </div>
         </article>
 
-        <!-- 14. DZ-DevKit -->
-        <article class="app-card" data-cat="developer" data-name="dz-devkit أدوات مطورين nif nis rc ccp حساب بريدي json yaml hash تشفير rust">
+        <!-- 13. DZ-PHOTO PRO -->
+        <article class="app-card" data-cat="multimedia" data-name="dz-photo محرر صور فوتوشوب تصميم فلاتر طبقات photoshop photopea canvas layers">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-multimedia">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">محرر الصور والتصميم الرقمي</h3>
+              <div class="app-subtitle">DZ-PHOTO PRO</div>
+            </div>
+            <span class="tech-pill">HTML5 Canvas + Layers</span>
+          </div>
+          <p class="card-desc">
+            استوديو تحرير صور وتصميم رقمي بديل Photoshop و Photopea، نظام طبقات (Layers)، فلاتر بصرية، أدوات قص وضبط الألوان والسطوع والتباين، وتصدير فوري.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>نظام طبقات متقدم (Layers Engine) مع إمكانية الترتيب، الإخفاء، وضبط الشفافية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>فلاتر بصرية احترافية: تشبع، تباين، ضبابية (Blur)، تدرجات رمادية، وحدّة الألوان</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>أدوات رسم، قص، تدوير، تحجيم، وتصدير فوري بصيغ PNG و JPEG و WebP عالية الدقة</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/creative-tools/dz-photo/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Photo Pro', 'Node.js (Port 3010) / Desktop App', 'npm run start:photo', 'يمكنك تشغيل واجهة سطح المكتب المستقلة فوراً عبر النقر المزدوج على run-photo.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 14. DZ-RPA PRO -->
+        <article class="app-card" data-cat="engineering" data-name="dz-rpa زلازل هندسة بناء كود جزائري rpa 99 dtr bc 2 48 python seismic civil">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-engineering">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">الحسابات الزلزالية للمباني</h3>
+              <div class="app-subtitle">DZ-RPA PRO</div>
+            </div>
+            <span class="tech-pill">Python 3.14 + RPA 99</span>
+          </div>
+          <p class="card-desc">
+            حساب القوى الزلزالية وطيف الاستجابة للمنشآت والمباني وفق كود البناء الجزائري المعتمد DTR-BC 2-48 (RPA 99 / 2003)، مع قاعدة بيانات الـ 58 ولاية.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قاعدة بيانات المناطق الزلزالية لكافة ولايات الجزائر الـ 58 والبلديات والدوائر</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>حساب قوة القص القاعدية (Effort Tranchant V) وطيف التصميم للمنشآت الخرسانية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>محرك رياضي دقيق مكتوب بلغة Python 3.14 مع واجهة ويب سريعة للمهندسين</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/engineering/dz-rpa/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-RPA Pro', 'Python 3.10+ (Port 8000)', 'python apps/engineering/dz-rpa/rpa_engine.py', 'يتطلب بيئة Python 3.10+ لتشغيل المحرك الحسابي المكتبي، مع واجهة ويب تفاعلية مدمجة.')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 15. DZ-DEVTOOLS PRO -->
+        <article class="app-card" data-cat="engineering" data-name="dz-devtools حقيبة أدوات المطورين nif nis rc ccp حساب بريدي تشفير ولايات cyberchef devtoys">
           <div class="card-top">
             <div class="app-icon-wrap icon-developer">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <polyline points="16 18 22 12 16 6"></polyline>
-                <polyline points="8 6 2 12 8 18"></polyline>
-              </svg>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
             </div>
             <div class="card-header-text">
               <h3 class="app-title">حقيبة أدوات المطورين الوطنية</h3>
-              <div class="app-subtitle">DZ-DEVKIT</div>
+              <div class="app-subtitle">DZ-DEVTOOLS PRO</div>
             </div>
-            <span class="tech-pill">Rust Native</span>
+            <span class="tech-pill">Rust CLI + Web ES</span>
           </div>
           <p class="card-desc">
-            مجموعة أدوات يومية للمطورين: التحقق وتوليد أرقام NIF/NIS و RC و CCP البريدي، تحويل الصيغ (JSON/YAML)، وتشفير النصوص والبصمات.
+            حقيبة أدوات شاملة للمبرمجين بديلة لـ CyberChef: فحص وتوليد مفاتيح الحسابات البريدية CCP، أرقام NIF و NIS و RC، قاعدة بيانات الـ 58 ولاية، وتشفير Hash.
           </p>
           <ul class="card-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>التحقق الحسابي الرسمي من مفاتيح الحسابات البريدية CCP و NIF و NIS</span>
+              <span>التحقق الحسابي الرسمي من مفاتيح الحسابات البريدية CCP وخوارزمية Modulo-97 الرسمية</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>محول صيغ سريع: JSON و YAML وتوليد بصمات SHA-256 و MD5</span>
+              <span>التحقق من صحة أرقام التعريف الجبائي NIF (15 رقم) والإحصائي NIS (20 رقم) والسجل التجاري RC</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>محرك Rust كأداة سطر أوامر CLI فائقة السرعة للمطورين</span>
+              <span>دليل الـ 58 ولاية الجزائرية مع الرموز البريدية وأكواد الترقيم ومحول صيغ وتشفير Hash</span>
             </li>
           </ul>
           <div class="card-actions">
-            <a href="apps/developer-tools/dz-devkit/index.html" class="btn-card-launch">
+            <a href="apps/developer-tools/dz-devtools/index.html" class="btn-card-launch">
               <span>جرّب الآن</span>
               <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-DevKit', 'Rust CLI Engine', 'cd native/rust ; cargo run --bin dz-devkit', 'يمكن تشغيل أدوات المطورين عبر سطر الأوامر CLI بسرعة قصوى.')">
+            <button class="btn-card-cmd" onclick="showCmd('DZ-DevTools Pro', 'Node.js (Port 3009) / Rust CLI', 'npm run start:devtools', 'يمكنك تشغيل واجهة سطح المكتب المستقلة فوراً عبر النقر المزدوج على run-devtools.bat')">
               أمر التشغيل
             </button>
           </div>
         </article>
 
-        <!-- 15. DZ-Mock -->
-        <article class="app-card" data-cat="developer" data-name="dz-mock محاكي api خدمات ويب mock server اختبار برمجة rest json">
+        <!-- 16. DZ-CHESS -->
+        <article class="app-card" data-cat="games" data-name="dz-chess شطرنج جزائري ذكاء اصطناعي لعبة رقعة تكتيك san minimax chess ai">
           <div class="card-top">
-            <div class="app-icon-wrap icon-developer">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                <line x1="6" y1="18" x2="6.01" y2="18"></line>
-              </svg>
+            <div class="app-icon-wrap icon-games">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2z"></path><line x1="8" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="16" y2="21"></line><line x1="3" y1="8" x2="21" y2="8"></line><line x1="3" y1="16" x2="21" y2="16"></line></svg>
             </div>
             <div class="card-header-text">
-              <h3 class="app-title">محاكي واجهات البرمجة (API Mock)</h3>
-              <div class="app-subtitle">DZ-MOCK</div>
+              <h3 class="app-title">الشطرنج الجزائري السيادي</h3>
+              <div class="app-subtitle">DZ-CHESS</div>
             </div>
-            <span class="tech-pill">Web ES</span>
+            <span class="tech-pill">Minimax AI + Trilingual</span>
           </div>
           <p class="card-desc">
-            إنشاء واختبار استجابات REST API وهمية محلياً للمطورين لاختبار تطبيقاتهم وربط الواجهات الأمامية دون الحاجة لخوادم فعلية.
+            لعبة الشطرنج الكلاسيكية بمحرك ذكاء اصطناعي محلي متعدد المستويات، تدوين الحركات SAN، تلميحات تكتيكية، ولوحة تحكم صوتية ثلاثية اللغات (عربية/فرنسية/إنجليزية).
           </p>
           <ul class="card-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>توليد بيانات وهمية باللغة العربية تشمل أسماء الولايات والمدن والأشخاص</span>
+              <span>محرك ذكاء اصطناعي محلي ذكي يدعم 3 مستويات صعوبة (مبتدئ، متوسط، محترف)</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>محاكاة حالات الاستجابة (200 OK, 404, 500) ومحاكاة تأخير الشبكة</span>
+              <span>تسجيل تاريخ النقلات بصيغة SAN الرسمية مع إمكانية التراجع والتلميح</span>
             </li>
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>تصدير نقاط النهاية كملف JSON مستقل لمشاركتها مع فريق العمل</span>
+              <span>أصوات تحريك القطع والأسر، واجهة ثلاثية اللغات كاملة وتعمل 100% بدون إنترنت</span>
             </li>
           </ul>
           <div class="card-actions">
-            <a href="apps/developer-tools/dz-api-mock/index.html" class="btn-card-launch">
+            <a href="apps/games-interactive/dz-chess/index.html" class="btn-card-launch">
               <span>جرّب الآن</span>
               <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <button class="btn-card-cmd" onclick="showCmd('DZ-Mock', 'Web ES Modules', 'npm start', 'يعمل التطبيق في المتصفح محلياً وفورياً.')">
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Chess', 'Node.js (Port 3012)', 'npm run start:chess', 'يمكنك أيضاً تشغيل قائمة الألعاب المتكاملة عبر run-games.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 17. DZ-DAMA -->
+        <article class="app-card" data-cat="games" data-name="dz-dama دامة جزائرية شعبية أسر إجباري قفز ملوك ذكاء اصطناعي مقاهي بطولات dama checkers">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-games">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">الدامة الشعبية الجزائرية</h3>
+              <div class="app-subtitle">DZ-DAMA</div>
+            </div>
+            <span class="tech-pill">Heuristic AI + 100% Rules</span>
+          </div>
+          <p class="card-desc">
+            الدامة الشعبية الجزائرية بقواعد المقاهي والبطولات الوطنية: الأسر الإجباري، قفزات متعددة بالسلسلة، وترقية القطع إلى ملوك مع ذكاء اصطناعي منافس.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تطبيق دقيق لقواعد الدامة الجزائرية: الأسر الإجباري، الأسر للخلف وللأمام، وأسر السلسلة</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>ترقية القطع لملوك عند بلوغ الصف الأخير مع حركة قطرية كاملة مفتوحة عبر الرقعة</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>ذكاء اصطناعي مبرمج بخوارزميات تقييم المواقع وأفضلية النقلات، مع تتبع النقاط</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/games-interactive/dz-dama/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Dama', 'Node.js (Port 3013)', 'npm run start:dama', 'يمكنك أيضاً تشغيل قائمة الألعاب المتكاملة عبر run-games.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 18. DZ-DOMINO -->
+        <article class="app-card" data-cat="games" data-name="dz-domino دومينو المقاهي والبطولات الشعبية بنك قفل بوشي ذكاء اصطناعي domino double-six">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-games">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="4" y1="12" x2="20" y2="12"></line><circle cx="12" cy="7" r="1.5"></circle><circle cx="9" cy="17" r="1.5"></circle><circle cx="15" cy="17" r="1.5"></circle></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">دومينو المقاهي والبطولات</h3>
+              <div class="app-subtitle">DZ-DOMINO</div>
+            </div>
+            <span class="tech-pill">Double-Six 28 Tiles</span>
+          </div>
+          <p class="card-desc">
+            لعبة الدومينو الكلاسيكية المزدوجة (Double-Six 28 قطعة)، قواعد الفوز بالنقاط، السحب من البنك، قفل الطاولة (Bouché)، وأصوات واقعية لضرب القطع.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>حزمة 28 قطعة دومينو كاملة بدقة عالية ومطابقة للمواصفات القياسية (168 نقطة)</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قواعد رسمية: افتتاح بصاحب أكبر مضاعف، السحب من البنك، وحساب نقاط الفوز عند القفل</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>ذكاء اصطناعي تكتيكي يتخلص من القطع الثقيلة ويحسب احتمالات قطع الخصم</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/games-interactive/dz-domino/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Domino', 'Node.js (Port 3014)', 'npm run start:domino', 'يمكنك أيضاً تشغيل قائمة الألعاب المتكاملة عبر run-games.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 19. DZ-TAWLA -->
+        <article class="app-card" data-cat="games" data-name="dz-tawla طاولة الزهر الجزائرية باك غامون نرد قواشيط مارس backgammon tawla">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-games">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line><polygon points="4,3 6,10 8,3"></polygon><polygon points="16,3 18,10 20,3"></polygon></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">طاولة الزهر الجزائرية</h3>
+              <div class="app-subtitle">DZ-TAWLA</div>
+            </div>
+            <span class="tech-pill">Backgammon Engine + AI</span>
+          </div>
+          <p class="card-desc">
+            لعبة طاولة الزهر الكلاسيكية، رمي النرد المزدوج، الأسر إلى الحاجز، إخراج القواشيط (Bear-off)، ونظام نقاط المارس والمارس المزدوج (Gammon).
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>محاكاة فيزيائية واقعية للوحة الطاولة مع 15 قشاطاً لكل لاعب ونردين ثنائيين عشوائيين</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قواعد كاملة: دخول الحاجز الإجباري، نقاط الإغلاق، الأسر، وإخراج القواشيط بنهاية اللوحة</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>محرك ذكاء اصطناعي خبير يلعب وفق الاستراتيجيات الدفاعية والهجومية للطاولة</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/games-interactive/dz-tawla/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Tawla', 'Node.js (Port 3015)', 'npm run start:tawla', 'يمكنك أيضاً تشغيل قائمة الألعاب المتكاملة عبر run-games.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 20. DZ-PUISSANCE 4 -->
+        <article class="app-card" data-cat="games" data-name="dz-puissance4 قوة 4 التكتيكية ربط أربعة أقراص ذكاء اصطناعي connect four puissance 4">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-games">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="18" r="3"></circle></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">لعبة قوة 4 التكتيكية</h3>
+              <div class="app-subtitle">DZ-PUISSANCE 4</div>
+            </div>
+            <span class="tech-pill">Connect-Four AlphaBeta AI</span>
+          </div>
+          <p class="card-desc">
+            اللعبة التكتيكية الشهيرة (ربط 4 أقراص متتالية): رسوميات تفاعلية، جاذبية واقعية للأقراص، ومحرك ذكاء اصطناعي كاشف للفوز ومنع هجمات الخصم.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>رقعة 7 أعمدة × 6 صفوف مع تأثيرات انزلاق الأقراص الرشيقة بفضل الجاذبية المحاكية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>كشف فوري ودقيق لخطوط الفوز الأفقية والعمودية والقطرية مع تسليط الضوء على خط الفوز</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>ذكاء اصطناعي Alpha-Beta يمنع فوراً محاولات فوز الخصم ويستغل الثغرات بذكاء</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/games-interactive/dz-puissance4/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Puissance4', 'Node.js (Port 3016)', 'npm run start:puissance4', 'يمكنك أيضاً تشغيل قائمة الألعاب المتكاملة عبر run-games.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 21. DZ-OTHELLO -->
+        <article class="app-card" data-cat="games" data-name="dz-othello أوتيلو ريفيرسي استراتيجية زوايا ذكاء اصطناعي othello reversi board game">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-games">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18"></path><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">أوتيلو / ريفيرسي الاستراتيجية</h3>
+              <div class="app-subtitle">DZ-OTHELLO</div>
+            </div>
+            <span class="tech-pill">Reversi Engine + Corner AI</span>
+          </div>
+          <p class="card-desc">
+            لعبة الإستراتيجية الذهنية الكلاسيكية: قلب الأقراص بين الأبيض والأسود، تمرير الدور التلقائي عند انعدام الحركات، وحساب لحظي لسيطرة الزوايا والأطراف.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>رقعة 8×8 كلاسيكية مع إشارات مرئية لكافة الحركات القانونية المتاحة للنقلة التالية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قلب متحرك متسلسل للأقراص المحصورة، وتمرير الدور التلقائي عند عدم وجود نقلة شرعية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>ذكاء اصطناعي يحسب القيمة الاستراتيجية للزوايا والأطراف لتقديم تحدٍ ممتع</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/games-interactive/dz-othello/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Othello', 'Node.js (Port 3017)', 'npm run start:othello', 'يمكنك أيضاً تشغيل قائمة الألعاب المتكاملة عبر run-games.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+      
+        <!-- 22. DZ-RECORDER -->
+        <article class="app-card" data-cat="multimedia" data-name="dz-recorder تسجيل الشاشة كاميرا دروس فيديو شروحات camtasia obs bandicam screen recorder">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-multimedia">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">استوديو تسجيل الشاشة والدروس</h3>
+              <div class="app-subtitle">DZ-RECORDER</div>
+            </div>
+            <span class="tech-pill">Web ES + MediaStream</span>
+          </div>
+          <p class="card-desc">
+            أداة تسجيل الشاشة وكاميرا الويب والصوت للأساتذة وصناع المحتوى، مع لوحة رسم وشرح مباشر وتصدير فوري بدون إنترنت.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>التقاط الشاشة بالكامل، النوافذ، أو تبويبات المتصفح بجودة Full HD و 60 إطاراً</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>نافذة كاميرا ويب مدمجة (Picture-in-Picture) ومزج احترافي لصوت الميكروفون والنظام</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>أدوات رسم مباشر: أقلام، أسهم توضيحية، مستطيلات، وتصدير فوري بصيغة WebM / MP4</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/video-montage/dz-recorder/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Recorder', 'Node.js (Port 3018) / Desktop App', 'node apps/video-montage/dz-recorder/server.js', 'يمكنك أيضاً تشغيله كنافذة تطبيق مستقلة عبر run-recorder.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 23. DZ-AUDIO STUDIO -->
+        <article class="app-card" data-cat="multimedia" data-name="dz-audio صوتيات استوديو هندسة صوت ميكساج تسجيل audacity sound daw waveform">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-multimedia">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">استوديو الهندسة الصوتية</h3>
+              <div class="app-subtitle">DZ-AUDIO STUDIO</div>
+            </div>
+            <span class="tech-pill">Web Audio + Multi-Track DAW</span>
+          </div>
+          <p class="card-desc">
+            محطة عمل صوتية متكاملة بديلة لبرنامج Audacity، لتسجيل الصوت وتحرير الإشارات الموجية والميكساج وتطبيق الفلاتر محلياً 100%.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تحرير المسارات الصوتية المتعددة (Multi-Track) مع قص، دمج، وتعديل الموجات</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>مؤثرات استوديو مدمجة: عزل الضوضاء، الإيكولايزر، الصدى، والتحليل الطيفي Spectral</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير فوري عالي النقاء بصيغ WAV و MP3 بدون إرسال أي بايت لخوادم خارجية</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/multimedia/dz-audio/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Audio Studio', 'Node.js (Port 3019) / Desktop App', 'node apps/multimedia/dz-audio/server.js', 'يمكنك أيضاً تشغيله كنافذة تطبيق مستقلة عبر run-audio.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 24. DZ-NOTES PRO -->
+        <article class="app-card" data-cat="office" data-name="dz-notes مفكرة ملاحظات رسم أقلام سبورة ذكية onenote notion apple notes">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">المفكرة والسبورة الذكية</h3>
+              <div class="app-subtitle">DZ-NOTES PRO</div>
+            </div>
+            <span class="tech-pill">Web ES + IndexedDB</span>
+          </div>
+          <p class="card-desc">
+            مفكرة رقمية وحرة بديلة لـ OneNote: دفاتر، أقسام، كتابة حرة في أي زاوية، أقلام رسم وتظليل، وحفظ محلي آمن 100%.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تنظيم هرمي كامل: دفاتر ملاحظات، أقسام ملونة، وصفحات قابلة للتمدد بحرية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>أدوات رسم يدوي، أقلام حبر، وأقلام تظليل ملونة مع وسوم المهام Checklists</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تخزين مشفر ومحلي 100% داخل IndexedDB دون الحاجة لأي حساب أو اتصال خارجي</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/productivity/dz-notes/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Notes Pro', 'Node.js (Port 3020) / Desktop App', 'node apps/productivity/dz-notes/server.js', 'يمكنك أيضاً تشغيله كنافذة تطبيق مستقلة عبر run-notes.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 25. DZ-TASKS PLANNER -->
+        <article class="app-card" data-cat="office" data-name="dz-tasks مهام تخطيط مشاريع تقويم تذكير todoist clickup trello tasks">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">منظومة تخطيط وإدارة المهام</h3>
+              <div class="app-subtitle">DZ-TASKS PLANNER</div>
+            </div>
+            <span class="tech-pill">Web ES + Local Mirror</span>
+          </div>
+          <p class="card-desc">
+            منظومة إدارة المهام والمشاريع وقوائم الإنجاز: أولويات، مهام فرعية، تذكيرات متكررة، وتزامن تقويم محلي 100% دون خوادم.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قوائم مهام متعددة، وسوم، أولويات، ومواعيد نهائية مع تذكيرات ذكية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>دعم التكرار الدوري للمهام وتصدير تقويم قياسي بصيغة iCalendar (.ics)</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>حفظ فوري في الذاكرة المحلية للجهاز مع استرجاع كامل وحماية الخصوصية</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/productivity/dz-tasks/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Tasks Planner', 'Node.js (Port 3021) / Desktop App', 'node apps/productivity/dz-tasks/server.js', 'يمكنك أيضاً تشغيله كنافذة تطبيق مستقلة عبر run-tasks.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 26. DZ-SIGNATURE -->
+        <article class="app-card" data-cat="office" data-name="dz-signature توقيع إلكتروني أختام رسمية وثائق إدارية تأشير docusign pdf sign">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">منظومة التوقيع والتأشير الرقمي</h3>
+              <div class="app-subtitle">DZ-SIGNATURE</div>
+            </div>
+            <span class="tech-pill">Web Crypto + PDF Engine</span>
+          </div>
+          <p class="card-desc">
+            منظومة توقيع وتأشير الوثائق والمراسلات الإدارية الرسمية، إضافة الأختام الجمهورية، والتحقق المشفر من الوثائق محلياً.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>رسم وتوليد التوقيعات الرقمية والتأشيرات الرسمية على مستندات PDF</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>قوالب أختام جمهورية معتمدة وطابع التاريخ والولاية (الجزائر في: ...)</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>محرك تشفير وتوقيع محلي 100% يضمن سرية المستندات الحكومية والتجارية</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/office-suite/dz-signature/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Signature', 'Node.js (Port 3022) / Desktop App', 'node apps/office-suite/dz-signature/server.js', 'يمكنك أيضاً تشغيله كنافذة تطبيق مستقلة عبر run-signature.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 27. DZ-TIME TRACKER -->
+        <article class="app-card" data-cat="finance" data-name="dz-time تتبع الوقت ساعات عمل أجور عمال قانون العمل 90-11 toggl clockify timesheet">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-finance">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">تتبع الوقت وساعات العمل الجزائري</h3>
+              <div class="app-subtitle">DZ-TIME TRACKER</div>
+            </div>
+            <span class="tech-pill">Web ES + Labor 90-11</span>
+          </div>
+          <p class="card-desc">
+            منظومة تسجيل وتتبع ساعات العمل للمشاريع والعمال مطابقة لقانون العمل الجزائري 90-11، مع حساب الساعات الإضافية وتصدير الكشوفات.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>مؤقت زمني دقيق لتسجيل فترات العمل على المهام والمشاريع والعملاء</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>مطابقة لقانون 90-11: حساب الساعات العادية (40 س/أسبوع) والإضافية بنسبة 50% و 100%</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تصدير تقارير شهرية متوافقة مباشرة للربط مع DZ-Paie و DZ-Facture</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/productivity/dz-time/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Time Tracker', 'Node.js (Port 3023) / Desktop App', 'node apps/productivity/dz-time/server.js', 'يمكنك أيضاً تشغيله كنافذة تطبيق مستقلة عبر run-time.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 28. DZ-PRAYER PRO -->
+        <article class="app-card" data-cat="productivity" data-name="dz-prayer مواقيت صلاة أذان قبلة بوصلة تقويم هجري إمساكية أذكار صلوات الجزائر 58 ولاية">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-office">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">مواقيت الصلاة والقبلة والتقويم</h3>
+              <div class="app-subtitle">DZ-PRAYER PRO</div>
+            </div>
+            <span class="tech-pill">Web ES + 58 Wilayas</span>
+          </div>
+          <p class="card-desc">
+            تطبيق فلكي سيادي 100% بدون إنترنت لحساب مواقيت الصلاة لجميع ولايات الجزائر الـ 58 وفق وزارة الشؤون الدينية، مع بوصلة القبلة الدقيقة وإمساكية شهرية.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>حساب فلكي دقيق مطابق للمعايير الوطنية لوزارة الشؤون الدينية والأوقاف الجزائري</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>بوصلة تفاعلية لحساب اتجاه القبلة والمسافة بالكيلومتر نحو مكة المكرمة لكل ولاية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>إمساكية شهرية قابلة للطباعة A4 والتصدير، تقويم هجري، وأذكار الصباح والمساء</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/productivity/dz-prayer/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Prayer Pro', 'Node.js (Port 3025) / Desktop App', 'node apps/productivity/dz-prayer/server.js', 'يمكنك أيضاً تشغيله كنافذة تطبيق مستقلة عبر run-prayer.bat')">
+              أمر التشغيل
+            </button>
+          </div>
+        </article>
+
+        <!-- 29. DZ-CONVERT PRO -->
+        <article class="app-card" data-cat="productivity" data-name="dz-convert محول عملات سنتيم دورو دينار تفقيد صكوك مساحات أراضي فلاحية هكتار آر زوجة حديد خرسانة بناء">
+          <div class="card-top">
+            <div class="app-icon-wrap icon-finance">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg>
+            </div>
+            <div class="card-header-text">
+              <h3 class="app-title">محول العملات والمقاييس الجزائري</h3>
+              <div class="app-subtitle">DZ-CONVERT PRO</div>
+            </div>
+            <span class="tech-pill">Web ES + Cadastre & BTP</span>
+          </div>
+          <p class="card-desc">
+            محول سيادي شامل: تحويل فوري بين الدينار والسنتيم والدورو مع التفقيد الرسمي للصكوك البريدية، تحويل الأراضي الفلاحية، وحاسبة حديد التسليح والخرسانة.
+          </p>
+          <ul class="card-features">
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تحويل العملة الدارجة (سنتيم، دورو، ملايين، ملايير) إلى الدينار الرسمي مع التفقيد العربي والفرنسي</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>تحويل المساحات العقارية والفلاحية: هكتار، آر، سنتيار، والزوجة التقليدية لعقود الملكية</span>
+            </li>
+            <li>
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>حاسبة أوزان حديد التسليح FeE500 ومكونات الخرسانة (إسمنت، رمل، حصى) لورشات البناء</span>
+            </li>
+          </ul>
+          <div class="card-actions">
+            <a href="apps/productivity/dz-convert/index.html" class="btn-card-launch">
+              <span>جرّب الآن</span>
+              <svg style="width:14px; height:14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="btn-card-cmd" onclick="showCmd('DZ-Convert Pro', 'Node.js (Port 3026) / Desktop App', 'node apps/productivity/dz-convert/server.js', 'يمكنك أيضاً تشغيله كنافذة تطبيق مستقلة عبر run-convert.bat')">
               أمر التشغيل
             </button>
           </div>
         </article>
 
       </div>
-
-      <!-- Empty Search Fallback -->
+<!-- Empty Search Fallback -->
       <div class="empty-state" id="emptyState" style="display: none;">
         <h3>لم يتم العثور على أي نتائج مطابقة</h3>
         <p>جرّب البحث بكلمة أخرى مثل: فواتير، رواتب، زلازل، مساحة، محاسبة، أو أعد اختيار "جميع البرامج".</p>
@@ -1957,7 +2484,7 @@
       });
 
       emptyState.style.display = (visibleCount === 0) ? 'block' : 'none';
-      resultsCount.textContent = `يظهر ${visibleCount} من أصل 15 برنامجاً`;
+      resultsCount.textContent = `يظهر ${visibleCount} من أصل ${appCards.length} تطبيقاً`;
     }
 
     // Filter Buttons click handler

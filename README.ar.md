@@ -9,7 +9,7 @@
 
 [![الترخيص: MIT](https://img.shields.io/badge/الترخيص-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![المعمارية: Polyglot Sovereign](https://img.shields.io/badge/المعمارية-Polyglot_Rust_Python_CSharp_JS-1e293b.svg?style=for-the-badge&logo=rust&logoColor=F7DF1E)](#-الركائز-الهندسية-لمشروع-heyputer)
-[![الحالة: 15 برنامج مكتمل](https://img.shields.io/badge/الحالة-15_برنامج_مكتمل_وجاهز-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
+[![الحالة: 21 برنامج وتطبيق مكتمل](https://img.shields.io/badge/الحالة-21_تطبيق_مكتمل_وجاهز-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
 [![المسارات: 11 قطاع](https://img.shields.io/badge/المسارات-11_قطاع_تخصصي-0284c7.svg?style=for-the-badge)](#-دليل-المسارات-الـ-11-وجدول-كافة-أنواع-البرمجيات)
 [![الخصوصية: 100% دون إنترنت](https://img.shields.io/badge/الخصوصية-100%25_دون_إنترنت_محلي-059669.svg?style=for-the-badge&logo=sqlite&logoColor=white)](#-الرؤية-الاستراتيجية-والسيادة-الرقمية)
 [![اللغات: عربية · فرنسية · إنجليزية](https://img.shields.io/badge/اللغات-العربية_%7C_Français_%7C_English-dc2626.svg?style=for-the-badge)](#-التوافق-واللغات)
@@ -84,7 +84,13 @@
 | **08** | **الحسابات الزلزالية الجزائري (DZ-RPA Pro)** | **Robot Structural / ETABS RPA** | 🟢 **مكتمل** (Web + **Python RPA 99/03**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/engineering/dz-rpa/) | [`apps/engineering/dz-rpa/`](apps/engineering/dz-rpa/) |
 | **03** | **المحاسبة المالية وميزان المراجعة (DZ-Compta)** | **PC Compta / DLG Compta SCF** | 🟢 **مكتمل** (Web + **C# .NET 10**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/) | [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) |
 | **03** | **كشوف الأجور والضمان الاجتماعي (DZ-Paie RH)** | **PC Paie / DLG Paie / IRG DGI** | 🟢 **مكتمل** (Web + **C# .NET 10**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/) | [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) |
-| **11** | **الألعاب التفاعلية وثقافة وتاريخ الجزائر** | ألعاب التسلية التجارية ومحرك Godot | 🟡 *قيد التخطيط* | — | [`apps/games-interactive/`](apps/games-interactive/) |
+| **11** | **حزمة الألعاب التفاعلية والتراثية (شطرنج، دامة، دومينو، طاولة، قوة 4، أوتيلو)** | ألعاب الذكاء واللوحة مع محركات AI محلية | 🟢 **مكتمل** (Web :3012-:3017) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/) | [`apps/games-interactive/`](apps/games-interactive/) |
+| **04** | **استوديو تسجيل الشاشة والدروس (DZ-Recorder)** | **Camtasia / OBS Studio** | 🟢 **مكتمل** (Web :3018) | [🚀 **جرب الآن**](apps/video-montage/dz-recorder/) | [`apps/video-montage/dz-recorder/`](apps/video-montage/dz-recorder/) |
+| **04** | **استوديو الهندسة الصوتية والتسجيل (DZ-Audio)** | **Audacity / Adobe Audition** | 🟢 **مكتمل** (Web :3019) | [🚀 **جرب الآن**](apps/multimedia/dz-audio/) | [`apps/multimedia/dz-audio/`](apps/multimedia/dz-audio/) |
+| **01** | **المفكرة والسبورة الرقمية الذكية (DZ-Notes)** | **Microsoft OneNote / Apple Notes** | 🟢 **مكتمل** (Web :3020) | [🚀 **جرب الآن**](apps/productivity/dz-notes/) | [`apps/productivity/dz-notes/`](apps/productivity/dz-notes/) |
+| **06** | **منظومة تخطيط وإدارة المهام (DZ-Tasks)** | **ClickUp / Todoist / Asana** | 🟢 **مكتمل** (Web :3021) | [🚀 **جرب الآن**](apps/productivity/dz-tasks/) | [`apps/productivity/dz-tasks/`](apps/productivity/dz-tasks/) |
+| **01** | **منظومة التوقيع والتأشير الرقمي (DZ-Signature)** | **DocuSign / Adobe Sign** | 🟢 **مكتمل** (Web :3022) | [🚀 **جرب الآن**](apps/office-suite/dz-signature/) | [`apps/office-suite/dz-signature/`](apps/office-suite/dz-signature/) |
+| **02** | **تتبع الوقت وساعات العمل الجزائري (DZ-Time)** | **Toggl / Clockify (قانون 90-11)** | 🟢 **مكتمل** (Web :3023) | [🚀 **جرب الآن**](apps/productivity/dz-time/) | [`apps/productivity/dz-time/`](apps/productivity/dz-time/) |
 
 ---
 
@@ -447,18 +453,32 @@ npm run test:native
 npm start
 
 # أو تشغيل أي برمجية مستقلة عبر منفذها:
-npm run start:dz-facture    # :3000
-npm run start:disk-tree     # :3001
-npm run start:archive       # :3002
-npm run start:player        # :3003
-npm run start:pdf           # :3004
-npm run start:whiteboard    # :3005
-npm run start:word          # :3006
-npm run start:calc          # :3007
-npm run start:slides        # :3008
-npm run start:devtools      # :3009
-npm run start:photo         # :3010
-npm run start:boards        # :3011
+npm run start:dz-facture    # :3000 (الفوترة ونقاط البيع)
+npm run start:disk-tree     # :3001 (فاحص مساحات القرص)
+npm run start:archive       # :3002 (الأرشفة والضغط)
+npm run start:player        # :3003 (مشغل الوسائط)
+npm run start:pdf           # :3004 (محرر وموثق PDF)
+npm run start:whiteboard    # :3005 (السبورة البيضاء التفاعلية)
+npm run start:word          # :3006 (كاتب الجزائر ومعالج النصوص)
+npm run start:calc          # :3007 (جداول وحسابات الجزائر)
+npm run start:slides        # :3008 (استوديو العروض التقديمية)
+npm run start:devtools      # :3009 (أدوات المطورين والـ 58 ولاية)
+npm run start:photo         # :3010 (استوديو تعديل الصور)
+npm run start:boards        # :3011 (لوحات كانبان وإدارة المشاريع)
+npm run start:chess         # :3012 (شطرنج الجزائر الذكي)
+npm run start:dama          # :3013 (الدامة الشعبية الجزائرية)
+npm run start:domino        # :3014 (الدومينو الشعبي المزدوج)
+npm run start:tawla         # :3015 (الطاولة التقليدية / المحبوسة)
+npm run start:puissance4    # :3016 (لعبة صف 4 الاستراتيجية)
+npm run start:othello       # :3017 (عطيل / ريفيرسي الاستراتيجية)
+npm run start:recorder      # :3018 (استوديو تصوير الشاشة والمونتاج)
+npm run start:audio         # :3019 (استوديو مونتاج الصوت الرقمي)
+npm run start:notes         # :3020 (المفكرة والسبورة الرقمية)
+npm run start:tasks         # :3021 (تخطيط وإدارة المهام والمشاريع)
+npm run start:signature     # :3022 (التوقيع والتأشير الرقمي للأوراق الرسمية)
+npm run start:time          # :3023 (تتبع الوقت وساعات العمل - قانون 90-11)
+npm run start:prayer        # :3025 (مواقيت الصلاة والقبلة والتقويم الوطني الجزائري)
+npm run start:convert       # :3026 (محول العملات، الأراضي ومواد البناء)
 ```
 
 ---

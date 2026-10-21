@@ -1,0 +1,1489 @@
+/* ---------- App shell ---------- */
+
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  width: var(--sidebar-w);
+  height: 100vh;
+  height: 100dvh;
+  /* An installed iPad app is wider than the mobile breakpoint but still
+     draws under a translucent status bar. */
+  padding: calc(18px + var(--safe-t)) 12px calc(14px + var(--safe-b)) calc(12px + var(--safe-l));
+  border-right: 1px solid var(--hairline);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 14px;
+  font-weight: 650;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.brand-mark {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  font-weight: 500;
+  text-align: left;
+  line-height: 20px; /* keep pill height steady regardless of body line-height */
+}
+
+.nav-item + .nav-item {
+  margin-top: 2px;
+}
+
+.nav-item:hover,
+.nav-item:focus {
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.nav-item[aria-current="page"] {
+  background: var(--accent-wash);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.nav-item .count {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.nav-item[aria-current="page"] .count {
+  color: var(--accent-text);
+}
+
+.nav-section {
+  margin: 14px 10px 4px;
+  font-size: 11.5px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sidebar-new {
+  margin: 2px 0 12px;
+}
+
+.sidebar-foot {
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 20px calc(40px + var(--safe-b));
+}
+
+.content {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.view-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: calc(26px + var(--safe-t)) 0 6px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--page);
+}
+
+.view-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.view-sub {
+  color: var(--ink-3);
+  font-size: 13.5px;
+  margin: 2px 0 0;
+}
+
+.view-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Mobile bottom tab bar */
+.tabbar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  height: calc(var(--tabbar-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  padding-left: var(--safe-l);
+  padding-right: var(--safe-r);
+  background: var(--surface);
+  border-top: 1px solid var(--hairline);
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 550;
+  color: var(--ink-3);
+  border-radius: 0;
+}
+
+.tab-item:hover {
+  text-decoration: none;
+}
+
+.tab-item[aria-current="page"] {
+  color: var(--accent-text);
+}
+
+.fab {
+  position: fixed;
+  right: calc(18px + var(--safe-r));
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 18px);
+  z-index: 19;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: none;
+  place-items: center;
+  border: 1px solid var(--accent-strong);
+  transition: transform 0.15s var(--ease-spring);
+}
+
+.fab:active {
+  transform: scale(0.92);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+
+  .tabbar {
+    display: grid;
+  }
+
+  .fab {
+    display: grid;
+  }
+
+  .main {
+    padding: 0 calc(14px + var(--safe-r)) calc(var(--tabbar-h) + var(--safe-b) + 84px) calc(14px + var(--safe-l));
+  }
+
+  .view-head {
+    padding-top: calc(14px + var(--safe-t));
+    gap: 8px;
+  }
+
+  /* A phone header has no room for a decorative tile: with the back
+     chevron, the list icon, share, edit and Add all holding their width,
+     "Japan trip" was squeezed to 83px at 390px wide and to 13px — a bare
+     ellipsis — at 320px. The icon is aria-hidden, so dropping it here
+     costs nothing a screen reader or a sighted user was relying on, and
+     the name is what identifies the list. */
+  .view-head .l-icon {
+    display: none;
+  }
+
+  /* Whatever room is left, a long name uses it over two lines instead of
+     truncating on the first. */
+  .view-title {
+    font-size: 21px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: var(--r-sm);
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid transparent;
+  transition: background 0.12s ease, transform 0.12s var(--ease-spring);
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent-text);
+}
+
+.btn-primary:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+  border-color: var(--hairline-strong);
+}
+
+.btn-ghost:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  flex-shrink: 0;
+}
+
+.icon-btn:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.icon-btn:active {
+  background: var(--surface-3);
+}
+
+/* Touch targets. The visible chrome is deliberately compact — 36px icon
+   buttons, a 21px "Move all to today", a 19px "Start fresh" — which is
+   fine under a cursor and too small under a thumb. Rather than inflate the
+   design on touch, each control claims the surrounding dead space with a
+   transparent ::after, the same trick .task-check already uses to reach
+   45x43. Nothing moves; only the hit area grows to 44px.
+   Gaps between neighbours (8px in .view-actions, 10px in .row) are wider
+   than the 4px each side takes, so no two targets overlap. */
+@media (hover: none) {
+  .icon-btn,
+  .section-action,
+  .sample-banner button {
+    position: relative;
+  }
+
+  .icon-btn::after,
+  .section-action::after,
+  .sample-banner button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 44px;
+    transform: translateY(-50%);
+    min-width: 44px;
+  }
+
+  /* Centre the widened box on buttons narrower than 44px. */
+  .icon-btn::after {
+    left: 50%;
+    right: auto;
+    width: 44px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* A colour swatch can't borrow space the way the buttons above do — its
+     neighbours are only 8px away — so it grows for real. The 8 swatches
+     wrap onto two rows on a phone, which the flex row already handles. */
+  .swatch {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ---------- Cards & rows ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.card + .card {
+  margin-top: 12px;
+}
+
+.section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 22px 2px 8px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-2);
+}
+
+.section-label .count {
+  color: var(--ink-3);
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+.section-label.danger {
+  color: var(--danger);
+}
+
+/* ---------- Task rows ---------- */
+
+.task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 11px 14px;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  transition: background 0.12s ease;
+}
+
+.task-row:hover {
+  background: var(--surface-2);
+}
+
+.task-row + .task-row,
+.task-row + .subtask-strip,
+.subtask-strip + .task-row {
+  border-top: 1px solid var(--hairline);
+}
+
+.task-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-main {
+  display: block;
+  width: 100%;
+  text-align: left; /* buttons default to center; wrapped titles must not */
+}
+
+.task-title {
+  font-weight: 550;
+  font-size: 14.5px;
+  overflow-wrap: anywhere;
+}
+
+.task-row.done .task-title {
+  color: var(--ink-3);
+  text-decoration: line-through;
+  text-decoration-color: var(--hairline-strong);
+}
+
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.task-meta .m {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.task-meta .overdue {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.task-meta .today {
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+/* Round completion control; ring tinted by priority. */
+.task-check {
+  width: 21px;
+  height: 21px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 2px solid var(--hairline-strong);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  color: transparent;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+/* The app's most-used control is only 21px across, and the button that
+   opens the task sits 11px away — a slightly-off tap opened the edit
+   form instead of completing. Claim the row's own padding and the gap
+   (both dead space) so the target is ~45x43 without moving anything.
+   z-index because .task-main is painted later and would otherwise win
+   the overlap. */
+.task-row > .task-check {
+  position: relative;
+  z-index: 1;
+}
+
+.task-row > .task-check::after {
+  content: '';
+  position: absolute;
+  inset: -11px -10px -11px -14px;
+}
+
+.task-check.p1 { border-color: var(--p1); background: var(--p1-wash); }
+.task-check.p2 { border-color: var(--p2); background: var(--p2-wash); }
+.task-check.p3 { border-color: var(--p3); background: var(--p3-wash); }
+
+.task-check:hover {
+  color: var(--ink-3);
+}
+
+.task-check[aria-checked="true"],
+.subtask-line[aria-checked="true"] .task-check {
+  background: var(--ink-3);
+  border-color: var(--ink-3);
+  color: var(--surface);
+}
+
+.priority-flag.p1 { color: var(--p1); }
+.priority-flag.p2 { color: var(--p2); }
+.priority-flag.p3 { color: var(--p3); }
+
+.list-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Expanded subtasks under a row */
+.subtask-strip {
+  padding: 2px 14px 10px 46px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.subtask-line {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 0;
+  width: 100%;
+  text-align: left;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  border-radius: var(--r-sm);
+}
+
+.subtask-line .task-check {
+  width: 17px;
+  height: 17px;
+  border-width: 1.5px;
+}
+
+.subtask-line.done {
+  color: var(--ink-3);
+  text-decoration: line-through;
+  text-decoration-color: var(--hairline-strong);
+}
+
+/* ---------- Chips, badges ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink-2);
+}
+
+.chip.on {
+  background: var(--accent-wash);
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+}
+
+.badge {
+  display: inline-flex;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Forms ---------- */
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field > label,
+.field > .field-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 5px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--ink-3);
+}
+
+.input:focus-visible,
+.select:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+/* A field the form rejected. aria-invalid was already set for screen
+   readers; without this, pressing Save on an empty title looked like
+   nothing had happened at all. */
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: var(--danger);
+  background: var(--danger-wash);
+}
+
+.input[aria-invalid="true"]:focus-visible,
+.textarea[aria-invalid="true"]:focus-visible {
+  outline-color: var(--danger);
+}
+
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--danger);
+}
+
+.field-error > svg {
+  flex-shrink: 0;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 66px;
+}
+
+.select-wrap {
+  position: relative;
+}
+
+.select {
+  appearance: none;
+  padding-right: 34px;
+}
+
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 1.8px solid var(--ink-3);
+  border-bottom: 1.8px solid var(--ink-3);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.row .grow,
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+}
+
+@media (max-width: 480px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Segmented control (priority, theme) */
+.segment {
+  display: flex;
+  padding: 3px;
+  gap: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+}
+
+.segment > button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 4px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--ink-3);
+}
+
+.segment > button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--hairline-strong);
+  font-weight: 650;
+}
+
+/* Weekday picker */
+.weekdays {
+  display: flex;
+  gap: 5px;
+}
+
+.weekdays > button {
+  flex: 1;
+  padding: 7px 0;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.weekdays > button[aria-pressed="true"] {
+  background: var(--accent-wash);
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+}
+
+/* Icon / color pickers */
+.swatch-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-full);
+  border: 2px solid transparent;
+  display: grid;
+  place-items: center;
+}
+
+.swatch[aria-pressed="true"] {
+  border-color: var(--ink);
+}
+
+.swatch .dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+}
+
+@media (max-width: 480px) {
+  .icon-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.icon-choice {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.icon-choice[aria-pressed="true"] {
+  background: var(--accent-wash);
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+}
+
+/* Inline add (subtasks) */
+.inline-add {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ---------- Modal / bottom sheet ---------- */
+
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  animation: fade-in 0.2s ease;
+}
+
+.modal-panel {
+  position: relative;
+  width: 100%;
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  padding: 6px 18px calc(20px + var(--safe-b));
+  animation: sheet-up 0.28s var(--ease-spring);
+}
+
+/* A dismissed dialog lingers for its exit animation; its invisible scrim
+   must not eat the tap that follows (close a sheet, tap a task). */
+.modal-root.closing {
+  pointer-events: none;
+}
+
+.modal-root.closing .modal-panel {
+  animation: sheet-down 0.2s ease forwards;
+}
+
+.modal-root.closing .modal-scrim {
+  animation: fade-out 0.2s ease forwards;
+}
+
+.sheet-handle {
+  width: 38px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--hairline-strong);
+  margin: 8px auto 4px;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0 14px;
+}
+
+.modal-title {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 640px) {
+  .modal-root {
+    align-items: center;
+    padding: 24px;
+  }
+
+  .modal-panel {
+    max-width: 460px;
+    border-radius: var(--r-lg);
+    padding: 8px 22px 22px;
+    animation: pop-in 0.22s var(--ease-spring);
+  }
+
+  .modal-panel.wide {
+    max-width: 620px;
+  }
+
+  .modal-root.closing .modal-panel {
+    animation: fade-out 0.15s ease forwards;
+  }
+
+  .sheet-handle {
+    display: none;
+  }
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+}
+
+@keyframes sheet-down {
+  to { transform: translateY(100%); }
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.96); opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+/* ---------- Toast ---------- */
+
+/* Full-width and flex-centred, not left:50% + translateX: a fixed element
+   offset to the middle takes its containing block from there, so the row
+   could only ever be half the viewport wide and .toast's max-width was
+   unreachable. On a 390px phone that capped every message at 188px and
+   wrapped short ones onto three lines. pointer-events stay off the row, so
+   spanning the width costs nothing.
+   Clearing the FAB matters once the toast can actually use that width. */
+.toast-root {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 84px);
+  padding: 0 calc(14px + var(--safe-r)) 0 calc(14px + var(--safe-l));
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* No FAB and no tab bar on desktop, so the toast sits low again. */
+@media (min-width: 901px) {
+  .toast-root {
+    bottom: 24px;
+  }
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  /* 100% of the padded row rather than 92vw: vw ignores the safe-area
+     insets and the scrollbar, and could push the toast past its own row. */
+  max-width: min(100%, 420px);
+  padding: 10px 16px;
+  background: var(--ink);
+  color: var(--page);
+  border-radius: var(--r-full);
+  font-size: 13.5px;
+  font-weight: 550;
+  pointer-events: auto;
+  animation: toast-in 0.25s var(--ease-spring);
+}
+
+.toast.leaving {
+  animation: toast-out 0.2s ease forwards;
+}
+
+.toast-action {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-left: 2px;
+}
+
+@keyframes toast-in {
+  from { transform: translateY(12px); opacity: 0; }
+}
+
+@keyframes toast-out {
+  to { transform: translateY(12px); opacity: 0; }
+}
+
+/* ---------- Empty states & banners ---------- */
+
+.empty {
+  text-align: center;
+  padding: 44px 20px;
+  color: var(--ink-2);
+}
+
+.empty-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 14px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  display: grid;
+  place-items: center;
+}
+
+.empty h3 {
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.empty p {
+  font-size: 13.5px;
+  color: var(--ink-3);
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.sample-banner {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 14px 0 0;
+  padding: 9px 14px;
+  border: 1px dashed var(--hairline-strong);
+  border-radius: var(--r-md);
+  background: var(--accent-wash);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.sample-banner button {
+  font-weight: 650;
+  color: var(--accent-text);
+  white-space: nowrap;
+}
+
+.offline-banner {
+  position: fixed;
+  top: calc(8px + var(--safe-t));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: var(--r-full);
+  background: var(--ink);
+  color: var(--page);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+/* ---------- Settings rows ---------- */
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  width: 100%;
+  text-align: left;
+}
+
+.setting-row + .setting-row {
+  border-top: 1px solid var(--hairline);
+}
+
+.setting-row .s-icon {
+  color: var(--ink-3);
+  flex-shrink: 0;
+}
+
+.setting-row .s-label {
+  font-weight: 550;
+  font-size: 14.5px;
+}
+
+.setting-row .s-sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 1px;
+  overflow-wrap: anywhere;
+}
+
+.setting-row .s-end {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Switch */
+.switch {
+  width: 44px;
+  height: 26px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  border: 1px solid var(--hairline);
+  position: relative;
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  transition: transform 0.18s var(--ease-spring);
+}
+
+/* The pill reflects the row it sits in; the row carries role=switch and
+   aria-checked, the pill is aria-hidden decoration. */
+.setting-row[aria-checked="true"] .switch {
+  background: var(--accent);
+  border-color: var(--accent-text);
+}
+
+.setting-row[aria-checked="true"] .switch::after {
+  transform: translateX(18px);
+}
+
+/* A row that cannot be toggled has to look like it. Disabled switches were
+   pixel-identical to live ones — same accent fill, same pointer cursor — so
+   "Due-date reminders" on a browser without notifications read as a working
+   toggle that silently did nothing. */
+.setting-row:disabled {
+  cursor: default;
+}
+
+.setting-row:disabled .s-label,
+.setting-row:disabled .s-icon,
+.setting-row:disabled .switch {
+  opacity: 0.5;
+}
+
+/* ---------- Misc ---------- */
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2.5px solid var(--hairline-strong);
+  border-top-color: var(--accent-text);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.progress > div {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--hairline-strong);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  font-size: 11.5px;
+  font-family: ui-monospace, monospace;
+}
+
+/* ---------- Manual reordering (drag & drop) ---------- */
+
+.sortable-dragging {
+  position: relative;
+  z-index: 5;
+  background: var(--surface-2);
+  outline: 1.5px solid var(--accent);
+  outline-offset: -1.5px;
+  border-radius: var(--r-sm);
+  opacity: 0.95;
+}
+
+body.sorting {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body.sorting .task-row,
+body.sorting .list-card,
+body.sorting .nav-item {
+  transition: none;
+}
+
+/* Rows stay draggable on touch without fighting the scroll (long-press
+   lifts); links must not trigger the native drag or iOS callout. */
+.task-row,
+.list-card,
+.nav-item[data-list-id] {
+  -webkit-touch-callout: none;
+}
+
+/* Per-row action menu: quiet until the row is hovered or focused. */
+.row-menu {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  flex-shrink: 0;
+}
+
+.task-row:hover .row-menu,
+.task-row:focus-within .row-menu,
+.list-card:hover .row-menu,
+.list-card:focus-within .row-menu {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .row-menu {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- Swipe quick actions (touch) ---------- */
+
+.card {
+  position: relative; /* anchors .swipe-hint strips behind swiped rows */
+}
+
+.task-row.swiping {
+  transition: none;
+  touch-action: pan-y;
+}
+
+.swipe-hint {
+  position: absolute;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+  pointer-events: none;
+}
+
+.swipe-hint.complete {
+  background: var(--swipe-ok-soft);
+}
+
+.swipe-hint.menu {
+  background: var(--surface-3);
+  color: var(--ink-2);
+}
+
+.swipe-hint.armed.complete {
+  background: var(--swipe-ok);
+}
+
+.swipe-hint.armed.menu {
+  background: var(--hairline-strong);
+}
+
+.section-action {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-text);
+  padding: 2px 4px;
+  border-radius: 6px;
+}
+
+.section-action:hover {
+  background: var(--accent-wash);
+}
+
+/* ---------- Quick-add bar ---------- */
+
+.quick-add {
+  margin: 14px 0 4px;
+}
+
+.quick-add-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 3px 6px 3px 12px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+}
+
+.quick-add-row:focus-within {
+  border-color: var(--accent);
+}
+
+.quick-add .qa-icon {
+  display: inline-flex;
+  color: var(--ink-3);
+  flex-shrink: 0;
+}
+
+.quick-add input.input {
+  border: none;
+  background: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.quick-add input.input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.quick-add-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.quick-add-chips .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chip-x {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  margin: -2px -3px -2px 0;
+  border-radius: 50%;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.chip-x:hover {
+  opacity: 1;
+  /* Plain colour first: color-mix needs Safari 16.2, below the declared
+     build target, and without a fallback the hover state vanishes. */
+  background: var(--hairline-strong);
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+
+/* ---------- Tags ---------- */
+
+.tag-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1.5px 8px;
+  border-radius: var(--r-full);
+  background: var(--accent-wash);
+  color: var(--accent-text);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+button.tag-chip:hover {
+  background: var(--select-bg);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.tag-chip.big {
+  font-size: 13px;
+  padding: 5px 12px;
+}
+
+.tag-chip .count {
+  font-weight: 550;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Tag editor in the task form */
+.tag-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  cursor: text;
+}
+
+.tag-box:focus-within {
+  border-color: var(--accent);
+}
+
+.tag-input {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  padding: 2px 0;
+}
+
+.tag-input:focus {
+  outline: none;
+}
+
+.tag-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 7px;
+}

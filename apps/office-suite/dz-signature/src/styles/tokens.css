@@ -1,0 +1,149 @@
+/* Design tokens. Light is the default; dark overrides via media query
+   (system) and via [data-theme] stamps set by the in-app theme toggle, which
+   must win in both directions. Every color that carries text holds 4.5:1 on
+   the surfaces it lands on; fills and strokes hold 3:1. */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces and ink (warm paper neutrals) */
+  --page: #f6f6f4;
+  --surface: #fdfdfc;
+  --surface-2: #efeeea;
+  --surface-3: #e5e4df;
+  --ink: #101012;
+  --ink-2: #4f4f52;
+  --ink-3: #6d6c68;
+  --hairline: rgba(16, 16, 18, 0.1);
+  --hairline-strong: rgba(16, 16, 18, 0.18);
+  --scrim: rgba(16, 16, 18, 0.45);
+
+  /* Accent: --accent is the fill (buttons, selection). --accent-ink sits ON
+     that fill as text, so the pair holds 4.5:1. --accent-strong is the same
+     hue pushed dark enough to be TEXT on --page/--surface/--accent-wash. */
+  --accent: #4f46e5;
+  --accent-ink: #ffffff;
+  --accent-strong: #4338ca;
+  --accent-wash: rgba(79, 70, 229, 0.1);
+
+  /* Status colors (always paired with an icon or label, never alone) */
+  --ok: #166534;
+  --ok-wash: rgba(21, 128, 61, 0.11);
+  --warn: #8a5a00;
+  --warn-wash: rgba(158, 106, 3, 0.13);
+  --danger: #b91c1c;
+  --danger-wash: rgba(185, 28, 28, 0.09);
+  --info: #4338ca;
+  --info-wash: rgba(79, 70, 229, 0.1);
+
+  /* Signer slots (field outlines and washes; 3:1 as strokes on white pages) */
+  --signer-1: #4f46e5;
+  --signer-2: #0f766e;
+  --signer-3: #c2410c;
+  --signer-4: #be185d;
+  --signer-5: #15803d;
+  --signer-6: #7c3aed;
+
+  /* The rendered PDF page is always white paper, in both themes. */
+  --paper: #ffffff;
+  --paper-edge: rgba(16, 16, 18, 0.14);
+
+  /* Shape */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-full: 999px;
+
+  /* Type */
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sig: "Snell Roundhand", "Savoye LET", "Segoe Script", "Brush Script MT", cursive;
+
+  /* Layout */
+  --sidebar-w: 250px;
+  --content-max: 1040px;
+  --tabbar-h: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Dark values, applied by OS preference unless the app stamped light. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #101013;
+    --surface: #1a1a1f;
+    --surface-2: #232329;
+    --surface-3: #2c2c33;
+    --ink: #f4f4f6;
+    --ink-2: #b9b9c0;
+    --ink-3: #8f8f98;
+    --hairline: rgba(244, 244, 246, 0.1);
+    --hairline-strong: rgba(244, 244, 246, 0.2);
+    --scrim: rgba(0, 0, 0, 0.6);
+
+    --accent: #818cf8;
+    --accent-ink: #101013;
+    --accent-strong: #a5b4fc;
+    --accent-wash: rgba(129, 140, 248, 0.15);
+
+    --ok: #4ade80;
+    --ok-wash: rgba(74, 222, 128, 0.13);
+    --warn: #fbbf24;
+    --warn-wash: rgba(251, 191, 36, 0.13);
+    --danger: #f87171;
+    --danger-wash: rgba(248, 113, 113, 0.12);
+    --info: #a5b4fc;
+    --info-wash: rgba(129, 140, 248, 0.15);
+
+    --signer-1: #818cf8;
+    --signer-2: #2dd4bf;
+    --signer-3: #fb923c;
+    --signer-4: #f472b6;
+    --signer-5: #4ade80;
+    --signer-6: #a78bfa;
+
+    --paper: #ffffff;
+    --paper-edge: rgba(244, 244, 246, 0.16);
+  }
+}
+
+/* Explicit in-app toggle: dark stamp wins over OS-light. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #101013;
+  --surface: #1a1a1f;
+  --surface-2: #232329;
+  --surface-3: #2c2c33;
+  --ink: #f4f4f6;
+  --ink-2: #b9b9c0;
+  --ink-3: #8f8f98;
+  --hairline: rgba(244, 244, 246, 0.1);
+  --hairline-strong: rgba(244, 244, 246, 0.2);
+  --scrim: rgba(0, 0, 0, 0.6);
+
+  --accent: #818cf8;
+  --accent-ink: #101013;
+  --accent-strong: #a5b4fc;
+  --accent-wash: rgba(129, 140, 248, 0.15);
+
+  --ok: #4ade80;
+  --ok-wash: rgba(74, 222, 128, 0.13);
+  --warn: #fbbf24;
+  --warn-wash: rgba(251, 191, 36, 0.13);
+  --danger: #f87171;
+  --danger-wash: rgba(248, 113, 113, 0.12);
+  --info: #a5b4fc;
+  --info-wash: rgba(129, 140, 248, 0.15);
+
+  --signer-1: #818cf8;
+  --signer-2: #2dd4bf;
+  --signer-3: #fb923c;
+  --signer-4: #f472b6;
+  --signer-5: #4ade80;
+  --signer-6: #a78bfa;
+
+  --paper: #ffffff;
+  --paper-edge: rgba(244, 244, 246, 0.16);
+}

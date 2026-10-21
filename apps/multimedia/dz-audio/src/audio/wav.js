@@ -1,0 +1,259 @@
+// WAV (RIFF/RF64) reading and writing. Supports 8/16/24/32-bit PCM, 32/64-bit
+// float, WAVE_FORMAT_EXTENSIBLE, cue points with labels and range lengths
+// (cue + LIST/adtl labl/ltxt), which round-trip markers with other editors,
+// mu-law/A-law and LIST/INFO metadata (title, artist, ...).
+
+import { parseRiffInfo, parseBext, parseCart } from './meta.js';
+import { parseXmp } from './xmp.js';
+import { ulaw, alaw } from './aiff.js';
+
+const ascii = (dv, o, n) => {
+  let s = '';
+  for (let i = 0; i < n; i++) s += String.fromCharCode(dv.getUint8(o + i));
+  return s;
+};
+
+export function isWav(buffer) {
+  if (buffer.byteLength < 12) return false;
+  const dv = new DataView(buffer);
+  const riff = ascii(dv, 0, 4);
+  return (riff === 'RIFF' || riff === 'RF64') && ascii(dv, 8, 4) === 'WAVE';
+}
+
+/** @returns {{ sampleRate, channels: Float32Array[], bitDepth, float, markers: object[] }} */
+export function parseWav(buffer) {
+  const dv = new DataView(buffer);
+  if (!isWav(buffer)) throw new Error('Not a WAV file');
+  let fmt = null;
+  let dataOffset = -1;
+  let dataSize = 0;
+  let ds64Data = null;
+  const cues = new Map();
+  const labels = new Map();
+  const lengths = new Map();
+  const notes = new Map();
+  let meta = {};
+  let o = 12;
+  while (o + 8 <= buffer.byteLength) {
+    const id = ascii(dv, o, 4);
+    let size = dv.getUint32(o + 4, true);
+    const body = o + 8;
+    if (id === 'ds64') ds64Data = Number(dv.getBigUint64(body + 8, true));
+    if (id === 'fmt ') {
+      let format = dv.getUint16(body, true);
+      const channels = dv.getUint16(body + 2, true);
+      const sampleRate = dv.getUint32(body + 4, true);
+      const bits = dv.getUint16(body + 14, true);
+      if (format === 0xfffe && size >= 40) format = dv.getUint16(body + 24, true);
+      fmt = { format, channels, sampleRate, bits };
+    } else if (id === 'data') {
+      dataOffset = body;
+      dataSize = size === 0xffffffff && ds64Data != null ? ds64Data : size;
+      if (dataOffset + dataSize > buffer.byteLength) dataSize = buffer.byteLength - dataOffset;
+      size = dataSize;
+    } else if (id === 'cue ') {
+      const n = dv.getUint32(body, true);
+      for (let i = 0; i < n; i++) {
+        const p = body + 4 + i * 24;
+        cues.set(dv.getUint32(p, true), dv.getUint32(p + 20, true));
+      }
+    } else if (id === 'LIST' && body + 4 <= buffer.byteLength && ascii(dv, body, 4) === 'INFO') {
+      meta = { ...meta, ...parseRiffInfo(new Uint8Array(buffer, body, Math.min(size, buffer.byteLength - body))) };
+    } else if (id === '_PMX') {
+      // XMP packet: fills fields the other chunks did not set.
+      meta = { ...parseXmp(new TextDecoder().decode(new Uint8Array(buffer, body, Math.max(0, Math.min(size, buffer.byteLength - body))))), ...meta };
+    } else if (id === 'bext' || id === 'cart') {
+      const bytes = new Uint8Array(buffer, body, Math.max(0, Math.min(size, buffer.byteLength - body)));
+      // INFO wins for the shared title and artist; the cart chunk fills them in only when missing.
+      meta = { ...(id === 'bext' ? parseBext(bytes) : parseCart(bytes)), ...meta };
+    } else if (id === 'LIST' && body + 4 <= buffer.byteLength && ascii(dv, body, 4) === 'adtl') {
+      let q = body + 4;
+      while (q + 8 <= body + size) {
+        const sid = ascii(dv, q, 4);
+        const ssize = dv.getUint32(q + 4, true);
+        const cueId = dv.getUint32(q + 8, true);
+        if (sid === 'labl' || sid === 'note') {
+          const text = new TextDecoder().decode(new Uint8Array(buffer, q + 12, Math.max(0, ssize - 4))).replace(/\0+$/, '');
+          (sid === 'labl' ? labels : notes).set(cueId, text);
+        } else if (sid === 'ltxt') {
+          lengths.set(cueId, dv.getUint32(q + 12, true));
+        }
+        q += 8 + ssize + (ssize & 1);
+      }
+    }
+    o = body + size + (size & 1);
+  }
+  if (!fmt || dataOffset < 0) throw new Error('The WAV file has no audio data.');
+  const { format, channels: nch, sampleRate, bits } = fmt;
+  if (!nch || !sampleRate) throw new Error('The WAV file header is damaged.');
+  const isFloat = format === 3;
+  const law = format === 6 ? alaw : format === 7 ? ulaw : null;
+  if (format !== 1 && format !== 3 && !law) throw new Error('This WAV encoding is not supported.');
+  const bytes = bits / 8;
+  const frames = Math.floor(dataSize / (bytes * nch));
+  const channels = Array.from({ length: nch }, () => new Float32Array(frames));
+  const src = new Uint8Array(buffer, dataOffset, frames * bytes * nch);
+  const view = new DataView(buffer, dataOffset);
+  if (law) {
+    for (let i = 0, p = 0; i < frames; i++) for (let c = 0; c < nch; c++, p++) channels[c][i] = law(src[p]);
+  } else if (isFloat && bits === 32) {
+    for (let i = 0, p = 0; i < frames; i++) for (let c = 0; c < nch; c++, p += 4) channels[c][i] = view.getFloat32(p, true);
+  } else if (isFloat && bits === 64) {
+    for (let i = 0, p = 0; i < frames; i++) for (let c = 0; c < nch; c++, p += 8) channels[c][i] = view.getFloat64(p, true);
+  } else if (bits === 16) {
+    for (let i = 0, p = 0; i < frames; i++) for (let c = 0; c < nch; c++, p += 2) channels[c][i] = view.getInt16(p, true) / 32768;
+  } else if (bits === 24) {
+    for (let i = 0, p = 0; i < frames; i++)
+      for (let c = 0; c < nch; c++, p += 3) {
+        const v = src[p] | (src[p + 1] << 8) | (src[p + 2] << 16);
+        channels[c][i] = ((v << 8) >> 8) / 8388608;
+      }
+  } else if (bits === 32) {
+    for (let i = 0, p = 0; i < frames; i++) for (let c = 0; c < nch; c++, p += 4) channels[c][i] = view.getInt32(p, true) / 2147483648;
+  } else if (bits === 8) {
+    for (let i = 0, p = 0; i < frames; i++) for (let c = 0; c < nch; c++, p++) channels[c][i] = (src[p] - 128) / 128;
+  } else throw new Error(`${bits}-bit WAV files are not supported.`);
+  const markers = [...cues].map(([id, position]) => ({
+    start: position,
+    duration: lengths.get(id) || 0,
+    name: labels.get(id) || '',
+    description: notes.get(id) || '',
+    type: 'cue',
+  }));
+  return { sampleRate, channels, bitDepth: law ? 16 : bits, float: isFloat, markers, meta };
+}
+
+/**
+ * Encodes channels (Channel objects or Float32Arrays) as a WAV Blob.
+ * @param {{ sampleRate, channels, bitDepth?: 16|24|32, float?: boolean, markers?: object[] }} o
+ */
+export function encodeWav({ sampleRate, channels, bitDepth = 16, float = bitDepth === 32, markers = [], dither = bitDepth < 24 }) {
+  const nch = channels.length;
+  const frames = channels[0]?.length ?? 0;
+  const bytes = bitDepth / 8;
+  const dataSize = frames * nch * bytes;
+  const parts = [];
+  const header = new DataView(new ArrayBuffer(36 + 8));
+  const w4 = (dv, o, s) => [...s].forEach((ch, i) => dv.setUint8(o + i, ch.charCodeAt(0)));
+  // Marker chunks.
+  const cueChunk = markers.length ? buildCue(markers) : null;
+  const total = 4 + 24 + 8 + dataSize + (dataSize & 1) + (cueChunk ? cueChunk.byteLength : 0);
+  w4(header, 0, 'RIFF');
+  header.setUint32(4, Math.min(0xffffffff, total), true);
+  w4(header, 8, 'WAVE');
+  w4(header, 12, 'fmt ');
+  header.setUint32(16, 16, true);
+  header.setUint16(20, float ? 3 : 1, true);
+  header.setUint16(22, nch, true);
+  header.setUint32(24, sampleRate, true);
+  header.setUint32(28, sampleRate * nch * bytes, true);
+  header.setUint16(32, nch * bytes, true);
+  header.setUint16(34, bitDepth, true);
+  w4(header, 36, 'data');
+  header.setUint32(40, dataSize, true);
+  parts.push(header.buffer);
+  const CH = 65536;
+  const tmp = Array.from({ length: nch }, () => new Float32Array(CH));
+  let seed = 22222;
+  const rand = () => {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    return seed / 0x7fffffff;
+  };
+  for (let at = 0; at < frames; at += CH) {
+    const n = Math.min(CH, frames - at);
+    for (let c = 0; c < nch; c++) {
+      const ch = channels[c];
+      if (ch.read) ch.read(at, tmp[c], 0, n);
+      else tmp[c].set(ch.subarray(at, at + n));
+    }
+    const buf = new ArrayBuffer(n * nch * bytes);
+    const dv = new DataView(buf);
+    let p = 0;
+    for (let i = 0; i < n; i++) {
+      for (let c = 0; c < nch; c++) {
+        let v = tmp[c][i];
+        if (float) {
+          dv.setFloat32(p, v, true);
+          p += 4;
+          continue;
+        }
+        if (dither) v += (rand() - rand()) / (bitDepth === 16 ? 32768 : 8388608);
+        v = Math.max(-1, Math.min(1, v));
+        if (bitDepth === 16) {
+          dv.setInt16(p, v < 0 ? Math.round(v * 32768) : Math.round(v * 32767), true);
+          p += 2;
+        } else if (bitDepth === 24) {
+          const s = v < 0 ? Math.round(v * 8388608) : Math.round(v * 8388607);
+          dv.setUint8(p, s & 255);
+          dv.setUint8(p + 1, (s >> 8) & 255);
+          dv.setUint8(p + 2, (s >> 16) & 255);
+          p += 3;
+        } else if (bitDepth === 8) {
+          dv.setUint8(p, Math.round(v * 127 + 128));
+          p += 1;
+        } else {
+          dv.setInt32(p, v < 0 ? Math.round(v * 2147483648) : Math.round(v * 2147483647), true);
+          p += 4;
+        }
+      }
+    }
+    parts.push(buf);
+  }
+  if (dataSize & 1) parts.push(new Uint8Array(1));
+  if (cueChunk) parts.push(cueChunk);
+  return new Blob(parts, { type: 'audio/wav' });
+}
+
+/** cue chunk plus LIST/adtl labels and region lengths for markers (an ArrayBuffer). */
+export function buildCue(markers) {
+  const enc = new TextEncoder();
+  const cue = new DataView(new ArrayBuffer(12 + markers.length * 24));
+  const w4 = (dv, o, s) => [...s].forEach((ch, i) => dv.setUint8(o + i, ch.charCodeAt(0)));
+  w4(cue, 0, 'cue ');
+  cue.setUint32(4, 4 + markers.length * 24, true);
+  cue.setUint32(8, markers.length, true);
+  markers.forEach((m, i) => {
+    const p = 12 + i * 24;
+    cue.setUint32(p, i + 1, true);
+    cue.setUint32(p + 4, m.start, true);
+    w4(cue, p + 8, 'data');
+    cue.setUint32(p + 20, m.start, true);
+  });
+  const subs = [];
+  markers.forEach((m, i) => {
+    const text = enc.encode(`${m.name || ''}\0`);
+    const size = 4 + text.length;
+    const sub = new Uint8Array(8 + size + (size & 1));
+    const dv = new DataView(sub.buffer);
+    w4(dv, 0, 'labl');
+    dv.setUint32(4, size, true);
+    dv.setUint32(8, i + 1, true);
+    sub.set(text, 12);
+    subs.push(sub);
+    if (m.duration) {
+      const lt = new Uint8Array(8 + 20);
+      const ld = new DataView(lt.buffer);
+      w4(ld, 0, 'ltxt');
+      ld.setUint32(4, 20, true);
+      ld.setUint32(8, i + 1, true);
+      ld.setUint32(12, m.duration, true);
+      w4(ld, 16, 'rgn ');
+      subs.push(lt);
+    }
+  });
+  const listSize = 4 + subs.reduce((s, b) => s + b.length, 0);
+  const list = new Uint8Array(8 + listSize);
+  const ldv = new DataView(list.buffer);
+  w4(ldv, 0, 'LIST');
+  ldv.setUint32(4, listSize, true);
+  w4(ldv, 8, 'adtl');
+  let o = 12;
+  for (const s of subs) {
+    list.set(s, o);
+    o += s.length;
+  }
+  const out = new Uint8Array(cue.byteLength + list.length);
+  out.set(new Uint8Array(cue.buffer), 0);
+  out.set(list, cue.byteLength);
+  return out.buffer;
+}
