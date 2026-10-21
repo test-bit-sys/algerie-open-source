@@ -1,0 +1,820 @@
+/* App shell: header, rail, sidebar, main area, status bar. */
+.shell {
+  --sidebar-w: 280px;
+  --rail-w: 76px;
+  display: grid;
+  grid-template-rows: var(--header-h) 1fr var(--statusbar-h);
+  height: 100%;
+  background: var(--bg);
+}
+
+body.resizing,
+body.resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+body.resizing-y,
+body.resizing-y * {
+  cursor: row-resize !important;
+  user-select: none !important;
+}
+
+/* Header ------------------------------------------------------------------ */
+.appbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 0 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-subtle);
+  min-width: 0;
+}
+
+.appbar-menu {
+  display: none;
+}
+
+.appbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.appbar-brand img {
+  border-radius: 5px;
+}
+
+.appbar-title {
+  margin: 0;
+  font-weight: 650;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.alpha-tag {
+  padding: 1px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.appbar-center {
+  flex: 0 1 460px;
+  min-width: 0;
+}
+
+.appbar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 30px;
+  padding: 0 6px 0 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-faint);
+  text-align: left;
+}
+
+.appbar-search:hover {
+  border-color: var(--border-strong);
+}
+
+.appbar-search-text {
+  flex: 1;
+}
+
+.appbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  flex: 1 1 0;
+}
+
+.appbar-import {
+  margin-right: 6px;
+}
+
+.sync-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--text-muted);
+}
+
+.sync-state.error {
+  color: var(--warning);
+}
+
+.sync-state.spin .icon {
+  animation: spin 1s linear infinite;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.account-btn {
+  display: flex;
+  padding: 2px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+}
+
+.account-btn:hover .avatar {
+  outline: 2px solid var(--border-strong);
+}
+
+/* Body -------------------------------------------------------------------- */
+.body {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  flex: none;
+  width: var(--rail-w);
+  padding: 8px 6px;
+  border-right: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+
+.rail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 2px 6px;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.rail-item:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.rail-item[aria-pressed='true'] {
+  background: var(--bg-active);
+  color: var(--text);
+}
+
+.sidebar {
+  position: relative;
+  display: none;
+  flex: none;
+  width: var(--sidebar-w);
+  min-width: 0;
+  flex-direction: column;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+}
+
+.shell.sidebar-open .sidebar {
+  display: flex;
+}
+
+.resizer.vertical {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -3px;
+  width: 5px;
+  z-index: 5;
+  cursor: col-resize;
+}
+
+
+.resizer:hover,
+.resizer:focus-visible {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.resizer.horizontal {
+  flex: none;
+  height: 5px;
+  margin: -3px 0 -2px;
+  z-index: 5;
+  cursor: row-resize;
+}
+
+.scrim {
+  display: none;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.main-row {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  container: main-row / inline-size;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: 380px;
+  min-width: 0;
+  border-left: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.right-panel[hidden] {
+  display: none;
+}
+
+/* In a narrower row the panel narrows first, so the editor keeps its controls in view. */
+@media (max-width: 899px) {
+  .right-panel {
+    width: clamp(240px, 40%, 380px);
+  }
+}
+
+@container main-row (max-width: 760px) {
+  .right-panel {
+    width: clamp(240px, 40%, 380px);
+  }
+}
+
+/* Too narrow for both side by side: the panel lies over the editor instead of squeezing it away. */
+@container main-row (max-width: 600px) {
+  .right-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 6;
+    width: min(380px, 100%);
+  }
+}
+
+/* On phones it is a full sheet: a sliver of editor beside it would only be in the way. */
+@container main-row (max-width: 480px) {
+  .right-panel {
+    width: 100%;
+    border-left: 0;
+  }
+}
+
+/* Status bar -------------------------------------------------------------- */
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-subtle);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  min-width: 0;
+}
+
+.status-left,
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+
+.status-msg {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.status-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+}
+
+.status-btn.icon-only {
+  width: 26px;
+  padding: 0;
+  justify-content: center;
+}
+
+.status-btn:hover,
+.status-btn[aria-pressed='true'],
+.status-btn[aria-expanded='true'] {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.status-badge {
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--danger);
+  color: var(--text-inverse);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* Touch: the status bar is taller (tokens.css) so its buttons can match the other small controls. */
+@media (pointer: coarse) {
+  .status-btn {
+    justify-content: center;
+    height: var(--control-sm-h);
+    min-width: var(--control-sm-h);
+  }
+}
+
+/* Tab bar ------------------------------------------------------------------ */
+.tabbar {
+  display: flex;
+  align-items: stretch;
+  flex: none;
+  height: var(--tabbar-h);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-subtle);
+  min-width: 0;
+}
+
+.doc-tabs {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.doc-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.doc-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: none;
+  max-width: 220px;
+  border-right: 1px solid var(--border);
+}
+
+.doc-tab.active {
+  background: var(--bg);
+}
+
+.doc-tab.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--accent);
+}
+
+.doc-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--bg);
+}
+
+.doc-tab.dragging {
+  opacity: 0.5;
+}
+
+.doc-tab.drop-before {
+  border-left: 2px solid var(--accent);
+}
+
+.doc-tab.drop-after {
+  border-right: 2px solid var(--accent);
+}
+
+.doc-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 100%;
+  padding: 0 4px 0 12px;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+}
+
+.doc-tab.active .doc-tab-btn,
+.doc-tab-btn:hover {
+  color: var(--text);
+}
+
+.doc-tab-btn .tab-icon {
+  color: var(--text-faint);
+}
+
+.doc-tab-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-tab.preview .doc-tab-name {
+  font-style: italic;
+}
+
+.doc-tab-close {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-faint);
+  flex: none;
+}
+
+@media (pointer: coarse) {
+  .doc-tab-close {
+    width: 32px;
+    height: 32px;
+    margin-right: 3px;
+  }
+}
+
+.doc-tab-close .icon {
+  visibility: hidden;
+}
+
+.doc-tab:hover .doc-tab-close .icon,
+.doc-tab.active .doc-tab-close .icon,
+.doc-tab-close:focus-visible .icon {
+  visibility: visible;
+}
+
+.doc-tab-close:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.doc-tab.dirty .doc-tab-close::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.doc-tab.dirty:hover .doc-tab-close::after,
+.doc-tab.dirty .doc-tab-close:focus-visible::after {
+  display: none;
+}
+
+.doc-tab.dirty .doc-tab-close .icon {
+  visibility: hidden;
+}
+
+.doc-tab.dirty:hover .doc-tab-close .icon,
+.doc-tab.dirty .doc-tab-close:focus-visible .icon {
+  visibility: visible;
+}
+
+.tabbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 4px;
+  flex: none;
+}
+
+.tabbar-spacer {
+  flex: 1;
+}
+
+.env-picker {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 6px;
+  border-left: 1px solid var(--border);
+  flex: none;
+}
+
+.env-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 220px;
+  height: 28px;
+  padding: 0 8px 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text);
+}
+
+.env-select:hover,
+.env-select[aria-expanded='true'] {
+  background: var(--bg-hover);
+}
+
+.env-select .env-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.env-select.none .env-name {
+  color: var(--text-muted);
+}
+
+.env-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+
+/* The popover box takes the width, so its padding stays inside the screen. */
+.popover.env-quick-pop {
+  width: min(420px, calc(100vw - 16px));
+}
+
+.env-quick h3 {
+  margin: 0 0 6px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.env-quick table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  margin-bottom: 12px;
+  table-layout: fixed;
+}
+
+.env-quick td {
+  padding: 4px 6px;
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.env-quick td:first-child {
+  width: 40%;
+  color: var(--text-muted);
+}
+
+.env-quick .muted {
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+  margin: 0 0 12px;
+}
+
+/* Launch screen ------------------------------------------------------------ */
+.launch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 1;
+  padding: 32px 16px;
+  text-align: center;
+  overflow: auto;
+}
+
+.launch-title {
+  margin: 0;
+  font-size: var(--fs-xl);
+  font-weight: 650;
+}
+
+.launch-sub {
+  margin: 0;
+  max-width: 460px;
+  color: var(--text-muted);
+}
+
+.launch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 200px));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.launch-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  position: relative;
+}
+
+.launch-card:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
+}
+
+.launch-card .icon {
+  color: var(--accent-text);
+}
+
+.launch-label {
+  font-weight: 600;
+}
+
+.launch-card kbd {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.launch-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 16px 0 0;
+  max-width: 520px;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+/* Compact layouts ----------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .appbar-search-text,
+  .appbar-search kbd {
+    display: none;
+  }
+  .appbar-center {
+    flex: none;
+  }
+  .appbar-search {
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+    border-color: transparent;
+    background: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .appbar-menu {
+    display: inline-flex;
+  }
+  .rail {
+    display: none;
+  }
+  .sidebar {
+    position: absolute;
+    z-index: 50;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(340px, 88vw);
+  }
+  /* Over the header and status bar too: everything but the drawer is out of reach while it is open. */
+  .shell {
+    position: relative;
+  }
+  .shell.sidebar-open .scrim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 40;
+    background: var(--scrim);
+  }
+  .sidebar .resizer.vertical {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .appbar {
+    padding: 0 4px;
+    gap: 4px;
+  }
+  .appbar-import span,
+  .alpha-tag,
+  .status-label,
+  .status-msg {
+    display: none;
+  }
+  .appbar-import {
+    width: 32px;
+    padding: 0;
+    margin: 0;
+  }
+  .env-select {
+    max-width: 120px;
+  }
+  /* A tab gives way to the strip, keeping its close button and unsaved dot in view; several scroll. */
+  .doc-tab {
+    flex: 0 1 auto;
+    min-width: min(120px, 100%);
+    max-width: 100%;
+  }
+  .launch-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* Too narrow for the name next to the actions: the logo stands for it, and the name stays for screen readers. */
+@media (max-width: 439px) {
+  .appbar-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 379px) {
+  .signin-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
