@@ -23,7 +23,7 @@
 </p>
 
 > ### ⚡ تجربة مباشرة وفورية لكافة البرمجيات أونلاين (Live Demo / Try Now)
-> يمكنك الآن تجربة كافة البرمجيات الـ 15 مباشرة في متصفحك دون الحاجة لتثبيت أي برامج، أو تشغيل المحركات الأصلية عالية الأداء (Rust, Python, C# .NET):  
+> يمكنك الآن تجربة كافة البرمجيات الـ 34 مباشرة في متصفحك دون الحاجة لتثبيت أي برامج، أو تشغيل المحركات الأصلية عالية الأداء (Rust, Python, C# .NET):  
 > 👉 **[اضغط هنا لفتح بوابة المنظومة المركزية وتجربة البرامج مباشرة (Launch DZ Open Suite Hub)](https://test-bit-sys.github.io/algerie-open-source/)**
 
 </div>
@@ -33,7 +33,7 @@
 ## 📑 فهرس المحتويات
 
 - [🌟 الرؤية الاستراتيجية والسيادة الرقمية](#-الرؤية-الاستراتيجية-والسيادة-الرقمية)
-- [🟢 جدول حالة وتصنيف كافة البرمجيات (15 تطبيقاً مكتمل وجاهز)](#-جدول-حالة-وتصنيف-كافة-البرمجيات)
+- [🟢 جدول حالة وتصنيف كافة البرمجيات (34 برمجية سيادية مكتملة)](#-جدول-حالة-وتصنيف-كافة-البرمجيات)
 - [🚀 البرمجيات المكتبية والهندسية المكتملة والجاهزة حالياً](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
   - [💼 1. برمجية الفوترة ونقاط البيع DZ-Facture & POS (المنفذ 3000)](#1--برمجية-الفوترة-ونقاط-البيع-dz-facture--pos)
   - [🌳 2. برمجية فحص وسائط التخزين DZ-Disk-Tree (المنفذ 3001 + محرك Rust)](#2--برمجية-فحص-وسائط-التخزين-dz-disk-tree)
@@ -50,6 +50,15 @@
   - [🏗️ 13. محرك الحسابات الزلزالية DZ-RPA Pro (كود RPA 99/2003 + محرك بايثون)](#13--محرك-الحسابات-الزلزالية-الجزائري-dz-rpa-pro)
   - [📊 14. المحاسبة المالية SCF وميزان المراجعة DZ-Compta (محرك C# .NET 10)](#14--المحاسبة-المالية-الجزائرية-dz-compta-scf-pro)
   - [👥 15. منظومة كشوف الأجور وسلم الـ IRG DZ-Paie RH (محرك C# .NET 10)](#15--منظومة-كشوف-الأجور-والضمان-الاجتماعي-dz-paie-rh-pro)
+  - [📅 16. منظومة التقويم والمواعيد الوطنية DZ-Calendar (المنفذ 3027)](#16--منظومة-التقويم-وجدولة-المواعيد-الوطنية-dz-calendar)
+  - [📚 17. الموسوعة وقواعد المعرفة السيادية DZ-Wiki (المنفذ 3028)](#17--الموسوعة-وقواعد-المعرفة-السيادية-dz-wiki)
+  - [🤝 18. إدارة علاقات العملاء والصفقات DZ-CRM (المنفذ 3029)](#18--إدارة-علاقات-العملاء-والصفقات-dz-crm)
+  - [📦 19. إدارة المخزون والمستودعات والباركود DZ-Inventory (المنفذ 3030)](#19--إدارة-المخزون-والمستودعات-والباركود-dz-inventory)
+  - [⚡ 20. استوديو واجهات البرمجة السيادي DZ-API Studio (المنفذ 3031)](#20--استوديو-واجهات-البرمجة-السيادي-dz-api-studio)
+  - [♟️ 21. حزمة الألعاب التراثية والذكاء الاصطناعي المحلي (المنافذ 3012-3017)](#21-️-حزمة-الألعاب-التراثية-والذكاء-الاصطناعي-المحلي)
+  - [🎙️ 22. استوديو الصوت والتسجيل DZ-Audio & DZ-Recorder (المنافذ 3018, 3019)](#22-️-استوديو-الصوت-وتسجيل-الشاشة)
+  - [📝 23. الملاحظات، المهام والتوقيع الرقمي (المنافذ 3020, 3021, 3022)](#23--الملاحظات-والمهام-والتوقيع-الرقمي)
+  - [⏱️ 24. تتبع الوقت، محول الوحدات ومواقيت الصلاة (المنافذ 3023, 3024, 3025)](#24-️-تتبع-الوقت-ومواقيت-الصلاة-ومحول-الوحدات)
 - [🗺️ دليل المسارات الـ 11 وجدول خارطة الطريق المتبقية](#-دليل-المسارات-الـ-11-وجدول-كافة-أنواع-البرمجيات)
 - [⚙️ الركائز الهندسية والمعمارية المتعددة اللغات Polyglot](#️-الركائز-الهندسية-لمشروع-heyputer)
 - [🏛️ الامتثال للمنظومة القانونية والجبائية الجزائرية](#️-الامتثال-للمنظومة-القانونية-والجبائية-الجزائرية)
@@ -65,22 +74,41 @@
 
 ---
 
-## 🟢 جدول حالة وتصنيف كافة البرمجيات
+## 🟢 جدول حالة وتصنيف كافة البرمجيات (34 برمجية وتطبيق مكتمل)
 
 | المسار | تصنيف ونوع البرنامج | البديل التجاري المستبدل | الحالة الراهنة والمحركات | تجربة مباشرة (Try Now) | مسار المجلد المصدري |
 | :---: | :--- | :--- | :---: | :---: | :--- |
-| **02** | **الفوترة ونقاط البيع POS** | **Sage 100 / Odoo POS** | 🟢 **مكتمل** (Web :3000) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/) | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
-| **07** | **فحص وسائط التخزين والأقراص** | **WizTree / TreeSize 1:1** | 🟢 **مكتمل** (Web :3001 + **Rust Native**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/) | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
-| **07** | **ضغط وإدارة الأرشيف والتشفير** | **WinRAR / 7-Zip 1:1** | 🟢 **مكتمل** (Web :3002 + **Rust Native**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/) | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
-| **04** | **مشغل الوسائط المتعددة والصوتيات** | **VLC Media Player 1:1** | 🟢 **مكتمل** (Web :3003 + **Python DSP**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/) | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
-| **01** | **استوديو وثائق PDF وتوقيعها** | **Adobe Acrobat Pro 1:1** | 🟢 **مكتمل** (Web :3004) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/) | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
-| **10** | **السبورة البيضاء التفاعلية للتعليم** | **OpenBoard / Miro 1:1** | 🟢 **مكتمل** (Web :3005) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/) | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
-| **01** | **محرر المستندات والنماذج الوزارية (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **مكتمل** (Web :3006) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/) | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
-| **01** | **معالج الجداول والحسابات الجبائية (DZ-Sheets)** | **Microsoft Excel / Google Sheets** | 🟢 **مكتمل** (Web :3007) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/) | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
+| **02** | **الفوترة ونقاط البيع POS (DZ-Facture)** | **Sage 100 / Odoo POS** | 🟢 **مكتمل** (Web :3000) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/) | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
+| **07** | **فحص وسائط التخزين (DZ-Disk-Tree)** | **WizTree / TreeSize 1:1** | 🟢 **مكتمل** (Web :3001 + **Rust Native**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/) | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
+| **07** | **ضغط وإدارة الأرشيف والتشفير (DZ-Archive)** | **WinRAR / 7-Zip 1:1** | 🟢 **مكتمل** (Web :3002 + **Rust Native**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/) | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
+| **04** | **مشغل الوسائط المتعددة (DZ-Player)** | **VLC Media Player 1:1** | 🟢 **مكتمل** (Web :3003 + **Python DSP**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/) | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
+| **01** | **استوديو وثائق PDF وتوقيعها (DZ-PDF Pro)** | **Adobe Acrobat Pro 1:1** | 🟢 **مكتمل** (Web :3004) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/) | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
+| **10** | **السبورة البيضاء التفاعلية (DZ-Whiteboard Pro)** | **OpenBoard / Miro 1:1** | 🟢 **مكتمل** (Web :3005) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/) | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
+| **01** | **محرر المستندات والنماذج (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **مكتمل** (Web :3006) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/) | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
+| **01** | **معالج الجداول والحسابات (DZ-Sheets)** | **Microsoft Excel / Google Sheets** | 🟢 **مكتمل** (Web :3007) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/) | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
 | **01** | **استوديو العروض ومؤشر الليزر (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **مكتمل** (Web :3008) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/) | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
-| **09** | **منصة أدوات المطورين والـ 58 ولاية (DZ-DevTools)** | **مكتبات SATIM/CIB والولايات** | 🟢 **مكتمل** (Web :3009 + **Rust CLI**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
+| **09** | **أدوات المطورين والـ 58 ولاية (DZ-DevTools)** | **مكتبات SATIM/CIB والولايات** | 🟢 **مكتمل** (Web :3009 + **Rust CLI**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
 | **05** | **استوديو التصميم ومعالجة الصور (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **مكتمل** (Web :3010 + **Python Engine**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/) | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
-| **06** | **لوحات كانبان وإدارة مهام المشاريع (DZ-Boards)** | **Trello / Jira / Focalboard** | 🟢 **مكتمل** (Web :3011) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
+| **06** | **لوحات كانبان وإدارة المشاريع (DZ-Boards)** | **Trello / Jira / Focalboard** | 🟢 **مكتمل** (Web :3011) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
+| **11** | **شطرنج الجزائر (DZ-Chess)** | **Chess.com / Lichess FIDE AI** | 🟢 **مكتمل** (Web :3012) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/) | [`apps/games-interactive/dz-chess/`](apps/games-interactive/dz-chess/) |
+| **11** | **دامة جزائرية (DZ-Dama)** | **Traditional Algerian Checkers** | 🟢 **مكتمل** (Web :3013) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-dama/) | [`apps/games-interactive/dz-dama/`](apps/games-interactive/dz-dama/) |
+| **11** | **دومينو الجزائر (DZ-Domino)** | **Algerian Double-Six Dominoes** | 🟢 **مكتمل** (Web :3014) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-domino/) | [`apps/games-interactive/dz-domino/`](apps/games-interactive/dz-domino/) |
+| **11** | **طاولة 31 الجزائرية (DZ-Tawla)** | **Backgammon / Tawla 31** | 🟢 **مكتمل** (Web :3015) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-tawla/) | [`apps/games-interactive/dz-tawla/`](apps/games-interactive/dz-tawla/) |
+| **11** | **قوة 4 (DZ-Puissance4)** | **Connect Four / Hasbro** | 🟢 **مكتمل** (Web :3016) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-puissance4/) | [`apps/games-interactive/dz-puissance4/`](apps/games-interactive/dz-puissance4/) |
+| **11** | **أوتيلو ريفيرسي (DZ-Othello)** | **Reversi / Othello AI** | 🟢 **مكتمل** (Web :3017) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-othello/) | [`apps/games-interactive/dz-othello/`](apps/games-interactive/dz-othello/) |
+| **04** | **استوديو تسجيل الشاشة والدروس (DZ-Recorder)** | **Camtasia / OBS Studio** | 🟢 **مكتمل** (Web :3018) | [🚀 **جرب الآن**](apps/video-montage/dz-recorder/) | [`apps/video-montage/dz-recorder/`](apps/video-montage/dz-recorder/) |
+| **04** | **استوديو الهندسة الصوتية (DZ-Audio)** | **Audacity / Adobe Audition** | 🟢 **مكتمل** (Web :3019) | [🚀 **جرب الآن**](apps/multimedia/dz-audio/) | [`apps/multimedia/dz-audio/`](apps/multimedia/dz-audio/) |
+| **01** | **المفكرة الذكية (DZ-Notes)** | **Microsoft OneNote / Apple Notes** | 🟢 **مكتمل** (Web :3020) | [🚀 **جرب الآن**](apps/productivity/dz-notes/) | [`apps/productivity/dz-notes/`](apps/productivity/dz-notes/) |
+| **06** | **منظومة تخطيط المهام (DZ-Tasks)** | **ClickUp / Todoist / Asana** | 🟢 **مكتمل** (Web :3021) | [🚀 **جرب الآن**](apps/productivity/dz-tasks/) | [`apps/productivity/dz-tasks/`](apps/productivity/dz-tasks/) |
+| **01** | **منظومة التوقيع والتأشير (DZ-Signature)** | **DocuSign / Adobe Sign** | 🟢 **مكتمل** (Web :3022) | [🚀 **جرب الآن**](apps/office-suite/dz-signature/) | [`apps/office-suite/dz-signature/`](apps/office-suite/dz-signature/) |
+| **02** | **تتبع الوقت وساعات العمل (DZ-Time)** | **Toggl / Clockify (قانون 90-11)** | 🟢 **مكتمل** (Web :3023) | [🚀 **جرب الآن**](apps/productivity/dz-time/) | [`apps/productivity/dz-time/`](apps/productivity/dz-time/) |
+| **07** | **محول الوحدات والعملات (DZ-Convert)** | **Convertio / XE Currency** | 🟢 **مكتمل** (Web :3024) | [🚀 **جرب الآن**](apps/productivity/dz-convert/) | [`apps/productivity/dz-convert/`](apps/productivity/dz-convert/) |
+| **07** | **مواقيت الصلاة لـ 58 ولاية (DZ-Prayer)** | **IslamicFinder / MuslimPro** | 🟢 **مكتمل** (Web :3025) | [🚀 **جرب الآن**](apps/productivity/dz-prayer/) | [`apps/productivity/dz-prayer/`](apps/productivity/dz-prayer/) |
+| **06** | **التقويم وجدولة المواعيد الوطنية (DZ-Calendar)** | **Google Calendar / Outlook** | 🟢 **مكتمل** (Web :3027) | [🚀 **جرب الآن**](apps/collaboration/dz-calendar/) | [`apps/collaboration/dz-calendar/`](apps/collaboration/dz-calendar/) |
+| **01** | **الموسوعة وقواعد المعرفة السيادية (DZ-Wiki)** | **Notion / Obsidian / Confluence** | 🟢 **مكتمل** (Web :3028) | [🚀 **جرب الآن**](apps/productivity/dz-wiki/) | [`apps/productivity/dz-wiki/`](apps/productivity/dz-wiki/) |
+| **02** | **إدارة علاقات العملاء والصفقات (DZ-CRM)** | **Salesforce / HubSpot CRM** | 🟢 **مكتمل** (Web :3029) | [🚀 **جرب الآن**](apps/business-enterprise/dz-crm/) | [`apps/business-enterprise/dz-crm/`](apps/business-enterprise/dz-crm/) |
+| **02** | **إدارة المخزون والمستودعات والباركود (DZ-Inventory)** | **Zoho Inventory / Sortly** | 🟢 **مكتمل** (Web :3030) | [🚀 **جرب الآن**](apps/business-enterprise/dz-inventory/) | [`apps/business-enterprise/dz-inventory/`](apps/business-enterprise/dz-inventory/) |
+| **09** | **استوديو واجهات البرمجة السيادي (DZ-API)** | **Postman / Insomnia / Hoppscotch** | 🟢 **مكتمل** (Web :3031) | [🚀 **جرب الآن**](apps/developer-tools/dz-api/) | [`apps/developer-tools/dz-api/`](apps/developer-tools/dz-api/) |
 | **08** | **الحسابات الزلزالية الجزائري (DZ-RPA Pro)** | **Robot Structural / ETABS RPA** | 🟢 **مكتمل** (Web + **Python RPA 99/03**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/engineering/dz-rpa/) | [`apps/engineering/dz-rpa/`](apps/engineering/dz-rpa/) |
 | **03** | **المحاسبة المالية وميزان المراجعة (DZ-Compta)** | **PC Compta / DLG Compta SCF** | 🟢 **مكتمل** (Web + **C# .NET 10**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/) | [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) |
 | **03** | **كشوف الأجور والضمان الاجتماعي (DZ-Paie RH)** | **PC Paie / DLG Paie / IRG DGI** | 🟢 **مكتمل** (Web + **C# .NET 10**) | [🚀 **جرب الآن**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/) | [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) |
@@ -378,6 +406,155 @@ npm run start:boards
 
 ---
 
+### 16. 📅 منظومة التقويم وجدولة المواعيد الوطنية DZ-Calendar
+> **التقويم السيادي لإدارة المواعيد، التخطيط المؤسسي، والأعياد الوطنية والإسلامية في الجزائر**  
+> *المنفذ: `:3027` • المسار: [`apps/collaboration/dz-calendar/`](apps/collaboration/dz-calendar/) • [🚀 تجربة البرنامج مباشرة](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-calendar/)*
+
+- **🇩🇿 محرك الأعياد والعطل الرسمية الجزائرية**: مدرج مسبقاً بالأعياد الوطنية المدنية (عيد الاستقلال 5 جويلية، عيد الثورة 1 نوفمبر، رأس السنة الميلادية، رأس السنة الأمازيغية يناير 12 جانفي، عيد العمال 1 ماي) والأعياد الدينية الهجرية (عيد الفطر، عيد الأضحى، المولد النبوي، أول محرم، وعاشوراء).
+- **📆 أنماط عرض متعددة**: عرض شهري، أسبوعي، يومي، وقائمة أجندة مع تصنيفات لونية للأحداث (عمل، شخصي، اجتماعات، طارئ).
+- **💾 استقلالية تامة وتصدير iCalendar**: استيراد وتصدير ملفات التقويم القياسية `.ics` والطباعة مع الحفظ التلقائي محلياً.
+
+```bash
+# تشغيل DZ-Calendar على المنفذ 3027
+npm run start:calendar
+```
+
+---
+
+### 17. 📚 الموسوعة وقواعد المعرفة السيادية DZ-Wiki
+> **منصة التوثيق المعرفي الداخلي، تحرير الماركداون، وقوالب النصوص الإدارية الجزائرية**  
+> *المنفذ: `:3028` • المسار: [`apps/productivity/dz-wiki/`](apps/productivity/dz-wiki/) • [🚀 تجربة البرنامج مباشرة](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-wiki/)*
+
+- **📑 شجرة مستندات ومحرر ماركداون مباشر**: نافذة تقسيم ثنائية (محرر مباشر + معاينة آنية) مع توليد تلقائي لفهرس المحتويات وتلوين الأكواد.
+- **🏛️ قوالب وثائق وطنية مدمجة**: قوالب جاهزة للقوانين الأساسية للشركات (Statuts SARL/EURL)، لوائح العمل الداخلي، وأدلة الإجراءات الإدارية.
+- **🔍 بحث محلي سريع وتصدير شامل**: بحث فوري في محتوى المقالات وتصديرها كصفحات HTML مستقلة أو حزم Markdown أو ملفات PDF مطبوعة.
+
+```bash
+# تشغيل DZ-Wiki على المنفذ 3028
+npm run start:wiki
+```
+
+---
+
+### 18. 🤝 إدارة علاقات العملاء والصفقات DZ-CRM
+> **المنظومة السيادية لإدارة الزبائن، مسار الصفقات التفاعلي، وتوزيع المناطق عبر الـ 58 ولاية**  
+> *المنفذ: `:3029` • المسار: [`apps/business-enterprise/dz-crm/`](apps/business-enterprise/dz-crm/) • [🚀 تجربة البرنامج مباشرة](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-crm/)*
+
+- **🎯 مسار صفقات كانبان التفاعلي**: سحب وإفلات بطاقات الفرص البيعية عبر مراحل البيع (عميل جديد، تم الاتصال، إرسال العرض، التفاوض، صفقة ناجحة، أو ملغاة).
+- **🇩🇿 مطابقة الهويات الجبائية الجزائرية**: تسجيل بطاقات الزبائن مع المعرفات الجبائية الرسمية (NIF, NIS, RC, رقم المادة) وتوزيعها حسب الـ 58 ولاية.
+- **📊 مؤشرات أداء فورية (KPIs)**: حساب فوري للقيمة الإجمالية لمسار الصفقات بالدينار الجزائري (DZD)، ومعدل التحويل ونسب الفوز.
+
+```bash
+# تشغيل DZ-CRM على المنفذ 3029
+npm run start:crm
+```
+
+---
+
+### 19. 📦 إدارة المخزون والمستودعات والباركود DZ-Inventory
+> **منظومة إدارة المخازن، قراءة الباركود، وتقييم المخزون المالي الجزائري (FIFO / PMP)**  
+> *المنفذ: `:3030` • المسار: [`apps/business-enterprise/dz-inventory/`](apps/business-enterprise/dz-inventory/) • [🚀 تجربة البرنامج مباشرة](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-inventory/)*
+
+- **🏷️ دليل المنتجات والباركود**: كتالوج شامل مع الترقيم التسلسلي، باركود EAN-13، حدود الأمان، وتنبيهات إعادة الطلب التلقائية.
+- **💰 التقييم المالي وفق المعايير الجزائرية**: تقييم قيمة المخزون الإجمالية بالدينار الجزائري وفق طريقة السعر المتوسط المرجح (PMP) وطريقة ما يدخل أولاً يخرج أولاً (FIFO).
+- **📋 سجل حركات الدخول والخروج**: توثيق متكامل لسندات الاستلام (Bon de Réception) وسندات التسليم (Bon de Livraison) والتسويات.
+
+```bash
+# تشغيل DZ-Inventory على المنفذ 3030
+npm run start:inventory
+```
+
+---
+
+### 20. ⚡ استوديو واجهات البرمجة السيادي DZ-API Studio
+> **بيئة اختبار واجهات برمجة التطبيقات REST & GraphQL وتوليد الشيفرات البرمجية محلياً**  
+> *المنفذ: `:3031` • المسار: [`apps/developer-tools/dz-api/`](apps/developer-tools/dz-api/) • [🚀 تجربة البرنامج مباشرة](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-api/)*
+
+- **🚀 دعم كامل لبروتوكول HTTP**: إرسال طلبات GET, POST, PUT, PATCH, DELETE مع ترويسات ومعاملات ومحرر نصوص JSON متقدم.
+- **💻 مولد شيفرات برمجية متعدد اللغات**: تصدير مباشر للطلبات إلى لغات cURL و JavaScript (Fetch/Axios) و Python و Rust و PHP.
+- **🛡️ أمان وسيادة مطلقة 100%**: لا يتم إرسال أي بيانات إلى خوادم خارجية؛ تخزين محلي لبيئات العمل والتاريخ.
+
+```bash
+# تشغيل DZ-API Studio على المنفذ 3031
+npm run start:api
+```
+
+---
+
+### 21. ♟️ حزمة الألعاب التراثية والذكاء الاصطناعي المحلي (DZ Games Suite)
+> **ألعاب الطاولة والذكاء التراثية والعالمية، محركات ذكاء اصطناعي مدمجة، وتوليد صوتي محلي 100%**  
+> *المنافذ: `:3012 - :3017` • المسار: [`apps/games-interactive/`](apps/games-interactive/) • [🚀 تجربة الألعاب مباشرة](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/)*
+
+حزمة سيادية متميزة تضم 6 ألعاب تراثية وفكرية بنيت دون أي مكتبات خارجية، مع توليد الأصوات التفاعلية عبر Web Audio API وعزل كامل لاتجاه الرقعة لمنع تشوه التخطيط:
+
+- **♟️ شطرنج الجزائر DZ-Chess (`:3012`)**: قواعد الاتحاد الدولي للشطرنج FIDE، محرك Minimax مع تقليم Alpha-Beta، فحص دقيق لكش ملك والتعادل، وتأمين اتجاه الإحداثيات (`a1..h8`) لمنع انعكاس المربعات والقطع في بيئة الـ RTL.
+- **🔴 دامة جزائرية DZ-Dama (`:3013`)**: قواعد الدامة الجزائرية الأصيلة (الأكل الإجباري، سلاسل القفز المتتالية، وترقية الملك الطائر) مع محاذاة رقعة دقيقة.
+- **🀫 دومينو الجزائر DZ-Domino (`:3014`)**: طقم الدومينو الكلاسيكي ذو 28 حجرة (Double-Six)، فتح الجولة بأعلى مضاعف، ذكاء اصطناعي يعتمد احتساب النقاط، حل البلوك (Blocked)، وإخفاء زر الجولة التالية تلقائياً أثناء اللعب النشط.
+- **🎲 طاولة 31 الجزائرية DZ-Tawla (`:3015`)**: لعبة الطاولة التقليدية بمثلثات مدببة حقيقية فائقة الجمال (`clip-path: polygon`) وتدرجات خشبية دافئة، بدء الرمي التلقائي عند دور الذكاء الاصطناعي، طرد القطع للبار، وخروج القطع (Bear-off).
+- **🟡 قوة 4 DZ-Puissance4 (`:3016`)**: لعبة ربط 4 أقراص مع ذكاء اصطناعي Lookahead، إصلاح تطابق النقر مع الأعمدة 1:1 دون أي انحراف بالـ RTL، وتصحيح أصوات الفوز والخسارة.
+- **⚪ أوتيلو ريفيرسي DZ-Othello (`:3017`)**: لعبة أوتيلو الاستراتيجية مع ذكاء اصطناعي يمنح الأولوية للزوايا، واستمرار دور الذكاء الاصطناعي تلقائياً دون تجمد عند تمرير دور اللاعب البشري.
+
+```bash
+# تشغيل أي لعبة من الألعاب التراثية:
+npm run start:chess       # :3012
+npm run start:dama        # :3013
+npm run start:domino      # :3014
+npm run start:tawla       # :3015
+npm run start:puissance4  # :3016
+npm run start:othello     # :3017
+
+# تشغيل اختبارات الألعاب الـ 56 المؤتمتة:
+npm run test:games
+```
+
+---
+
+### 22. 🎙️ استوديو الصوت وتسجيل الشاشة (DZ-Audio & DZ-Recorder)
+> **تسجيل شاشة الحاسوب عالي الدقة وهندسة الصوت الرقمي مباشرة داخل المتصفح**  
+> *المنافذ: `:3018, :3019` • المسارات: [`apps/video-montage/dz-recorder/`](apps/video-montage/dz-recorder/) و [`apps/multimedia/dz-audio/`](apps/multimedia/dz-audio/)*
+
+- **🎥 تسجيل الشاشة DZ-Recorder (`:3018`)**: تسجيل الشاشة، النوافذ، أو الكاميرا مع دمج صوت الميكروفون والنظام، وإيقاف مؤقت، وتصدير فوري بصيغة WebM.
+- **🎛️ هندسة الصوت DZ-Audio (`:3019`)**: استوديو موجات صوتية متعدد المسارات، تحليل الترددات، معالجة الصوت، والتحويل بين الصيغ.
+
+```bash
+npm run start:recorder    # :3018
+npm run start:audio       # :3019
+```
+
+---
+
+### 23. 📝 الملاحظات، المهام والتوقيع الرقمي (DZ-Notes, Tasks, Signature)
+> **المفكرة الذكية، إدارة المهام الفردية، وتوثيق التوقيعات الرقمية بالأختام الوطنية**  
+> *المنافذ: `:3020, :3021, :3022`*
+
+- **📒 المفكرة DZ-Notes (`:3020`)**: كتابة الملاحظات بتنسيق غني وماركداون، البحث الفوري، وتشفير المحتوى محلياً.
+- **✅ قائمة المهام DZ-Tasks (`:3021`)**: تتبع المهام اليومية مع المهام الفرعية والتواريخ النهائية ووسوم الأولوية وإحصاءات الإنجاز.
+- **✍️ التوقيع الرقمي DZ-Signature (`:3022`)**: منصة متخصصة للتوقيع الرقمي المتجهي وتوليد بصمة التوثيق والأختام الإدارية.
+
+```bash
+npm run start:notes       # :3020
+npm run start:tasks       # :3021
+npm run start:signature   # :3022
+```
+
+---
+
+### 24. ⏱️ تتبع الوقت ومواقيت الصلاة ومحول الوحدات (DZ-Time, Convert, Prayer)
+> **تتبع ساعات العمل وفق قانون العمل 90-11، محول الوحدات، ومواقيت الصلاة لـ 58 ولاية**  
+> *المنافذ: `:3023, :3024, :3025`*
+
+- **⏱️ تتبع الوقت DZ-Time (`:3023`)**: احتساب ساعات العمل مع مراعاة قانون العمل الجزائري 90-11 وساعات الراحة والساعات الإضافية.
+- **🔄 محول الوحدات DZ-Convert (`:3024`)**: تحويل دقيق بين الوحدات المترية، الدولية، التقليدية، وأسعار الصرف الرسمية لبنك الجزائر.
+- **🕌 مواقيت الصلاة DZ-Prayer (`:3025`)**: الحساب الفلكي الدقيق لمواقيت الصلاة الخمس عبر كافة بلديات ودوائر الـ 58 ولاية مع بوصلة القبلة.
+
+```bash
+npm run start:time        # :3023
+npm run start:convert     # :3024
+npm run start:prayer      # :3025
+```
+
+---
+
 ## 🗺️ دليل المسارات الـ 11 وجدول كافة أنواع البرمجيات
 
 تم تقسيم المستودع إلى **11 مساراً قطاعياً متخصصاً** لتغطية كافة احتياجات الإدارة، المؤسسات، التعليم، والمهن في الجزائر:
@@ -482,8 +659,13 @@ npm run start:notes         # :3020 (المفكرة والسبورة الرقم�
 npm run start:tasks         # :3021 (تخطيط وإدارة المهام والمشاريع)
 npm run start:signature     # :3022 (التوقيع والتأشير الرقمي للأوراق الرسمية)
 npm run start:time          # :3023 (تتبع الوقت وساعات العمل - قانون 90-11)
+npm run start:convert       # :3024 (محول العملات، الأراضي ومواد البناء)
 npm run start:prayer        # :3025 (مواقيت الصلاة والقبلة والتقويم الوطني الجزائري)
-npm run start:convert       # :3026 (محول العملات، الأراضي ومواد البناء)
+npm run start:calendar      # :3027 (التقويم وجدولة المواعيد الوطنية)
+npm run start:wiki          # :3028 (الموسوعة وقواعد المعرفة السيادية)
+npm run start:crm           # :3029 (إدارة علاقات العملاء ومسار الصفقات)
+npm run start:inventory     # :3030 (إدارة المخزون والمستودعات والباركود)
+npm run start:api           # :3031 (استوديو واجهات البرمجة السيادي REST & GraphQL)
 ```
 
 ---

@@ -49,11 +49,15 @@
   - [🏗️ 13. DZ-RPA Pro (Algerian Seismic Code RPA 99/2003 — Python Engine)](#13--dz-rpa-pro-algerian-seismic-code-rpa-99--version-2003)
   - [📊 14. DZ-Compta SCF Pro (Algerian Financial Accounting SCF — C# .NET 10)](#14--dz-compta-scf-pro-algerian-financial-accounting-scf)
   - [👥 15. DZ-Paie RH Pro (Algerian Payroll, CNAS & IRG Scale — C# .NET 10)](#15--dz-paie-rh-pro-algerian-payroll-cnas--irg-tax-scale)
-  - [📅 16. DZ-Calendar (Google Calendar Alternative — Port 3027)](#-flagship-operational-applications-11-desktop-alternatives)
-  - [📚 17. DZ-Wiki (Notion / Obsidian / Confluence Alternative — Port 3028)](#-flagship-operational-applications-11-desktop-alternatives)
-  - [🤝 18. DZ-CRM (Salesforce / HubSpot Pipeline Alternative — Port 3029)](#-flagship-operational-applications-11-desktop-alternatives)
-  - [📦 19. DZ-Inventory (Zoho Inventory / Sortly Alternative — Port 3030)](#-flagship-operational-applications-11-desktop-alternatives)
-  - [⚡ 20. DZ-API Studio (Postman / Insomnia / Hoppscotch Alternative — Port 3031)](#-flagship-operational-applications-11-desktop-alternatives)
+  - [📅 16. DZ-Calendar (Google Calendar Alternative — Port 3027)](#16--dz-calendar-google-calendar--outlook-alternative)
+  - [📚 17. DZ-Wiki (Notion / Obsidian / Confluence Alternative — Port 3028)](#17--dz-wiki-notion--obsidian--confluence-alternative)
+  - [🤝 18. DZ-CRM (Salesforce / HubSpot Pipeline Alternative — Port 3029)](#18--dz-crm-salesforce--hubspot-pipeline-alternative)
+  - [📦 19. DZ-Inventory (Zoho Inventory / Sortly Alternative — Port 3030)](#19--dz-inventory-zoho-inventory--sortly-alternative)
+  - [⚡ 20. DZ-API Studio (Postman / Insomnia / Hoppscotch Alternative — Port 3031)](#20--dz-api-studio-postman--insomnia--hoppscotch-alternative)
+  - [♟️ 21. Interactive Heritage Games Suite (Chess, Dama, Domino, Tawla, Puissance 4, Othello — Ports 3012-3017)](#21-️-interactive-heritage-games-suite-casual--board-games-with-local-ai)
+  - [🎙️ 22. DZ-Audio & DZ-Recorder (Audio Workstation & Screen Studio — Ports 3018, 3019)](#22-️-dz-audio--dz-recorder-multimedia-production-suite)
+  - [📝 23. DZ-Notes, DZ-Tasks & DZ-Signature (Sovereign Office & Signature — Ports 3020, 3021, 3022)](#23--dz-notes-dz-tasks--dz-signature-sovereign-productivity)
+  - [⏱️ 24. DZ-Time, DZ-Convert & DZ-Prayer (Citizen Utilities & Labor Law — Ports 3023, 3024, 3025)](#24-️-dz-time-dz-convert--dz-prayer-citizen-utilities--legal-compliance)
 - [🗺️ The 11 Strategic Software Tracks & Complete Matrix](#-the-11-strategic-software-tracks--complete-matrix)
 - [⚙️ Architectural Principles (Polyglot Sovereign Architecture)](#️-architectural-principles-the-heyputer-standard)
 - [🏛️ Algerian Legal & Regulatory Compliance](#️-algerian-legal--regulatory-compliance)
@@ -69,32 +73,44 @@
 
 ---
 
-## 🟢 Software Status Matrix
+## 🟢 Software Status Matrix (34 Sovereign Operational Applications)
 
-| Track | Software Category | Primary Proprietary Target | Status & Engines | Try Now (Live Demo) | Repository Path |
+| Track | Software Application | Primary Proprietary Alternative | Status & Engines | Try Now (Live Demo) | Repository Path |
 | :---: | :--- | :--- | :---: | :---: | :--- |
-| **02** | **Billing & Point-of-Sale** | **Sage 100 / Odoo POS** | 🟢 **Ready** (Web :3000) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/) | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
-| **07** | **Disk Space Analyzer** | **WizTree / TreeSize 1:1** | 🟢 **Ready** (Web :3001 + **Rust Native**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/) | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
-| **07** | **Archive & Compression** | **WinRAR / 7-Zip 1:1** | 🟢 **Ready** (Web :3002 + **Rust Native**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/) | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
-| **04** | **Multimedia Player** | **VLC Media Player 1:1** | 🟢 **Ready** (Web :3003 + **Python DSP**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/) | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
-| **01** | **PDF Document Suite** | **Adobe Acrobat Pro 1:1** | 🟢 **Ready** (Web :3004) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/) | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
-| **10** | **Interactive Whiteboard** | **OpenBoard / Miro 1:1** | 🟢 **Ready** (Web :3005) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/) | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
-| **01** | **Document Processor (DZ-Writer)** | **Microsoft Word / Google Docs** | 🟢 **Ready** (Web :3006) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/) | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
-| **01** | **Spreadsheet Engine (DZ-Sheets)** | **Microsoft Excel / Google Sheets** | 🟢 **Ready** (Web :3007) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/) | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
-| **01** | **Presentation Studio (DZ-Impress)** | **Microsoft PowerPoint / Slides** | 🟢 **Ready** (Web :3008) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/) | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
-| **09** | **58 Wilayas & Dev Studio (DZ-DevTools)** | **SATIM/CIB & Wilayas SDKs** | 🟢 **Ready** (Web :3009 + **Rust CLI**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
-| **05** | **Layered Photo Studio (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **Ready** (Web :3010 + **Python Engine**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/) | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
-| **06** | **Kanban & Project Management (DZ-Boards)**| **Trello / Jira / Focalboard** | 🟢 **Ready** (Web :3011) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
-| **06** | **Sovereign Calendar (DZ-Calendar)** | **Google Calendar / Outlook** | 🟢 **Ready** (Web :3027) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-calendar/) | [`apps/collaboration/dz-calendar/`](apps/collaboration/dz-calendar/) |
-| **01** | **Knowledge Base & Wiki (DZ-Wiki)** | **Notion / Obsidian / Confluence** | 🟢 **Ready** (Web :3028) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-wiki/) | [`apps/productivity/dz-wiki/`](apps/productivity/dz-wiki/) |
-| **02** | **Sovereign CRM Pipeline (DZ-CRM)** | **Salesforce / HubSpot CRM** | 🟢 **Ready** (Web :3029) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-crm/) | [`apps/business-enterprise/dz-crm/`](apps/business-enterprise/dz-crm/) |
-| **02** | **Warehouse & Stock (DZ-Inventory)** | **Zoho Inventory / Sortly** | 🟢 **Ready** (Web :3030) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-inventory/) | [`apps/business-enterprise/dz-inventory/`](apps/business-enterprise/dz-inventory/) |
-| **09** | **API Studio & Testbed (DZ-API)** | **Postman / Insomnia / Hoppscotch** | 🟢 **Ready** (Web :3031) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-api/) | [`apps/developer-tools/dz-api/`](apps/developer-tools/dz-api/) |
-| **08** | **Algerian Seismic Engine (DZ-RPA Pro)** | **Robot Structural / ETABS RPA** | 🟢 **Ready** (Web + **Python RPA 99/03**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/engineering/dz-rpa/) | [`apps/engineering/dz-rpa/`](apps/engineering/dz-rpa/) |
-| **03** | **SCF Financial Accounting (DZ-Compta)** | **PC Compta / DLG Compta SCF** | 🟢 **Ready** (Web + **C# .NET 10**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/) | [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) |
-| **03** | **Payroll, CNAS & IRG (DZ-Paie RH)** | **PC Paie / DLG Paie / IRG DGI** | 🟢 **Ready** (Web + **C# .NET 10**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/) | [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) |
-| **11** | **Interactive Heritage Games Suite (Chess, Dama, Domino, Tawla, Puissance 4, Othello)** | Casual & Board Games with Local AI | 🟢 **Ready** (Web :3012-:3017) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/) | [`apps/games-interactive/`](apps/games-interactive/) |
-| **11** | **Interactive Heritage Games Suite (Chess, Dama, Domino, Tawla, Puissance 4, Othello)** | Casual & Board Games with Local AI | 🟢 **Ready** (Web :3012-:3017) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/) | [`apps/games-interactive/`](apps/games-interactive/) |
+| **02** | **DZ-Facture & POS** | **Sage 100 / Odoo POS** | 🟢 **Ready** (Web :3000) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/) | [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) |
+| **07** | **DZ-Disk-Tree** | **WizTree / TreeSize 1:1** | 🟢 **Ready** (Web :3001 + **Rust Native**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-disk-tree/) | [`apps/productivity/dz-disk-tree/`](apps/productivity/dz-disk-tree/) |
+| **07** | **DZ-Archive** | **WinRAR / 7-Zip 1:1** | 🟢 **Ready** (Web :3002 + **Rust Native**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-archive/) | [`apps/productivity/dz-archive/`](apps/productivity/dz-archive/) |
+| **04** | **DZ-Player** | **VLC Media Player 1:1** | 🟢 **Ready** (Web :3003 + **Python DSP**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-player/) | [`apps/multimedia/dz-player/`](apps/multimedia/dz-player/) |
+| **01** | **DZ-PDF Pro** | **Adobe Acrobat Pro 1:1** | 🟢 **Ready** (Web :3004) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-pdf/) | [`apps/office-suite/dz-pdf/`](apps/office-suite/dz-pdf/) |
+| **10** | **DZ-Whiteboard Pro** | **OpenBoard / Miro 1:1** | 🟢 **Ready** (Web :3005) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/education-academia/dz-whiteboard/) | [`apps/education-academia/dz-whiteboard/`](apps/education-academia/dz-whiteboard/) |
+| **01** | **DZ-Writer** | **Microsoft Word / Google Docs** | 🟢 **Ready** (Web :3006) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-word/) | [`apps/office-suite/dz-word/`](apps/office-suite/dz-word/) |
+| **01** | **DZ-Sheets** | **Microsoft Excel / Google Sheets** | 🟢 **Ready** (Web :3007) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-calc/) | [`apps/office-suite/dz-calc/`](apps/office-suite/dz-calc/) |
+| **01** | **DZ-Impress** | **Microsoft PowerPoint / Slides** | 🟢 **Ready** (Web :3008) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-slides/) | [`apps/office-suite/dz-slides/`](apps/office-suite/dz-slides/) |
+| **09** | **DZ-DevTools** | **SATIM/CIB & Wilayas SDKs** | 🟢 **Ready** (Web :3009 + **Rust CLI**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
+| **05** | **DZ-Photo** | **Adobe Photoshop / PhotoCraft** | 🟢 **Ready** (Web :3010 + **Python Engine**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/) | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
+| **06** | **DZ-Boards** | **Trello / Jira / Focalboard** | 🟢 **Ready** (Web :3011) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
+| **11** | **DZ-Chess (شطرنج)** | **Chess.com / Lichess AI** | 🟢 **Ready** (Web :3012) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/) | [`apps/games-interactive/dz-chess/`](apps/games-interactive/dz-chess/) |
+| **11** | **DZ-Dama (دامة)** | **Traditional Algerian Checkers** | 🟢 **Ready** (Web :3013) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-dama/) | [`apps/games-interactive/dz-dama/`](apps/games-interactive/dz-dama/) |
+| **11** | **DZ-Domino (دومينو)** | **Algerian Double-Six Dominoes** | 🟢 **Ready** (Web :3014) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-domino/) | [`apps/games-interactive/dz-domino/`](apps/games-interactive/dz-domino/) |
+| **11** | **DZ-Tawla (طاولة 31)** | **Backgammon / Tawla 31** | 🟢 **Ready** (Web :3015) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-tawla/) | [`apps/games-interactive/dz-tawla/`](apps/games-interactive/dz-tawla/) |
+| **11** | **DZ-Puissance4 (قوة 4)** | **Connect Four / Hasbro** | 🟢 **Ready** (Web :3016) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-puissance4/) | [`apps/games-interactive/dz-puissance4/`](apps/games-interactive/dz-puissance4/) |
+| **11** | **DZ-Othello (أوتيلو)** | **Reversi / Othello** | 🟢 **Ready** (Web :3017) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-othello/) | [`apps/games-interactive/dz-othello/`](apps/games-interactive/dz-othello/) |
+| **04** | **DZ-Recorder** | **Camtasia / Loom / OBS Studio** | 🟢 **Ready** (Web :3018) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/video-montage/dz-recorder/) | [`apps/video-montage/dz-recorder/`](apps/video-montage/dz-recorder/) |
+| **04** | **DZ-Audio** | **Audacity / Adobe Audition** | 🟢 **Ready** (Web :3019) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/multimedia/dz-audio/) | [`apps/multimedia/dz-audio/`](apps/multimedia/dz-audio/) |
+| **01** | **DZ-Notes** | **Microsoft OneNote / Apple Notes** | 🟢 **Ready** (Web :3020) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-notes/) | [`apps/productivity/dz-notes/`](apps/productivity/dz-notes/) |
+| **06** | **DZ-Tasks** | **ClickUp / Todoist / Asana** | 🟢 **Ready** (Web :3021) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-tasks/) | [`apps/productivity/dz-tasks/`](apps/productivity/dz-tasks/) |
+| **01** | **DZ-Signature** | **DocuSign / Adobe Sign** | 🟢 **Ready** (Web :3022) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/office-suite/dz-signature/) | [`apps/office-suite/dz-signature/`](apps/office-suite/dz-signature/) |
+| **02** | **DZ-Time** | **Toggl / Clockify (Law 90-11)** | 🟢 **Ready** (Web :3023) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-time/) | [`apps/productivity/dz-time/`](apps/productivity/dz-time/) |
+| **07** | **DZ-Convert** | **Convertio / XE Currency** | 🟢 **Ready** (Web :3024) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-convert/) | [`apps/productivity/dz-convert/`](apps/productivity/dz-convert/) |
+| **07** | **DZ-Prayer** | **IslamicFinder / MuslimPro** | 🟢 **Ready** (Web :3025) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-prayer/) | [`apps/productivity/dz-prayer/`](apps/productivity/dz-prayer/) |
+| **06** | **DZ-Calendar** | **Google Calendar / Outlook** | 🟢 **Ready** (Web :3027) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-calendar/) | [`apps/collaboration/dz-calendar/`](apps/collaboration/dz-calendar/) |
+| **01** | **DZ-Wiki** | **Notion / Obsidian / Confluence** | 🟢 **Ready** (Web :3028) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-wiki/) | [`apps/productivity/dz-wiki/`](apps/productivity/dz-wiki/) |
+| **02** | **DZ-CRM** | **Salesforce / HubSpot CRM** | 🟢 **Ready** (Web :3029) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-crm/) | [`apps/business-enterprise/dz-crm/`](apps/business-enterprise/dz-crm/) |
+| **02** | **DZ-Inventory** | **Zoho Inventory / Sortly** | 🟢 **Ready** (Web :3030) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-inventory/) | [`apps/business-enterprise/dz-inventory/`](apps/business-enterprise/dz-inventory/) |
+| **09** | **DZ-API Studio** | **Postman / Insomnia / Hoppscotch** | 🟢 **Ready** (Web :3031) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-api/) | [`apps/developer-tools/dz-api/`](apps/developer-tools/dz-api/) |
+| **08** | **DZ-RPA Pro** | **Robot Structural / ETABS RPA** | 🟢 **Ready** (Web + **Python RPA 99/03**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/engineering/dz-rpa/) | [`apps/engineering/dz-rpa/`](apps/engineering/dz-rpa/) |
+| **03** | **DZ-Compta SCF Pro** | **PC Compta / DLG Compta SCF** | 🟢 **Ready** (Web + **C# .NET 10**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/) | [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) |
+| **03** | **DZ-Paie RH Pro** | **PC Paie / DLG Paie / IRG DGI** | 🟢 **Ready** (Web + **C# .NET 10**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/) | [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) |
 
 ---
 
@@ -377,6 +393,155 @@ npm run start:boards
 
 ---
 
+### 16. 📅 DZ-Calendar (Google Calendar & Outlook Alternative)
+> **National Sovereign Scheduling, Meeting Planning & Hijri/Gregorian Algerian Holiday Suite**  
+> *Port: `:3027` • Path: [`apps/collaboration/dz-calendar/`](apps/collaboration/dz-calendar/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-calendar/)*
+
+- **🇩🇿 Official Algerian Public Holidays Engine**: Preloaded with statutory holidays (Independence Day 5 July, Revolution Day 1 Nov, New Year 1 Jan, Yennayer 12 Jan, Labor Day 1 May) and dynamic lunar Islamic holidays (Eid al-Fitr, Eid al-Adha, Mawlid, Awal Muharram, Achoura).
+- **📆 Multi-View Layout**: Month, Week, Day, and Agenda lists with color-coded categories (Work, Personal, Meeting, Urgent).
+- **💾 100% Offline Persistence & iCalendar Export**: Export/import standard `.ics` calendar files, print schedule overviews, and auto-save via local storage.
+
+```bash
+# Run DZ-Calendar on http://localhost:3027
+npm run start:calendar
+```
+
+---
+
+### 17. 📚 DZ-Wiki (Notion, Obsidian & Confluence Alternative)
+> **Sovereign Enterprise Knowledge Base, Markdown Documentation & Algerian Administrative Wiki**  
+> *Port: `:3028` • Path: [`apps/productivity/dz-wiki/`](apps/productivity/dz-wiki/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-wiki/)*
+
+- **📑 Hierarchical Tree & Live Split Editor**: Two-pane live markdown editor with real-time preview, Table of Contents generator, and syntax highlighting.
+- **🏛️ National Knowledge Templates**: Pre-configured corporate bylaws (*Statuts SARL/EURL*), Algerian labor regulations, and civil service procedure manuals.
+- **🔍 Full-Text Client Search & Export**: High-speed offline keyword search, export to standalone HTML, Markdown bundles, and PDF documents.
+
+```bash
+# Run DZ-Wiki on http://localhost:3028
+npm run start:wiki
+```
+
+---
+
+### 18. 🤝 DZ-CRM (Salesforce & HubSpot Pipeline Alternative)
+> **Sovereign Client Relationship Management, Visual Deal Pipeline & 58 Wilayas Territory Distribution**  
+> *Port: `:3029` • Path: [`apps/business-enterprise/dz-crm/`](apps/business-enterprise/dz-crm/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-crm/)*
+
+- **🎯 Interactive Kanban Deal Funnel**: Drag-and-drop opportunity cards across stages (New Lead, Contacted, Proposal Sent, Negotiation, Closed Won, Closed Lost).
+- **🇩🇿 Algerian Enterprise Identifiers**: Store customer records with official tax identifiers (NIF, NIS, RC, Article d'Imposition) and 58 wilayas classification.
+- **📊 Real-Time Sales Metrics**: Live aggregate metrics tracking total pipeline valuation in DZD, conversion win rate, and territory breakdown.
+
+```bash
+# Run DZ-CRM on http://localhost:3029
+npm run start:crm
+```
+
+---
+
+### 19. 📦 DZ-Inventory (Zoho Inventory & Sortly Alternative)
+> **Warehouse Stock Management, Barcode Tracking & Algerian Commercial Valuations (FIFO/PMP)**  
+> *Port: `:3030` • Path: [`apps/business-enterprise/dz-inventory/`](apps/business-enterprise/dz-inventory/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-inventory/)*
+
+- **🏷️ Product Catalog & Barcode Scanner**: Searchable item list with SKU, EAN-13 barcodes, categories, stock levels, safety thresholds, and reorder alerts.
+- **💰 Algerian Fiscal Valuations**: Real-time stock valuation in DZD supporting PMP (*Prix Moyen Pondéré*) and FIFO statutory valuation methods.
+- **📋 Inbound & Outbound Movement Ledger**: Full audit trail for supplier deliveries (Bon de Réception), customer shipments (Bon de Livraison), and stock adjustments.
+
+```bash
+# Run DZ-Inventory on http://localhost:3030
+npm run start:inventory
+```
+
+---
+
+### 20. ⚡ DZ-API Studio (Postman, Insomnia & Hoppscotch Alternative)
+> **Sovereign REST & GraphQL API Client, Code Generator & Security Testing Environment**  
+> *Port: `:3031` • Path: [`apps/developer-tools/dz-api/`](apps/developer-tools/dz-api/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-api/)*
+
+- **🚀 Multi-Method HTTP Testing**: GET, POST, PUT, PATCH, DELETE, and HEAD requests with headers, query parameters, auth tokens, and JSON body editor.
+- **💻 Polyglot Code Snippet Generator**: Export requests directly to copyable snippets in cURL, JavaScript (Fetch / Axios), Python (Requests), Rust (Reqwest), and PHP.
+- **🛡️ 100% Offline & Private**: Zero data sent to third-party cloud servers; local request history and environment variables saved securely.
+
+```bash
+# Run DZ-API Studio on http://localhost:3031
+npm run start:api
+```
+
+---
+
+### 21. ♟️ Interactive Heritage Games Suite (Casual & Board Games with Local AI)
+> **Cultural Heritage, Traditional Board Games, Standard FIDE Engines & Zero-Cloud Offline AI**  
+> *Ports: `:3012 - :3017` • Path: [`apps/games-interactive/`](apps/games-interactive/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/)*
+
+A complete, sovereign 6-game suite celebrating Algerian cultural leisure and intellectual classics, engineered with zero external libraries, 100% Web Audio sound synthesis, and strict RTL/LTR board isolation:
+
+- **♟️ DZ-Chess (`:3012`)**: FIDE standard international chess with piece-square evaluation tables, minimax search with alpha-beta pruning, move validation, check/checkmate detection, and strict LTR coordinates isolation (`a1..h8`) preventing RTL CSS grid coordinate mirroring.
+- **🔴 DZ-Dama (`:3013`)**: Authentic Algerian checkers featuring mandatory captures, multi-jump capture chains, flying king promotion, and clean LTR square alignment.
+- **🀫 DZ-Domino (`:3014`)**: Authentic Algerian Double-Six 28-tile dominoes, highest double opening, pip-counting heuristic AI, blocked game resolution, and streamlined active-round UX with contextual "Next Round" controls.
+- **🎲 DZ-Tawla (`:3015`)**: Traditional Algerian Tawla 31 / Backgammon featuring authentic tapered triangular wood/felt points (`clip-path: polygon`), automated initial AI dice rolls, blot hitting to the bar, and bearing off.
+- **🟡 DZ-Puissance4 (`:3016`)**: Connect 4 with Lookahead AI, horizontal/vertical/diagonal victory detection, RTL-proof column clicking, and accurate win/lose audio feedback.
+- **⚪ DZ-Othello (`:3017`)**: Classic Reversi / Othello with corner-priority AI, automated pass loop resolution, and standard LTR disc setup.
+
+```bash
+# Launch any game individually:
+npm run start:chess       # :3012
+npm run start:dama        # :3013
+npm run start:domino      # :3014
+npm run start:tawla       # :3015
+npm run start:puissance4  # :3016
+npm run start:othello     # :3017
+
+# Run all 56 game automated unit tests:
+npm run test:games
+```
+
+---
+
+### 22. 🎙️ DZ-Audio & DZ-Recorder (Multimedia Production Suite)
+> **Digital Audio Workstation & High-Definition In-Browser Screen Recorder**  
+> *Ports: `:3018, :3019` • Paths: [`apps/video-montage/dz-recorder/`](apps/video-montage/dz-recorder/), [`apps/multimedia/dz-audio/`](apps/multimedia/dz-audio/)*
+
+- **🎥 DZ-Recorder (`:3018`)**: In-browser screen, window, and webcam video capture with system/microphone audio mixing, pause/resume, and instant WebM video download.
+- **🎛️ DZ-Audio (`:3019`)**: Multi-track waveform audio visualizer, frequency spectrum analysis, pitch adjustment, gain regulation, and audio format conversion.
+
+```bash
+npm run start:recorder    # :3018
+npm run start:audio       # :3019
+```
+
+---
+
+### 23. 📝 DZ-Notes, DZ-Tasks & DZ-Signature (Sovereign Productivity)
+> **Digital Scratchpad, Task Scheduler & Vector Signature Certification**  
+> *Ports: `:3020, :3021, :3022`*
+
+- **📒 DZ-Notes (`:3020`)**: Rich text and markdown note taking with categories, instant search, and local encryption.
+- **✅ DZ-Tasks (`:3021`)**: Personal task tracker with subtasks, due dates, priority tags, and completion statistics.
+- **✍️ DZ-Signature (`:3022`)**: Standalone digital signature studio with SHA timestamping and official Algerian administrative seals.
+
+```bash
+npm run start:notes       # :3020
+npm run start:tasks       # :3021
+npm run start:signature   # :3022
+```
+
+---
+
+### 24. ⏱️ DZ-Time, DZ-Convert & DZ-Prayer (Citizen Utilities & Legal Compliance)
+> **Algerian Labor Law Time Tracker, Conversion Suite & Sovereign Prayer Calculations**  
+> *Ports: `:3023, :3024, :3025`*
+
+- **⏱️ DZ-Time (`:3023`)**: Work hour tracking strictly aligned with Algerian Labor Law 90-11 (overtime thresholds, rest intervals, and statutory working week).
+- **🔄 DZ-Convert (`:3024`)**: Instant metric, imperial, Algerian traditional units, and official Bank of Algeria DZD exchange rates.
+- **🕌 DZ-Prayer (`:3025`)**: High-precision astronomical calculation of the 5 daily prayer times across all 58 Algerian wilayas with Qibla compass.
+
+```bash
+npm run start:time        # :3023
+npm run start:convert     # :3024
+npm run start:prayer      # :3025
+```
+
+---
+
 ## 🗺️ The 11 Strategic Software Tracks & Complete Matrix
 
 The DZ Open Suite monorepo is organized into **11 specialized functional domains** addressing all sectors of Algerian civil, administrative, commercial, and educational activity:
@@ -457,19 +622,33 @@ npm run test:native
 npm start
 
 # Or launch any individual web application:
-npm run start:dz-facture    # :3000
-npm run start:disk-tree     # :3001
-npm run start:archive       # :3002
-npm run start:player        # :3003
-npm run start:pdf           # :3004
-npm run start:whiteboard    # :3005
-npm run start:word          # :3006
-npm run start:calc          # :3007
-npm run start:slides        # :3008
-npm run start:devtools      # :3009
-npm run start:photo         # :3010
-npm run start:boards        # :3011
-npm run start:calendar      # :3027 (DZ-Calendar Sovereign Scheduling)
+npm run start:dz-facture    # :3000 (DZ-Facture & POS)
+npm run start:disk-tree     # :3001 (DZ-Disk-Tree Analyzer)
+npm run start:archive       # :3002 (DZ-Archive WinRAR 1:1)
+npm run start:player        # :3003 (DZ-Player VLC 1:1)
+npm run start:pdf           # :3004 (DZ-PDF Pro Acrobat 1:1)
+npm run start:whiteboard    # :3005 (DZ-Whiteboard OpenBoard 1:1)
+npm run start:word          # :3006 (DZ-Writer Word 1:1)
+npm run start:calc          # :3007 (DZ-Sheets Excel 1:1)
+npm run start:slides        # :3008 (DZ-Impress PowerPoint 1:1)
+npm run start:devtools      # :3009 (DZ-DevTools 58 Wilayas)
+npm run start:photo         # :3010 (DZ-Photo Photoshop 1:1)
+npm run start:boards        # :3011 (DZ-Boards Trello 1:1)
+npm run start:chess         # :3012 (DZ-Chess FIDE Minimax AI)
+npm run start:dama          # :3013 (DZ-Dama Algerian Checkers)
+npm run start:domino        # :3014 (DZ-Domino Double-Six AI)
+npm run start:tawla         # :3015 (DZ-Tawla 31 Backgammon)
+npm run start:puissance4    # :3016 (DZ-Puissance4 Connect 4)
+npm run start:othello       # :3017 (DZ-Othello Reversi AI)
+npm run start:recorder      # :3018 (DZ-Recorder Screen & Cam)
+npm run start:audio         # :3019 (DZ-Audio DAW Studio)
+npm run start:notes         # :3020 (DZ-Notes OneNote 1:1)
+npm run start:tasks         # :3021 (DZ-Tasks Todoist 1:1)
+npm run start:signature     # :3022 (DZ-Signature DocuSign 1:1)
+npm run start:time          # :3023 (DZ-Time Law 90-11)
+npm run start:convert       # :3024 (DZ-Convert Unit Converter)
+npm run start:prayer        # :3025 (DZ-Prayer 58 Wilayas)
+npm run start:calendar      # :3027 (DZ-Calendar Sovereign Scheduler)
 npm run start:wiki          # :3028 (DZ-Wiki Sovereign Knowledge Base)
 npm run start:crm           # :3029 (DZ-CRM Sovereign Sales Pipeline)
 npm run start:inventory     # :3030 (DZ-Inventory Sovereign Warehouse)
