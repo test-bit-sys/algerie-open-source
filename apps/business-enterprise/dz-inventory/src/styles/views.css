@@ -1,0 +1,620 @@
+/* Auth / intro */
+.auth-view {
+  min-height: 100dvh;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: max(8vh, calc(40px + var(--safe-t))) 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.auth-logo { border-radius: 20px; margin-bottom: 22px; }
+.auth-title { font-size: 27px; font-weight: 750; letter-spacing: -0.02em; }
+.auth-sub { color: var(--ink-2); font-size: 15px; margin: 10px 0 28px; max-width: 360px; }
+.auth-features { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 30px; }
+.auth-feature {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  padding: 13px 15px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+.auth-feature svg { color: var(--accent-text); }
+.auth-cta { width: 100%; padding: 13px; font-size: 15px; }
+.auth-note { margin-top: 16px; font-size: 12.5px; color: var(--ink-3); }
+
+.auth-error { justify-content: center; }
+
+/* Dashboard */
+.alert-row-qty {
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.activity-delta { font-variant-numeric: tabular-nums; font-weight: 650; white-space: nowrap; }
+.activity-delta.pos { color: var(--ok); }
+.activity-delta.neg { color: var(--danger); }
+
+/* History */
+/* Two dates, each with its own word in front of it. Side by side they
+   ask for ~330px, which a 320px phone doesn't have: the pair ran past
+   the right edge, clipping the second field and handing the whole page
+   a horizontal scrollbar. Let the ends wrap onto separate lines — each
+   end is one piece, so a label never wraps away from the field it
+   names. */
+.date-range {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  white-space: nowrap;
+}
+.date-end {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.date-input {
+  width: auto;
+  min-width: 132px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  font-size: 13.5px;
+}
+.day-group + .day-group { margin-top: 18px; }
+.day-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 2px 8px;
+}
+.day-title { font-size: 13px; font-weight: 650; color: var(--ink-2); }
+.day-net { display: flex; gap: 10px; font-size: 12.5px; }
+
+/* On a phone at the shelf, scanning is the first thing you reach for. */
+@media (max-width: 640px) {
+  .view-actions .scan-btn { order: -1; }
+}
+
+/* Products toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.toolbar .select-wrap { min-width: 130px; }
+.toolbar .select { padding-top: 8px; padding-bottom: 8px; font-size: 13.5px; }
+
+.table tr.is-archived .cell-main { color: var(--ink-3); font-weight: 550; }
+.table tr.is-picked { background: var(--accent-wash); }
+.table tr.is-picked:hover { background: var(--accent-wash); }
+
+/* A floor under the name column. It is the only one whose text may break
+   mid-word (.cell-main), so auto table layout treated it as the column
+   with give: one unbroken category, location, or supplier name took the
+   width it asked for and squeezed this one to a sliver, wrapping every
+   product in the list three characters at a time. Well under the table's
+   own 760px minimum, so nothing else has to give up room for it. */
+.products-table .cell-with-thumb { min-width: 168px; }
+
+/* Selection */
+.pick-cell { width: 34px; padding-right: 0 !important; }
+.pick-cell input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+.select-toggle { display: none; }
+@media (max-width: 900px) {
+  .select-toggle { display: inline-flex; }
+}
+.card-pick {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.product-card.is-picked { border-color: var(--accent); background: var(--accent-wash); }
+
+/* Bulk action bar */
+.bulk-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 35;
+  padding: 10px clamp(12px, 3vw, 36px) calc(10px + var(--safe-b));
+  border-top: 1px solid var(--hairline);
+  background: var(--surface);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.07);
+  animation: bar-up 0.2s var(--ease-spring);
+}
+@media (max-width: 900px) {
+  .bulk-bar { bottom: calc(var(--tabbar-h) + var(--safe-b)); padding-bottom: 10px; }
+}
+.bulk-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+.bulk-bar strong { font-size: 14px; white-space: nowrap; }
+.bulk-bar .btn { padding: 7px 12px; }
+.btn.danger-text { color: var(--danger); }
+@keyframes bar-up { from { transform: translateY(100%); } }
+
+/* Checkbox with a label beside it */
+.check-row {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  font-weight: 500 !important;
+  cursor: pointer;
+}
+.check-row input { accent-color: var(--accent); }
+.table .qty-unit { color: var(--ink-3); font-size: 12px; font-weight: 550; }
+
+/* Product cards (mobile) */
+.product-cards { display: none; }
+@media (max-width: 900px) {
+  .product-cards { display: flex; flex-direction: column; gap: 8px; }
+  .products-table { display: none; }
+}
+.product-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  text-align: left;
+}
+/* Stretched button: whole card opens the editor; the visible content
+   stays inert so clicks fall through to it. */
+.product-card .card-hit {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: inherit;
+}
+.product-card:hover { background: var(--surface-2); }
+.product-card .card-action { position: relative; }
+.product-card .qty {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.product-card .qty .n { font-size: 17px; font-weight: 700; }
+.product-card .qty .u { font-size: 11px; color: var(--ink-3); }
+/* A card can carry a second badge (a shelf running out while its
+   threshold still reads fine); they wrap rather than stretch the row. */
+.card-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+
+/* A product's own page. Read-first: the photo, the facts, the figures,
+   then a card per question — with every action that belongs to the
+   product sitting on it, so the page is a destination, not a dead end. */
+.product-page .card + .card { margin-top: 10px; }
+.product-page .stat-grid { margin: 10px 0; }
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.back-link:hover { color: var(--ink); text-decoration: none; }
+.product-hero { display: flex; flex-direction: column; gap: 14px; }
+.product-hero-main { display: flex; align-items: flex-start; gap: 14px; }
+.product-hero-main .thumb { flex-shrink: 0; }
+.product-hero .view-title { font-size: clamp(20px, 3vw, 26px); }
+.product-hero-meta {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--ink-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 4px;
+}
+.product-hero-meta a { color: var(--ink-2); }
+.product-hero-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+/* The actions wrap onto as many lines as the width needs; on a phone
+   they end up two-up, which is a thumb-sized target either way. */
+.product-hero-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.product-hero-actions .btn { flex: 1 1 auto; justify-content: center; }
+.product-qty { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.product-row-actions { display: flex; align-items: center; gap: 2px; }
+
+/* A name that leads to the thing it names. Inherits the row's colour so
+   a table doesn't turn into a page of links. */
+/* Variant families. A family row is one thing the owner thinks of, and
+   the variants under it are the real ones on the shelf — indented by a
+   hair so the relationship reads without a second visual language. */
+.family-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.family-toggle:hover { background: var(--surface-2); color: var(--ink); }
+.table tr.is-family { background: var(--surface-2); }
+.table tr.is-family .cell-main { font-weight: 650; }
+.table tr.is-variant td:nth-child(2) { padding-left: 26px; }
+.product-card.is-family { background: var(--surface-2); }
+.product-card.is-variant { margin-left: 16px; }
+.item-row.is-current { background: var(--accent-wash); }
+
+/* A shelf code beside a location: quiet, monospaced, and never the
+   thing the eye lands on first. */
+.cell-bin {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.cell-link { color: inherit; }
+.cell-link:hover { text-decoration: underline; }
+
+/* Where a product is bought: one row per supplier, each with their own
+   code, price, pack and lead time. The fields sit on their own line
+   under the picker so four small boxes never fight a select for width. */
+.source-list { display: flex; flex-direction: column; gap: 10px; }
+.source-row {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.source-row-top { display: flex; align-items: center; gap: 8px; }
+.source-row-fields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.source-row-fields .input { padding: 6px 8px; min-width: 0; }
+.source-preferred { margin-top: 0 !important; white-space: nowrap; }
+.source-note { color: var(--ink-3); }
+.source-legend { padding: 0 10px; font-size: 11.5px; color: var(--ink-3); font-weight: 600; }
+/* A component row: the product takes the width, its quantity a box. */
+.source-row-top > .select-wrap.grow { min-width: 0; flex: 1 1 auto; }
+.kit-qty { width: 96px; flex: 0 0 auto; text-align: right; padding: 6px 8px; font-variant-numeric: tabular-nums; }
+
+/* Per-location minimums, in the product sheet: a label, what it's short
+   of, and the number — the same three-part row the stock split uses, so
+   the two blocks read as one idea. */
+.min-list { display: flex; flex-direction: column; gap: 6px; }
+.min-row { display: flex; align-items: center; gap: 8px; }
+.min-row .input { width: 96px; padding: 6px 8px; }
+.min-row .input[type="number"] { text-align: right; font-variant-numeric: tabular-nums; }
+.min-legend { font-size: 11.5px; color: var(--ink-3); font-weight: 600; }
+.min-legend > span:not(.grow) { width: 96px; }
+.min-row-note { color: var(--warn); white-space: nowrap; }
+
+/* Replenish: what to move where, on the Locations view. The card's
+   shortfall line is a button that narrows the list below, so it has to
+   look like the link beside it rather than a control of its own. */
+.warn-link { color: var(--warn); background: none; border: 0; cursor: pointer; font: inherit; }
+.warn-link:hover { text-decoration: underline; }
+.replenish-row .btn { white-space: nowrap; }
+
+/* Take out: the basket sheet. The price box is narrower than the
+   quantity box beside it and hides itself for a write-off, so a row
+   stays one line for as long as the screen allows. */
+.takeout-suggestions { margin-bottom: 10px; }
+.takeout-price .input { width: 76px; }
+.takeout-line-actions { display: flex; align-items: center; gap: 2px; }
+.item-row.line-short .title { color: var(--warn); }
+
+/* Days of cover, where the shelf empties before a restock could land.
+   The tone is the same warning the Low stock badge carries, so the
+   column reads at a glance without another legend to learn. */
+.cover-urgent { color: var(--warn); font-weight: 650; }
+
+/* Importer */
+.import-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 34px 20px;
+  border: 1.5px dashed var(--hairline-strong);
+  border-radius: var(--r-md);
+  color: var(--ink-2);
+  text-align: center;
+  cursor: pointer;
+  background: none;
+  width: 100%;
+  font-size: 14px;
+}
+.import-drop:hover, .import-drop.dragover { border-color: var(--accent); background: var(--accent-wash); }
+.import-drop svg { color: var(--ink-3); }
+
+.import-review { max-height: 320px; overflow: auto; border: 1px solid var(--hairline); border-radius: var(--r-sm); }
+.import-review .table { min-width: 640px; font-size: 13px; }
+.import-summary { display: flex; gap: 14px; flex-wrap: wrap; margin: 12px 0; font-size: 13.5px; color: var(--ink-2); }
+.import-summary strong { color: var(--ink); }
+.import-note {
+  margin: 0 0 10px;
+  padding: 9px 11px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 12.5px;
+}
+.import-errors {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: var(--warn-wash);
+  color: var(--warn);
+  font-size: 12.5px;
+  max-height: 110px;
+  overflow-y: auto;
+}
+.import-errors div { margin: 2px 0; }
+
+/* Settings */
+.settings-list {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 13px 15px;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+.settings-row:last-child { border-bottom: 0; }
+button.settings-row { cursor: pointer; }
+button.settings-row:hover { background: var(--surface-2); }
+/* Clipped by the list's rounded corners, same as .item-row. */
+.settings-list .settings-row:focus-visible { outline-offset: -2px; }
+.settings-row .title { font-weight: 600; font-size: 14.5px; }
+.settings-row .sub { font-size: 12.5px; color: var(--ink-3); margin-top: 1px; }
+.settings-row.danger .title { color: var(--danger); }
+/* The icon svg sits inside its span, so the span carries the muted
+   color (an inline style on it — the danger rows — still wins). */
+.settings-row .settings-ic { display: grid; place-items: center; color: var(--ink-2); }
+/* Wide enough for the longest code-and-name pair in the currency list.
+   Once the row stacks (see .row-stacks) it has a whole line to sit on,
+   so it never has to give width back to the label. */
+.settings-row .settings-control { width: 210px; max-width: 100%; }
+
+/* Reorder */
+.order-card { display: flex; flex-direction: column; gap: 12px; }
+.order-card + .order-card { margin-top: 10px; }
+.order-head { display: flex; align-items: flex-start; gap: 11px; }
+.order-head h3 { font-size: 15.5px; font-weight: 650; letter-spacing: -0.01em; }
+.order-lines {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+.order-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border-bottom: 1px solid var(--hairline);
+}
+.order-line:last-child { border-bottom: 0; }
+.order-qty-wrap { display: flex; align-items: baseline; gap: 5px; }
+.order-qty {
+  width: 82px;
+  text-align: right;
+  padding: 6px 8px;
+  font-variant-numeric: tabular-nums;
+}
+/* The supplier switch on a reorder line: narrow, under the sub-line,
+   so it reads as part of the line rather than a filter for the card. */
+.order-source-wrap { margin-top: 6px; max-width: 320px; }
+.order-source { font-size: 12.5px; padding: 5px 26px 5px 8px; }
+.order-min-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: -4px 2px 0;
+  font-size: 12.5px;
+  color: var(--warn);
+}
+.order-min-warning svg { flex: none; margin-top: 1.5px; }
+.order-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+@media (max-width: 560px) {
+  .order-actions .grow { display: none; }
+  .order-actions .btn { flex: 1; }
+}
+
+/* Stocktake: the row a scan just counted announces itself. */
+.count-flash { animation: count-flash 1.2s ease; }
+@keyframes count-flash {
+  0% { background: var(--accent-wash); }
+  100% { background: transparent; }
+}
+
+/* Reports */
+/* min() on the track floor, not a bare 300px: a minmax minimum is a
+   floor the track holds even when the grid is narrower than it, so on
+   a 320px phone every card in here stood 300px wide inside 273px of
+   content and hung over the right edge, giving the page a horizontal
+   scrollbar. Below the floor a card simply takes the width available;
+   above it nothing changes. */
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 10px;
+}
+.report-grid .card + .card { margin-top: 0; }
+.report-title { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; }
+.report-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.item-list.flush { border: 0; border-radius: 0; margin-top: 8px; }
+.item-list.flush .item-row { padding-inline: 0; }
+.table.compact { min-width: 420px; font-size: 13.5px; }
+.table.compact td, .table.compact th { padding: 8px 10px; }
+
+/* Charts */
+.chart { margin: 0; }
+.chart-plot { position: relative; }
+.chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart-grid { stroke: var(--hairline); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.chart-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.chart-area { fill: var(--accent-wash); stroke: none; }
+.chart-marker { fill: var(--accent); stroke: var(--surface); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.chart-crosshair { stroke: var(--hairline-strong); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
+.chart-axis {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.chart-peak { font-weight: 600; }
+.chart-tip {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  padding: 5px 9px;
+  border-radius: var(--r-sm);
+  background: var(--ink);
+  color: var(--page);
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.chart-tip strong { font-variant-numeric: tabular-nums; }
+.chart-tip span { opacity: 0.75; }
+.chart-empty { color: var(--ink-3); font-size: 13px; padding: 18px 0; text-align: center; }
+.chart figcaption { margin-top: 8px; font-size: 12px; color: var(--ink-3); }
+
+.bar-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.bar-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 13px; }
+.bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-value { font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bar-track {
+  height: 8px;
+  margin-top: 4px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.bar-fill { height: 100%; border-radius: var(--r-full); background: var(--accent); }
+.bar-sub { font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+
+/* Supplier / location cards */
+.entity-grid {
+  display: grid;
+  /* Same floor-vs-viewport trap as .report-grid above. */
+  grid-template-columns: repeat(auto-fill, minmax(min(270px, 100%), 1fr));
+  gap: 10px;
+}
+/* Stacked cards space themselves with a top margin; here the grid gap
+   already does it, and the margin was landing on every card but the
+   first — so the first card in each row sat 10px above its neighbours,
+   and the gap between rows came out doubled. */
+.entity-grid .card + .card { margin-top: 0; }
+.entity-card { display: flex; flex-direction: column; gap: 10px; }
+.entity-card .head { display: flex; align-items: flex-start; gap: 11px; }
+.entity-card .head .actions { display: flex; }
+.entity-card h3 { font-size: 15.5px; font-weight: 650; letter-spacing: -0.01em; }
+.entity-meta { display: flex; flex-direction: column; gap: 5px; font-size: 13px; color: var(--ink-2); }
+.entity-meta > div { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.entity-meta svg { color: var(--ink-3); }
+.entity-meta .val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.entity-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline);
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+.entity-stats > span { white-space: nowrap; }
+.entity-stats strong { color: var(--ink); font-weight: 650; font-variant-numeric: tabular-nums; }
+/* The only way off the card, and it had neither of the two things a
+   control owes you: the global rule underlines a link on hover and
+   this one turned that off without putting anything in its place, so
+   nothing said it was live; and at 119x19 there was very little of it
+   for a fingertip to find. Padding gives a hover somewhere to land and
+   a thumb something to hit, and the matching negative margin keeps the
+   text sitting exactly where it did. */
+.entity-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin: -9px -10px;
+  padding: 9px 10px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+.entity-link:hover { background: var(--surface-2); text-decoration: none; }
+.entity-link svg { color: currentColor; }
+@media (pointer: coarse) {
+  .entity-link { margin-block: -13px; padding-block: 13px; }
+}
+
+/* Onboarding */
+.onboard-h { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 6px; }
+.onboard-p { color: var(--ink-2); font-size: 13.5px; margin-bottom: 16px; }
+
+/* iOS Safari zooms the whole page when a focused control's text is
+   under 16px — and stays zoomed after the keyboard goes. On devices
+   whose primary pointer is a finger, every text control meets that
+   floor; desktop keeps the tighter sizes. */
+@media (pointer: coarse) {
+  .input, .select, .textarea, .toolbar .select {
+    font-size: 16px;
+  }
+  /* The table shows on touch tablets too; a 16px checkbox next to a
+     grown 44px icon button is the one selection target that stayed
+     fingertip-hostile. */
+  .pick-cell input, .card-pick { width: 22px; height: 22px; }
+}

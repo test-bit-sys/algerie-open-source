@@ -1,0 +1,135 @@
+/* Design tokens — light is the default; dark overrides via media query
+   (system) and via [data-theme] stamps set by the in-app theme toggle,
+   which must win in both directions. */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces & ink (cool neutrals) */
+  --page: #f8f9fa;
+  --surface: #ffffff;
+  --surface-2: #f1f2f4;
+  --surface-3: #e7e9ec;
+  --ink: #14161a;
+  --ink-2: #4b5058;
+  /* Tertiary ink carries real text (meta lines, table headers) — holds
+     4.5:1 on --page and --surface. */
+  --ink-3: #666c76;
+  --hairline: rgba(20, 22, 26, 0.1);
+  --hairline-strong: rgba(20, 22, 26, 0.18);
+  --scrim: rgba(20, 22, 26, 0.44);
+
+  /* Accent (brand orange). --accent paints fills — buttons, bars, charts,
+     checkboxes — and pairs with --accent-ink on top; #ff8f15 is too light
+     to carry white text. --accent-text is the darker cut for accent used
+     as text, icons, or focus rings on a surface — holds 4.5:1 on --page
+     and --surface. */
+  --accent: #ff8f15;
+  --accent-strong: #e07800;
+  --accent-ink: #241302;
+  --accent-text: #a85800;
+  --accent-wash: rgba(255, 143, 21, 0.12);
+  /* Selected text. The wash is calibrated to sit behind whole rows, far
+     too faint to show what's selected; this cut stays obvious under the
+     dark ink of either theme. */
+  --selection: rgba(255, 143, 21, 0.35);
+
+  /* Stock status (always paired with a label or icon, never color alone).
+     --ok-text and --danger-text are the darker cuts for ok/danger used
+     as badge text — like --accent-text, they hold 4.5:1 on their wash
+     even over a hovered row, which --ok and --danger fall short of. */
+  --ok: #1a7f37;
+  --ok-text: #15672d;
+  --ok-wash: rgba(26, 127, 55, 0.1);
+  --warn: #96570a;
+  --warn-wash: rgba(224, 138, 30, 0.14);
+  --danger: #c22f2f;
+  --danger-strong: #a82626;
+  --danger-text: #b32b2b;
+  --danger-wash: rgba(194, 47, 47, 0.09);
+
+  /* Shape */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-full: 999px;
+
+  /* Type */
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Layout */
+  --sidebar-w: 240px;
+  --content-max: 1120px;
+  --tabbar-h: 62px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Dark values, applied by OS preference unless the app stamped light. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0e0f11;
+    --surface: #17181b;
+    --surface-2: #1f2125;
+    --surface-3: #292b30;
+    --ink: #f4f5f6;
+    --ink-2: #b6bac1;
+    --ink-3: #8b9099;
+    --hairline: rgba(244, 245, 246, 0.1);
+    --hairline-strong: rgba(244, 245, 246, 0.2);
+    --scrim: rgba(0, 0, 0, 0.6);
+
+    --accent: #ff8f15;
+    --accent-strong: #ffa64a;
+    --accent-ink: #241302;
+    --accent-text: #ffa64a;
+    --accent-wash: rgba(255, 143, 21, 0.14);
+    --selection: rgba(255, 143, 21, 0.4);
+
+    --ok: #57ab5a;
+    --ok-text: #57ab5a;
+    --ok-wash: rgba(87, 171, 90, 0.14);
+    --warn: #d9a03f;
+    --warn-wash: rgba(217, 160, 63, 0.15);
+    --danger: #e5716b;
+    --danger-strong: #ec8f8a;
+    --danger-text: #ec8f8a;
+    --danger-wash: rgba(229, 113, 107, 0.12);
+  }
+}
+
+/* Explicit in-app toggle: dark stamp wins over OS-light. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e0f11;
+  --surface: #17181b;
+  --surface-2: #1f2125;
+  --surface-3: #292b30;
+  --ink: #f4f5f6;
+  --ink-2: #b6bac1;
+  --ink-3: #8b9099;
+  --hairline: rgba(244, 245, 246, 0.1);
+  --hairline-strong: rgba(244, 245, 246, 0.2);
+  --scrim: rgba(0, 0, 0, 0.6);
+
+  --accent: #ff8f15;
+  --accent-strong: #ffa64a;
+  --accent-ink: #241302;
+  --accent-text: #ffa64a;
+  --accent-wash: rgba(255, 143, 21, 0.14);
+  --selection: rgba(255, 143, 21, 0.4);
+
+  --ok: #57ab5a;
+  --ok-text: #57ab5a;
+  --ok-wash: rgba(87, 171, 90, 0.14);
+  --warn: #d9a03f;
+  --warn-wash: rgba(217, 160, 63, 0.15);
+  --danger: #e5716b;
+  --danger-strong: #ec8f8a;
+  --danger-text: #ec8f8a;
+  --danger-wash: rgba(229, 113, 107, 0.12);
+}

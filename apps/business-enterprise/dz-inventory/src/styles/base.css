@@ -1,0 +1,304 @@
+/* Reset & app scaffold */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+h1, h2, h3, h4, p { margin: 0; }
+/* Beats the display values components set on themselves. */
+[hidden] { display: none !important; }
+button { font: inherit; color: inherit; }
+input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--accent-text); text-decoration: none; }
+a:hover { text-decoration: underline; }
+svg { display: block; flex-shrink: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection { background: var(--selection); }
+
+body.modal-open { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Boot splash */
+.boot-splash {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--page);
+}
+.boot-mark { border-radius: 14px; animation: boot-pulse 1.2s ease-in-out infinite; }
+@keyframes boot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* App shell: sidebar + main on desktop, tab bar on mobile */
+.app { min-height: 100%; }
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: 100dvh;
+}
+
+.main {
+  min-width: 0;
+  /* black-translucent + viewport-fit=cover let content run under the
+     iOS status bar; the top inset keeps the view title out from under
+     the clock. Zero everywhere else. */
+  padding: calc(20px + var(--safe-t)) clamp(16px, 3vw, 36px) calc(32px + var(--safe-b));
+}
+
+/* The selection bar is fixed over the page, so the list has to be able to
+   scroll clear of it — and the row it covers at the very bottom is one
+   you may well be trying to select. The products view measures the bar
+   into --bulk-bar-h, since it wraps to two lines on a narrow screen. */
+body.has-bulk-bar .main {
+  padding-bottom: calc(32px + var(--safe-b) + var(--bulk-bar-h, 58px));
+}
+
+.main-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+/* Sidebar (desktop) */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: calc(18px + var(--safe-t)) 12px calc(14px + var(--safe-b));
+  border-right: 1px solid var(--hairline);
+  background: var(--surface);
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 650;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  padding: 4px 10px 16px;
+}
+.brand img { border-radius: 8px; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 10px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+}
+.nav-item:hover { background: var(--surface-2); color: var(--ink); text-decoration: none; }
+.nav-item.active { background: var(--accent-wash); color: var(--accent-text); font-weight: 600; }
+.nav-item span:first-of-type { flex: 1; }
+
+.nav-badge {
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-full);
+  background: var(--danger);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+:root[data-theme="dark"] .nav-badge { color: #1b1010; }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .nav-badge { color: #1b1010; }
+}
+
+.sidebar-spacer { flex: 1; }
+
+.sidebar-add { margin: 10px 4px; }
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px 0;
+  border-top: 1px solid var(--hairline);
+}
+.sidebar-user .name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13.5px;
+  font-weight: 550;
+  color: var(--ink-2);
+}
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: var(--accent-wash);
+  color: var(--accent-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Tab bar (mobile) */
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: none;
+  height: calc(var(--tabbar-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  border-top: 1px solid var(--hairline);
+  background: var(--surface);
+}
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 0;
+  /* Four of these are links and two are buttons, and a button keeps the
+     browser's own 6px of side padding unless told otherwise. Sharing a
+     flex-basis of zero, that padding made Search and More 12px wider
+     than every other tab: the labels drifted out of step across the bar,
+     and on a 320px screen it squeezed the first two until "Overview"
+     and "Products" touched with no space between them. */
+  padding: 0;
+  background: none;
+  color: var(--ink-3);
+  font-size: 10.5px;
+  font-weight: 550;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+}
+.tab-item:hover { text-decoration: none; }
+.tab-item.active { color: var(--accent-text); }
+.tab-item .nav-badge {
+  position: absolute;
+  top: 6px;
+  left: calc(50% + 6px);
+}
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .tabbar { display: flex; }
+  .main { padding-bottom: calc(var(--tabbar-h) + var(--safe-b) + 84px); }
+  /* The bar sits above the tab bar here, and the 84px that clears the
+     floating add button is not enough to clear it too. That 84px isn't
+     wanted either way: the add button stands down while a selection owns
+     the corner, so this clears the bar and leaves a gap, not both. */
+  body.has-bulk-bar .main {
+    padding-bottom: calc(var(--tabbar-h) + var(--safe-b) + var(--bulk-bar-h, 58px) + 22px);
+  }
+}
+
+/* View header */
+.view-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.view-title {
+  font-size: clamp(21px, 2.4vw, 25px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.view-sub { color: var(--ink-3); font-size: 13.5px; margin-top: 2px; }
+.view-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.section-title {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: 26px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title:first-child { margin-top: 0; }
+
+/* Visually hidden, still read by screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Generic rows */
+.row { display: flex; align-items: center; gap: 10px; }
+.row-end { justify-content: flex-end; margin-top: 18px; }
+.grow { flex: 1; min-width: 0; }
+
+/* A row that sets a block of text beside a control — an amount and a
+   Restock button, a count field, a theme switch. The text is the only
+   part of such a row with any give, so as soon as the two stop fitting
+   side by side it is the text that pays: on a phone "USB-C Cable 2m"
+   came out over two lines and its meta line over three, in a column a
+   hundred pixels wide, while the control kept its full size. Hold a
+   floor under the text and let the control drop to a line of its own,
+   which happens only at the width where it actually stops fitting. The
+   text takes the free space on its own line, so flex-end only ever
+   bites on the line the control drops to — keeping it on the side it
+   sits on while the row still fits. */
+.row-stacks { flex-wrap: wrap; justify-content: flex-end; }
+.row-stacks > .grow { min-width: 200px; }
+
+.muted { color: var(--ink-3); }
+.small { font-size: 12.5px; }
+.mono { font-family: var(--mono); font-size: 0.92em; }
