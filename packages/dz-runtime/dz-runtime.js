@@ -121,7 +121,7 @@
           console.warn('[DZ-Runtime] Fallback write failed:', e);
         }
       }
-      return { path: filePath, name: filePath.split('/').pop() };
+      return { path: filePath, name: filePath.split('/').pop(), size: blob.size, modified: Date.now() };
     },
 
     async read(filePath) {
@@ -132,15 +132,41 @@
           const req = tx.objectStore(FS_STORE_NAME).get(filePath);
           req.onsuccess = () => {
             if (req.result) resolve(req.result);
-            else reject(new Error('الملف غير موجود / File not found'));
+            else {
+              const err = new Error('الملف غير موجود / File not found');
+              err.code = 'not_found';
+              err.status = 404;
+              reject(err);
+            }
           };
           req.onerror = () => reject(tx.error);
         });
       }
       const dataUri = localStorage.getItem('dz:fs:' + filePath);
-      if (!dataUri) throw new Error('الملف غير موجود');
+      if (!dataUri) {
+        const err = new Error('الملف غير موجود / File not found');
+        err.code = 'not_found';
+        err.status = 404;
+        throw err;
+      }
       const res = await fetch(dataUri);
       return await res.blob();
+    },
+
+    async stat(filePath) {
+      try {
+        const blob = await this.read(filePath);
+        return {
+          name: filePath.split('/').pop(),
+          size: blob.size,
+          modified: Date.now()
+        };
+      } catch (e) {
+        const err = new Error('File not found: ' + filePath);
+        err.code = 'not_found';
+        err.status = 404;
+        throw err;
+      }
     },
 
     async delete(filePath) {
@@ -176,10 +202,20 @@
           const keys = req.result || [];
           const prefix = dirPath ? (dirPath.endsWith('/') ? dirPath : dirPath + '/') : '';
           const matching = keys.filter(k => k.startsWith(prefix));
-          resolve(matching.map(k => ({ name: k.slice(prefix.length), path: k, isDir: false })));
+          resolve(matching.map(k => ({
+            name: k.slice(prefix.length),
+            path: k,
+            is_dir: false,
+            isDir: false,
+            modified: Date.now()
+          })));
         };
         req.onerror = () => resolve([]);
       });
+    },
+
+    async readdir(dirPath = '') {
+      return this.list(dirPath);
     }
   };
 
