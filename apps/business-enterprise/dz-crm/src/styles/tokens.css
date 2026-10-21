@@ -1,0 +1,156 @@
+/* Design tokens - light is the default; dark overrides via media query (system)
+   and via [data-theme] stamps set by the in-app theme toggle, which must win
+   in both directions. Neutrals and status colors are the validated dataviz
+   reference set; the accent/stage/viz family is derived from the brand teal
+   #4bae98, luminance-matched step-for-step to the reference blue ramp so the
+   documented contrast pairs hold, and re-validated with the palette checker. */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces & ink (warm neutrals) */
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --surface-2: #f0efec;
+  --surface-3: #e7e6e1;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  /* Tertiary ink carries real text (row meta, stat labels) -
+     it must hold 4.5:1 on --page, --surface, and --surface-2. */
+  --ink-3: #6b6964;
+  --hairline: rgba(11, 11, 11, 0.1);
+  --hairline-strong: rgba(11, 11, 11, 0.16);
+  --scrim: rgba(11, 11, 11, 0.44);
+
+  /* Accent (brand teal #4bae98, darkened to the step where white text and
+     text-on-wash both clear 4.5:1; dark mode carries the brand hex itself) */
+  --accent: #007663;
+  --accent-strong: #006958;
+  --accent-ink: #ffffff;
+  --accent-wash: rgba(0, 118, 99, 0.11);
+
+  /* Status (icon + label always ride along; color never alone).
+     The -ink variants carry text on the matching wash at >= 4.5:1;
+     the base steps are for solid fills and icons. */
+  --good: #006300;
+  --good-ink: #006300;
+  --good-wash: rgba(12, 163, 12, 0.12);
+  --critical: #d03b3b;
+  --critical-ink: #b02a2a;
+  --critical-wash: rgba(208, 59, 59, 0.1);
+  --warning-ink: #8a5a00;
+  --warning-wash: rgba(250, 178, 25, 0.16);
+
+  /* Deal stages: an ordinal ramp of the accent hue, interpolated per badge
+     so any number of configured stages spans the same range (early = light,
+     late = dark), with status colors for the closed states. */
+  --stage-ramp-from: #62c4ad;
+  --stage-ramp-to: #006958;
+  --stage-won: #0ca30c;
+  --stage-lost: #898781;
+
+  /* Forecast chart series. The weighted/upside pair is a certainty ramp of
+     the brand hue (upside is nested inside best case, not its own identity);
+     weighted sits far enough from the won green to clear the CVD and
+     normal-vision separation floors in both modes. */
+  --viz-weighted: #008774;
+  --viz-upside: #49c5ae;
+  --viz-won: #0ca30c;
+
+  /* Shape */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-full: 999px;
+
+  /* Type */
+  --font: "Cairo", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Layout */
+  --sidebar-w: 240px;
+  --content-max: 1160px;
+  --tabbar-h: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Dark values, applied by OS preference unless the app stamped light. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-2: #232322;
+    --surface-3: #2c2c2a;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --ink-3: #8f8d87;
+    --hairline: rgba(255, 255, 255, 0.1);
+    --hairline-strong: rgba(255, 255, 255, 0.18);
+    --scrim: rgba(0, 0, 0, 0.6);
+
+    --accent: #4bae98;
+    --accent-strong: #62c4ad;
+    --accent-ink: #0d0d0d;
+    --accent-wash: rgba(75, 174, 152, 0.16);
+
+    --good: #0ca30c;
+    --good-ink: #2fc12f;
+    --good-wash: rgba(12, 163, 12, 0.18);
+    --critical: #e66767;
+    --critical-ink: #ee8f8f;
+    --critical-wash: rgba(230, 103, 103, 0.14);
+    --warning-ink: #fab219;
+    --warning-wash: rgba(250, 178, 25, 0.12);
+
+    /* Ordinal ramp re-stepped for the dark surface: later stage = lighter. */
+    --stage-ramp-from: #005a4b;
+    --stage-ramp-to: #62c4ad;
+    --stage-won: #0ca30c;
+    --stage-lost: #8f8d87;
+
+    --viz-weighted: #00a39d;
+    --viz-upside: #006958;
+    --viz-won: #0ca30c;
+  }
+}
+
+/* Explicit in-app toggle: dark stamp wins over OS-light. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-2: #232322;
+  --surface-3: #2c2c2a;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --ink-3: #8f8d87;
+  --hairline: rgba(255, 255, 255, 0.1);
+  --hairline-strong: rgba(255, 255, 255, 0.18);
+  --scrim: rgba(0, 0, 0, 0.6);
+
+  --accent: #4bae98;
+  --accent-strong: #62c4ad;
+  --accent-ink: #0d0d0d;
+  --accent-wash: rgba(75, 174, 152, 0.16);
+
+  --good: #0ca30c;
+  --good-ink: #2fc12f;
+  --good-wash: rgba(12, 163, 12, 0.18);
+  --critical: #e66767;
+  --critical-ink: #ee8f8f;
+  --critical-wash: rgba(230, 103, 103, 0.14);
+  --warning-ink: #fab219;
+  --warning-wash: rgba(250, 178, 25, 0.12);
+
+  --stage-ramp-from: #005a4b;
+  --stage-ramp-to: #62c4ad;
+  --stage-won: #0ca30c;
+  --stage-lost: #8f8d87;
+
+  --viz-weighted: #00a39d;
+  --viz-upside: #006958;
+  --viz-won: #0ca30c;
+}

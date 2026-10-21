@@ -1,0 +1,21 @@
+{
+  "name": "crm",
+  "version": "1.0.0",
+  "description": "CRM & Sales Pipeline — leads, companies, deals, follow-ups, and forecasts on Puter",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^8.2.0",
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "lucide": "^1.28.0"
+  }
+}

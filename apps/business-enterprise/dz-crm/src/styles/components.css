@@ -1,0 +1,2694 @@
+/* ---------- Page scaffolding ---------- */
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0 16px;
+  /* Everything after the title is fixed-width - a search button plus "New
+     follow-up" - so the title was the only thing that could give: below
+     about 368px "Follow-ups" came out "Follow…" and "Companies" came out
+     "Compani…", the one word on the page that says where you are. The
+     actions drop to a line of their own instead, right-aligned, the way the
+     detail head already moves its own actions down at 560px. */
+  flex-wrap: wrap;
+}
+
+.page-title {
+  /* Basis auto, not 0: a title with no width of its own can be squeezed to
+     nothing and never asks the row to wrap. Sized by its text, it wraps the
+     actions off the line exactly when the two no longer fit together - and
+     still shrinks with an ellipsis when even the title alone is too long. */
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  /* Keeps them at the end of whichever line they land on. */
+  margin-inline-start: auto;
+}
+
+/* The sidebar owns search on desktop; on mobile every page header does. */
+@media (min-width: 900px) {
+  .page-actions .page-search {
+    display: none;
+  }
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin: 2px 0 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+  border-radius: var(--r-sm);
+  padding: 4px 8px 4px 4px;
+}
+
+.back-link:hover {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+
+/* ---------- Cards ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  margin-bottom: 14px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 0;
+}
+
+.card-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.card-head + * {
+  margin-top: 8px;
+}
+
+/* Two actions in a card head (Playbook and Add) sit together and wrap as a
+   pair rather than pushing the title into an ellipsis. */
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.card-empty {
+  padding: 10px 16px 16px;
+  color: var(--ink-3);
+  font-size: 13.5px;
+}
+
+.settings-body {
+  padding: 12px 16px 16px;
+}
+
+.count-pill {
+  min-width: 22px;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.count-pill.critical {
+  background: var(--critical-wash);
+  color: var(--critical-ink);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: var(--r-sm);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-primary:hover {
+  background: var(--accent-strong);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--hairline-strong);
+}
+
+.btn-ghost:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.btn-danger {
+  background: var(--critical);
+  color: var(--page);
+}
+
+.btn-danger-ghost {
+  color: var(--critical-ink);
+  border-color: transparent;
+}
+
+.btn-danger-ghost:hover {
+  background: var(--critical-wash);
+  color: var(--critical-ink);
+}
+
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+.btn-tall {
+  padding: 13px;
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.btn-dashed {
+  border: 1px dashed var(--hairline-strong);
+}
+
+.btn-inline {
+  display: inline;
+  padding: 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* "Review", "Clear filters", "Select all 24", "Open instead?" - text actions
+   sitting inside a sentence, with only their colour to say they can be
+   pressed. Underline on hover is what the toast's Undo and the sample
+   banner's button wear all the time, and what a link is expected to do. */
+.btn-inline:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  color: var(--ink-3);
+  transition: background 0.15s, color 0.15s;
+}
+
+.icon-btn:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+/* ---------- Forms ---------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 560px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* The asterisk on a label whose control is required. Colour is never the
+   whole signal here: the mark is a glyph, and the control carries the
+   native `required` for the keyboard and for assistive tech. */
+.field-required {
+  color: var(--critical-ink);
+}
+
+.field-hint {
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  color: var(--ink);
+  min-height: 42px;
+}
+
+.input::placeholder {
+  color: var(--ink-3);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 74px;
+}
+
+.select-wrap {
+  position: relative;
+}
+
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -6px;
+  border-inline-end: 2px solid var(--ink-3);
+  border-bottom: 2px solid var(--ink-3);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 10px 34px 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  color: var(--ink);
+  min-height: 42px;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Switch (opt-in toggles) */
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.switch-row .title {
+  font-weight: 600;
+  font-size: 14.5px;
+  display: block;
+  cursor: pointer;
+}
+
+.switch-row .sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+
+/* Each switch is rebuilt in its own slot on every toggle, so consecutive
+   switches are not siblings and had nothing between them: the first one's
+   help text ran straight into the second one's title, and two independent
+   settings read as one paragraph. Separated like the threshold fields
+   below them. */
+.switch-slot + .switch-slot {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+}
+
+.switch {
+  flex: none;
+  position: relative;
+  width: 46px;
+  height: 28px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  transition: background 0.2s;
+}
+
+.switch.on {
+  background: var(--accent);
+}
+
+.switch:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.switch-knob {
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s var(--ease-spring);
+}
+
+.switch.on .switch-knob {
+  transform: translateX(18px);
+}
+
+/* Segmented control (theme picker) */
+/* Wraps rather than spills: Light + System + Dark need 285px, and a 320px
+   phone leaves the group 239px inside the card. Nothing here can give - a
+   segment is an icon plus a word - so Dark simply hung off the edge of the
+   page. Two rows of segments still read as one control; a segment cut in
+   half by the viewport doesn't. */
+.seg-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+
+.seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 7px;
+  /* Reserve the active state's border so selecting a segment doesn't
+     widen it and nudge its siblings. */
+  border: 1px solid transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* Every other control in the app answers the pointer; these two (the theme
+   picker and the board/list toggle) sat inert until clicked, so the only way
+   to learn a segment was clickable was to click it. Halfway to the selected
+   look: enough to say "this one", not enough to be mistaken for it. */
+.seg:not(.active):hover {
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  color: var(--ink);
+}
+
+.seg.active {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+}
+
+/* ---------- Modal (sheet on mobile, dialog on desktop) ---------- */
+
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  animation: fade-in 0.2s ease;
+}
+
+/* The panel takes fallback focus for the trap; a ring on a non-interactive
+   container is noise - controls inside keep theirs. */
+.modal-panel:focus-visible {
+  outline: none;
+}
+
+.modal-panel {
+  position: relative;
+  width: 100%;
+  max-height: calc(100dvh - 40px - var(--safe-t));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  padding: 8px 18px calc(20px + var(--safe-b));
+  animation: sheet-up 0.28s var(--ease-spring);
+}
+
+.sheet-handle {
+  width: 38px;
+  height: 4px;
+  margin: 6px auto 4px;
+  border-radius: var(--r-full);
+  background: var(--hairline-strong);
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0 14px;
+}
+
+.modal-title {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.modal-root.closing .modal-panel {
+  animation: sheet-down 0.2s ease forwards;
+}
+
+.modal-root.closing .modal-scrim {
+  animation: fade-out 0.2s ease forwards;
+}
+
+@media (min-width: 640px) {
+  .modal-root {
+    align-items: center;
+    padding: 24px;
+  }
+
+  .modal-panel {
+    max-width: 480px;
+    border-radius: var(--r-lg);
+    border: 1px solid var(--hairline);
+    padding: 6px 22px 22px;
+    max-height: calc(100dvh - 80px);
+    animation: dialog-in 0.22s var(--ease-spring);
+  }
+
+  .modal-panel.wide {
+    max-width: 680px;
+  }
+
+  .sheet-handle {
+    display: none;
+  }
+
+  .modal-head {
+    padding-top: 14px;
+  }
+
+  .modal-root.closing .modal-panel {
+    animation: dialog-out 0.18s ease forwards;
+  }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(60%); }
+  to { transform: none; }
+}
+
+@keyframes sheet-down {
+  to { transform: translateY(100%); }
+}
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes dialog-out {
+  to { opacity: 0; transform: scale(0.97); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.confirm-message {
+  color: var(--ink-2);
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+/* ---------- Command palette ---------- */
+
+/* Drops from the top rather than rising from the bottom: it is a
+   destination, not a form. */
+.modal-root.palette {
+  align-items: flex-start;
+  padding: 0;
+}
+
+.modal-panel.palette {
+  padding: 0;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  max-height: min(560px, calc(100dvh - 24px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: palette-in 0.18s var(--ease-spring);
+}
+
+.modal-root.palette .sheet-handle {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .modal-root.palette {
+    padding: 10vh 24px 24px;
+  }
+
+  .modal-panel.palette {
+    max-width: 620px;
+    border-radius: var(--r-lg);
+    max-height: min(560px, calc(100dvh - 20vh));
+  }
+}
+
+@keyframes palette-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.palette-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  padding: 10px 12px 10px 16px;
+  padding-top: calc(10px + var(--safe-t));
+  border-bottom: 1px solid var(--hairline);
+}
+
+.palette-icon {
+  display: grid;
+  color: var(--ink-3);
+  flex: none;
+}
+
+.palette-input {
+  border: 0;
+  background: none;
+  padding: 0;
+  min-height: 40px;
+  font-size: 16px;
+}
+
+.palette-input:focus-visible {
+  outline: none;
+}
+
+/* The input is borderless by design, so when the keyboard lands on it
+   the head's hairline thickens into the focus indicator - without this,
+   Tab cycling between the field and Close never shows where focus went. */
+.palette-head:has(.palette-input:focus-visible) {
+  border-bottom-color: var(--accent);
+  box-shadow: 0 1px 0 var(--accent);
+}
+
+.palette-results {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 8px calc(10px + var(--safe-b));
+  flex: 1;
+}
+
+.palette-group {
+  padding: 10px 10px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.palette-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: var(--r-sm);
+  text-align: start;
+  color: inherit;
+}
+
+.palette-row.active {
+  background: var(--accent-wash);
+}
+
+.palette-row-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.palette-row.active .palette-row-ic {
+  color: var(--accent);
+}
+
+.palette-row-title {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.palette-row-sub {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.palette-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 40px 24px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+.palette-empty p {
+  font-size: 14px;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+
+.palette-empty-sub {
+  font-size: 12.5px;
+  color: var(--ink-3) !important;
+}
+
+/* Keyboard hint on the sidebar's search button. */
+.kbd {
+  flex: none;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+/* ---------- Toast ---------- */
+
+.toast-root {
+  position: fixed;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+}
+
+@media (min-width: 900px) {
+  .toast-root {
+    bottom: 24px;
+  }
+}
+
+/* The bulk actions bar sits in the same spot. Most bulk actions clear the
+   selection, so the two are rarely up together, but Export deliberately
+   keeps it - and its confirmation would then land on the very controls the
+   selection was kept for. toast() measures the bar and steps over it; the
+   bar wraps to two rows on a narrow window, so its height has to be looked
+   at rather than assumed. */
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--r-full);
+  background: var(--ink);
+  color: var(--page);
+  font-size: 13.5px;
+  font-weight: 550;
+  animation: toast-in 0.25s var(--ease-spring);
+  max-width: 100%;
+}
+
+.toast svg {
+  flex: none;
+}
+
+.toast.leaving {
+  animation: toast-out 0.2s ease forwards;
+  pointer-events: none;
+}
+
+.toast-action {
+  margin-inline-start: 4px;
+  color: inherit;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(6px); }
+}
+
+/* ---------- Settings-style rows ---------- */
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px 8px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 10px;
+  border-radius: var(--r-sm);
+  text-align: start;
+  color: inherit;
+  transition: background 0.15s;
+}
+
+.settings-row:not(.static):not(:disabled):hover {
+  background: var(--surface-2);
+}
+
+/* A row with nothing to do - "Activity: nothing to export yet" - looked
+   and hovered exactly like one that works, so it read as a live choice
+   that silently did nothing. Dim what promises the action (title, icon,
+   and the chevron that says "this leads somewhere") and drop the hover.
+   The sub-line keeps its own contrast: it is the reason the row is off. */
+.settings-row:disabled {
+  cursor: default;
+}
+
+.settings-row:disabled .title {
+  color: var(--ink-3);
+}
+
+.settings-row:disabled .row-ic,
+.settings-row:disabled .row-chev {
+  opacity: 0.45;
+}
+
+.settings-row .title {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.settings-row .sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+/* Text takes the -ink step, per the token contract: the base red is for
+   fills and icons, and on the hovered row's surface it lands at 4.18:1 -
+   under the 4.5:1 this 14.5px label needs, on "Erase all data" of all
+   rows. The icon beside it keeps the base step. */
+.settings-row.danger .title {
+  color: var(--critical-ink);
+}
+
+.row-ic {
+  color: var(--ink-2);
+  flex: none;
+}
+
+.settings-row.danger .row-ic {
+  color: var(--critical);
+}
+
+.row-chev {
+  color: var(--ink-3);
+  flex: none;
+}
+
+.settings-note {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* ---------- Avatars, badges, chips, pills ---------- */
+
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-full);
+  background: var(--accent-wash);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.avatar.lg {
+  width: 52px;
+  height: 52px;
+  font-size: 18px;
+}
+
+.avatar.square {
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+/* Open stages read their step off the ramp: --stage-mix is set per badge
+   (100% = first stage), so a 3- or 8-stage funnel spans the same range. */
+.stage-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--r-full);
+  background: color-mix(in oklab,
+    var(--stage-ramp-from) var(--stage-mix, 100%), var(--stage-ramp-to));
+}
+
+.stage-badge[data-stage="won"] .stage-dot { background: var(--stage-won); }
+.stage-badge[data-stage="lost"] .stage-dot { background: var(--stage-lost); }
+
+/* A stage that has since been removed from the funnel. */
+.stage-badge.gone {
+  color: var(--ink-3);
+}
+
+.stage-badge.gone .stage-dot {
+  background: var(--surface-3);
+  border: 1px solid var(--hairline-strong);
+}
+
+/* Time-in-stage marker on a board card / deal row. */
+.age-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 650;
+  background: var(--surface-2);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.age-pill[data-tone="stalled"] {
+  background: var(--warning-wash);
+  color: var(--warning-ink);
+}
+
+/* Per-deal forecast confidence marker: the founder's own call.
+   accent-strong, not accent: these pills sit on rows that hover to
+   --surface-2, where the wash composite drops plain accent text under
+   the 4.5:1 floor. The strong step holds it on every surface. */
+.conf-pill {
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+}
+
+/* Confidence field in the deal form: select plus the custom % input. */
+.conf-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.conf-field .select-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.conf-pct[hidden] {
+  display: none;
+}
+
+/* ---------- the people on a deal (form) ----------
+   One row per extra contact: who they are, what they do, and a way out. */
+
+.people-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.people-rows:not(:empty) {
+  margin-top: -4px;
+}
+
+.people-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.people-who {
+  flex: 1 1 55%;
+  min-width: 0;
+}
+
+.people-role {
+  flex: 1 1 40%;
+  min-width: 0;
+}
+
+.people-add {
+  align-self: flex-start;
+  margin-top: -4px;
+}
+
+.status-badge {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 650;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.status-badge[data-status="customer"] {
+  background: var(--good-wash);
+  color: var(--good-ink);
+}
+
+.status-badge[data-status="active"] {
+  background: var(--accent-wash);
+  /* See .conf-pill: holds 4.5:1 even on a hovered row's surface-2. */
+  color: var(--accent-strong);
+}
+
+.status-badge[data-status="lost"] {
+  color: var(--ink-3);
+}
+
+/* What someone does on a deal. Only the two roles that change what you do
+ * next carry a colour - the decision maker you must reach, the blocker you
+ * must answer; the rest read as quiet labels, so the coloured ones mean
+ * something. Never colour alone: the word is the label.
+ */
+.role-badge {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 650;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.role-badge[data-role="decision-maker"] {
+  background: var(--accent-wash);
+  color: var(--accent-strong);
+}
+
+.role-badge[data-role="blocker"] {
+  background: var(--critical-wash);
+  color: var(--critical-ink);
+}
+
+.due-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 650;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.due-pill[data-status="overdue"] {
+  background: var(--critical-wash);
+  color: var(--critical-ink);
+}
+
+.due-pill[data-status="today"] {
+  background: var(--warning-wash);
+  color: var(--warning-ink);
+}
+
+.due-pill[data-status="soon"] {
+  background: var(--accent-wash);
+  /* See .conf-pill: holds 4.5:1 even on a hovered row's surface-2. */
+  color: var(--accent-strong);
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip-row:empty {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--hairline);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--surface);
+  transition: background 0.15s, color 0.15s;
+}
+
+.chip:not(.static):hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.chip svg {
+  flex: none;
+}
+
+.chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip.static {
+  cursor: default;
+}
+
+.chip[data-tone="overdue"] {
+  border-color: transparent;
+  background: var(--critical-wash);
+  color: var(--critical-ink);
+}
+
+.chip[data-tone="stalled"] {
+  border-color: transparent;
+  background: var(--warning-wash);
+  color: var(--warning-ink);
+}
+
+.mini-note {
+  flex: none;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* Last-touch marker on a lead row; amber once it has gone quiet. */
+.touch-note {
+  font-variant-numeric: tabular-nums;
+}
+
+.touch-note.cold {
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  background: var(--warning-wash);
+  color: var(--warning-ink);
+  font-weight: 650;
+}
+
+@media (max-width: 560px) {
+  .hide-sm {
+    display: none;
+  }
+}
+
+/* ---------- Saved views ----------
+   A row of chips above the filters: one click to apply, and a small menu
+   on the one that is active. Scrolls sideways rather than wrapping into a
+   second row - it sits over the filters it belongs to. */
+
+.view-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.view-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.view-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+}
+
+.view-menu {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin-inline-start: -2px;
+}
+
+.view-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  border-style: dashed;
+  color: var(--ink-3);
+}
+
+.view-save:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* A checkbox and its words on one line, for a dialog. */
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 14px;
+  font-size: 13.5px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.check-row input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+/* ---------- Offline status ----------
+   Only on screen when there is something to say: working offline, changes
+   still owed to the cloud, or a conflict waiting on a decision. */
+
+.offline-slot:empty {
+  display: none;
+}
+
+.offline-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: start;
+}
+
+.offline-pill:hover {
+  border-color: var(--ink-3);
+}
+
+.offline-pill.off {
+  background: var(--warning-wash);
+  border-color: transparent;
+  color: var(--warning-ink);
+}
+
+.offline-pill.conflict {
+  background: var(--critical-wash);
+  border-color: transparent;
+  color: var(--critical-ink);
+}
+
+.offline-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The phone copy: above the tab bar, out of the way of the FAB. */
+.offline-floating {
+  position: fixed;
+  left: 12px;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 10px);
+  z-index: 39;
+  max-width: 60vw;
+}
+
+.offline-floating .offline-pill {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+  background: var(--surface);
+}
+
+/* The tint needs something to sit on. This copy floats over the list, not
+   over the sidebar's own surface, and the washes are ~15% alpha - so the
+   rows underneath read straight through the pill, and through the label on
+   it, whose contrast was measured against the wash over a surface. Paint
+   the wash over the surface instead of in place of it. */
+.offline-floating .offline-pill.off {
+  background: linear-gradient(var(--warning-wash), var(--warning-wash)), var(--surface);
+}
+
+.offline-floating .offline-pill.conflict {
+  background: linear-gradient(var(--critical-wash), var(--critical-wash)), var(--surface);
+}
+
+@media (min-width: 900px) {
+  .offline-floating {
+    display: none;
+  }
+}
+
+/* ---------- AI assist ----------
+   A quiet control, marked by its sparkle rather than by colour, and a
+   spinner while the model is out. */
+
+.ai-btn {
+  align-self: flex-start;
+}
+
+.ai-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: ai-spin 0.7s linear infinite;
+}
+
+@keyframes ai-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* A reader who has turned motion down gets a pulse instead of a spin.
+   Longhand, and !important: base.css caps every animation at 0.01ms and
+   one iteration with !important of its own, so the shorthand here lost
+   the cascade and the swap silently produced no animation at all - a
+   static three-quarter ring that reads as a rendering fault rather than
+   as work in progress. A fade in place is the exception that rule is
+   about; it carries no motion to be bothered by. */
+@media (prefers-reduced-motion: reduce) {
+  .ai-spinner {
+    animation-name: ai-pulse !important;
+    animation-duration: 1.4s !important;
+    animation-timing-function: ease-in-out !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+
+@keyframes ai-pulse {
+  50% { opacity: 0.35; }
+}
+
+.ai-summary {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ---------- Stat tiles ---------- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+@media (min-width: 720px) {
+  .stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* Five tiles (goal coverage joins the forecast row) fit as one band
+     rather than leaving an orphan on a second line. */
+  .stat-grid.wide {
+    grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  }
+}
+
+.stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+
+.stat-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+  font-size: 12.5px;
+  font-weight: 650;
+}
+
+.stat-delta.good { color: var(--good-ink); }
+.stat-delta.bad { color: var(--critical-ink); }
+
+/* Goal meter under a stat value. */
+.stat-meter {
+  height: 6px;
+  margin: 8px 0 6px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.stat-meter-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  transition: width 0.3s var(--ease-spring);
+  min-width: 3px;
+}
+
+.stat-meter-fill.good { background: var(--good); }
+.stat-meter-fill.warn { background: var(--warning-ink); }
+
+.stat-pace {
+  font-weight: 700;
+}
+
+.stat-pace.good { color: var(--good-ink); }
+.stat-pace.warn { color: var(--warning-ink); }
+
+/* ---------- Lists: people, deals, tasks, activities ---------- */
+
+.list-card {
+  padding: 6px 8px;
+}
+
+.person-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 10px;
+  border-radius: var(--r-sm);
+  color: inherit;
+  transition: background 0.15s;
+}
+
+.person-row:hover {
+  background: var(--surface-2);
+}
+
+.person-name {
+  font-weight: 600;
+  font-size: 14.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.person-sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deal-list {
+  padding: 4px 8px 8px;
+}
+
+.deal-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 10px;
+  border-radius: var(--r-sm);
+  color: inherit;
+  transition: background 0.15s;
+}
+
+.deal-row:hover {
+  background: var(--surface-2);
+}
+
+/* A row that carries its own action button wraps the text in an inner
+   link; it must read as row content, not accent-colored link text. */
+.deal-row > a {
+  color: inherit;
+}
+
+.deal-row-name {
+  font-weight: 600;
+  font-size: 14.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deal-row-value {
+  flex: none;
+  font-weight: 650;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The same squeeze the follow-up and lead rows had, one list over. Every
+   trailing item on a deal row is fixed-width - the stalled age pill, the
+   money figure and its stage badge, the Follow up button - so the deal's
+   name was the only thing left to shrink: 169px of a 375px page on a 390px
+   phone, where "Lumen Health - platform license" came out "Lumen Health -
+   platfo…" on the dashboard's stalled list, and the same on every company
+   and lead page. Below the same 560px the trailing items move under the
+   name, right-aligned, the way the follow-up rows already do. */
+@media (max-width: 560px) {
+  .deal-row {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  /* A lever, not a width: wide enough that nothing can share line one,
+     narrow enough that the name always can - and once the rest has gone,
+     flex-grow hands it the whole line anyway. */
+  .deal-row > .grow {
+    flex-basis: 80%;
+  }
+
+  /* Right-align the wrapped line by its leading item: the money figure
+     where there is one, otherwise the pill or the button. */
+  .deal-row > .deal-row-value,
+  .deal-row > .age-pill,
+  .deal-row > .btn {
+    margin-inline-start: auto;
+  }
+
+  .deal-row > .deal-row-value ~ .stage-badge {
+    margin-inline-start: 0;
+  }
+}
+
+.person-row.inset {
+  padding-block: 9px;
+}
+
+/* The people on a deal, in a card of their own. */
+.people-list {
+  padding: 4px 8px 8px;
+}
+
+/* A closing remark inside a card, under the content it is about. */
+.card-note {
+  padding: 4px 16px 14px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+/* Same squeeze the follow-up rows had, one list over: every trailing item on
+   a lead row is fixed-width - the last-touch note, the status badge, the
+   chevron - so the name was the only thing left to shrink, down to 57px of a
+   307px row on a 390px screen. Every name in the book ellipsized to
+   "Jorda…" while "In conversation" kept all 100 of its pixels.
+   Below the same 560px, the metadata moves under the name, right-aligned.
+   The status badge is what marks a lead row: a company row carries only a
+   money figure and a chevron and still reads at this width, and the people
+   list on a company page carries nothing but the chevron. */
+@media (max-width: 560px) {
+  .person-row:has(> .status-badge) {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  /* Sized off the row rather than as a share of it: minus the avatar and one
+     gap the name always fits beside the avatar, and minus a little more
+     anything after it always breaks - true at any width, which a percentage
+     basis can't promise for a row this shallow. */
+  .person-row:has(> .status-badge) > .grow {
+    flex-basis: calc(100% - 70px);
+  }
+
+  /* Right-align the wrapped line by its leading item, the last-touch note. */
+  .person-row:has(> .status-badge) > .mini-note {
+    margin-inline-start: auto;
+  }
+
+  /* Same squeeze for a deal's people row: its trailing items are a role
+     badge, a last-touch note, and a chevron, and the name loses to all
+     three. The wrapped line is right-aligned by whichever comes first. */
+  .deal-person-row {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .deal-person-row > .grow {
+    flex-basis: calc(100% - 70px);
+  }
+
+  .deal-person-row > .role-badge,
+  .deal-person-row:not(:has(> .role-badge)) > .mini-note {
+    margin-inline-start: auto;
+  }
+}
+
+.task-list {
+  padding: 4px 10px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Quiet truncation note under a capped list ("Showing the 10 most recent"). */
+.list-more-note {
+  padding: 0 10px 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 9px 6px;
+  border-radius: var(--r-sm);
+}
+
+.task-row:hover {
+  background: var(--surface-2);
+}
+
+.task-check {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  /* 24px is the floor a pointer target may not go under; a finger gets
+     more than that from the hit area at the end of this file. */
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  border-radius: 7px;
+  border: 1.5px solid var(--hairline-strong);
+  color: var(--accent-ink);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.task-check:hover {
+  border-color: var(--accent);
+}
+
+.task-row.done .task-check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.task-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-title {
+  font-size: 14px;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+
+.task-row.done .task-title {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+/* On a phone the row's trailing furniture - a due pill plus a 34px snooze
+   and a 34px edit button - is fixed-width, so the only thing left to give
+   was the title: 73px of a 321px row on a 390px screen. "Chase Northwind
+   legal on MSA redlines" came out one word per line and the link chips
+   ellipsized to "Mei…". Wrap the furniture onto a second, right-aligned
+   line and hand the whole first line to the title. */
+@media (max-width: 560px) {
+  .task-row {
+    flex-wrap: wrap;
+    row-gap: 5px;
+  }
+
+  /* A lever, not a width: 80% is wide enough that the pill and buttons can
+     never share line one, narrow enough that the body always can - and once
+     they are gone, flex-grow gives the body the whole line anyway. */
+  .task-body {
+    flex-basis: 80%;
+  }
+
+  /* Right-align the wrapped line by its leading item: the repeat pill when
+     the follow-up has one, otherwise the due pill. */
+  .task-row > .repeat-pill,
+  .task-row > .due-pill {
+    align-self: center;
+    margin-inline-start: auto;
+  }
+
+  .task-row > .repeat-pill {
+    margin-top: 0;
+  }
+
+  .task-row > .repeat-pill ~ .due-pill {
+    margin-inline-start: 0;
+  }
+}
+
+/* ---------- tags ---------- */
+
+/* Chip input: looks like an .input, holds removable chips plus a free
+   text field that commits on Enter, comma, or blur. */
+.tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-height: 42px;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  cursor: text;
+}
+
+.tag-input:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.tag-input-field {
+  flex: 1;
+  min-width: 90px;
+  border: none;
+  outline: none;
+  background: none;
+  color: var(--ink);
+  padding: 4px 4px;
+  font: inherit;
+  font-size: 14px;
+}
+
+.tag-input-field::placeholder {
+  color: var(--ink-3);
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 3px 5px 3px 10px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.tag-chip-x {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--r-full);
+  color: var(--ink-3);
+}
+
+.tag-chip-x:hover {
+  background: var(--surface-3);
+  color: var(--ink);
+}
+
+/* Tag filter on list views: active tags as chips, the rest in a select. */
+.tag-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.tag-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag-filter .select {
+  min-height: 33px;
+  padding-block: 5px;
+  font-size: 13px;
+}
+
+/* Tag manager in Settings: name is an input so renaming is typing. */
+.tag-manage-row .tag-name-input {
+  max-width: 260px;
+  min-height: 34px;
+  padding: 5px 9px;
+  font-size: 14px;
+}
+
+/* ---------- attachments ---------- */
+
+.attachment-picker {
+  display: none;
+}
+
+.attachment-list {
+  padding: 4px 10px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.attachment-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px;
+  border-radius: var(--r-sm);
+}
+
+.attachment-row:hover {
+  background: var(--surface-2);
+}
+
+.attachment-row:hover .row-edit {
+  opacity: 1;
+}
+
+.attachment-ic {
+  flex: none;
+  color: var(--ink-3);
+  display: grid;
+  place-items: center;
+}
+
+.attachment-name {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachment-name:hover {
+  color: var(--accent);
+}
+
+.attachment-sub {
+  flex: none;
+  font-size: 12px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* ---------- email compose ---------- */
+
+.compose-to {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 2px 2px 0;
+}
+
+.compose-addr {
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.tpl-chips {
+  margin-top: 8px;
+}
+
+/* ---------- bulk selection ---------- */
+
+/* Row checkbox, kin to .task-check. A button may not nest inside an
+   anchor, so on link rows the box sits *next to* the link and overlays
+   the spacer the link keeps for it. */
+.select-row {
+  position: relative;
+}
+
+.select-row > .row-select {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+/* Hovering the overlaid box should light the row under it, exactly as
+   when the box was inside the link. */
+.select-row:hover .person-row {
+  background: var(--surface-2);
+}
+
+.row-select-space {
+  flex: none;
+  width: 20px;
+}
+
+.row-select {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--hairline-strong);
+  color: var(--accent-ink);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+/* 24px is the floor a pointer target may not go under (.task-check's
+   rule); these two are drawn smaller on purpose, so the hit area grows
+   invisibly - into row padding and chip padding, never over a neighbour.
+   Touch reaches further still, at the end of this file. */
+.row-select::after,
+.tag-chip-x::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+}
+
+/* Insets measure from the padding box, so the 1.5px border eats into the
+   halo - reach further to keep the hit area at 24px past the drawn edge. */
+.row-select::after {
+  inset: -5px;
+}
+
+.row-select:hover {
+  border-color: var(--accent);
+}
+
+.row-select.on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.data-table .col-select {
+  width: 34px;
+  padding-right: 0;
+}
+
+/* Floating actions bar: appears only while something is selected. */
+.bulk-bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--tabbar-h, 0px) + var(--safe-b, 0px) + 18px);
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  /* Sized by its contents, like the toast: a fixed box pinned at left: 50%
+     has only the half-window to its right to shrink-to-fit inside, so the
+     bar could never take more than half the width it was allowed. It wrapped
+     onto two rows on any window under twice its own width - around 1150px
+     with the deal actions - and on a 768px one it took 384px of the 720px on
+     offer, putting the second row on top of the floating action button. */
+  width: max-content;
+  max-width: min(94vw, 720px);
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+  animation: bulk-bar-in 0.2s var(--ease-spring);
+}
+
+/* Its own keyframes, because an animated transform replaces the whole
+   property: borrowing the views' entrance dropped the translateX(-50%) that
+   centres the bar for the length of the animation, so it rose with its left
+   edge on the middle of the window and jumped half its own width sideways as
+   the animation ended. */
+@keyframes bulk-bar-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+
+/* Tablet: the bar and the floating action button share this corner, and
+   centred on the window the bar simply ran into it - at 768px its rounded
+   right end cut the button in half, and being the higher layer it won, so
+   the app's primary Add control was a green sliver behind the toolbar. The
+   collision runs from 720px, where the row checkboxes (and so this bar)
+   start appearing, to about 840px.
+
+   Side by side doesn't fit: the bar's own controls, the button's footprint,
+   and the page margins want more than the window has at these widths, so
+   squeezing the bar in beside it only trades the overlap for a wrap. Stack
+   them instead - the bar steps up over the button, keeping the row it had.
+   Toasts already measure this bar and stay clear of wherever it sits. */
+@media (min-width: 720px) and (max-width: 899px) {
+  .bulk-bar {
+    /* 18px of button inset + its 56px + a 10px gap. */
+    bottom: calc(var(--tabbar-h) + var(--safe-b) + 84px);
+  }
+}
+
+/* Desktop: the bar belongs over the list it acts on, not over the window.
+   Centred on the window it reached as far in as 103px on a 900px one - past
+   the sidebar's edge and across the New button and the sign-out beside it,
+   the two controls a selection has no business covering - and it stayed
+   there up to about 1160px. It also held itself 82px off the bottom to
+   clear a tab bar that isn't drawn at these widths (the `, 0px` fallbacks
+   above never fire; both tokens are always set), while the toast it shares
+   this corner with already drops to 24px here.
+
+   Half the sidebar's width shifts the centre onto the content column, and
+   the width cap follows: the column, not the window, is what the bar has
+   to fit inside - it wraps to a second row rather than spill, the same
+   trade the phone-width controls make. */
+@media (min-width: 900px) {
+  .bulk-bar {
+    left: calc(50% + var(--sidebar-w) / 2);
+    bottom: 24px;
+    max-width: min(calc(100vw - var(--sidebar-w) - 32px), 720px);
+  }
+}
+
+.bulk-count {
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.bulk-all {
+  white-space: nowrap;
+}
+
+.bulk-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--hairline-strong);
+  margin-inline: 4px;
+}
+
+/* One record at a time is the honest interaction on a phone. */
+@media (max-width: 719px) {
+  .row-select,
+  .row-select-space,
+  .bulk-bar,
+  .data-table .col-select {
+    display: none;
+  }
+}
+
+/* ---------- duplicates & merge ---------- */
+
+/* Quiet pointer above the leads list; a banner would cry wolf. */
+.dupe-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  margin-bottom: 12px;
+  border-radius: var(--r-sm);
+  border: 1px dashed var(--hairline-strong);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+/* "Looks like Dana Fox. Open instead?" under the email field. */
+.dupe-inline {
+  margin-top: 5px;
+  font-size: 12.5px;
+}
+
+.dupe-inline:empty {
+  display: none;
+}
+
+.dupe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.dupe-pair {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+}
+
+.dupe-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+.dupe-line .title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dupe-line .sub,
+.merge-record .sub {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dupe-reasons {
+  margin-top: 6px;
+}
+
+/* Survivor pick: two records side by side, the kept one ringed. */
+.merge-records {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 560px) {
+  .merge-records {
+    grid-template-columns: 1fr;
+  }
+}
+
+.merge-record {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--r-sm);
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.merge-conflicts {
+  margin-top: 4px;
+}
+
+.merge-conflicts .csv-preview-title {
+  margin-bottom: 10px;
+}
+
+.merge-record .title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Both sides of a merge are choices, and only the chosen one was drawn as
+   one - the other read as a plain outlined box, the same shape a read-only
+   field has everywhere else here. A hover that borrows the selected border
+   without its wash says "pick me" without pretending to be picked. */
+.merge-record:not(.active):hover,
+.merge-option:not(.active):hover {
+  border-color: var(--hairline-strong);
+  background: var(--surface-2);
+}
+
+.merge-record.active {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.merge-keep {
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.merge-record.active .merge-keep {
+  color: var(--accent);
+}
+
+.merge-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.merge-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.merge-option {
+  padding: 9px 12px;
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  text-align: left;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.merge-option.active {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--ink);
+}
+
+/* Recurrence marker on a follow-up row: quiet, icon-only, explained by title. */
+.repeat-pill {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  margin-top: 3px;
+  padding: 3px 6px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--ink-3);
+}
+
+/* Snooze sheet: quick date + confirm, under the one-tap options. */
+.snooze-pick {
+  display: flex;
+  gap: 8px;
+}
+
+.snooze-pick .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-edit {
+  opacity: 0;
+  flex: none;
+}
+
+.task-row:hover .row-edit,
+.activity-row:hover .row-edit,
+.row-edit:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .row-edit {
+    opacity: 1;
+  }
+}
+
+.activity-list {
+  padding: 4px 16px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-row {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.activity-row + .activity-row {
+  border-top: 1px solid var(--hairline);
+}
+
+.activity-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.activity-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activity-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.activity-summary {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  font-size: 14px;
+  /* min-width lets the flex item shrink; it does not stop an unbreakable
+     summary - a subject line pasted in from an email, an imported cell -
+     from painting straight over the date beside it. The notes below it
+     already break the same way. */
+  overflow-wrap: anywhere;
+}
+
+.activity-date {
+  flex: none;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.activity-notes {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Search & filters ---------- */
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink-3);
+}
+
+.search-box:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+.search-input {
+  border: 0;
+  background: none;
+  padding-inline: 0;
+  min-height: 42px;
+}
+
+.search-input:focus-visible {
+  outline: none;
+}
+
+.filter-row {
+  display: flex;
+  gap: 6px;
+  /* The scroll container forces overflow-y to auto, which would clip the
+     chips' focus rings; pad for the ring and pull the box back with
+     negative margins so the layout rhythm is unchanged. A ring sits 2px out
+     and is 2px thick, so it needs the full 4px on every side: at 2px the
+     sides were short, and the first chip in the row - All, Open, the one the
+     keyboard reaches first - showed a ring with its left edge sliced off. */
+  padding: 4px;
+  margin: -4px -4px 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* An author `display` beats the UA rule behind the hidden attribute, so a
+   row put away in script needs saying again here - the way .term-field and
+   .conf-pct already do. */
+.filter-row[hidden] {
+  display: none;
+}
+
+.filter-chip {
+  flex: none;
+  padding: 6px 13px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--hairline-strong);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.filter-chip:hover {
+  background: var(--surface-2);
+}
+
+.filter-chip.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--page);
+}
+
+/* Wrapping chip picker (close reasons) - same chip, no scroll rail. */
+.reason-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ---------- Empty states ---------- */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  padding: 44px 24px;
+}
+
+.empty-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+
+.empty-icon.accent {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.empty h3 {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.empty p {
+  max-width: 400px;
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.empty .btn {
+  margin-top: 10px;
+}
+
+.empty-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.all-clear {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px 16px;
+  color: var(--good-ink);
+  font-size: 14px;
+  font-weight: 550;
+}
+
+/* Under a card head (the dashboard's "Needs attention") the head supplies
+   the space above; owning the card outright, it has to supply its own. */
+.card > .all-clear:only-child {
+  padding-top: 16px;
+}
+
+/* ---------- Data table ---------- */
+
+/* Positioned, so it is the containing block for anything inside it that
+   isn't in flow. The two unlabelled columns of the deals table name
+   themselves with a visually-hidden span, and .sr-only is
+   position: absolute - with nothing positioned between it and the page, a
+   table wider than this scroller placed that span at the table's own right
+   edge, outside the box that was supposed to be clipping it. One imported
+   deal name with no spaces in it and the whole page scrolled sideways,
+   header and nav and all, while the scroller beside it sat unused. */
+.table-wrap {
+  position: relative;
+  overflow-x: auto;
+  padding: 4px 16px 16px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 9px 10px;
+  text-align: start;
+  border-bottom: 1px solid var(--hairline);
+  white-space: nowrap;
+}
+
+.data-table thead th {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.data-table tbody th {
+  font-weight: 600;
+}
+
+.data-table tbody tr:last-child th,
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table .num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A second, quieter figure under a cell's main one - the monthly rate
+   under a recurring deal's contract value. */
+.cell-sub {
+  display: block;
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--ink-3);
+}
+
+/* ---------- Sample banner ---------- */
+
+.sample-banner {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 2px 0 14px;
+  padding: 9px 14px;
+  border-radius: var(--r-sm);
+  background: var(--accent-wash);
+  /* The wash sits over the page, not the surface; the strong step is the
+     one that clears 4.5:1 there in both modes. */
+  color: var(--accent-strong);
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.sample-banner .grow {
+  min-width: 0;
+}
+
+.sample-banner button {
+  position: relative;
+  flex: none;
+  /* 19px of underlined text was the one control in the app under the 24px
+     floor a pointer target may not go below - and it rides on every page
+     for as long as the sample data is loaded, as the way out of it. The box
+     grows into the banner's own padding and the negative margins hand that
+     room back, so the target gets its height and nothing moves. Touch
+     reaches further still, at the end of this file. */
+  padding: 7px 2px;
+  margin: -7px -2px;
+  font-weight: 750;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.sample-banner-ic {
+  display: grid;
+  flex: none;
+}
+
+/* ---------- touch targets ----------
+   Some controls are drawn small on purpose: a 24px box reads as a
+   checkbox, and a tag's remove button has to fit inside its chip. A
+   finger needs about 44px, so on touch an invisible pseudo-element grows
+   what has to be hit without changing what is seen.
+
+   The insets are deliberately uneven. They reach into the padding and
+   empty space around each control and stop short of whatever sits beside
+   it - a hit area that overlapped the follow-up's title or the next chip
+   would trade a missed tap for a wrong one. */
+@media (hover: none) {
+  .task-check::after,
+  .tag-chip-x::after,
+  .deal-card-move::after,
+  .col-fold::after,
+  .sample-banner button::after {
+    content: "";
+    position: absolute;
+  }
+
+  /* Left into the row's padding, and vertically within the row - never
+     rightwards, where the title and its chips are. */
+  .task-check::after {
+    inset: -10px -2px -10px -12px;
+  }
+
+  /* Inside its own chip, stopping short of the neighbouring one. */
+  .tag-chip-x::after {
+    inset: -8px -5px;
+  }
+
+  /* Left into the row's padding, up and down within the row, and
+     rightwards stopping short of the avatar (or the deal name in the
+     list's select column). */
+  .row-select::after {
+    inset: -10px -7px -10px -12px;
+  }
+
+  /* Alone in the card's top corner, so it can take the whole 44px. */
+  .deal-card-move::after {
+    inset: -8px;
+  }
+
+  .col-fold::after {
+    inset: -7px;
+  }
+
+  /* Out into the banner's padding, and leftwards stopping short of the
+     sentence it sits beside. */
+  .sample-banner button::after {
+    inset: -6px -8px;
+  }
+}
