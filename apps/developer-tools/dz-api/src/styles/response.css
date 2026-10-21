@@ -1,0 +1,489 @@
+.resp {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.resp-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 8px 0 10px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.resp-title {
+  margin: 0 6px;
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.resp-tabs {
+  flex: 1 1 auto;
+}
+
+.resp-tabs .count.fail {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.resp-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.resp-meta .sep {
+  width: 1px;
+  height: 14px;
+  background: var(--border);
+}
+
+.resp-metric {
+  height: 24px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--success);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+
+.resp-metric:hover,
+.resp-metric[aria-expanded='true'] {
+  background: var(--bg-hover);
+}
+
+.resp-transport {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+}
+
+.metric-pop {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 280px;
+  font-size: var(--fs-sm);
+}
+
+.metric-head {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 64px;
+  gap: 8px;
+  align-items: center;
+}
+
+.metric-row.plain {
+  grid-template-columns: 1fr auto;
+}
+
+.metric-row .mono {
+  text-align: right;
+}
+
+.metric-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-muted);
+  overflow: hidden;
+}
+
+.metric-bar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.metric-note {
+  margin: 4px 0 0;
+  color: var(--text-faint);
+}
+
+.resp-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.resp-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 12px;
+  flex-wrap: wrap;
+}
+
+.resp-tools .spacer {
+  flex: 1;
+}
+
+.resp-tools .input {
+  max-width: 280px;
+}
+
+.resp-tools-note {
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+}
+
+.resp-lang {
+  width: auto;
+}
+
+.resp-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  border-top: 1px solid var(--border);
+}
+
+.resp-body .code-editor {
+  min-height: 0;
+}
+
+.resp-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  color: var(--text-muted);
+}
+
+.resp-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 12px 12px;
+}
+
+.resp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+  padding: 24px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.resp-empty .icon {
+  color: var(--text-faint);
+}
+
+.resp-empty p {
+  margin: 0;
+}
+
+.resp-empty.small {
+  flex: 0 0 auto;
+  padding: 32px 16px;
+}
+
+.resp-hint {
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+.resp-elapsed {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.resp-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 24px;
+  text-align: center;
+  overflow: auto;
+}
+
+.resp-error-icon {
+  color: var(--danger);
+}
+
+.resp-error h3 {
+  margin: 0;
+  font-size: var(--fs-lg);
+}
+
+.resp-error p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--text-muted);
+}
+
+.resp-url {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-faint) !important;
+}
+
+.resp-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.resp-warnings {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 12px 0;
+}
+
+.resp-script-error {
+  margin: 6px 12px 0;
+}
+
+.resp-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+/* The icon stays beside the first line however the text wraps. */
+.resp-note > .icon {
+  flex: none;
+  margin-top: 2px;
+}
+
+.resp-note > span {
+  flex: 1;
+  min-width: 0;
+}
+
+.resp-preview {
+  flex: 1;
+  overflow: auto;
+}
+
+.resp-preview.media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background-color: var(--bg-subtle);
+}
+
+.resp-preview.media img,
+.resp-preview.media video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.resp-frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.resp-preview-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 12px;
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+}
+
+/* Shared data table --------------------------------------------------------- */
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+table.data-table th {
+  position: sticky;
+  top: 0;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: left;
+}
+
+table.data-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  word-break: break-word;
+}
+
+table.data-table td:first-child {
+  width: 30%;
+  font-weight: 500;
+}
+
+table.data-table .copy-cell {
+  width: 32px;
+  padding: 2px;
+}
+
+table.data-table tr .copy-cell .icon-btn {
+  opacity: 0;
+}
+
+table.data-table tr:hover .copy-cell .icon-btn,
+table.data-table .copy-cell .icon-btn:focus-visible {
+  opacity: 1;
+}
+
+/* Tests ------------------------------------------------------------------------ */
+.tests {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.test-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.test {
+  display: grid;
+  grid-template-columns: 18px 56px 1fr auto;
+  gap: 8px;
+  align-items: start;
+  padding: 7px 4px;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+}
+
+.test-icon {
+  display: flex;
+  margin-top: 1px;
+}
+
+.test.passed .test-icon,
+.test.passed .test-state {
+  color: var(--success);
+}
+
+.test.failed .test-icon,
+.test.failed .test-state {
+  color: var(--danger);
+}
+
+.test.skipped .test-icon,
+.test.skipped .test-state {
+  color: var(--text-faint);
+}
+
+.test-state {
+  font-weight: 600;
+}
+
+.test-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.test-error {
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.test-source {
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+}
+
+@media (max-width: 600px) {
+  .resp-bar {
+    padding: 4px 8px;
+  }
+  /* Tighter, so Copy stays on the row with the other tools on a phone. */
+  .resp-tools {
+    gap: 4px;
+    padding: 6px 8px;
+  }
+  .resp-meta {
+    width: 100%;
+    justify-content: flex-start;
+    padding-bottom: 4px;
+  }
+  .test {
+    grid-template-columns: 18px 1fr;
+  }
+  .test-state,
+  .test-source {
+    display: none;
+  }
+}
+
+.resp-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 8px;
+  color: var(--text-muted);
+}
+
+.resp-filter[hidden] {
+  display: none;
+}
+
+.resp-filter .input {
+  max-width: 420px;
+}
+
+.resp-filter-msg {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
