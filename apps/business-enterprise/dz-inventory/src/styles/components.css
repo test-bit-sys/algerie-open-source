@@ -1,0 +1,956 @@
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: none;
+  white-space: nowrap;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.btn:disabled { opacity: 0.55; cursor: default; }
+
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover:not(:disabled) { background: var(--accent-strong); }
+
+.btn-secondary { background: var(--surface); border-color: var(--hairline-strong); color: var(--ink); }
+.btn-secondary:hover:not(:disabled) { background: var(--surface-2); }
+
+.btn-ghost { color: var(--ink-2); }
+.btn-ghost:hover:not(:disabled) { background: var(--surface-2); color: var(--ink); }
+
+.btn-danger { background: var(--danger); color: var(--page); }
+.btn-danger:hover:not(:disabled) { background: var(--danger-strong); }
+
+.btn-block { display: flex; width: 100%; }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.icon-btn:hover { background: var(--surface-2); color: var(--ink); }
+/* Fingertip targets: the 34px button keeps its look, but on touch
+   screens its hit area grows to ~44px — on the product cards a near
+   miss otherwise falls through to the stretched edit-the-card button
+   underneath, which is the opposite of what was aimed at. */
+@media (pointer: coarse) {
+  .icon-btn { position: relative; }
+  .icon-btn::after { content: ""; position: absolute; inset: -5px; }
+  .qty-toggle button { padding: 7px 12px; }
+  /* Same treatment for the filter chips (~31px tall) and the toast's
+     Undo (~23px): a missed chip applies the wrong filter, and a missed
+     Undo runs out with the toast. Their neighbours are text or gaps,
+     so the grown hit areas cost nothing. */
+  .chip, .toast-action { position: relative; }
+  .chip::after { content: ""; position: absolute; inset: -7px; }
+  .toast-action::after { content: ""; position: absolute; inset: -10px; }
+  /* And for the sample banner's Start fresh (~23px), which sits on
+     every view until the sample data goes. It is the one control in
+     the strip, so the grown area only ever covers the sentence beside
+     it and a couple of pixels of the banner's own edge. */
+  .sample-banner button { position: relative; }
+  .sample-banner button::after { content: ""; position: absolute; inset: -11px; }
+  /* Segmented buttons sit flush against each other, so grown hit areas
+     would overlap the neighbour; height does the job instead. A mode
+     mistap here is expensive — it changes what Apply does. */
+  .segmented button { padding: 10px 12px; min-height: 44px; }
+  /* Buttons that trade height for density stop short of a fingertip:
+     the Overview's Restock and the selection bar's actions sit at 33px,
+     and a full-size button at 40px is still under the mark. The padding
+     is what makes them read as compact, so it stays where it is and a
+     floor on the height does the rest. Same for the amount fields on
+     the reorder, receiving, and count sheets. */
+  .btn, .order-qty { min-height: 44px; }
+  /* The table's row actions are the app's smallest buttons (30px), so
+     the standard 5px of grown hit area leaves them short too. */
+  .table .actions-cell .icon-btn::after { inset: -7px; }
+  /* The stepper's − and + are how a count gets nudged without opening
+     the keyboard, and they're the one pair here that shrinks: the
+     field between them asks for the full row, so flex takes the
+     difference out of the buttons — 34px across on a phone sheet, and
+     41px tall. A floor on both sides; the field keeps whatever's left,
+     which is still most of the row. */
+  .stepper button { min-width: 44px; min-height: 44px; }
+}
+
+/* FAB (mobile) */
+.fab {
+  position: fixed;
+  right: 18px;
+  bottom: calc(var(--tabbar-h) + var(--safe-b) + 16px);
+  z-index: 25;
+  width: 54px;
+  height: 54px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+.fab:active { transform: scale(0.96); }
+@media (max-width: 900px) {
+  .fab { display: inline-flex; }
+}
+/* The selection bar sits in the same corner: one floating action at a time. */
+body.has-bulk-bar .fab { display: none; }
+
+/* Fields */
+.field { margin-bottom: 14px; }
+.field > label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 5px;
+}
+/* Not scoped to .field: the scanner's status line, the pack-size
+   disclosure, the photo row, and the bulk form's name list are hints
+   living outside one. */
+.hint { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+
+.input, .select, .textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14.5px;
+}
+.input::placeholder, .textarea::placeholder { color: var(--ink-3); }
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: -1px;
+}
+.textarea { resize: vertical; min-height: 66px; }
+/* The surface and ink above are set outright, which is also what the
+   browser would have used to grey a disabled field out — so a disabled
+   one came back looking exactly like a live one. Tick "use the store
+   default" on the bulk sheet and the threshold box stayed white, dark
+   inked, and to all appearances ready to type in. Say it the way the
+   buttons have always said it. */
+/* A read-only field holds a value set somewhere else (a variant's name,
+   which its family writes). It stays legible — it's real information —
+   but is drawn as not-for-typing, or it reads as a box that ignores what
+   is typed into it. */
+.input:read-only { background: var(--surface-2); cursor: default; }
+.input:disabled, .select:disabled, .textarea:disabled {
+  background: var(--surface-2);
+  color: var(--ink-3);
+  cursor: default;
+}
+/* The chevron is drawn on the wrapper, so it has to be told too. */
+.select-wrap:has(.select:disabled)::after { opacity: 0.45; }
+
+.select-wrap { position: relative; }
+.select { appearance: none; padding-right: 32px; }
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 1.7px solid var(--ink-3);
+  border-bottom: 1.7px solid var(--ink-3);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+}
+@media (max-width: 480px) {
+  .field-grid { grid-template-columns: 1fr; gap: 0; }
+}
+
+.field-error { color: var(--danger); font-size: 12.5px; margin-top: 4px; }
+.input[aria-invalid="true"] { border-color: var(--danger); }
+
+/* Inline button that reads as a link (inside errors and hints) */
+.link-btn {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* Secondary actions under a form's primary button */
+.form-actions {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.form-actions .btn { padding-inline: 8px; }
+
+/* Optional section inside a form */
+.disclosure { margin-bottom: 14px; }
+.disclosure > summary {
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  padding: 4px 0;
+  list-style-position: inside;
+}
+.disclosure > summary:hover { color: var(--ink); }
+.disclosure[open] > summary { margin-bottom: 8px; }
+
+/* Explanatory strip inside a form (e.g. "this product is archived") */
+.form-banner {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 9px 11px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 12.5px;
+}
+.form-banner svg { color: var(--ink-3); margin-top: 1px; }
+
+/* Search box */
+.searchbox {
+  position: relative;
+  flex: 1;
+  min-width: 160px;
+  max-width: 340px;
+}
+.searchbox svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
+  pointer-events: none;
+}
+.searchbox .input { padding-left: 34px; }
+
+/* Segmented control */
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+.segmented button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+/* Everything else pressable in the app answers a pointer — the chips
+   beside these do the same job and fill on hover — but a segment sat
+   there inert, so on the stock sheet nothing said Remove or Recount
+   could be clicked until it had been. The track is already --surface-2
+   and the chosen segment --surface, so the tone under a hovered one
+   has to be the third. */
+.segmented button:not([aria-pressed="true"]):hover {
+  background: var(--surface-3);
+  color: var(--ink);
+}
+.segmented button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  padding: 5px 11px;
+}
+
+/* Filter chips */
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  padding: 6px 12px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-full);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+}
+.chip:hover { background: var(--surface-2); }
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--page);
+}
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-full);
+  background: currentColor;
+}
+/* Badge text is 12px — it has to hold 4.5:1 on its own wash, hovered
+   rows included; --ok, --danger, and --ink-3 all fall just short there. */
+.badge.ok { background: var(--ok-wash); color: var(--ok-text); }
+.badge.archived { background: var(--surface-3); color: var(--ink-2); }
+.badge.ordered { background: var(--accent-wash); color: var(--accent-text); }
+.badge.low { background: var(--warn-wash); color: var(--warn); }
+.badge.out { background: var(--danger-wash); color: var(--danger-text); }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  padding: 16px;
+}
+.card + .card { margin-top: 10px; }
+
+/* Stat tiles */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 900px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+}
+.stat .label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+.stat .value {
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.stat .sub { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.stat.attention { border-color: var(--warn); }
+.stat.attention .value { color: var(--warn); }
+.stat.critical { border-color: var(--danger); }
+.stat.critical .value { color: var(--danger); }
+
+/* Data table (desktop) */
+.table-wrap {
+  /* Anchors anything absolutely positioned inside the table to this box,
+     so the scroller actually clips it. The products header carries an
+     .sr-only "Actions" label, and an absolute element whose ancestors are
+     all static belongs to the page instead: on a window too narrow for
+     the table's 760px minimum it landed past the right edge of the
+     document, and the whole page — sidebar and all — picked up a
+     horizontal scrollbar the table's own scroller was there to avoid. */
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 760px;
+}
+.table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  white-space: nowrap;
+}
+.table th button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  padding: 0;
+}
+.table th button:hover { color: var(--ink); }
+.table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: middle;
+}
+.table tbody tr:last-child td { border-bottom: 0; }
+.table tbody tr:hover { background: var(--surface-2); }
+.table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.table th.num { text-align: right; }
+.table .actions-cell { text-align: right; white-space: nowrap; }
+.table .actions-cell .icon-btn { width: 30px; height: 30px; }
+
+/* Names and notes are user text up to 120 chars with no promise of a
+   space; an unbroken part number must wrap rather than push past the
+   qty column or the card edge. */
+.cell-main { font-weight: 600; overflow-wrap: anywhere; }
+.cell-sub { font-size: 12px; color: var(--ink-3); margin-top: 1px; overflow-wrap: anywhere; }
+
+/* List rows (mobile cards, settings, alerts) */
+.item-list {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  background: none;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+.item-row:last-child { border-bottom: 0; }
+button.item-row { cursor: pointer; }
+button.item-row:hover { background: var(--surface-2); }
+/* The list clips to its rounded corners, and these rows run edge to
+   edge inside it — so a focus ring drawn 2px outside one is cut away
+   on both sides, plus the top on the first row and the bottom on the
+   last. A keyboard user was left with a hairline under the row and no
+   ring at all around it. Draw it just inside instead, the way the
+   inputs already do. */
+.item-list .item-row:focus-visible { outline-offset: -2px; }
+.item-row .title { font-weight: 600; font-size: 14.5px; overflow-wrap: anywhere; }
+.item-row .sub { font-size: 12.5px; color: var(--ink-3); margin-top: 1px; overflow-wrap: anywhere; }
+.item-ic {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  flex-shrink: 0;
+}
+.item-ic.warn { background: var(--warn-wash); color: var(--warn); }
+.item-ic.danger { background: var(--danger-wash); color: var(--danger); }
+.item-ic.accent { background: var(--accent-wash); color: var(--accent-text); }
+.item-ic.ok { background: var(--ok-wash); color: var(--ok); }
+
+/* Product photos */
+.thumb {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  overflow: hidden;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.thumb.has-photo { background: var(--surface-3); }
+.thumb.warn { box-shadow: 0 0 0 2px var(--warn); }
+.thumb.danger { box-shadow: 0 0 0 2px var(--danger); }
+
+.cell-with-thumb { display: flex; align-items: center; gap: 10px; }
+
+.photo-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.photo-preview {
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 1px dashed var(--hairline-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  overflow: hidden;
+}
+.photo-preview.has-photo { border-style: solid; }
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.photo-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.photo-field .hint { margin-top: 6px; }
+
+/* A field with a button glued to its right (scan into this input) */
+.input-with-action { display: flex; gap: 6px; }
+.input-with-action .icon-btn {
+  width: 40px;
+  height: auto;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+}
+.input-with-action .icon-btn:hover { background: var(--surface-2); }
+
+/* Barcode scanner */
+.scan-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  max-height: 46vh;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+/* No camera coming — unsupported, blocked, or unavailable. The box is
+   shaped like a viewfinder because it holds one; once it can't, that
+   shape is a couple of hundred pixels of empty grey above the field
+   that still works, and on a phone it pushes that field under the
+   keyboard. Let the message set the height instead. */
+.scan-stage.no-camera { aspect-ratio: auto; }
+.scan-stage video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.scan-stage.live video { display: block; }
+/* Reticle: a window the width of a barcode, so people know where to aim */
+.scan-stage.live::after {
+  content: "";
+  position: absolute;
+  inset: 22% 12%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--r-sm);
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.35);
+}
+.scan-fallback {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 26px 20px;
+  text-align: center;
+  color: var(--ink-2);
+  font-size: 13.5px;
+}
+.scan-fallback svg { color: var(--ink-3); }
+
+/* Per-location stock breakdown inside the product form */
+.stock-split {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  font-size: 13.5px;
+}
+.stock-split > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 11px;
+  border-bottom: 1px solid var(--hairline);
+}
+.stock-split > div:last-child { border-bottom: 0; }
+.stock-split strong { font-variant-numeric: tabular-nums; }
+.stock-split-total { background: var(--surface-2); color: var(--ink-2); }
+
+/* Quantity label row with a units/packs switch on the right */
+.qty-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.qty-toggle { display: inline-flex; gap: 4px; margin-bottom: 5px; }
+.qty-toggle button {
+  padding: 3px 9px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-full);
+  background: none;
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+/* Same pill as a filter chip, same press semantics; it should answer
+   a pointer the same way. */
+.qty-toggle button:not([aria-pressed="true"]):hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.qty-toggle button[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--page);
+}
+
+/* Qty stepper */
+.stepper { display: flex; align-items: stretch; }
+.stepper .input {
+  text-align: center;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.stepper .input::-webkit-outer-spin-button,
+.stepper .input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.stepper button {
+  width: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.stepper button:first-child { border-radius: var(--r-sm) 0 0 var(--r-sm); }
+.stepper button:last-child { border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+.stepper button:hover { color: var(--ink); background: var(--surface-3); }
+
+/* Empty states */
+.empty {
+  text-align: center;
+  padding: 44px 20px;
+  color: var(--ink-2);
+}
+.empty-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--ink-3);
+}
+.empty h3 { font-size: 16.5px; font-weight: 650; color: var(--ink); margin-bottom: 4px; }
+.empty p { font-size: 13.5px; max-width: 380px; margin: 0 auto 16px; }
+/* That bottom margin is the gap before the buttons — and most of these
+   states have none to offer: nothing to reorder, nothing to report,
+   no matching activity. Left in place it padded the box 16px deeper
+   below the sentence than above the icon, and the whole block sat off
+   centre. (Onboarding's welcome step keeps its own copy of .empty with
+   the buttons outside it, hence the .card.) */
+.card .empty p:last-child { margin-bottom: 0; }
+
+/* Sample-data banner */
+.sample-banner {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  padding: 9px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--accent-wash);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.sample-banner-ic { color: var(--accent-text); display: grid; place-items: center; }
+.sample-banner button {
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 2px 4px;
+}
+.sample-banner button:hover { text-decoration: underline; }
+
+/* Modal: bottom sheet on mobile, dialog on desktop */
+.modal-root { position: fixed; inset: 0; z-index: 50; }
+.modal-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  animation: fade-in 0.18s ease;
+}
+.modal-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: calc(100dvh - 40px - var(--safe-t));
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  border-top: 1px solid var(--hairline);
+  padding: 8px 18px calc(20px + var(--safe-b));
+  animation: sheet-up 0.28s var(--ease-spring);
+}
+.sheet-handle {
+  width: 38px;
+  height: 4px;
+  margin: 4px auto 10px;
+  border-radius: var(--r-full);
+  background: var(--hairline-strong);
+}
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.modal-title { font-size: 17.5px; font-weight: 700; letter-spacing: -0.01em; }
+.confirm-message { color: var(--ink-2); font-size: 14px; }
+
+.modal-root.closing .modal-scrim { animation: fade-out 0.18s ease forwards; }
+.modal-root.closing .modal-panel { animation: sheet-down 0.2s ease forwards; }
+
+@media (min-width: 640px) {
+  .modal-root { display: grid; place-items: center; padding: 24px; }
+  .modal-panel {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    max-height: calc(100dvh - 80px);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-lg);
+    padding: 18px 22px 22px;
+    animation: pop-in 0.22s var(--ease-spring);
+  }
+  .modal-panel.wide { max-width: 720px; }
+  .sheet-handle { display: none; }
+  .modal-root.closing .modal-panel { animation: fade-out 0.15s ease forwards; }
+}
+
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+@keyframes sheet-down { to { transform: translateY(100%); } }
+@keyframes pop-in { from { opacity: 0; transform: scale(0.97); } }
+
+/* Command palette (Ctrl/Cmd+K) */
+.palette-root { position: fixed; inset: 0; z-index: 60; }
+.palette-panel {
+  position: absolute;
+  left: 50%;
+  top: clamp(16px, 12dvh, 120px);
+  transform: translateX(-50%);
+  width: min(580px, calc(100vw - 24px));
+  max-height: min(60dvh, 520px);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  animation: palette-in 0.16s var(--ease-spring);
+}
+@keyframes palette-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.985); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+.palette-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink-3);
+}
+.palette-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: 15.5px/1.3 var(--font);
+  color: var(--ink);
+}
+.palette-input::placeholder { color: var(--ink-3); }
+.palette-hint {
+  font: 11px var(--mono);
+  color: var(--ink-3);
+  border: 1px solid var(--hairline);
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+.palette-list { overflow-y: auto; padding: 6px; overscroll-behavior: contain; }
+.palette-section {
+  font-size: 11px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  padding: 8px 10px 4px;
+}
+.palette-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: 0;
+  background: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink);
+}
+.palette-row .title { font-size: 14px; font-weight: 550; }
+.palette-row .sub { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+.palette-row[aria-selected="true"] { background: var(--surface-2); }
+.palette-row[aria-selected="true"] .palette-edit { opacity: 1; }
+.palette-edit { opacity: 0; width: 30px; height: 30px; }
+.palette-row:hover .palette-edit { opacity: 1; }
+.palette-empty { padding: 18px 12px; text-align: center; color: var(--ink-3); font-size: 13.5px; }
+
+/* Sidebar entry for the palette, styled like a quiet input. */
+.sidebar-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 2px 4px 10px;
+  padding: 8px 11px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  font: 13.5px var(--font);
+  cursor: pointer;
+  text-align: left;
+}
+.sidebar-search:hover { border-color: var(--hairline-strong); color: var(--ink-2); }
+.sidebar-search .grow { flex: 1; text-align: left; }
+.sidebar-search kbd {
+  font: 11px var(--mono);
+  border: 1px solid var(--hairline);
+  border-radius: 5px;
+  padding: 1.5px 5px;
+}
+
+/* Toasts */
+.toast-root {
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+/* Above the tab bar exactly while there is one — the same query that
+   shows the bar, so no fractional width falls between two breakpoints. */
+@media (max-width: 900px) {
+  .toast-root { bottom: calc(var(--tabbar-h) + var(--safe-b) + 14px); }
+}
+/* A bulk selection owns the bottom of the screen while it lasts, and
+   the toast that reports what the selection just did must not land on
+   the buttons for the next thing. The products view measures the bar,
+   since it wraps to two lines on a narrow screen. */
+body.has-bulk-bar .toast-root { bottom: calc(var(--bulk-bar-h, 58px) + 12px); }
+@media (max-width: 900px) {
+  body.has-bulk-bar .toast-root {
+    bottom: calc(var(--tabbar-h) + var(--safe-b) + var(--bulk-bar-h, 58px) + 12px);
+  }
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: min(92vw, 420px);
+  padding: 10px 16px;
+  border-radius: var(--r-full);
+  background: var(--ink);
+  color: var(--page);
+  font-size: 13.5px;
+  font-weight: 550;
+  pointer-events: auto;
+  animation: toast-in 0.25s var(--ease-spring);
+}
+.toast svg { color: var(--page); opacity: 0.85; }
+.toast.leaving { animation: toast-out 0.2s ease forwards; }
+.toast-action {
+  border: 0;
+  background: none;
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 4px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(6px); } }
+
+/* Offline banner */
+.offline-banner {
+  max-width: calc(100vw - 20px);
+  position: fixed;
+  top: calc(10px + var(--safe-t));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+.offline-banner button { flex-shrink: 0; white-space: nowrap; }

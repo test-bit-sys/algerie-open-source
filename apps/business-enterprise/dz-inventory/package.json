@@ -1,0 +1,22 @@
+{
+  "name": "inventory-management",
+  "version": "1.0.0",
+  "description": "Inventory management on Puter: products, quantities, locations, purchase cost, low-stock alerts, suppliers, and CSV import/export",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "lucide": "^1.28.0"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "vite": "^8.2.0",
+    "vitest": "^3.2.4"
+  }
+}

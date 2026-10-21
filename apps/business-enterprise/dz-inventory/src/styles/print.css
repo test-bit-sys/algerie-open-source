@@ -1,0 +1,185 @@
+/* Print. Two modes share this sheet:
+   1. Printing a view as-is (Reports, the filtered product list): the
+      app chrome — navigation, toolbars, buttons — disappears and the
+      content gets the page to itself.
+   2. Printing a built document (#print-sheet: order sheets, count
+      sheets, label sheets): body.printing hides the app entirely and
+      the sheet is the only thing on paper.
+   The hand-rolled SVG charts already print crisply; they just need the
+   shell out of the way. */
+
+/* Hidden on screen; only the print media block below reveals it. */
+#print-sheet { display: none; }
+
+@media print {
+  /* Paper is light. A dark theme printed literally is toner-soaked grey
+     mush, so the ink and surface tokens flip to print-friendly values
+     whatever theme the screen was in. */
+  :root,
+  :root[data-theme="dark"] {
+    color-scheme: light;
+    --page: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f1f2f4;
+    --surface-3: #e7e9ec;
+    --ink: #000000;
+    --ink-2: #333940;
+    --ink-3: #565c66;
+    --hairline: rgba(0, 0, 0, 0.25);
+    --hairline-strong: rgba(0, 0, 0, 0.45);
+    --accent-text: #8a4a00;
+    --ok-text: #15672d;
+    --warn: #7a4708;
+    --danger: #a82626;
+    --danger-text: #a82626;
+  }
+
+  html, body { background: #fff; }
+
+  /* The chrome: navigation, actions, filters, floating things. What's
+     left is the content the person actually asked to print. */
+  .sidebar, .tabbar, .fab, .bulk-bar,
+  .view-actions, .toolbar, .chips,
+  .offline-banner, .sample-banner, .toast-root,
+  .btn, .icon-btn, .link-btn,
+  .modal-root, .palette-root {
+    display: none !important;
+  }
+
+  .shell { display: block; }
+  .main { padding: 0; }
+  .main-inner { max-width: none; }
+
+  /* Content blocks hold together instead of straddling a page break. */
+  .card, .item-row, .order-line, .stat, .bar-row, tr, .day-head {
+    break-inside: avoid;
+  }
+  .section-title { break-after: avoid; }
+
+  /* Tables print in full — no scrollbars on paper. On screen the minimum
+     width is what makes a wide table scroll inside its box instead of
+     crushing its columns; paper has no scrollbar to offer, so a table
+     held above the printable width is either clipped at the page edge or
+     shrinks the whole sheet to fit. Let the columns take the page. */
+  .table-wrap { overflow: visible; }
+  .table { min-width: 0; }
+
+  /* The product list prints as its table even at phone widths; the
+     card layout is a touch affordance, not a document. */
+  .products-table { display: block !important; }
+  .product-cards { display: none !important; }
+
+  /* Selection checkboxes and row buttons are things to click, not facts
+     about the stock: their columns print as two empty stripes, one of
+     them ruled with twenty untickable boxes, and they take the width the
+     product names and locations need. */
+  .pick-cell, .actions-cell { display: none !important; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* A built document (order sheet, count sheet, labels) replaces the
+     app on paper entirely. */
+  body.printing #app,
+  body.printing .tabbar,
+  body.printing .fab,
+  body.printing .toast-root { display: none !important; }
+  body.printing #print-sheet { display: block; }
+}
+
+/* --- The built print document --- */
+
+#print-sheet {
+  color: #000;
+  font: 13px/1.45 var(--font);
+}
+#print-sheet .print-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 2px;
+}
+#print-sheet .print-sub {
+  color: #444;
+  margin: 0 0 18px;
+}
+#print-sheet table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#print-sheet th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #444;
+  padding: 6px 8px;
+  border-bottom: 1.5px solid #000;
+}
+#print-sheet td {
+  padding: 7px 8px;
+  border-bottom: 1px solid #ccc;
+  vertical-align: top;
+}
+#print-sheet th.num, #print-sheet td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+#print-sheet tr { break-inside: avoid; }
+#print-sheet .print-foot {
+  margin-top: 18px;
+  color: #666;
+  font-size: 11px;
+}
+
+/* --- Barcode label sheets ---
+   The grid dimensions (columns, label size, gaps, @page) are injected
+   per layout preset by the label builder; this is the shared cell. */
+#print-sheet .label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 4px 8px;
+  overflow: hidden;
+  text-align: center;
+  break-inside: avoid;
+  box-sizing: border-box;
+}
+#print-sheet .label-name {
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.2;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+#print-sheet .label-meta {
+  font-size: 8.5px;
+  color: #333;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#print-sheet .label-barcode {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#print-sheet .label-barcode svg {
+  width: 100%;
+  height: 100%;
+}
+#print-sheet .label-code {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
