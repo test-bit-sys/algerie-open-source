@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Architecture: Polyglot Sovereign](https://img.shields.io/badge/Architecture-Polyglot_Rust_Python_CSharp_JS-1e293b.svg?style=for-the-badge&logo=rust&logoColor=F7DF1E)](#-architectural-principles)
-[![Status: 21 Operational Apps](https://img.shields.io/badge/Status-21_Operational_Apps-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-flagship-operational-applications-11-desktop-alternatives)
+[![Status: 34 Operational Apps](https://img.shields.io/badge/Status-34_Operational_Apps-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-flagship-operational-applications-11-desktop-alternatives)
 [![Tracks: 11 Domains](https://img.shields.io/badge/Tracks-11_Specialized_Domains-0284c7.svg?style=for-the-badge)](#-the-11-strategic-software-tracks--directory)
 [![Privacy: 100% Offline](https://img.shields.io/badge/Privacy-100%25_Offline--First-059669.svg?style=for-the-badge&logo=sqlite&logoColor=white)](#-mission--strategic-vision)
 [![Languages: AR · FR · EN](https://img.shields.io/badge/Languages-العربية_%7C_Français_%7C_English-dc2626.svg?style=for-the-badge)](#-internationalization--bidirectionality)
@@ -22,7 +22,7 @@
 </p>
 
 > ### ⚡ Instant Live In-Browser Testing (Try Now Online)
-> You can now test and explore all 15 sovereign applications directly inside your web browser without installing dependencies, or execute high-performance native engines locally (Rust, Python, C# .NET):  
+> You can now test and explore all 34 sovereign applications directly inside your web browser without installing dependencies, or execute high-performance native engines locally (Rust, Python, C# .NET):  
 > 👉 **[Click here to launch the Central App Portal (DZ Open Suite Hub)](https://test-bit-sys.github.io/algerie-open-source/)**
 
 </div>
@@ -32,7 +32,7 @@
 ## 📑 Table of Contents
 
 - [🌟 Mission & Strategic Vision](#-mission--strategic-vision)
-- [🟢 Software Status Matrix (15 Operational Sovereign Apps)](#-software-status-matrix)
+- [🟢 Software Status Matrix (34 Operational Sovereign Apps)](#-software-status-matrix)
 - [🚀 Flagship Operational Applications (1:1 Desktop Alternatives)](#-flagship-operational-applications-11-desktop-alternatives)
   - [💼 1. DZ-Facture & POS (Sage / Odoo Alternative — Port 3000)](#1--dz-facture--pos-sage--odoo-pos-alternative)
   - [🌳 2. DZ-Disk-Tree (WizTree 1:1 Alternative — Port 3001 + Rust Native)](#2--dz-disk-tree-wiztree-11-alternative)
@@ -49,6 +49,11 @@
   - [🏗️ 13. DZ-RPA Pro (Algerian Seismic Code RPA 99/2003 — Python Engine)](#13--dz-rpa-pro-algerian-seismic-code-rpa-99--version-2003)
   - [📊 14. DZ-Compta SCF Pro (Algerian Financial Accounting SCF — C# .NET 10)](#14--dz-compta-scf-pro-algerian-financial-accounting-scf)
   - [👥 15. DZ-Paie RH Pro (Algerian Payroll, CNAS & IRG Scale — C# .NET 10)](#15--dz-paie-rh-pro-algerian-payroll-cnas--irg-tax-scale)
+  - [📅 16. DZ-Calendar (Google Calendar Alternative — Port 3027)](#-flagship-operational-applications-11-desktop-alternatives)
+  - [📚 17. DZ-Wiki (Notion / Obsidian / Confluence Alternative — Port 3028)](#-flagship-operational-applications-11-desktop-alternatives)
+  - [🤝 18. DZ-CRM (Salesforce / HubSpot Pipeline Alternative — Port 3029)](#-flagship-operational-applications-11-desktop-alternatives)
+  - [📦 19. DZ-Inventory (Zoho Inventory / Sortly Alternative — Port 3030)](#-flagship-operational-applications-11-desktop-alternatives)
+  - [⚡ 20. DZ-API Studio (Postman / Insomnia / Hoppscotch Alternative — Port 3031)](#-flagship-operational-applications-11-desktop-alternatives)
 - [🗺️ The 11 Strategic Software Tracks & Complete Matrix](#-the-11-strategic-software-tracks--complete-matrix)
 - [⚙️ Architectural Principles (Polyglot Sovereign Architecture)](#️-architectural-principles-the-heyputer-standard)
 - [🏛️ Algerian Legal & Regulatory Compliance](#️-algerian-legal--regulatory-compliance)
@@ -80,9 +85,15 @@
 | **09** | **58 Wilayas & Dev Studio (DZ-DevTools)** | **SATIM/CIB & Wilayas SDKs** | 🟢 **Ready** (Web :3009 + **Rust CLI**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/) | [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) |
 | **05** | **Layered Photo Studio (DZ-Photo)** | **Adobe Photoshop / PhotoCraft** | 🟢 **Ready** (Web :3010 + **Python Engine**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/creative-tools/dz-photo/) | [`apps/creative-tools/dz-photo/`](apps/creative-tools/dz-photo/) |
 | **06** | **Kanban & Project Management (DZ-Boards)**| **Trello / Jira / Focalboard** | 🟢 **Ready** (Web :3011) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-boards/) | [`apps/collaboration/dz-boards/`](apps/collaboration/dz-boards/) |
+| **06** | **Sovereign Calendar (DZ-Calendar)** | **Google Calendar / Outlook** | 🟢 **Ready** (Web :3027) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/collaboration/dz-calendar/) | [`apps/collaboration/dz-calendar/`](apps/collaboration/dz-calendar/) |
+| **01** | **Knowledge Base & Wiki (DZ-Wiki)** | **Notion / Obsidian / Confluence** | 🟢 **Ready** (Web :3028) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/productivity/dz-wiki/) | [`apps/productivity/dz-wiki/`](apps/productivity/dz-wiki/) |
+| **02** | **Sovereign CRM Pipeline (DZ-CRM)** | **Salesforce / HubSpot CRM** | 🟢 **Ready** (Web :3029) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-crm/) | [`apps/business-enterprise/dz-crm/`](apps/business-enterprise/dz-crm/) |
+| **02** | **Warehouse & Stock (DZ-Inventory)** | **Zoho Inventory / Sortly** | 🟢 **Ready** (Web :3030) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-inventory/) | [`apps/business-enterprise/dz-inventory/`](apps/business-enterprise/dz-inventory/) |
+| **09** | **API Studio & Testbed (DZ-API)** | **Postman / Insomnia / Hoppscotch** | 🟢 **Ready** (Web :3031) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-api/) | [`apps/developer-tools/dz-api/`](apps/developer-tools/dz-api/) |
 | **08** | **Algerian Seismic Engine (DZ-RPA Pro)** | **Robot Structural / ETABS RPA** | 🟢 **Ready** (Web + **Python RPA 99/03**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/engineering/dz-rpa/) | [`apps/engineering/dz-rpa/`](apps/engineering/dz-rpa/) |
 | **03** | **SCF Financial Accounting (DZ-Compta)** | **PC Compta / DLG Compta SCF** | 🟢 **Ready** (Web + **C# .NET 10**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/) | [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) |
 | **03** | **Payroll, CNAS & IRG (DZ-Paie RH)** | **PC Paie / DLG Paie / IRG DGI** | 🟢 **Ready** (Web + **C# .NET 10**) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/) | [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) |
+| **11** | **Interactive Heritage Games Suite (Chess, Dama, Domino, Tawla, Puissance 4, Othello)** | Casual & Board Games with Local AI | 🟢 **Ready** (Web :3012-:3017) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/) | [`apps/games-interactive/`](apps/games-interactive/) |
 | **11** | **Interactive Heritage Games Suite (Chess, Dama, Domino, Tawla, Puissance 4, Othello)** | Casual & Board Games with Local AI | 🟢 **Ready** (Web :3012-:3017) | [🚀 **Try Now**](https://test-bit-sys.github.io/algerie-open-source/apps/games-interactive/dz-chess/) | [`apps/games-interactive/`](apps/games-interactive/) |
 
 ---
@@ -458,6 +469,11 @@ npm run start:slides        # :3008
 npm run start:devtools      # :3009
 npm run start:photo         # :3010
 npm run start:boards        # :3011
+npm run start:calendar      # :3027 (DZ-Calendar Sovereign Scheduling)
+npm run start:wiki          # :3028 (DZ-Wiki Sovereign Knowledge Base)
+npm run start:crm           # :3029 (DZ-CRM Sovereign Sales Pipeline)
+npm run start:inventory     # :3030 (DZ-Inventory Sovereign Warehouse)
+npm run start:api           # :3031 (DZ-API Studio REST & GraphQL)
 ```
 
 ---

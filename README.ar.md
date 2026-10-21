@@ -9,7 +9,7 @@
 
 [![الترخيص: MIT](https://img.shields.io/badge/الترخيص-MIT-008744.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![المعمارية: Polyglot Sovereign](https://img.shields.io/badge/المعمارية-Polyglot_Rust_Python_CSharp_JS-1e293b.svg?style=for-the-badge&logo=rust&logoColor=F7DF1E)](#-الركائز-الهندسية-لمشروع-heyputer)
-[![الحالة: 21 برنامج وتطبيق مكتمل](https://img.shields.io/badge/الحالة-21_تطبيق_مكتمل_وجاهز-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
+[![الحالة: 34 برنامج وتطبيق مكتمل](https://img.shields.io/badge/الحالة-34_تطبيق_مكتمل_وجاهز-10b981.svg?style=for-the-badge&logo=checkmarx&logoColor=white)](#-البرمجيات-المكتبية-المكتملة-والجاهزة-حالياً-بدائل-متطابقة-11)
 [![المسارات: 11 قطاع](https://img.shields.io/badge/المسارات-11_قطاع_تخصصي-0284c7.svg?style=for-the-badge)](#-دليل-المسارات-الـ-11-وجدول-كافة-أنواع-البرمجيات)
 [![الخصوصية: 100% دون إنترنت](https://img.shields.io/badge/الخصوصية-100%25_دون_إنترنت_محلي-059669.svg?style=for-the-badge&logo=sqlite&logoColor=white)](#-الرؤية-الاستراتيجية-والسيادة-الرقمية)
 [![اللغات: عربية · فرنسية · إنجليزية](https://img.shields.io/badge/اللغات-العربية_%7C_Français_%7C_English-dc2626.svg?style=for-the-badge)](#-التوافق-واللغات)
@@ -91,6 +91,11 @@
 | **06** | **منظومة تخطيط وإدارة المهام (DZ-Tasks)** | **ClickUp / Todoist / Asana** | 🟢 **مكتمل** (Web :3021) | [🚀 **جرب الآن**](apps/productivity/dz-tasks/) | [`apps/productivity/dz-tasks/`](apps/productivity/dz-tasks/) |
 | **01** | **منظومة التوقيع والتأشير الرقمي (DZ-Signature)** | **DocuSign / Adobe Sign** | 🟢 **مكتمل** (Web :3022) | [🚀 **جرب الآن**](apps/office-suite/dz-signature/) | [`apps/office-suite/dz-signature/`](apps/office-suite/dz-signature/) |
 | **02** | **تتبع الوقت وساعات العمل الجزائري (DZ-Time)** | **Toggl / Clockify (قانون 90-11)** | 🟢 **مكتمل** (Web :3023) | [🚀 **جرب الآن**](apps/productivity/dz-time/) | [`apps/productivity/dz-time/`](apps/productivity/dz-time/) |
+| **06** | **التقويم وجدولة المواعيد الوطنية (DZ-Calendar)** | **Google Calendar / Outlook** | 🟢 **مكتمل** (Web :3027) | [🚀 **جرب الآن**](apps/collaboration/dz-calendar/) | [`apps/collaboration/dz-calendar/`](apps/collaboration/dz-calendar/) |
+| **01** | **الموسوعة وقواعد المعرفة السيادية (DZ-Wiki)** | **Notion / Obsidian / Confluence** | 🟢 **مكتمل** (Web :3028) | [🚀 **جرب الآن**](apps/productivity/dz-wiki/) | [`apps/productivity/dz-wiki/`](apps/productivity/dz-wiki/) |
+| **02** | **إدارة علاقات العملاء والصفقات (DZ-CRM)** | **Salesforce / HubSpot CRM** | 🟢 **مكتمل** (Web :3029) | [🚀 **جرب الآن**](apps/business-enterprise/dz-crm/) | [`apps/business-enterprise/dz-crm/`](apps/business-enterprise/dz-crm/) |
+| **02** | **إدارة المخزون والمستودعات والباركود (DZ-Inventory)** | **Zoho Inventory / Sortly** | 🟢 **مكتمل** (Web :3030) | [🚀 **جرب الآن**](apps/business-enterprise/dz-inventory/) | [`apps/business-enterprise/dz-inventory/`](apps/business-enterprise/dz-inventory/) |
+| **09** | **استوديو واجهات البرمجة السيادي (DZ-API)** | **Postman / Insomnia / Hoppscotch** | 🟢 **مكتمل** (Web :3031) | [🚀 **جرب الآن**](apps/developer-tools/dz-api/) | [`apps/developer-tools/dz-api/`](apps/developer-tools/dz-api/) |
 
 ---
 
