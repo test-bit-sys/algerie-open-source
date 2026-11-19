@@ -291,15 +291,17 @@ npm run start:slides
 ---
 
 ### 10. 💻 DZ-DevTools (58 Wilayas & Sovereign Developer Studio)
-> **Sovereign Developer Platform, Banking & Fiscal Validators, and Curated 58 Wilayas Geographic Database**  
+> **Sovereign Developer Platform, Banking & Fiscal Validators, NIN Inspector, and Curated 58 Wilayas Geographic Database**  
 > *Port: `:3009` • Path: [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/)*
 
 - **🗺️ Complete 58 Wilayas & Communes Explorer**: Curated dataset of all 58 Algerian wilayas with Arabic/French names, capitals, postal prefixes, vehicle matricules, and telephone area codes with instant export to `JSON`, `CSV`, `SQL DDL/Inserts`, and `ES Modules`.
 - **💳 Sovereign Banking & Fiscal Validators**:
-  - **Algérie Poste CCP Mod-97 Calculator**: Official postal check-digit calculator.
-  - **20-Digit Postal RIP Generator & Validator**: Full postal account RIP validation.
-  - **Edahabia & CIB Luhn Check**: Luhn validation with national BIN identification.
-  - **Fiscal Identifiers**: NIF (15 digits), NIS (20 digits), and Registre de Commerce (RC) validators.
+  - **NIN (18-Digit National ID Inspector)**: Validates and decodes gender, birth year, wilaya, commune, and birth record number.
+  - **Algerian Bank Directory & 20-Digit RIB Builder**: 19 national banks (BNA, BEA, BADR, BDL, CNEP, CPA, Algérie Poste, Al Baraka, SGA, BNP, Al Salam...) with SWIFT/BIC codes and exact Modulo-97 check key generation.
+  - **SATIM / CIB / EDAHABIA Test Card Generator**: Generates valid 16-digit test payment cards passing Luhn checksums for e-commerce developers testing SATIM gateways.
+  - **Algérie Poste CCP & RIP**: Calculates Modulo-97 CCP checkbook key and 20-digit postal RIP.
+  - **Official Barème IRG 2024 / 2025 Simulator**: Dynamic tax simulator showing progressive tax brackets, 40% abattement, and effective rate.
+  - **Fiscal Identifiers**: NIF (15 digits), NIS (20 digits), and Registre de Commerce (RC) syntax validators.
 - **📡 Telecom Operator & Landline Inspector**: Carrier identification (Mobilis, Djezzy, Ooredoo, Algérie Télécom) with international E.164 formatting.
 - **⚡ Tafqit Developer SDK**: Live playground and copyable code snippets in JavaScript/TypeScript, Python, and PHP.
 
@@ -364,15 +366,21 @@ npm run start:boards
 ---
 
 ### 14. 📊 DZ-Compta SCF Pro (Algerian Financial Accounting SCF)
-> **National Sovereign Financial Accounting Engine Compliant with the Système Comptable Financier (SCF)**  
-> *Path: [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/)*
+> **National Sovereign Financial Accounting Engine Compliant with the Système Comptable Financier (SCF 2007)**  
+> *Port: `:3033` • Path: [`apps/finance-accounting/dz-compta/`](apps/finance-accounting/dz-compta/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-compta/)*
 
-- **📑 Plan Comptable National SCF**: Full coverage of Class 1 (Capitaux) through Class 7 (Produits) with standard Algerian labels.
-- **⚖️ Double-Entry General Journal**: Live debit/credit verification with $0.00$ variance enforcement and document voucher tracing.
-- **🏛️ 6-Column General Trial Balance**: Generates opening balances, movement totals, and closing debit/credit balances.
-- **⚡ High-Precision C# .NET 10 Engine**: Processes millions of entries using native `decimal` representation with zero floating-point roundoff errors.
+- **📑 Plan Comptable National SCF**: Full coverage of Class 1 (Capitaux) through Class 7 (Produits) with standard Algerian labels in Arabic and French.
+- **⚖️ Double-Entry General Journal**: Live debit/credit verification with $0.00$ variance enforcement, quick business transaction templates (Sales, Purchases, Payroll, Banking, Cash), and document voucher tracing.
+- **📖 General Ledger (Le Grand Livre)**: Account-by-account breakdown showing opening balance, debit/credit movements, and progressive balances.
+- **🏛️ 6-Column General Trial Balance (Balance Générale)**: Generates opening balances, movement totals, and closing debit/credit balances with double balance verification.
+- **🏢 Financial Statements (Bilan & Compte de Résultat TCR)**: Generates official SCF Balance Sheet (Actif Non-Courant/Courant vs Passif Capitaux/Dettes) and Income Statement (TCR) with automated Gross Margin, EBE, Operating Result, and IBS tax (19%).
+- **💾 100% Offline Persistence**: LocalStorage auto-save, preloaded standard Algerian enterprise dataset (SARL Atlas Tech Alger), and CSV export.
+- **⚡ Dual Web & C# .NET 10 Engines**: Run directly via browser/Node server or via native C# engine:
   ```bash
-  # Run the native C# accounting engine
+  # Run DZ-Compta web server on http://localhost:3033
+  npm run start:compta
+  
+  # Or run the native C# accounting engine
   npm run native:compta
   ```
 
@@ -380,14 +388,19 @@ npm run start:boards
 
 ### 15. 👥 DZ-Paie RH Pro (Algerian Payroll, CNAS & IRG Tax Scale)
 > **Algerian Labor Code Payroll Engine with CNAS Social Security & Official DGI IRG Progressive Scale**  
-> *Path: [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/)*
+> *Port: `:3034` • Path: [`apps/finance-accounting/dz-paie/`](apps/finance-accounting/dz-paie/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/finance-accounting/dz-paie/)*
 
-- **🛡️ CNAS Deductions**: Social security contributions (9% employee, 26% employer).
-- **📉 Official Algerian IRG Scale (DGI)**: Progressive tax brackets (23%, 27%, 30%, 35%) with legal 40% abattement (1,000 to 1,500 DZD) and total exemption under legal thresholds.
-- **📄 Printable Pay Slips (Bulletins de Paie)**: Automatic allowances (IEP, transport, panier, overtime) with Arabic/French DZD monetary Tafqit.
-- **⚡ High-Performance C# .NET 10 Engine**:
+- **🛡️ CNAS Deductions & Contributions**: Social security contributions (9% employee deduction, 26% employer patronal charge).
+- **📉 Official Algerian IRG Scale (DGI 2024 / 2025)**: Progressive tax brackets (23%, 27%, 30%, 35%) with legal 40% abattement (1,000 to 1,500 DZD) and total exemption for taxable salaries $\le 30,000\text{ DZD}$.
+- **📄 Official Printable Pay Slips (Bulletins de Paie A4)**: Complete official slip with company credentials, Wilaya, CNAS affiliate number, employee matricule and NSS, breakdown of rubriques (Base 100, IEP 110, PRI 120, Panier 200, Transport 210, CNAS 400, IRG 500), and legal Arabic Tafqit (*أوقف كشف الراتب عند المبلغ الصافي للدفع: ... دينار جزائري*).
+- **📋 Monthly Payroll Book (Livre de Paie Mensuel)**: Enterprise-wide aggregate table summarizing all staff, total gross payroll, social security contributions, IRG tax, and net disbursements.
+- **👥 Enterprise Personnel Directory**: Add, edit, and manage company employees with local storage persistence and sample Algerian corporate staff preloaded.
+- **⚡ Dual Web & C# .NET 10 Engines**:
   ```bash
-  # Run the native C# payroll engine
+  # Run DZ-Paie web server on http://localhost:3034
+  npm run start:paie
+  
+  # Or run the native C# payroll engine
   npm run native:paie
   ```
 

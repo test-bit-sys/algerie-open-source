@@ -685,7 +685,11 @@
     </button>
     <button class="tab-btn" data-tab="validators">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-      <span data-i18n="tabValidators">المعرفات الجبائية والبنكية</span>
+      <span data-i18n="tabValidators">المعرفات الجبائية والبنكية والـ NIN</span>
+    </button>
+    <button class="tab-btn" data-tab="irg">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+      <span data-i18n="tabIrg">محاكي ضريبة الدخل IRG</span>
     </button>
     <button class="tab-btn" data-tab="phone">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
@@ -778,6 +782,89 @@
           </div>
           <div id="resultCard"></div>
         </div>
+
+        <!-- NIN Validator (الرقم التعريفي الوطني) -->
+        <div class="dev-tool-card">
+          <h3>الرقم التعريفي الوطني (NIN - 18 رقماً)</h3>
+          <p class="card-desc">تحليل وتفكيك الرقم التعريفي الوطني الصادر عن وزارة الداخلية: الجنس، ولاية وبلدية الميلاد، سنة الميلاد، ورقم عقد الميلاد.</p>
+          <div class="form-group">
+            <input type="text" id="inputNin" class="form-control" placeholder="مثال: 1 16 0123 1995 00456 12" maxlength="24">
+          </div>
+          <div id="resultNin"></div>
+        </div>
+
+        <!-- Bank Directory & RIB Builder -->
+        <div class="dev-tool-card">
+          <h3>دليل البنوك الجزائرية ومولّد الـ RIB الوطني</h3>
+          <p class="card-desc">تركيب رقم التعريف البنكي RIB (20 رقماً) مع احتساب مفتاح التدقيق تلقائياً لجميع البنوك الجزائرية المعتمدة.</p>
+          <div class="form-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <select id="selectBankCode" class="form-control" style="flex: 2; min-width: 180px;">
+              <option value="001">001 — البنك الوطني الجزائري (BNA)</option>
+              <option value="002">002 — بنك الجزائر الخارجي (BEA)</option>
+              <option value="003">003 — بنك الفلاحة والتنمية (BADR)</option>
+              <option value="004">004 — بنك التنمية المحلية (BDL)</option>
+              <option value="005">005 — صندوق التوفير والاحتياط (CNEP)</option>
+              <option value="006">006 — القرض الشعبي الجزائري (CPA)</option>
+              <option value="007">007 — بريد الجزائر (Algérie Poste)</option>
+              <option value="021">021 — بنك البركة الجزائري (Al Baraka)</option>
+              <option value="020">020 — سوسيتي جنرال الجزائر (SGA)</option>
+              <option value="012">012 — بي إن بي باريبا الجزائر (BNP)</option>
+              <option value="009">009 — مصرف السلام الجزائر (Al Salam)</option>
+            </select>
+            <input type="text" id="inputBankGuichet" class="form-control" placeholder="رمز الوكالة (5 أرقام)" value="00123" maxlength="5" style="flex: 1; min-width: 100px;">
+            <input type="text" id="inputBankAccount" class="form-control" placeholder="رقم الحساب (10 أرقام)" value="1234567890" maxlength="10" style="flex: 2; min-width: 130px;">
+          </div>
+          <button id="btnGenerateBankRib" class="btn btn-primary btn-sm" style="margin-top: 4px; width: 100%;">توليد الـ RIB ومفتاح التدقيق</button>
+          <div id="resultBankRib" style="margin-top: 10px;"></div>
+        </div>
+
+        <!-- SATIM / CIB / EDAHABIA Test Card Generator -->
+        <div class="dev-tool-card">
+          <h3>مولّد بطاقات الدفع التجريبية (SATIM / Edahabia)</h3>
+          <p class="card-desc">توليد أرقام بطاقات تجريبية مطابقة لخوارزمية Luhn لمطوري بوابات الدفع والمتاجر الإلكترونية في الجزائر.</p>
+          <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+            <button id="btnGenEdahabia" class="btn btn-outline btn-sm" style="flex: 1; border-color: #d97706; color: #d97706;">توليد بطاقة ذهبية (Edahabia)</button>
+            <button id="btnGenCib" class="btn btn-outline btn-sm" style="flex: 1; border-color: #059669; color: #059669;">توليد بطاقة ساتيم (CIB)</button>
+          </div>
+          <div id="resultTestCard"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab: IRG Tax Simulator -->
+    <section id="tab-irg" class="tab-pane">
+      <div class="dev-tool-card" style="max-width: 800px; margin: 0 auto;">
+        <h3>محاكي الضريبة على الدخل الإجمالي (Barème IRG 2024 / 2025)</h3>
+        <p class="card-desc">حساب دقيق لضريبة IRG وفقاً للمادة 104 من قانون الضرائب المباشرة والرسوم المماثلة، مع تطبيق نسبة التخفيض 40% (بين 1,000 و1,500 دج) وتفصيل الشرائح الضريبية.</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px;">
+          <div class="form-group">
+            <label style="font-weight: 700; margin-bottom: 6px; display: block;">الراتب الخاضع للضريبة (Salaire Imposable دج):</label>
+            <input type="number" id="inputIrgImposable" class="form-control" value="65000" step="500">
+          </div>
+          <div class="form-group">
+            <label style="font-weight: 700; margin-bottom: 6px; display: block;">اقتطاع الضمان الاجتماعي CNAS (9%):</label>
+            <input type="text" id="outputIrgCnas" class="form-control" value="-" readonly style="background: #f1f5f9; color: #64748b;">
+          </div>
+        </div>
+
+        <div id="resultIrgSummary" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <h4 style="margin-bottom: 10px; color: var(--text);">تفصيل الشرائح الضريبية (Tranches du Barème):</h4>
+        <table class="data-table" id="tableIrgTranches">
+          <thead>
+            <tr>
+              <th>الشريحة الخاضعة للضريبة</th>
+              <th>المعدل</th>
+              <th>المبلغ الخاضع (دج)</th>
+              <th>الضريبة المستحقة (دج)</th>
+            </tr>
+          </thead>
+          <tbody id="bodyIrgTranches">
+          </tbody>
+        </table>
       </div>
     </section>
 

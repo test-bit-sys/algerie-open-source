@@ -22,6 +22,7 @@
       --success: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
+      --blue: #38bdf8;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -57,9 +58,10 @@
     }
 
     .brand-wrap img {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(5, 150, 105, 0.35);
     }
 
     .brand-text h1 {
@@ -72,21 +74,34 @@
       font-size: 0.72rem;
       color: var(--accent);
       font-weight: 600;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .company-badge {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn {
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 7px 14px;
+      padding: 6px 12px;
       border-radius: 6px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
@@ -98,540 +113,992 @@
     }
 
     .btn:hover {
-      background: #1e314f;
-      border-color: #3b5278;
+      background: var(--border);
     }
 
     .btn-primary {
       background: var(--accent);
       border-color: var(--accent);
-      color: #fff;
+      color: #ffffff;
     }
 
     .btn-primary:hover {
       background: var(--accent-hover);
     }
 
-    /* Main Container */
-    main.compta-container {
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 24px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      flex: 1;
+    .btn-outline-blue {
+      border-color: var(--blue);
+      color: var(--blue);
     }
 
-    /* Equilibrium Banner */
-    .balance-banner {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .balance-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .balance-stat .lbl {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .balance-stat .val {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.4rem;
-      font-weight: 800;
-    }
-
-    .equilibrium-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 0.85rem;
-    }
-
-    .equilibrium-badge.balanced {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: var(--success);
-    }
-
-    .equilibrium-badge.unbalanced {
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      color: var(--danger);
-    }
-
-    /* Grid Layout */
-    .compta-grid {
+    /* KPI Bar */
+    .kpi-grid {
       display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 24px;
-    }
-
-    @media (max-width: 1024px) {
-      .compta-grid { grid-template-columns: 1fr; }
-    }
-
-    .card {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      padding: 16px 24px;
       background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
     }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .form-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #cbd5e1;
-    }
-
-    select, input {
+    .kpi-card {
       background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 12px;
-      color: #fff;
-      font-size: 0.88rem;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    select:focus, input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px var(--accent-glow);
-    }
-
-    /* Table styling */
-    .table-wrap {
-      overflow-x: auto;
       border: 1px solid var(--border);
       border-radius: 8px;
+      padding: 12px 16px;
     }
 
-    table.compta-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-      text-align: right;
+    .kpi-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
     }
 
-    table.compta-table th, table.compta-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    table.compta-table th {
-      background: var(--bg-card);
-      color: #94a3b8;
-      font-weight: 700;
-    }
-
-    table.compta-table tr:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .monetary {
+    .kpi-value {
+      font-size: 1.15rem;
+      font-weight: 800;
       font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      text-align: left;
     }
 
-    /* Tabs */
-    .tabs-header {
+    /* Main Tabs Navigation */
+    .tabs-nav {
       display: flex;
-      gap: 8px;
+      background: var(--bg-surface);
       border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
+      padding: 0 24px;
+      gap: 4px;
+      overflow-x: auto;
     }
 
     .tab-btn {
       background: transparent;
       border: none;
+      border-bottom: 3px solid transparent;
+      padding: 12px 18px;
       color: var(--text-muted);
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 6px;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
     }
 
     .tab-btn.active {
-      background: var(--accent);
-      color: #fff;
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      background: rgba(5, 150, 105, 0.08);
     }
 
-    /* Native Box */
-    .native-box {
-      background: #040810;
-      border: 1px dashed var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      color: #34d399;
+    .tab-pane {
+      display: none;
+      padding: 24px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Entry Form */
+    .form-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+
+    .form-panel h3 {
+      font-size: 0.95rem;
+      color: var(--blue);
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
+      gap: 8px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      background: #091322;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    /* Template Pills */
+    .template-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .template-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .template-pill:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* Tables */
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      overflow-x: auto;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: right;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.data-table th {
+      background: #0a1424;
+      color: var(--text-muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    table.data-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .num-col {
+      font-family: 'JetBrains Mono', monospace;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    /* Bilan & TCR Layouts */
+    .bilan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+
+    .bilan-col {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .bilan-col h3 {
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+      display: flex;
       justify-content: space-between;
-      gap: 10px;
+    }
+
+    .bilan-section-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--blue);
+      margin: 14px 0 6px 0;
+      text-transform: uppercase;
+    }
+
+    .bilan-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+      font-size: 0.84rem;
+    }
+
+    .bilan-total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      margin-top: 10px;
+      border-top: 2px solid var(--border);
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    @media print {
+      header.app-header, .tabs-nav, .form-panel, .header-actions { display: none !important; }
+      body { background: #ffffff !important; color: #000000 !important; }
+      .tab-pane { display: block !important; padding: 0 !important; }
+      .table-container, .bilan-col { border: 1px solid #000 !important; background: #fff !important; }
+      table.data-table th, table.data-table td { color: #000 !important; border-color: #ddd !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Header -->
+  <!-- Top Application Header -->
   <header class="app-header">
-    <a href="../../../index.html" class="brand-wrap">
-      <img src="assets/logo.svg" alt="DZ-Compta">
+    <div class="brand-wrap">
+      <img src="assets/logo.svg" alt="DZ-Compta Logo">
       <div class="brand-text">
         <h1>DZ-Compta SCF Pro</h1>
-        <p>النظام المحاسبي المالي الجزائري (SCF) · دفتر اليومية وميزان المراجعة</p>
+        <p>النظام المحاسبي المالي الجزائري (SCF 2007) — 100% Offline</p>
       </div>
-    </a>
+    </div>
+
+    <div class="company-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+      <span>SARL ATLAS TECH ALGER — NIF: 001616012345678</span>
+    </div>
+
     <div class="header-actions">
-      <button class="btn" onclick="exportCSV()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <button class="btn btn-primary" id="btnExportCsv">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span>تصدير CSV</span>
       </button>
-      <button class="btn" onclick="window.print()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-        <span>طباعة الميزان</span>
+      <button class="btn btn-outline-blue" id="btnLoadDemo">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        <span>شحن عينة قياسية</span>
       </button>
-      <a href="../../../index.html" class="btn btn-primary">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        <span>العودة للبوابة</span>
-      </a>
+      <button class="btn" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>طباعة</span>
+      </button>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="compta-container">
+  <!-- KPI Banner -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-title">مجموع حركات المدين (Total Débit)</div>
+      <div class="kpi-value" style="color: var(--blue);" id="kpiTotalDebit">0.00 DZD</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">مجموع حركات الدائن (Total Crédit)</div>
+      <div class="kpi-value" style="color: #34d399;" id="kpiTotalCredit">0.00 DZD</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">توازن القيد المزدوج (Équilibre)</div>
+      <div class="kpi-value" id="kpiDiff" style="color: var(--success);">0.00 DZD (متوازن)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">نتيجة السنة المالية الصافية (TCR)</div>
+      <div class="kpi-value" style="color: #fbbf24;" id="kpiResultNet">0.00 DZD</div>
+    </div>
+  </div>
 
-    <!-- Equilibrium Banner -->
-    <section class="balance-banner">
-      <div class="balance-stat">
-        <span class="lbl">مجموع المدين (Total Débit)</span>
-        <span class="val" style="color:#38bdf8;" id="totalDebit">0.00 DZD</span>
+  <!-- Navigation Tabs -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="journal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>1. اليومية العامة (Journal Général)</span>
+    </button>
+    <button class="tab-btn" data-tab="ledger">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      <span>2. دفتر الأستاذ (Grand Livre)</span>
+    </button>
+    <button class="tab-btn" data-tab="balance">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>3. ميزان المراجعة (Balance 6 Colonnes)</span>
+    </button>
+    <button class="tab-btn" data-tab="bilan">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>4. الميزانية المحاسبية (Bilan SCF)</span>
+    </button>
+    <button class="tab-btn" data-tab="tcr">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>5. حساب النتائج (TCR)</span>
+    </button>
+    <button class="tab-btn" data-tab="accounts">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>6. مدونة الحسابات SCF</span>
+    </button>
+  </nav>
+
+  <main style="flex: 1;">
+    <!-- Tab 1: Journal Général -->
+    <section id="tab-journal" class="tab-pane active">
+      <div class="form-panel">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          تسجيل قيد محاسبي جديد وفق مبدأ القيد المزدوج
+        </h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>التاريخ (Date):</label>
+            <input type="date" id="entryDate" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>رقم وثيقة الإثبات (Pièce N°):</label>
+            <input type="text" id="entryPiece" class="form-control" placeholder="FAC-2026-001">
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>حساب المدين (Débit):</label>
+            <select id="entryDebit" class="form-control"></select>
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>حساب الدائن (Crédit):</label>
+            <select id="entryCredit" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label>المبلغ (DZD):</label>
+            <input type="number" id="entryAmount" class="form-control" placeholder="0.00" step="100">
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>البيان والشرح (Libellé):</label>
+            <input type="text" id="entryLabel" class="form-control" placeholder="شراء معدات، فاتورة مبيعات، تسديد أجور...">
+          </div>
+          <div class="form-group" style="display: flex; align-items: flex-end;">
+            <button class="btn btn-primary" id="btnAddEntry" style="width: 100%; height: 38px;">إضافة القيد</button>
+          </div>
+        </div>
+
+        <div class="template-bar">
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">نماذج سريعة:</span>
+          <button class="template-pill" data-t="vente">فاتورة بيع بضائع (411 / 700)</button>
+          <button class="template-pill" data-t="achat">فاتورة شراء بضائع (600 / 401)</button>
+          <button class="template-pill" data-t="fournisseur">تسديد مورد بنك (401 / 512)</button>
+          <button class="template-pill" data-t="client">تحصيل زبون بنك (512 / 411)</button>
+          <button class="template-pill" data-t="paie">تسجيل أجور الموظفين (631 / 421)</button>
+          <button class="template-pill" data-t="virement-ccp">تحويل أجور CCP (421 / 512)</button>
+          <button class="template-pill" data-t="caisse">تغذية الصندوق نقداً (530 / 512)</button>
+        </div>
       </div>
-      <div class="balance-stat">
-        <span class="lbl">مجموع الدائن (Total Crédit)</span>
-        <span class="val" style="color:#34d399;" id="totalCredit">0.00 DZD</span>
-      </div>
-      <div class="balance-stat">
-        <span class="lbl">فارق التوازن (Écart)</span>
-        <span class="val" id="totalDiff">0.00 DZD</span>
-      </div>
-      <div id="equilibriumBadge" class="equilibrium-badge balanced">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        <span>اليومية متوازنة محاسبياً (Équilibré 100%)</span>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>التاريخ</th>
+              <th>الوثيقة</th>
+              <th>حساب المدين (Débit)</th>
+              <th>حساب الدائن (Crédit)</th>
+              <th>البيان (Libellé)</th>
+              <th class="num-col">المبلغ (دج)</th>
+              <th style="width: 50px;">حذف</th>
+            </tr>
+          </thead>
+          <tbody id="journalTbody"></tbody>
+        </table>
       </div>
     </section>
 
-    <!-- Content Grid -->
-    <div class="compta-grid">
-      
-      <!-- Entry Form -->
-      <section class="card">
-        <div class="card-title">
-          <span>تسجيل قيد محاسبي جديد</span>
-          <span style="font-size:0.75rem; color:var(--accent);">نظام القيد المزدوج</span>
-        </div>
+    <!-- Tab 2: Grand Livre -->
+    <section id="tab-ledger" class="tab-pane">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="color: var(--blue);">دفتر الأستاذ العام (Le Grand Livre des Comptes)</h3>
+        <input type="text" id="ledgerSearchInput" class="form-control" placeholder="تصفية برقم الحساب أو الاسم..." style="max-width: 300px;">
+      </div>
+      <div id="ledgerContainer"></div>
+    </section>
 
-        <div class="form-group">
-          <label class="form-label" for="entryDate">تاريخ العملية</label>
-          <input type="date" id="entryDate" value="2026-10-18">
-        </div>
+    <!-- Tab 3: Balance Générale -->
+    <section id="tab-balance" class="tab-pane">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="color: var(--blue);">ميزان المراجعة الرسمي بالأرصدة والحركات (Balance 6 Colonnes)</h3>
+        <span id="balanceCheckBadge" style="padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; background: rgba(16, 185, 129, 0.15); color: #10b981;">متوازن 100%</span>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th rowspan="2">رقم الحساب</th>
+              <th rowspan="2">اسم الحساب (Intitulé)</th>
+              <th colspan="2" style="text-align: center; background: #132238;">مجموع الحركات (Mouvements)</th>
+              <th colspan="2" style="text-align: center; background: #0f2744;">الأرصدة الصافية (Soldes)</th>
+            </tr>
+            <tr>
+              <th class="num-col" style="background: #132238;">مدين (Débit)</th>
+              <th class="num-col" style="background: #132238;">دائن (Crédit)</th>
+              <th class="num-col" style="background: #0f2744;">رصيد مدين</th>
+              <th class="num-col" style="background: #0f2744;">رصيد دائن</th>
+            </tr>
+          </thead>
+          <tbody id="balanceTbody"></tbody>
+          <tfoot id="balanceTfoot" style="font-weight: 800; background: #091322;"></tfoot>
+        </table>
+      </div>
+    </section>
 
-        <div class="form-group">
-          <label class="form-label" for="entryPiece">رقم الوثيقة التبريرية (Pièce Justificative)</label>
-          <input type="text" id="entryPiece" placeholder="FA-2026-001 أو CHQ-5542">
-        </div>
+    <!-- Tab 4: Bilan Comptable SCF -->
+    <section id="tab-bilan" class="tab-pane">
+      <h3 style="color: var(--blue); margin-bottom: 16px;">الميزانية المالية المحاسبية (Bilan Comptable Actif / Passif)</h3>
+      <div class="bilan-grid">
+        <!-- ACTIF -->
+        <div class="bilan-col">
+          <h3 style="color: #38bdf8;">الأصول (ACTIF)</h3>
+          
+          <div class="bilan-section-title">أصول غير جارية (Actif Non Courant)</div>
+          <div class="bilan-row">
+            <span>تثبيتات غير مادية (Immo incorporelles Cl. 20)</span>
+            <strong class="num-col" id="bilanImmoIncorp">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row">
+            <span>تثبيتات مادية (Immo corporelles Cl. 21)</span>
+            <strong class="num-col" id="bilanImmoCorp">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row">
+            <span>مجموع الاهتلاكات (Amortissements Cl. 28)</span>
+            <strong class="num-col" style="color: #ef4444;" id="bilanAmort">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row" style="font-weight: 700; color: #38bdf8;">
+            <span>صافي الأصول غير الجارية</span>
+            <strong class="num-col" id="bilanTotalNonCourant">0.00 DZD</strong>
+          </div>
 
-        <div class="form-group">
-          <label class="form-label" for="debitAccount">حساب المدين (Compte Débit)</label>
-          <select id="debitAccount">
-            <option value="512">512 - بنك الجزائر الخارجي / القرض الشعبي (Banques)</option>
-            <option value="530">530 - الصندوق النقدي (Caisse)</option>
-            <option value="411">411 - الزبائن (Clients)</option>
-            <option value="380">380 - بضائع مخزنة (Marchandises)</option>
-            <option value="607">607 - مشتريات بضائع مبيعة (Achats de marchandises)</option>
-            <option value="631">631 - رواتب المستخدمين (Rémunérations du personnel)</option>
-            <option value="4456">4456 - الرسم على القيمة المضافة المسترجع (TVA Déductible)</option>
-          </select>
-        </div>
+          <div class="bilan-section-title" style="margin-top: 20px;">أصول جارية (Actif Courant)</div>
+          <div class="bilan-row">
+            <span>مخزونات البضائع والمنتجات (Stocks Cl. 3)</span>
+            <strong class="num-col" id="bilanStocks">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row">
+            <span>الزبائن والحسابات الملحقة (Créances Clients Cl. 41)</span>
+            <strong class="num-col" id="bilanCreances">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row">
+            <span>الخزينة والأموال المتاحة (Banque & Caisse Cl. 5)</span>
+            <strong class="num-col" id="bilanTresorerie">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row" style="font-weight: 700; color: #38bdf8;">
+            <span>مجموع الأصول الجارية</span>
+            <strong class="num-col" id="bilanTotalCourant">0.00 DZD</strong>
+          </div>
 
-        <div class="form-group">
-          <label class="form-label" for="creditAccount">حساب الدائن (Compte Crédit)</label>
-          <select id="creditAccount">
-            <option value="700">700 - مبيعات البضائع (Ventes de marchandises)</option>
-            <option value="401">401 - الموردون (Fournisseurs)</option>
-            <option value="512">512 - الحساب البنكي (Banques)</option>
-            <option value="530">530 - الصندوق النقدي (Caisse)</option>
-            <option value="4457">4457 - الرسم على القيمة المضافة المحصل (TVA Collectée)</option>
-            <option value="431">431 - الضمان الاجتماعي CNAS (Sécurité sociale)</option>
-            <option value="442">442 - الضرائب المقتطعة من المصدر IRG (État - Impôts)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="entryLabel">البيان والشرح (Libellé)</label>
-          <input type="text" id="entryLabel" placeholder="فاتورة شراء بضائع من شركة الوفاق">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="entryAmount">المبلغ بالدينار الجزائري (Montant DZD)</label>
-          <input type="number" id="entryAmount" value="50000" min="1" step="100">
-        </div>
-
-        <button class="btn btn-primary" onclick="addEntry()" style="justify-content:center; padding:10px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          <span>إدراج القيد في اليومية العامة</span>
-        </button>
-
-        <div class="native-box">
-          <div>
-            <div style="font-size:0.7rem; color:#8892b0;">محرك C# .NET 10 بدقة محاسبية متناهية:</div>
-            <code>dotnet run --project apps/finance-accounting/dz-compta</code>
+          <div class="bilan-total-row" style="color: #38bdf8;">
+            <span>مجموع الأصول العام (TOTAL ACTIF)</span>
+            <span class="num-col" id="bilanTotalActif">0.00 DZD</span>
           </div>
         </div>
-      </section>
 
-      <!-- Ledger / Balance Views -->
-      <section class="card">
-        <div class="tabs-header">
-          <button class="tab-btn active" onclick="switchView('journal')">دفتر اليومية العامة (Journal Général)</button>
-          <button class="tab-btn" onclick="switchView('balance')">ميزان المراجعة (Balance 6 Colonnes)</button>
+        <!-- PASSIF -->
+        <div class="bilan-col">
+          <h3 style="color: #34d399;">الخصوم (PASSIF)</h3>
+
+          <div class="bilan-section-title">أموال خاصة (Capitaux Propres)</div>
+          <div class="bilan-row">
+            <span>رأس المال الاجتماعي (Capital social Cl. 101)</span>
+            <strong class="num-col" id="bilanCapital">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row">
+            <span>الاحتياطات والترحيل (Réserves Cl. 106/110)</span>
+            <strong class="num-col" id="bilanReserves">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row">
+            <span>نتيجة السنة المالية (Résultat de l'exercice)</span>
+            <strong class="num-col" style="color: #fbbf24;" id="bilanResultat">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row" style="font-weight: 700; color: #34d399;">
+            <span>مجموع الأموال الخاصة</span>
+            <strong class="num-col" id="bilanTotalCapitaux">0.00 DZD</strong>
+          </div>
+
+          <div class="bilan-section-title" style="margin-top: 20px;">خصوم غير جارية (Passif Non Courant)</div>
+          <div class="bilan-row">
+            <span>قروض واقتراضات بنكية (Emprunts Cl. 16)</span>
+            <strong class="num-col" id="bilanEmprunts">0.00 DZD</strong>
+          </div>
+
+          <div class="bilan-section-title" style="margin-top: 20px;">خصوم جارية (Passif Courant)</div>
+          <div class="bilan-row">
+            <span>موردو المخزونات والخدمات (Fournisseurs Cl. 40)</span>
+            <strong class="num-col" id="bilanFournisseurs">0.00 DZD</strong>
+          </div>
+          <div class="bilan-row">
+            <span>ديون جبائية واجتماعية (Personnel, CNAS, Impôts Cl. 42/43/44)</span>
+            <strong class="num-col" id="bilanFiscalSocial">0.00 DZD</strong>
+          </div>
+
+          <div class="bilan-total-row" style="color: #34d399;">
+            <span>مجموع الخصوم العام (TOTAL PASSIF)</span>
+            <span class="num-col" id="bilanTotalPassif">0.00 DZD</span>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Journal View -->
-        <div id="journalView" class="table-wrap">
-          <table class="compta-table">
+    <!-- Tab 5: TCR -->
+    <section id="tab-tcr" class="tab-pane">
+      <h3 style="color: var(--blue); margin-bottom: 16px;">جدول حسابات النتائج (Tableau des Comptes de Résultats - TCR)</h3>
+      <div class="table-container" style="max-width: 900px; margin: 0 auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>العنصر المحاسبي (Rubrique)</th>
+              <th style="width: 140px;">رقم الحساب</th>
+              <th class="num-col">المبلغ (DZD)</th>
+            </tr>
+          </thead>
+          <tbody id="tcrTbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Tab 6: Accounts -->
+    <section id="tab-accounts" class="tab-pane">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="color: var(--blue);">مدونة الحسابات الوطنية الرسمية (Plan de Comptes SCF 2007)</h3>
+        <input type="text" id="accSearchInput" class="form-control" placeholder="بحث بالرقم، الاسم بالعربية أو الفرنسية..." style="max-width: 350px;">
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 100px;">رقم الحساب</th>
+              <th style="width: 80px;">الصنف</th>
+              <th>الاسم باللغة العربية</th>
+              <th>Intitulé en Français</th>
+            </tr>
+          </thead>
+          <tbody id="accPlanTbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { SCF_ACCOUNTS, searchAccounts, getAccountName } from './src/scf-plan.js';
+    import {
+      validateDoubleEntry,
+      computeGrandLivre,
+      computeBalance,
+      generateBilan,
+      generateTCR,
+      DEMO_JOURNAL,
+      round2
+    } from './src/compta-engine.js';
+
+    // State
+    const STORAGE_KEY = 'dz_compta_journal_v2';
+    let journal = [];
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          journal = JSON.parse(saved);
+        } catch (e) {
+          journal = [...DEMO_JOURNAL];
+        }
+      } else {
+        journal = [...DEMO_JOURNAL];
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(journal));
+      renderAll();
+    }
+
+    function initSelects() {
+      const debitSel = document.getElementById('entryDebit');
+      const creditSel = document.getElementById('entryCredit');
+
+      SCF_ACCOUNTS.forEach(a => {
+        const optD = new Option(`${a.code} — ${a.nameAr} (${a.nameFr})`, a.code);
+        const optC = new Option(`${a.code} — ${a.nameAr} (${a.nameFr})`, a.code);
+        debitSel.add(optD);
+        creditSel.add(optC);
+      });
+
+      debitSel.value = '512';
+      creditSel.value = '700';
+      document.getElementById('entryDate').value = new Date().toISOString().slice(0, 10);
+    }
+
+    function renderAll() {
+      renderKPIs();
+      renderJournal();
+      renderGrandLivre();
+      renderBalance();
+      renderBilan();
+      renderTCR();
+      renderAccountsPlan();
+    }
+
+    function renderKPIs() {
+      const bal = computeBalance(journal, 'ar');
+      const tcr = generateTCR(journal, 'ar');
+
+      document.getElementById('kpiTotalDebit').textContent = bal.totals.totalDebit.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+      document.getElementById('kpiTotalCredit').textContent = bal.totals.totalCredit.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+
+      const diffEl = document.getElementById('kpiDiff');
+      if (bal.totals.isBalanced) {
+        diffEl.textContent = '0.00 DZD (متوازن 100%)';
+        diffEl.style.color = '#10b981';
+      } else {
+        diffEl.textContent = bal.totals.diff.toLocaleString('en-US') + ' DZD (غير متوازن)';
+        diffEl.style.color = '#ef4444';
+      }
+
+      const resNetEl = document.getElementById('kpiResultNet');
+      resNetEl.textContent = tcr.resultatNet.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+      resNetEl.style.color = tcr.resultatNet >= 0 ? '#34d399' : '#ef4444';
+    }
+
+    function renderJournal() {
+      const tbody = document.getElementById('journalTbody');
+      tbody.innerHTML = '';
+
+      journal.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--text-muted);">${idx + 1}</td>
+          <td><code>${item.date}</code></td>
+          <td><span style="background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-family: monospace;">${item.piece}</span></td>
+          <td><strong style="color: var(--blue); font-family: monospace;">${item.debitAccount}</strong> <span style="font-size: 0.8rem; color: var(--text-muted);">(${getAccountName(item.debitAccount, 'ar')})</span></td>
+          <td><strong style="color: #34d399; font-family: monospace;">${item.creditAccount}</strong> <span style="font-size: 0.8rem; color: var(--text-muted);">(${getAccountName(item.creditAccount, 'ar')})</span></td>
+          <td>${item.label}</td>
+          <td class="num-col" style="font-weight: 700; color: #f8fafc;">${item.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td>
+            <button class="btn btn-sm" style="color: #ef4444; padding: 2px 6px;" data-del="${idx}">✕</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll('[data-del]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.getAttribute('data-del'), 10);
+          journal.splice(idx, 1);
+          saveState();
+        });
+      });
+    }
+
+    function renderGrandLivre() {
+      const container = document.getElementById('ledgerContainer');
+      const q = document.getElementById('ledgerSearchInput')?.value.toLowerCase().trim() || '';
+      const ledger = computeGrandLivre(journal, 'ar');
+      container.innerHTML = '';
+
+      const codes = Object.keys(ledger).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+      codes.forEach(code => {
+        const acc = ledger[code];
+        if (q && !code.includes(q) && !acc.name.toLowerCase().includes(q)) {
+          return;
+        }
+
+        const box = document.createElement('div');
+        box.style.cssText = 'background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden;';
+
+        let linesHtml = '';
+        acc.lines.forEach(l => {
+          linesHtml += `
+            <tr>
+              <td><code>${l.date}</code></td>
+              <td>${l.piece}</td>
+              <td>${l.label}</td>
+              <td style="font-family: monospace;">حـ/ ${l.counterAccount}</td>
+              <td class="num-col" style="color: var(--blue);">${l.debit > 0 ? l.debit.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
+              <td class="num-col" style="color: #34d399;">${l.credit > 0 ? l.credit.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
+            </tr>
+          `;
+        });
+
+        box.innerHTML = `
+          <div style="background: #091322; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);">
+            <div>
+              <strong style="color: var(--blue); font-size: 1rem; font-family: monospace;">حـ/ ${code}</strong>
+              <span style="font-weight: 700; margin-right: 8px;">${acc.name}</span>
+            </div>
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">الرصيد الصافي:</span>
+              <strong class="num-col" style="color: ${acc.balance >= 0 ? 'var(--blue)' : '#34d399'}; font-size: 0.95rem;">
+                ${Math.abs(acc.balance).toLocaleString('en-US', {minimumFractionDigits: 2})} DZD (${acc.balance >= 0 ? 'مدين' : 'دائن'})
+              </strong>
+            </div>
+          </div>
+          <table class="data-table" style="font-size: 0.8rem;">
             <thead>
               <tr>
                 <th>التاريخ</th>
                 <th>الوثيقة</th>
-                <th>رقم الحساب</th>
-                <th>البيان (Libellé)</th>
-                <th style="text-align:left;">مدين (Débit)</th>
-                <th style="text-align:left;">دائن (Crédit)</th>
+                <th>البيان</th>
+                <th>الحساب المقابل</th>
+                <th class="num-col">مدين (Débit)</th>
+                <th class="num-col">دائن (Crédit)</th>
               </tr>
             </thead>
-            <tbody id="journalBody">
-              <!-- Entries rendered here -->
-            </tbody>
+            <tbody>${linesHtml}</tbody>
           </table>
-        </div>
-
-        <!-- Balance View (Hidden by default) -->
-        <div id="balanceView" class="table-wrap" style="display:none;">
-          <table class="compta-table">
-            <thead>
-              <tr>
-                <th rowspan="2">رقم الحساب</th>
-                <th rowspan="2">اسم الحساب</th>
-                <th colspan="2" style="text-align:center;">حركات الفترة (Mouvements)</th>
-                <th colspan="2" style="text-align:center;">الأرصدة الختامية (Soldes de Clôture)</th>
-              </tr>
-              <tr>
-                <th style="text-align:left;">مدين</th>
-                <th style="text-align:left;">دائن</th>
-                <th style="text-align:left;">رصيد مدين</th>
-                <th style="text-align:left;">رصيد دائن</th>
-              </tr>
-            </thead>
-            <tbody id="balanceBody">
-              <!-- Balance accounts rendered here -->
-            </tbody>
-          </table>
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
-
-  <script>
-    // SCF Account Names
-    const ACCOUNT_NAMES = {
-      "512": "حسابات البنوك والمؤسسات المالية",
-      "530": "الصندوق",
-      "411": "الزبائن",
-      "401": "موردو المخزونات والخدمات",
-      "380": "بضائع مخزنة",
-      "607": "مشتريات البضائع المبيعة",
-      "631": "أجور ورواتب المستخدمين",
-      "700": "المبيعات من البضائع والمنتجات",
-      "4456": "الدولة - الرسم على القيمة المضافة القابل للاسترجاع",
-      "4457": "الدولة - الرسم على القيمة المضافة المحصل",
-      "431": "الضمان الاجتماعي (CNAS)",
-      "442": "الدولة - الضرائب والرسوم المقتطعة من المصدر (IRG)"
-    };
-
-    // Initial Algerian SCF Accounting Entries
-    const journalEntries = [
-      { date: "2026-10-01", piece: "OD-001", debit: "512", credit: "101", label: "إيداع رأس المال الأولي في بنك الجزائر الخارجي", amount: 2500000 },
-      { date: "2026-10-04", piece: "FA-4011", debit: "380", credit: "401", label: "شراء مخزون أجهزة وإلكترونيات من المورد", amount: 450000 },
-      { date: "2026-10-08", piece: "VR-089", debit: "401", credit: "512", label: "تسوية فاتورة المورد عبر تحويل بنكي", amount: 450000 },
-      { date: "2026-10-12", piece: "FAC-102", debit: "411", credit: "700", label: "فاتورة بيع معدات ومكاتب للمؤسسة الوطنية", amount: 780000 },
-      { date: "2026-10-15", piece: "CHQ-77", debit: "512", credit: "411", label: "تحصيل شيك بنكي من الزبون", amount: 780000 },
-      { date: "2026-10-18", piece: "PAIE-10", debit: "631", credit: "512", label: "تسديد صافي رواتب العمال لشهر أكتوبر", amount: 320000 }
-    ];
-
-    function renderJournal() {
-      const tbody = document.getElementById('journalBody');
-      tbody.innerHTML = '';
-      let totalD = 0;
-      let totalC = 0;
-
-      journalEntries.forEach(entry => {
-        totalD += entry.amount;
-        totalC += entry.amount;
-
-        // Debit row
-        const trD = document.createElement('tr');
-        trD.innerHTML = `
-          <td>${entry.date}</td>
-          <td><span style="font-family:monospace; background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px;">${entry.piece}</span></td>
-          <td><strong style="color:#38bdf8; font-family:monospace;">${entry.debit}</strong> (${ACCOUNT_NAMES[entry.debit] || 'حساب فرعي'})</td>
-          <td>${entry.label}</td>
-          <td class="monetary" style="color:#38bdf8;">${entry.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-          <td class="monetary" style="color:#64748b;">-</td>
         `;
-        tbody.appendChild(trD);
-
-        // Credit row
-        const trC = document.createElement('tr');
-        trC.style.borderBottom = "2px solid #233554";
-        trC.innerHTML = `
-          <td>${entry.date}</td>
-          <td><span style="font-family:monospace; color:#64748b;">${entry.piece}</span></td>
-          <td style="padding-right:24px;"><strong style="color:#34d399; font-family:monospace;">${entry.credit}</strong> (${ACCOUNT_NAMES[entry.credit] || 'حساب فرعي'})</td>
-          <td style="color:#8892b0;">${entry.label}</td>
-          <td class="monetary" style="color:#64748b;">-</td>
-          <td class="monetary" style="color:#34d399;">${entry.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-        `;
-        tbody.appendChild(trC);
+        container.appendChild(box);
       });
-
-      // Update Banner
-      document.getElementById('totalDebit').textContent = totalD.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
-      document.getElementById('totalCredit').textContent = totalC.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
-      const diff = totalD - totalC;
-      document.getElementById('totalDiff').textContent = diff.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
-
-      renderBalance();
     }
 
     function renderBalance() {
-      const accounts = {};
-      journalEntries.forEach(entry => {
-        if (!accounts[entry.debit]) accounts[entry.debit] = { debit: 0, credit: 0 };
-        if (!accounts[entry.credit]) accounts[entry.credit] = { debit: 0, credit: 0 };
-        accounts[entry.debit].debit += entry.amount;
-        accounts[entry.credit].credit += entry.amount;
-      });
-
-      const tbody = document.getElementById('balanceBody');
+      const tbody = document.getElementById('balanceTbody');
+      const tfoot = document.getElementById('balanceTfoot');
+      const bal = computeBalance(journal, 'ar');
       tbody.innerHTML = '';
 
-      Object.keys(accounts).sort().forEach(acc => {
-        const d = accounts[acc].debit;
-        const c = accounts[acc].credit;
-        const soldeD = (d > c) ? (d - c) : 0;
-        const soldeC = (c > d) ? (c - d) : 0;
-
+      bal.rows.forEach(r => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong style="font-family:monospace; color:#38bdf8;">${acc}</strong></td>
-          <td>${ACCOUNT_NAMES[acc] || 'حساب عام'}</td>
-          <td class="monetary">${d ? d.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
-          <td class="monetary">${c ? c.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
-          <td class="monetary" style="color:#38bdf8;">${soldeD ? soldeD.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
-          <td class="monetary" style="color:#34d399;">${soldeC ? soldeC.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
+          <td><strong style="color: var(--blue); font-family: monospace;">${r.code}</strong></td>
+          <td>${r.name}</td>
+          <td class="num-col">${r.totalDebit > 0 ? r.totalDebit.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
+          <td class="num-col">${r.totalCredit > 0 ? r.totalCredit.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
+          <td class="num-col" style="color: var(--blue); font-weight: 700;">${r.soldeDebiteur > 0 ? r.soldeDebiteur.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
+          <td class="num-col" style="color: #34d399; font-weight: 700;">${r.soldeCrediteur > 0 ? r.soldeCrediteur.toLocaleString('en-US', {minimumFractionDigits: 2}) : '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tfoot.innerHTML = `
+        <tr>
+          <td colspan="2">المجموع العام لميزان المراجعة (TOTAUX)</td>
+          <td class="num-col">${bal.totals.totalDebit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td class="num-col">${bal.totals.totalCredit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td class="num-col" style="color: var(--blue);">${bal.totals.totalSoldeDebiteur.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+          <td class="num-col" style="color: #34d399;">${bal.totals.totalSoldeCrediteur.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+        </tr>
+      `;
+
+      const badge = document.getElementById('balanceCheckBadge');
+      if (bal.totals.isBalanced) {
+        badge.textContent = 'متوازن 100% (Débit === Crédit)';
+        badge.style.background = 'rgba(16, 185, 129, 0.15)';
+        badge.style.color = '#10b981';
+      } else {
+        badge.textContent = 'فارق توازن: ' + bal.totals.diff + ' DZD';
+        badge.style.background = 'rgba(239, 68, 68, 0.15)';
+        badge.style.color = '#ef4444';
+      }
+    }
+
+    function renderBilan() {
+      const bilan = generateBilan(journal, 'ar');
+      const fmt = (n) => Number(n || 0).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+
+      document.getElementById('bilanImmoIncorp').textContent = fmt(bilan.actif.nonCourant.immoIncorporelles);
+      document.getElementById('bilanImmoCorp').textContent = fmt(bilan.actif.nonCourant.immoCorporelles);
+      document.getElementById('bilanAmort').textContent = '-' + fmt(bilan.actif.nonCourant.amortissements);
+      document.getElementById('bilanTotalNonCourant').textContent = fmt(bilan.actif.nonCourant.total);
+
+      document.getElementById('bilanStocks').textContent = fmt(bilan.actif.courant.stocks);
+      document.getElementById('bilanCreances').textContent = fmt(bilan.actif.courant.creancesClients);
+      document.getElementById('bilanTresorerie').textContent = fmt(bilan.actif.courant.disponibilites);
+      document.getElementById('bilanTotalCourant').textContent = fmt(bilan.actif.courant.total);
+      document.getElementById('bilanTotalActif').textContent = fmt(bilan.actif.totalActif);
+
+      document.getElementById('bilanCapital').textContent = fmt(bilan.passif.capitauxPropres.capitalSocial);
+      document.getElementById('bilanReserves').textContent = fmt(bilan.passif.capitauxPropres.reserves);
+      document.getElementById('bilanResultat').textContent = fmt(bilan.passif.capitauxPropres.resultatNetExercice);
+      document.getElementById('bilanTotalCapitaux').textContent = fmt(bilan.passif.capitauxPropres.total);
+
+      document.getElementById('bilanEmprunts').textContent = fmt(bilan.passif.nonCourant.emprunts);
+      document.getElementById('bilanFournisseurs').textContent = fmt(bilan.passif.courant.dettesFournisseurs);
+      document.getElementById('bilanFiscalSocial').textContent = fmt(bilan.passif.courant.dettesFiscalesSociales);
+      document.getElementById('bilanTotalPassif').textContent = fmt(bilan.passif.totalPassif);
+    }
+
+    function renderTCR() {
+      const tcr = generateTCR(journal, 'ar');
+      const tbody = document.getElementById('tcrTbody');
+      const fmt = (n) => Number(n || 0).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' DZD';
+
+      const items = [
+        { label: 'رقم الأعمال الإجمالي (Chiffre d\'Affaires)', acc: '70', val: tcr.chiffreAffaires, color: '#38bdf8', bold: true },
+        { label: 'المشتريات المستهلكة (Achats consommés)', acc: '60', val: -tcr.achatsConsommes, color: '#ef4444' },
+        { label: 'القيمة المضافة للاستغلال (Valeur Ajoutée)', acc: '-', val: tcr.valeurAjoutee, color: '#34d399', bold: true },
+        { label: 'الخدمات الخارجية والمصروفات الأخرى (Services extérieurs)', acc: '61 / 62', val: -tcr.servicesExterieurs, color: '#ef4444' },
+        { label: 'أعباء المستخدمين والأجور (Charges de personnel)', acc: '63', val: -tcr.chargesPersonnel, color: '#ef4444' },
+        { label: 'الضرائب والرسوم وتسديدات مماثلة (Impôts et taxes)', acc: '64', val: -tcr.impotsTaxes, color: '#ef4444' },
+        { label: 'الفائض الإجمالي للاستغلال (EBE)', acc: '-', val: tcr.ebe, color: '#34d399', bold: true },
+        { label: 'مخصصات الاهتلاكات والمؤونات (Dotations amortissements)', acc: '68', val: -tcr.dotationsAmortissements, color: '#ef4444' },
+        { label: 'النتيجة العملياتية / الاستغلال (Résultat Opérationnel)', acc: '-', val: tcr.resultatExploitation, color: '#fbbf24', bold: true },
+        { label: 'النتيجة المالية الصافية (Résultat Financier)', acc: '76 - 66', val: tcr.resultatFinancier, color: '#38bdf8' },
+        { label: 'النتيجة العادية قبل الضريبة', acc: '-', val: tcr.resultatAvantImpot, color: '#fbbf24', bold: true },
+        { label: 'الضريبة على أرباح الشركات IBS (19%)', acc: '444', val: -tcr.impotIBS, color: '#ef4444' },
+        { label: 'النتيجة الصافية للسنة المالية (RÉSULTAT NET)', acc: '12', val: tcr.resultatNet, color: tcr.resultatNet >= 0 ? '#10b981' : '#ef4444', bold: true, grand: true }
+      ];
+
+      tbody.innerHTML = '';
+      items.forEach(it => {
+        const tr = document.createElement('tr');
+        if (it.grand) {
+          tr.style.background = 'rgba(16, 185, 129, 0.1)';
+          tr.style.fontSize = '1rem';
+        }
+        tr.innerHTML = `
+          <td><strong style="${it.bold ? 'font-weight: 800;' : ''}">${it.label}</strong></td>
+          <td><code style="font-family: monospace;">${it.acc}</code></td>
+          <td class="num-col" style="color: ${it.color}; font-weight: ${it.bold ? '800' : '600'};">${fmt(it.val)}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function addEntry() {
-      const date = document.getElementById('entryDate').value;
-      const piece = document.getElementById('entryPiece').value || 'OD-' + Math.floor(Math.random() * 900 + 100);
-      const debit = document.getElementById('debitAccount').value;
-      const credit = document.getElementById('creditAccount').value;
-      const label = document.getElementById('entryLabel').value || 'عملية محاسبية';
-      const amount = parseFloat(document.getElementById('entryAmount').value);
+    function renderAccountsPlan() {
+      const q = document.getElementById('accSearchInput')?.value.trim() || '';
+      const list = searchAccounts(q);
+      const tbody = document.getElementById('accPlanTbody');
+      tbody.innerHTML = '';
 
-      if (!amount || amount <= 0) {
-        alert("يرجى إدخال مبلغ صحيح أكبر من الصفر.");
+      list.forEach(a => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong style="color: var(--blue); font-family: monospace;">${a.code}</strong></td>
+          <td><span style="background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-weight: bold;">صنف ${a.class}</span></td>
+          <td><strong>${a.nameAr}</strong></td>
+          <td style="font-family: 'Inter', sans-serif;">${a.nameFr}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Event Handlers
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.getAttribute('data-tab');
+        document.getElementById(`tab-${tab}`).classList.add('active');
+      });
+    });
+
+    document.getElementById('btnAddEntry').addEventListener('click', () => {
+      const date = document.getElementById('entryDate').value;
+      const piece = document.getElementById('entryPiece').value.trim() || 'OD-' + Math.floor(Math.random() * 9000 + 1000);
+      const debitAccount = document.getElementById('entryDebit').value;
+      const creditAccount = document.getElementById('entryCredit').value;
+      const amount = parseFloat(document.getElementById('entryAmount').value);
+      const label = document.getElementById('entryLabel').value.trim() || 'قيد محاسبي جديد';
+
+      const entry = { date, piece, debitAccount, creditAccount, amount, label };
+      const val = validateDoubleEntry(entry);
+      if (!val.isValid) {
+        alert(val.error);
         return;
       }
 
-      journalEntries.push({ date, piece, debit, credit, label, amount });
-      renderJournal();
+      journal.push(entry);
+      saveState();
+      document.getElementById('entryAmount').value = '';
       document.getElementById('entryLabel').value = '';
-    }
+    });
 
-    function switchView(view) {
-      document.querySelectorAll('.tab-btn').forEach((b, i) => {
-        b.classList.toggle('active', (view === 'journal' && i === 0) || (view === 'balance' && i === 1));
+    // Quick Templates
+    document.querySelectorAll('.template-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const t = pill.getAttribute('data-t');
+        if (t === 'vente') {
+          document.getElementById('entryDebit').value = '411';
+          document.getElementById('entryCredit').value = '700';
+          document.getElementById('entryLabel').value = 'فاتورة مبيعات بضائع للزبون';
+        } else if (t === 'achat') {
+          document.getElementById('entryDebit').value = '600';
+          document.getElementById('entryCredit').value = '401';
+          document.getElementById('entryLabel').value = 'فاتورة شراء بضائع من المورد';
+        } else if (t === 'fournisseur') {
+          document.getElementById('entryDebit').value = '401';
+          document.getElementById('entryCredit').value = '512';
+          document.getElementById('entryLabel').value = 'تسديد مستحقات المورد بشيك بنكي';
+        } else if (t === 'client') {
+          document.getElementById('entryDebit').value = '512';
+          document.getElementById('entryCredit').value = '411';
+          document.getElementById('entryLabel').value = 'تحصيل مستحقات الزبون في البنك';
+        } else if (t === 'paie') {
+          document.getElementById('entryDebit').value = '631';
+          document.getElementById('entryCredit').value = '421';
+          document.getElementById('entryLabel').value = 'قيد رواتب ومستحقات الموظفين للشهر';
+        } else if (t === 'virement-ccp') {
+          document.getElementById('entryDebit').value = '421';
+          document.getElementById('entryCredit').value = '512';
+          document.getElementById('entryLabel').value = 'تحويل رواتب الموظفين إلى الحسابات البريدية CCP';
+        } else if (t === 'caisse') {
+          document.getElementById('entryDebit').value = '530';
+          document.getElementById('entryCredit').value = '512';
+          document.getElementById('entryLabel').value = 'سحب بنكي لتغذية الصندوق';
+        }
       });
-      document.getElementById('journalView').style.display = (view === 'journal') ? 'block' : 'none';
-      document.getElementById('balanceView').style.display = (view === 'balance') ? 'block' : 'none';
-    }
+    });
 
-    function exportCSV() {
-      let csv = "Date,Piece,Debit_Account,Credit_Account,Libelle,Montant_DZD\n";
-      journalEntries.forEach(e => {
-        csv += `${e.date},${e.piece},${e.debit},${e.credit},"${e.label}",${e.amount}\n`;
+    document.getElementById('btnLoadDemo').addEventListener('click', () => {
+      if (confirm('هل ترغب في شحن قيود العينة المحاسبية القياسية للمؤسسة الجزائرية؟')) {
+        journal = [...DEMO_JOURNAL];
+        saveState();
+      }
+    });
+
+    document.getElementById('btnExportCsv').addEventListener('click', () => {
+      let csv = "Index,Date,Piece,Debit_Account,Credit_Account,Libelle,Montant_DZD\r\n";
+      journal.forEach((item, i) => {
+        csv += `${i + 1},"${item.date}","${item.piece}","${item.debitAccount}","${item.creditAccount}","${item.label.replace(/"/g, '""')}",${item.amount}\r\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `DZ-Compta-Journal-${new Date().toISOString().slice(0,10)}.csv`;
+      a.download = `DZ-Compta-Journal-${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
-    }
+    });
 
-    // Initial render
-    renderJournal();
+    document.getElementById('ledgerSearchInput')?.addEventListener('input', renderGrandLivre);
+    document.getElementById('accSearchInput')?.addEventListener('input', renderAccountsPlan);
+
+    // Initial Load
+    loadState();
+    initSelects();
+    renderAll();
   </script>
 </body>
 </html>

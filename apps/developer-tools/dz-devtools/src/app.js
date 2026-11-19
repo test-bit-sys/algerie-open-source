@@ -14,14 +14,20 @@ import {
   validatePaymentCard,
   validateAlgerianPhone,
   tafqitArabic,
-  tafqitFrench
+  tafqitFrench,
+  validateNin,
+  generateBankRib,
+  generateTestCard,
+  calculateIRGDetails,
+  ALGERIAN_BANKS
 } from './validators.js';
 
 const I18N = {
   ar: {
     appTitle: 'أدوات المطورين الجزائريين — DZ-DevTools',
     tabGeo: 'ولايات ومدن الجزائر (58)',
-    tabValidators: 'المعرفات الجبائية والبنكية',
+    tabValidators: 'المعرفات الجبائية والبنكية والـ NIN',
+    tabIrg: 'محاكي ضريبة الدخل IRG',
     tabPhone: 'مدقق أرقام الهواتف',
     tabTafqit: 'مختبر التفقيط البرمجي',
     tabSnippets: 'قصاصات الأكواد و SDK',
@@ -44,7 +50,8 @@ const I18N = {
   fr: {
     appTitle: 'DZ-DevTools — Outils & SDK Développeurs Algériens',
     tabGeo: 'Wilayas & Communes (58)',
-    tabValidators: 'Identifiants Fiscaux & Bancaires',
+    tabValidators: 'Identifiants Fiscaux, Bancaires & NIN',
+    tabIrg: 'Simulateur Barème IRG 2024',
     tabPhone: 'Validateur Télécom & Mobile',
     tabTafqit: 'Sandbox Tafqit & Devises',
     tabSnippets: 'Snippets & SDK Algérie',
@@ -67,7 +74,8 @@ const I18N = {
   en: {
     appTitle: 'DZ-DevTools — Algerian Developer Suite & Geo Studio',
     tabGeo: 'Algerian Wilayas & Cities (58)',
-    tabValidators: 'Fiscal & Banking Validators',
+    tabValidators: 'Fiscal, Banking & NIN Validators',
+    tabIrg: 'IRG Tax Simulator 2024',
     tabPhone: 'Phone Carrier Inspector',
     tabTafqit: 'Tafqit API Sandbox',
     tabSnippets: 'Dev SDK Snippets',
@@ -105,6 +113,7 @@ export class DZDevToolsApp {
     this.applyLanguage(this.currentLang);
     this.renderWilayasGrid();
     this.initValidators();
+    this.initIrgSimulator();
     this.initPhoneInspector();
     this.initTafqitSandbox();
     this.initSnippets();
@@ -328,14 +337,13 @@ export class DZDevToolsApp {
         ccpResult.innerHTML = '';
         return;
       }
-      const key = calculateCcpKey(val);
-      const ripObj = generatePostalRip(val, key);
+      const ripObj = generatePostalRip(val);
       if (ripObj) {
         ccpResult.innerHTML = `
           <div class="val-box valid">
-            <p><strong>مفتاح الحساب البريدي الجاري (Clé CCP):</strong> <span class="badge-key">${ripObj.key}</span></p>
-            <p><strong>رقم الحساب الكامل (20 رقماً - RIP):</strong></p>
-            <code class="code-rip">${ripObj.formatted}</code>
+            <p><strong>مفتاح الصك البريدي الجاري (Clé CCP):</strong> <span class="badge-key">${ripObj.ccpKey}</span> | <strong>مفتاح التحويل (Clé RIP):</strong> <span class="badge-key" style="background:#0284c7;">${ripObj.ripKey}</span></p>
+            <p><strong>رقم التعريف البريدي الوطني الكامل (20 رقماً - RIP):</strong></p>
+            <code class="code-rip" style="font-weight: bold; font-size: 15px;">${ripObj.formatted}</code>
           </div>
         `;
       } else {
@@ -364,6 +372,158 @@ export class DZDevToolsApp {
         cardResult.innerHTML = `<div class="val-box invalid">${res.error || 'رقم البطاقة غير مطابق لخوارزمية Luhn.'}</div>`;
       }
     });
+
+    // NIN (الرقم التعريفي الوطني)
+    const ninInput = document.getElementById('inputNin');
+    const ninResult = document.getElementById('resultNin');
+    ninInput?.addEventListener('input', () => {
+      const val = ninInput.value.trim();
+      if (!val) {
+        ninResult.innerHTML = '';
+        return;
+      }
+      const res = validateNin(val);
+      if (res.isValid) {
+        ninResult.innerHTML = `
+          <div class="val-box valid">
+            <p><strong>حالة الرقم التعريفي الوطني:</strong> <span class="badge-success">صحيح ومطابق للمواصفات الرسمية</span></p>
+            <p><strong>الجنس:</strong> ${res.gender}</p>
+            <p><strong>رمز الولاية:</strong> <strong>${res.wilayaCode}</strong> | <strong>رمز البلدية:</strong> <strong>${res.communeCode}</strong></p>
+            <p><strong>سنة الميلاد:</strong> ${res.birthYear} | <strong>رقم العقد:</strong> ${res.acteNumber}</p>
+            <p><strong>التنسيق القياسي:</strong> <code>${res.formatted}</code></p>
+          </div>
+        `;
+      } else {
+        ninResult.innerHTML = `<div class="val-box invalid">${res.error || 'الرقم التعريفي الوطني غير صالح.'}</div>`;
+      }
+    });
+
+    // Bank RIB Builder
+    const btnGenRib = document.getElementById('btnGenerateBankRib');
+    const selectBank = document.getElementById('selectBankCode');
+    const inputGuichet = document.getElementById('inputBankGuichet');
+    const inputAccount = document.getElementById('inputBankAccount');
+    const resultRib = document.getElementById('resultBankRib');
+
+    const updateRib = () => {
+      const b = selectBank?.value || '001';
+      const g = inputGuichet?.value.trim() || '00000';
+      const a = inputAccount?.value.trim() || '0000000000';
+      const ripObj = generateBankRib(b, g, a);
+      if (ripObj) {
+        resultRib.innerHTML = `
+          <div class="val-box valid">
+            <p><strong>المؤسسة البنكية:</strong> <span style="font-weight: 700; color: var(--primary);">${ripObj.bankNameAr}</span></p>
+            <p><strong>رمز السويفت الدولي (SWIFT/BIC):</strong> <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: bold;">${ripObj.swift}</code></p>
+            <p><strong>مفتاح التدقيق المحتسب (Clé RIB):</strong> <span class="badge-key">${ripObj.key}</span></p>
+            <p><strong>رقم التعريف البنكي الكامل (20 رقماً - RIB):</strong></p>
+            <code class="code-rip" style="font-size: 15px; font-weight: 700;">${ripObj.formatted}</code>
+          </div>
+        `;
+      } else {
+        resultRib.innerHTML = `<div class="val-box invalid">يرجى التحقق من صحة رمز الوكالة (5 أرقام) ورقم الحساب (10 أرقام).</div>`;
+      }
+    };
+    btnGenRib?.addEventListener('click', updateRib);
+    selectBank?.addEventListener('change', updateRib);
+
+    // Test Card Generator (SATIM / Edahabia)
+    const btnGenEdahabia = document.getElementById('btnGenEdahabia');
+    const btnGenCib = document.getElementById('btnGenCib');
+    const resultTestCard = document.getElementById('resultTestCard');
+
+    const renderCardCard = (card) => {
+      resultTestCard.innerHTML = `
+        <div class="val-box valid" style="background: #0f172a; color: #f8fafc; border: 1px solid #334155;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; font-weight: 700; color: #38bdf8;">${card.label}</span>
+            <span class="badge-success">Luhn Valid</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 2px; color: #fbbf24; margin: 10px 0; font-weight: 700;">
+            ${card.formatted}
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: #cbd5e1;">
+            <span>DATE EXP: <strong>${card.expiry}</strong></span>
+            <span>CVV: <strong>${card.cvv}</strong></span>
+          </div>
+        </div>
+      `;
+    };
+
+    btnGenEdahabia?.addEventListener('click', () => {
+      renderCardCard(generateTestCard('edahabia'));
+    });
+    btnGenCib?.addEventListener('click', () => {
+      renderCardCard(generateTestCard('cib'));
+    });
+  }
+
+  // IRG Tax Simulator Engine Binding
+  initIrgSimulator() {
+    const inputSalary = document.getElementById('inputIrgImposable');
+    const cnasDisplay = document.getElementById('outputIrgCnas');
+    const summaryBox = document.getElementById('resultIrgSummary');
+    const tbodyTranches = document.getElementById('bodyIrgTranches');
+
+    const updateIrg = () => {
+      const val = parseFloat(inputSalary?.value) || 0;
+      const res = calculateIRGDetails(val);
+
+      // Estimate CNAS (if this was brut, brut approx = imposable / 0.91)
+      const approxBrut = val > 0 ? Math.round(val / 0.91) : 0;
+      const approxCnas = approxBrut > 0 ? Math.round(approxBrut * 0.09) : 0;
+      if (cnasDisplay) {
+        cnasDisplay.value = approxCnas.toLocaleString('en-US') + ' دج (تقديري 9% من الأجر الإجمالي)';
+      }
+
+      if (summaryBox) {
+        summaryBox.innerHTML = `
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+            <div>
+              <span style="font-size: 12px; color: var(--text-muted); display: block;">الراتب الخاضع (Imposable):</span>
+              <strong style="font-size: 16px; color: var(--text);">${res.imposable.toLocaleString('en-US')} دج</strong>
+            </div>
+            <div>
+              <span style="font-size: 12px; color: var(--text-muted); display: block;">الضريبة الخام (Taxe Brute):</span>
+              <strong style="font-size: 16px; color: #64748b;">${res.rawTax.toLocaleString('en-US')} دج</strong>
+            </div>
+            <div>
+              <span style="font-size: 12px; color: var(--text-muted); display: block;">قيمة التخفيض القانوني (40%):</span>
+              <strong style="font-size: 16px; color: #10b981;">- ${res.abattement.toLocaleString('en-US')} دج</strong>
+            </div>
+            <div>
+              <span style="font-size: 12px; color: #ef4444; font-weight: bold; display: block;">ضريبة IRG الشهرية للدفع:</span>
+              <strong style="font-size: 18px; color: #ef4444;">${res.monthlyTax.toLocaleString('en-US')} دج</strong>
+            </div>
+            <div>
+              <span style="font-size: 12px; color: var(--primary); font-weight: bold; display: block;">صافي الراتب بعد الضريبة:</span>
+              <strong style="font-size: 18px; color: var(--primary);">${res.netImposable.toLocaleString('en-US')} دج</strong>
+            </div>
+            <div>
+              <span style="font-size: 12px; color: var(--text-muted); display: block;">النسبة الفعلية للاقتطاع:</span>
+              <strong style="font-size: 16px; color: #0284c7;">${res.effectiveRatePercent}%</strong>
+            </div>
+          </div>
+        `;
+      }
+
+      if (tbodyTranches) {
+        tbodyTranches.innerHTML = '';
+        res.tranches.forEach(t => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${t.tranche}</strong></td>
+            <td style="text-align: center; font-family: monospace;">${(t.rate * 100).toFixed(0)}%</td>
+            <td style="text-align: right; font-family: monospace;">${t.base.toLocaleString('en-US')} دج</td>
+            <td style="text-align: right; font-family: monospace; font-weight: bold; color: ${t.tax > 0 ? '#ef4444' : '#64748b'};">${t.tax.toLocaleString('en-US')} دج</td>
+          `;
+          tbodyTranches.appendChild(tr);
+        });
+      }
+    };
+
+    inputSalary?.addEventListener('input', updateIrg);
+    updateIrg();
   }
 
   renderValidationResult(container, res) {

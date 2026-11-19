@@ -1,0 +1,20 @@
+{
+  "name": "dz-compta",
+  "version": "1.1.0",
+  "description": "DZ-Compta Pro — Système Comptable Financier Algérien (SCF 2007)",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "algeria",
+    "accounting",
+    "scf",
+    "comptabilite",
+    "grand-livre",
+    "bilan",
+    "tcr"
+  ],
+  "license": "MIT"
+}
