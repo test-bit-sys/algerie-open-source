@@ -12,6 +12,7 @@ import { tafqitDZD } from './modules/tafqit.js';
 import { sound } from './modules/audio.js';
 import { QRCodeSVG } from './modules/qrcode.js';
 import { BusinessCharts } from './modules/charts.js';
+import { convertInvoiceToSCF, syncEntriesToLocalCompta } from '../../../packages/dz-runtime/erp-bridge.js';
 
 // Application State
 let currentLang = 'ar';
@@ -1566,6 +1567,31 @@ function initFacturationA4() {
   document.getElementById('btnPrintA4').addEventListener('click', () => {
     saveCurrentA4Invoice();
     printA4Sheet();
+  });
+
+  document.getElementById('btnExportInvoiceToCompta')?.addEventListener('click', () => {
+    saveCurrentA4Invoice();
+    const docNumber = document.getElementById('a4DocNumber').value;
+    const inv = LocalDB.getInvoices().find(i => i.docNumber === docNumber) || {
+      docNumber,
+      date: document.getElementById('a4DocDate').value,
+      clientName: document.getElementById('a4ClientSelect')?.selectedOptions[0]?.text || 'عميل',
+      totalHT: a4Items.reduce((s, it) => s + (it.unitPriceHT * it.quantity), 0),
+      totalTVA: a4Items.reduce((s, it) => s + (it.unitPriceHT * it.quantity * (it.tvaRate / 100)), 0),
+      timbreFiscal: document.getElementById('a4PaymentMethod').value === 'ESPECES' ? 100 : 0,
+      totalTTC: a4Items.reduce((s, it) => s + (it.unitPriceHT * it.quantity * (1 + it.tvaRate / 100)), 0),
+      paymentMethod: document.getElementById('a4PaymentMethod').value
+    };
+    const scfObj = convertInvoiceToSCF(inv);
+    const res = syncEntriesToLocalCompta(scfObj.entries);
+    if (res.success) {
+      sound.playSuccess();
+      showToast(currentLang === 'ar'
+        ? `✅ تم ترحيل ${scfObj.entries.length} قيود محاسبية إلى DZ-Compta SCF بنجاح!`
+        : `✅ ${scfObj.entries.length} écritures comptables exportées vers DZ-Compta !`);
+    } else {
+      alert('خطأ في المزامنة المحاسبية: ' + res.error);
+    }
   });
 }
 

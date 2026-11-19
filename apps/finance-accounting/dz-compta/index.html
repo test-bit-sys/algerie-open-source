@@ -405,6 +405,15 @@
     </div>
 
     <div class="header-actions">
+      <label class="btn btn-outline-blue" style="cursor: pointer; margin-bottom: 0;" title="استيراد قيود الفواتير أو الأجور المرحلة بتنسيق .dzcompta.json">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>استيراد ERP (.json)</span>
+        <input type="file" id="inputImportErp" accept=".json,.dzcompta.json" style="display: none;">
+      </label>
+      <button class="btn btn-outline-blue" id="btnSyncFromLocalStorage" title="تحديث وتزامن فوري من الفواتير والأجور">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        <span>تحديث السجل</span>
+      </button>
       <button class="btn btn-primary" id="btnExportCsv">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span>تصدير CSV</span>
@@ -467,6 +476,21 @@
       <span>6. مدونة الحسابات SCF</span>
     </button>
   </nav>
+
+  <!-- Sovereign Suite Navigation Strip -->
+  <div class="suite-strip no-print" style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid var(--border); padding: 7px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem;">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <span style="color: var(--text-muted); font-weight: bold;">حزمة المؤسسة السيادية:</span>
+      <a href="../../business-enterprise/dz-facture/index.html" style="color: #34d399; text-decoration: none; font-weight: 600;">🧾 الفوترة والكاشير (DZ-Facture)</a>
+      <span style="color: var(--border);">|</span>
+      <a href="../dz-paie/index.html" style="color: #a78bfa; text-decoration: none; font-weight: 600;">👥 كشوف الأجور (DZ-Paie)</a>
+      <span style="color: var(--border);">|</span>
+      <a href="../../developer-tools/dz-devtools/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;">🛠️ أدوات المطور (DZ-DevTools)</a>
+    </div>
+    <a href="../../../index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+      <span>🏠 الرئيسية</span>
+    </a>
+  </div>
 
   <main style="flex: 1;">
     <!-- Tab 1: Journal Général -->
@@ -1077,6 +1101,45 @@
         journal = [...DEMO_JOURNAL];
         saveState();
       }
+    });
+
+    document.getElementById('btnSyncFromLocalStorage')?.addEventListener('click', () => {
+      loadState();
+      renderAll();
+      alert(`🔄 تم تحديث السجل المحاسبي بنجاح!\nإجمالي القيود الحالية في دفتر اليومية: ${journal.length}`);
+    });
+
+    document.getElementById('inputImportErp')?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          const entriesToAdd = Array.isArray(parsed) ? parsed : (parsed.entries || []);
+          if (!entriesToAdd.length) {
+            alert('⚠️ لم يتم العثور على قيود محاسبية صالحة في الملف المحدد.');
+            return;
+          }
+
+          let addedCount = 0;
+          entriesToAdd.forEach(ent => {
+            const exists = journal.some(j => j.piece === ent.piece && j.debitAccount === ent.debitAccount && j.creditAccount === ent.creditAccount && j.amount === ent.amount);
+            if (!exists) {
+              journal.push(ent);
+              addedCount++;
+            }
+          });
+
+          saveState();
+          alert(`✅ تم استيراد حزمة القيود المحاسبية بنجاح!\n• قيود جديدة أضيفت: ${addedCount}\n• إجمالي القيود في اليومية: ${journal.length}`);
+        } catch (err) {
+          alert('❌ تعذر قراءة ملف الحزمة: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
     });
 
     document.getElementById('btnExportCsv').addEventListener('click', () => {

@@ -383,6 +383,10 @@
     </div>
 
     <div class="header-actions">
+      <button class="btn btn-outline-indigo" id="btnExportPaieToCompta" title="ترحيل قيود الأجور الشهرية إلى اليومية العامة في DZ-Compta SCF">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span>ترحيل للمحاسبة SCF</span>
+      </button>
       <button class="btn btn-primary" id="btnExportJournalCsv">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span>تصدير دفتر الأجور CSV</span>
@@ -437,6 +441,21 @@
       <span>4. محاكي سلم الضريبة IRG 2024</span>
     </button>
   </nav>
+
+  <!-- Sovereign Suite Navigation Strip -->
+  <div class="suite-strip no-print" style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid var(--border); padding: 7px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem;">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <span style="color: var(--text-muted); font-weight: bold;">حزمة المؤسسة السيادية:</span>
+      <a href="../../business-enterprise/dz-facture/index.html" style="color: #34d399; text-decoration: none; font-weight: 600;">🧾 الفوترة والكاشير (DZ-Facture)</a>
+      <span style="color: var(--border);">|</span>
+      <a href="../dz-compta/index.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;">📊 المحاسبة المالية (DZ-Compta)</a>
+      <span style="color: var(--border);">|</span>
+      <a href="../../developer-tools/dz-devtools/index.html" style="color: #fbbf24; text-decoration: none; font-weight: 600;">🛠️ أدوات المطور (DZ-DevTools)</a>
+    </div>
+    <a href="../../../index.html" style="color: var(--text-muted); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+      <span>🏠 الرئيسية</span>
+    </a>
+  </div>
 
   <main style="flex: 1;">
     <!-- Tab 1: Bulletin de Paie -->
@@ -695,6 +714,11 @@
       DEMO_EMPLOYEES,
       round2
     } from './src/paie-engine.js';
+    import {
+      convertPayrollMonthToSCF,
+      syncEntriesToLocalCompta,
+      downloadComptaBatch
+    } from '../../../packages/dz-runtime/erp-bridge.js';
 
     // Tafqit
     function tafqitArabic(amount) {
@@ -1055,6 +1079,40 @@
       a.href = url;
       a.download = `DZ-Paie-Journal-${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
+    });
+
+    document.getElementById('btnExportPaieToCompta')?.addEventListener('click', () => {
+      const journal = computePayrollJournal(employees);
+      const period = new Date().toISOString().slice(0, 7);
+      const payrollSummary = {
+        period,
+        slips: journal.slips,
+        totals: {
+          totalBrut: journal.totals.totalBrut,
+          totalCnasSalarie: journal.totals.totalCnasSalarie,
+          totalIRG: journal.totals.totalIRG,
+          totalNet: journal.totals.totalNet,
+          totalCnasPatronale: journal.totals.totalCnasPatronale,
+          totalCost: journal.totals.totalCost
+        }
+      };
+
+      const result = convertPayrollMonthToSCF(payrollSummary);
+      const res = syncEntriesToLocalCompta(result.entries);
+
+      const downloadConfirmed = confirm(
+        `✅ تم ترحيل قيود أجور شهر ${period} بنجاح إلى المحاسبة المالية (DZ-Compta)!\n\n` +
+        `• عدد القيود المرحلة: ${result.entries.length}\n` +
+        `• إجمالي الأجور الخام (حـ/ 631): ${journal.totals.totalBrut.toLocaleString()} دج\n` +
+        `• اشتراكات الضمان الاجتماعي CNAS (حـ/ 431): ${(journal.totals.totalCnasSalarie + journal.totals.totalCnasPatronale).toLocaleString()} دج\n` +
+        `• الضرائب IRG (حـ/ 447): ${journal.totals.totalIRG.toLocaleString()} دج\n` +
+        `• الصافي للدفع للمستخدمين (حـ/ 421): ${journal.totals.totalNet.toLocaleString()} دج\n\n` +
+        `هل ترغب أيضاً في تحميل ملف الحزمة (.dzcompta.json) كنسخة احتياطية أو لاستيراده في متصفح آخر؟`
+      );
+
+      if (downloadConfirmed) {
+        downloadComptaBatch(result.entries, `DZ-Compta-Payroll-${period}.dzcompta.json`);
+      }
     });
 
     // IRG Simulator

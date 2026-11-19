@@ -78,6 +78,23 @@
       </div>
 
       <div class="sidebar-footer">
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px;">
+          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: bold; margin-bottom: 6px;">حزمة المؤسسة السيادية:</div>
+          <div style="display: flex; flex-direction: column; gap: 5px; font-size: 0.78rem;">
+            <a href="../../finance-accounting/dz-compta/index.html" style="color: #38bdf8; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+              <span>📊</span>
+              <span>المحاسبة المالية (DZ-Compta)</span>
+            </a>
+            <a href="../../finance-accounting/dz-paie/index.html" style="color: #a78bfa; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+              <span>👥</span>
+              <span>كشوف الأجور والـ RH (DZ-Paie)</span>
+            </a>
+            <a href="../../../index.html" style="color: #34d399; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+              <span>🏠</span>
+              <span>المركز الرئيسي (DZ Open)</span>
+            </a>
+          </div>
+        </div>
         <div style="font-size:0.75rem; color:#94a3b8; text-align:center;">
           <div><b data-i18n="footerSecurityTitle">100% Offline-First Architecture</b></div>
           <div style="margin-top:2px;" data-i18n="footerSecurityDesc">بياناتك محفوظة محلياً بأمان وسرية تامة</div>
@@ -335,10 +352,16 @@
             <div class="no-print" style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; display:flex; flex-direction:column; gap:1rem;">
               <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
                 <h3 style="font-size:1.05rem; font-weight:800;" data-i18n="invoiceEditorTitle">محرر المستندات والوثائق الرسمية</h3>
-                <button class="btn btn-primary btn-sm" id="btnPrintA4">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-                  <span data-i18n="btnPrintA4">طباعة A4</span>
-                </button>
+                <div style="display:flex; gap:0.5rem;">
+                  <button class="btn btn-outline btn-sm" id="btnExportInvoiceToCompta" title="ترحيل الفاتورة إلى اليومية العامة في DZ-Compta SCF">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>ترحيل إلى المحاسبة SCF</span>
+                  </button>
+                  <button class="btn btn-primary btn-sm" id="btnPrintA4">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    <span data-i18n="btnPrintA4">طباعة A4</span>
+                  </button>
+                </div>
               </div>
 
               <!-- Doc Type & Meta -->

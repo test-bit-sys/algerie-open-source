@@ -58,6 +58,7 @@
   - [🎙️ 22. DZ-Audio & DZ-Recorder (Audio Workstation & Screen Studio — Ports 3018, 3019)](#22-️-dz-audio--dz-recorder-multimedia-production-suite)
   - [📝 23. DZ-Notes, DZ-Tasks & DZ-Signature (Sovereign Office & Signature — Ports 3020, 3021, 3022)](#23--dz-notes-dz-tasks--dz-signature-sovereign-productivity)
   - [⏱️ 24. DZ-Time, DZ-Convert & DZ-Prayer (Citizen Utilities & Labor Law — Ports 3023, 3024, 3025)](#24-️-dz-time-dz-convert--dz-prayer-citizen-utilities--legal-compliance)
+  - [🏛️ 25. Algerian Sovereign ERP Bridge (Facture + Compta SCF + Paie RH — Packages Runtime)](#25-️-algerian-sovereign-erp-bridge-facture--compta-scf--paie-rh)
 - [🗺️ The 11 Strategic Software Tracks & Complete Matrix](#-the-11-strategic-software-tracks--complete-matrix)
 - [⚙️ Architectural Principles (Polyglot Sovereign Architecture)](#️-architectural-principles-the-heyputer-standard)
 - [🏛️ Algerian Legal & Regulatory Compliance](#️-algerian-legal--regulatory-compliance)
@@ -551,6 +552,34 @@ npm run start:signature   # :3022
 npm run start:time        # :3023
 npm run start:convert     # :3024
 npm run start:prayer      # :3025
+```
+
+---
+
+### 25. 🏛️ Algerian Sovereign ERP Bridge (Facture + Compta SCF + Paie RH)
+> **Inter-Application Synchronization & Double-Entry Accounting Bridge**  
+> *Package Path: [`packages/dz-runtime/erp-bridge.js`](packages/dz-runtime/erp-bridge.js) • Tests: `npm run test:erp`*
+
+The **Sovereign ERP Bridge** seamlessly connects the three cornerstone enterprise tools into a unified offline national ERP system:
+
+1. **🧾 DZ-Facture & POS ➡️ DZ-Compta (SCF 2007)**:
+   - Converts retail sales and commercial invoices into balanced SCF accounting entries.
+   - Automatically debits payment accounts (Cash `530`, Bank `512`, or Client Debt `411`).
+   - Automatically credits Sales Revenue `700` (HT), VAT Output `4457` (TVA Collectée 19% or 9%), and Fiscal Stamp Duty `447` (*Droit de Timbre*).
+   - Generates daily POS register closure (Rapport Z) journal entries.
+
+2. **👥 DZ-Paie RH ➡️ DZ-Compta (SCF 2007)**:
+   - Aggregates monthly payroll summaries into balanced journal entries.
+   - Debits Gross Wages (Charges de personnel `631`) and Employer Social Security (Cotisation Patronale CNAS 26% `635`).
+   - Credits Employee Net Payable (Rémunérations dues au personnel `421`), Total CNAS Contributions (Sécurité Sociale 35% `431`), and Withholding Tax (Retenue IRG `447`).
+
+3. **🔄 Real-Time Local Synchronization & Batch Exchange**:
+   - One-click migration into the browser's persistent `dz_compta_journal_v2` storage.
+   - Export and import portable, self-contained `.dzcompta.json` batch files across machines and browsers with complete auditability.
+
+```bash
+# Run ERP Bridge automated tests
+npm run test:erp
 ```
 
 ---
