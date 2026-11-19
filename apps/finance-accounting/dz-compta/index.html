@@ -475,6 +475,10 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span>6. مدونة الحسابات SCF</span>
     </button>
+    <button class="tab-btn" data-tab="g50">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>7. التصريح الجبائي الشهري G50</span>
+    </button>
   </nav>
 
   <!-- Sovereign Suite Navigation Strip -->
@@ -731,6 +735,205 @@
         </table>
       </div>
     </section>
+
+    <!-- Tab 7: G50 Tax Return -->
+    <section id="tab-g50" class="tab-pane">
+      <div class="form-panel no-print" style="max-width: 950px; margin: 0 auto 20px auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+          <div>
+            <h3 style="color: var(--blue); margin-bottom: 4px;">التصريح الجبائي الشهري — سلسلة G رقم 50 (DGI Algérie)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">
+              مطابق لأحكام قانون الضرائب المباشرة وقانون الرسم على رقم الأعمال وقانون المالية 2024 / 2025.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-primary" id="btnComputeG50">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span>إعادة حساب من اليومية</span>
+            </button>
+            <button class="btn btn-outline-blue" id="btnExportG50Json">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>تصدير JSON</span>
+            </button>
+            <button class="btn" onclick="window.print()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <span>طباعة الاستمارة الرسمية</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>فترة التصريح الجبائي (Mois / Année):</label>
+            <input type="month" id="g50PeriodInput" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>رصيد TVA دائن سابق مرحل (Crédit antérieur دج):</label>
+            <input type="number" id="g50CreditAnterieurInput" class="form-control" value="0" step="1000">
+          </div>
+          <div class="form-group">
+            <label>أقساط مؤقتة للضريبة على الشركات IBS (إن وجدت):</label>
+            <input type="number" id="g50AcomptesIbsInput" class="form-control" value="0" step="1000">
+          </div>
+          <div class="form-group">
+            <label>آخر أجل قانوني للإيداع والتسديد:</label>
+            <div id="g50DeadlineBadge" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; font-weight: bold; padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; text-align: center;">
+              قبل 20 من الشهر القادم
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Printable Official G50 Sheet View -->
+      <div style="background: #ffffff; color: #0f172a; border-radius: 8px; padding: 30px; max-width: 950px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3); font-size: 13px; line-height: 1.5;" id="g50OfficialSheet">
+        <!-- Official Header -->
+        <div style="border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <div style="font-weight: 800; font-size: 15px;">الجمهورية الجزائرية الديمقراطية الشعبية</div>
+            <div style="font-size: 12px; font-weight: 700; color: #475569;">وزارة المالية — المديرية العامة للضرائب (DGI)</div>
+            <div style="font-size: 11px; color: #64748b;">مديرية الضرائب الولائية: 16 - الجزائر | مركز الضرائب: CDI Bab Ezzouar</div>
+          </div>
+          <div style="text-align: left;">
+            <div style="background: #0f172a; color: #ffffff; padding: 4px 14px; font-weight: 800; border-radius: 4px; display: inline-block; font-size: 14px;">
+              جدول إشعار بالدفع — سلسلة G رقم 50
+            </div>
+            <div style="font-size: 11px; margin-top: 4px; font-weight: 700; color: #334155;">
+              BORDEREAU-AVIS DE VERSEMENT — SÉRIE G N° 50
+            </div>
+            <div style="font-size: 12px; margin-top: 4px; font-weight: 800; color: #0284c7;">
+              الفترة: <span id="g50SheetPeriodLabel">جانفي 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enterprise Identifiers Table -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; margin-bottom: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 11.5px;">
+          <div><strong>المكلف بالضريبة:</strong> <span id="g50SheetRaison">SARL ATLAS TECH ALGER</span></div>
+          <div><strong>الرقم الجبائي NIF:</strong> <code style="font-family: monospace; font-weight: bold;" id="g50SheetNif">001616012345678</code></div>
+          <div><strong>رقم المادة (AI):</strong> <code style="font-family: monospace;" id="g50SheetAi">16012345678</code></div>
+          <div><strong>السجل التجاري (RC):</strong> <span id="g50SheetRc">16/00-1234567B22</span></div>
+          <div style="grid-column: 1 / -1;"><strong>النشاط المهني:</strong> تطوير البرمجيات والحلول الرقمية (Régime Réel)</div>
+        </div>
+
+        <!-- Section 1: TVA Breakdown -->
+        <div style="margin-bottom: 18px;">
+          <div style="background: #0284c7; color: #fff; padding: 6px 12px; font-weight: 800; border-radius: 4px 4px 0 0; font-size: 12px; display: flex; justify-content: space-between;">
+            <span>أولاً: الرسم على القيمة المضافة (TAXE SUR LA VALEUR AJOUTÉE - TVA)</span>
+            <span>حـ/ 445</span>
+          </div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid #cbd5e1; text-align: right;">
+            <thead>
+              <tr style="background: #f1f5f9;">
+                <th style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1;">البيان (Rubrique)</th>
+                <th style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1; text-align: left;">رقم الأعمال الخاضع (CA)</th>
+                <th style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1; text-align: center;">المعدل</th>
+                <th style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1; text-align: left;">الرسم المحصل (DZD)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0;">العمليات الخاضعة للمعدل العادي (19%)</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace;" id="g50SheetCa19">0.00</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; font-weight: bold;">19%</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace; font-weight: bold;" id="g50SheetTva19">0.00</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0;">العمليات الخاضعة للمعدل المخفض (9%)</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace;" id="g50SheetCa9">0.00</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; font-weight: bold;">9%</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace; font-weight: bold;" id="g50SheetTva9">0.00</td>
+              </tr>
+              <tr style="background: #f8fafc; font-weight: bold;">
+                <td colspan="3" style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1;">مجموع الرسم المحصل الإجمالي (Total TVA Collectée Brut)</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1; text-align: left; font-family: monospace; color: #0284c7;" id="g50SheetTotalTvaBrut">0.00</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; color: #b91c1c;">- يطرح: رسم قابل للخصم على المشتريات والمواد (TVA Déductible Achats)</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace; color: #b91c1c;" id="g50SheetTvaDedAchats">0.00</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; color: #b91c1c;">- يطرح: رسم قابل للخصم على الخدمات والاستثمارات (TVA Déductible Services)</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace; color: #b91c1c;" id="g50SheetTvaDedServices">0.00</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1; color: #b91c1c;">- يطرح: رصيد سابق مرحل من الشهر الماضي (Crédit Antérieur)</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1; text-align: left; font-family: monospace; color: #b91c1c;" id="g50SheetTvaCreditAnt">0.00</td>
+              </tr>
+              <tr style="background: #f0fdf4; font-weight: bold; font-size: 13px;">
+                <td colspan="3" style="padding: 8px 10px; color: #166534;">= الصافي الواجب دفعه للرسم على القيمة المضافة (TVA Nette à Payer)</td>
+                <td style="padding: 8px 10px; text-align: left; font-family: monospace; color: #166534;" id="g50SheetTvaNette">0.00 DZD</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="font-size: 11px; color: #64748b; margin-top: 4px;" id="g50SheetCreditNote"></div>
+        </div>
+
+        <!-- Section 2: Droits de Timbre & Impôts Directs -->
+        <div style="margin-bottom: 18px;">
+          <div style="background: #334155; color: #fff; padding: 6px 12px; font-weight: 800; border-radius: 4px 4px 0 0; font-size: 12px;">
+            ثانياً: حقوق الطابع والضرائب المباشرة والاقتطاعات (TIMBRE & IMPÔTS DIRECTS)
+          </div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid #cbd5e1; text-align: right;">
+            <tbody>
+              <tr>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; width: 65%;">
+                  <strong>حقوق الطابع الجبائي (Droits de Timbre Fiscal 1%)</strong>
+                  <div style="font-size: 10.5px; color: #64748b;">المبيعات المسددة نقداً وفق قانون الطابع</div>
+                </td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace; font-weight: bold;" id="g50SheetTimbre">0.00 DZD</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0;">
+                  <strong>الضريبة على الدخل الإجمالي — أجور المستخدمين (IRG / Salaires)</strong>
+                  <div style="font-size: 10.5px; color: #64748b;">اقتطاع من المنبع بموجب سلم المادة 104 من ق.ض.م</div>
+                </td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace; font-weight: bold; color: #b91c1c;" id="g50SheetIrgSalaires">0.00 DZD</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0;">
+                  <strong>الرسم على النشاط المهني (TAP)</strong>
+                  <div style="font-size: 10.5px; color: #166534; font-weight: bold;">معفى 0% بموجب قانون المالية 2024 (Abrogation LF 2024)</div>
+                </td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-family: monospace; color: #166534;">0.00 DZD (معفى)</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1;">
+                  <strong>أقساط مؤقتة للضريبة على أرباح الشركات (Acomptes IBS)</strong>
+                </td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #cbd5e1; text-align: left; font-family: monospace;" id="g50SheetIbs">0.00 DZD</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section 3: Total à Payer & Legal Signature -->
+        <div style="background: #f8fafc; border: 2px solid #0f172a; border-radius: 6px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 14px; font-weight: 800; color: #0f172a;">المجموع العام الواجب تسديده للخزينة العمومية:</div>
+            <div style="font-size: 11px; color: #64748b; margin-top: 2px;">TOTAL GÉNÉRAL À VERSER À LA RECETTE DES IMPÔTS</div>
+            <div style="font-size: 11px; color: #b91c1c; font-weight: bold; margin-top: 4px;">
+              * آخر أجل قانوني للتسديد: <span id="g50SheetDeadlineText">20/02/2026</span> (دون غرامات تأخير)
+            </div>
+          </div>
+          <div style="text-align: left;">
+            <div style="font-size: 22px; font-weight: 800; font-family: monospace; color: #0f172a;" id="g50SheetTotalGrand">
+              0.00 DZD
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 24px; padding-top: 14px; border-top: 1px dashed #cbd5e1; font-size: 11px;">
+          <div style="width: 250px; text-align: center;">
+            <div style="font-weight: bold; margin-bottom: 35px;">ختم وتوقيع المكلف بالضريبة (Employeur / Déclarant)</div>
+            <div style="border-top: 1px solid #cbd5e1; padding-top: 4px; color: #94a3b8;">SARL ATLAS TECH ALGER</div>
+          </div>
+          <div style="width: 250px; text-align: center;">
+            <div style="font-weight: bold; margin-bottom: 35px;">إطار خاص بقباضة الضرائب (Cadre réservé à la Recette)</div>
+            <div style="border-top: 1px solid #cbd5e1; padding-top: 4px; color: #94a3b8;">رقم الوصل والتأشيرة وتاريخ التحصيل</div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script type="module">
@@ -744,6 +947,7 @@
       DEMO_JOURNAL,
       round2
     } from './src/compta-engine.js';
+    import { computeG50FromJournal, G50_DEFAULT_ENTERPRISE } from './src/g50-engine.js';
 
     // State
     const STORAGE_KEY = 'dz_compta_journal_v2';
@@ -791,6 +995,7 @@
       renderBilan();
       renderTCR();
       renderAccountsPlan();
+      renderG50();
     }
 
     function renderKPIs() {
@@ -1152,6 +1357,93 @@
       const a = document.createElement('a');
       a.href = url;
       a.download = `DZ-Compta-Journal-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+    });
+
+    // G50 Tax Return Renderer
+    function renderG50() {
+      const periodInput = document.getElementById('g50PeriodInput');
+      if (periodInput && !periodInput.value) {
+        periodInput.value = new Date().toISOString().slice(0, 7);
+      }
+      const period = periodInput ? periodInput.value : new Date().toISOString().slice(0, 7);
+      const creditAnt = parseFloat(document.getElementById('g50CreditAnterieurInput')?.value) || 0;
+      const acomptesIbs = parseFloat(document.getElementById('g50AcomptesIbsInput')?.value) || 0;
+
+      const g50 = computeG50FromJournal(journal, { period, creditTvaAnterieur: creditAnt, acomptesIbs });
+      const fmt = (n) => Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+      const badge = document.getElementById('g50DeadlineBadge');
+      if (badge) badge.textContent = `تاريخ الإيداع القانوني قبل: ${g50.deadlineStr}`;
+      const sheetDeadline = document.getElementById('g50SheetDeadlineText');
+      if (sheetDeadline) sheetDeadline.textContent = g50.deadlineStr;
+      const sheetPeriod = document.getElementById('g50SheetPeriodLabel');
+      if (sheetPeriod) sheetPeriod.textContent = g50.period;
+
+      const ca19 = document.getElementById('g50SheetCa19');
+      if (ca19) ca19.textContent = fmt(g50.tva.caNormal19);
+      const tva19 = document.getElementById('g50SheetTva19');
+      if (tva19) tva19.textContent = fmt(g50.tva.tvaCollectee19);
+      const ca9 = document.getElementById('g50SheetCa9');
+      if (ca9) ca9.textContent = fmt(g50.tva.caReduit9);
+      const tva9 = document.getElementById('g50SheetTva9');
+      if (tva9) tva9.textContent = fmt(g50.tva.tvaCollectee9);
+      const tvaTot = document.getElementById('g50SheetTotalTvaBrut');
+      if (tvaTot) tvaTot.textContent = fmt(g50.tva.totalTvaBrute) + ' DZD';
+
+      const dedAch = document.getElementById('g50SheetTvaDedAchats');
+      if (dedAch) dedAch.textContent = '-' + fmt(g50.tva.tvaDeductibleAchats) + ' DZD';
+      const dedSrv = document.getElementById('g50SheetTvaDedServices');
+      if (dedSrv) dedSrv.textContent = '-' + fmt(g50.tva.tvaDeductibleServices) + ' DZD';
+      const credAnt = document.getElementById('g50SheetTvaCreditAnt');
+      if (credAnt) credAnt.textContent = '-' + fmt(g50.tva.creditTvaAnterieur) + ' DZD';
+
+      const tvaNet = document.getElementById('g50SheetTvaNette');
+      if (tvaNet) tvaNet.textContent = fmt(g50.tva.tvaNetteAPayer) + ' DZD';
+
+      const creditNote = document.getElementById('g50SheetCreditNote');
+      if (creditNote) {
+        if (g50.tva.nouveauCreditTva > 0) {
+          creditNote.textContent = `* تنبيه: يوجد رصيد دائن جديد للرسم على القيمة المضافة (Crédit TVA à reporter) بمبلغ: ${fmt(g50.tva.nouveauCreditTva)} دج يرحل للشهر القادم.`;
+          creditNote.style.color = '#0284c7';
+        } else {
+          creditNote.textContent = '';
+        }
+      }
+
+      const timbre = document.getElementById('g50SheetTimbre');
+      if (timbre) timbre.textContent = fmt(g50.timbre.droitsTimbre) + ' DZD';
+      const irg = document.getElementById('g50SheetIrgSalaires');
+      if (irg) irg.textContent = fmt(g50.irg.irgSalaires) + ' DZD';
+      const ibs = document.getElementById('g50SheetIbs');
+      if (ibs) ibs.textContent = fmt(g50.ibs.acomptesIbs) + ' DZD';
+      const totalGrand = document.getElementById('g50SheetTotalGrand');
+      if (totalGrand) totalGrand.textContent = fmt(g50.totaux.totalDroitsDus) + ' DZD';
+    }
+
+    document.getElementById('btnComputeG50')?.addEventListener('click', renderG50);
+    document.getElementById('g50PeriodInput')?.addEventListener('change', renderG50);
+    document.getElementById('g50CreditAnterieurInput')?.addEventListener('input', renderG50);
+    document.getElementById('g50AcomptesIbsInput')?.addEventListener('input', renderG50);
+
+    document.getElementById('btnExportG50Json')?.addEventListener('click', () => {
+      const period = document.getElementById('g50PeriodInput')?.value || new Date().toISOString().slice(0, 7);
+      const creditAnt = parseFloat(document.getElementById('g50CreditAnterieurInput')?.value) || 0;
+      const acomptesIbs = parseFloat(document.getElementById('g50AcomptesIbsInput')?.value) || 0;
+      const g50 = computeG50FromJournal(journal, { period, creditTvaAnterieur: creditAnt, acomptesIbs });
+
+      const payload = {
+        declarationType: 'DGI_SERIE_G_50',
+        generatedAt: new Date().toISOString(),
+        enterprise: G50_DEFAULT_ENTERPRISE,
+        data: g50
+      };
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Declaration-G50-${period}.json`;
       a.click();
     });
 

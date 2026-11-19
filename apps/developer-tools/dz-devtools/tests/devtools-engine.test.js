@@ -16,6 +16,8 @@ import {
   generateBankRib,
   generateTestCard,
   calculateIRGDetails,
+  validateAutoEntrepreneurCard,
+  calculateAutoEntrepreneurTaxes,
   ALGERIAN_BANKS
 } from '../src/validators.js';
 
@@ -152,4 +154,31 @@ test('DZ-DevTools: Tafqit in Algerian Dinars', () => {
   const fr = tafqitFrench(100);
   assert.match(fr, /cent/);
   assert.match(fr, /dinars algériens/);
+});
+
+test('DZ-DevTools: Auto-Entrepreneur Card & ANAE Verification (Loi 22-23)', () => {
+  const valid = validateAutoEntrepreneurCard('AE-2024-001234');
+  assert.equal(valid.isValid, true);
+  assert.equal(valid.registrationYear, 2024);
+  assert.equal(valid.serialNumber, '001234');
+  assert.equal(valid.tvaExempt, true);
+
+  const invalid = validateAutoEntrepreneurCard('INVALID-CARD');
+  assert.equal(invalid.isValid, false);
+});
+
+test('DZ-DevTools: Auto-Entrepreneur IFU (0.5%) & CASNOS calculation (LF 2024)', () => {
+  // Annual turnover: 2,000,000 DZD
+  const res = calculateAutoEntrepreneurTaxes(2000000, { casnosCotisation: 34000 });
+  assert.equal(res.isOverCeiling, false);
+  // IFU at 0.5% = 2,000,000 * 0.005 = 10,000 DZD
+  assert.equal(res.ifu.amount, 10000);
+  assert.equal(res.casnos.annualAmount, 34000);
+  assert.equal(res.totaux.totalCharges, 44000);
+  assert.equal(res.totaux.netEarnings, 2000000 - 44000);
+
+  // Over ceiling: 6,000,000 DZD
+  const over = calculateAutoEntrepreneurTaxes(6000000);
+  assert.equal(over.isOverCeiling, true);
+  assert.ok(over.ceilingWarning !== null);
 });

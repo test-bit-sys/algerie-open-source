@@ -19,6 +19,8 @@ import {
   generateBankRib,
   generateTestCard,
   calculateIRGDetails,
+  validateAutoEntrepreneurCard,
+  calculateAutoEntrepreneurTaxes,
   ALGERIAN_BANKS
 } from './validators.js';
 
@@ -456,6 +458,63 @@ export class DZDevToolsApp {
     btnGenCib?.addEventListener('click', () => {
       renderCardCard(generateTestCard('cib'));
     });
+
+    // Auto-Entrepreneur Card Validator
+    const aeCardInput = document.getElementById('inputAeCard');
+    const aeCardResult = document.getElementById('resultAeCard');
+    aeCardInput?.addEventListener('input', () => {
+      const val = aeCardInput.value.trim();
+      if (!val) {
+        aeCardResult.innerHTML = '';
+        return;
+      }
+      const res = validateAutoEntrepreneurCard(val);
+      if (res.isValid) {
+        aeCardResult.innerHTML = `
+          <div class="val-box valid">
+            <p><strong>حالة بطاقة المقاول الذاتي:</strong> <span class="badge-success">صالحة ومسجلة</span></p>
+            <p><strong>سنة التسجيل:</strong> <strong>${res.registrationYear}</strong> | <strong>الرقم التسلسلي:</strong> <code>${res.serialNumber}</code></p>
+            <p><strong>النظام الجبائي:</strong> <span style="color: #059669; font-weight: bold;">${res.regimeFiscal}</span></p>
+            <p><strong>الإعفاء من الرسم على القيمة المضافة:</strong> <span class="badge-success">معفى قانوناً 0% TVA</span></p>
+            <p style="font-size: 11.5px; color: #475569; margin-top: 4px;"><em>${res.legalNotice}</em></p>
+          </div>
+        `;
+      } else {
+        aeCardResult.innerHTML = `<div class="val-box invalid">${res.error}</div>`;
+      }
+    });
+
+    // Auto-Entrepreneur IFU & CASNOS Simulator
+    const aeTurnoverInput = document.getElementById('inputAeTurnover');
+    const aeTaxesResult = document.getElementById('resultAeTaxes');
+    const updateAeTaxes = () => {
+      if (!aeTaxesResult) return;
+      const val = parseFloat(aeTurnoverInput?.value) || 0;
+      const res = calculateAutoEntrepreneurTaxes(val);
+      aeTaxesResult.innerHTML = `
+        <div class="val-box ${res.isOverCeiling ? 'invalid' : 'valid'}">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span>ضريبة IFU المستحقة (0.5%):</span>
+            <strong style="color: #059669; font-size: 15px;">${res.ifu.amount.toLocaleString('en-US')} دج</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span>اشتراك الضمان الاجتماعي الأدنى CASNOS:</span>
+            <strong style="color: #3b82f6;">${res.casnos.annualAmount.toLocaleString('en-US')} دج / سنوياً</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-top: 1px dashed var(--border); padding-top: 6px; margin-top: 6px;">
+            <span>مجموع التكاليف الجبائية والاجتماعية:</span>
+            <strong style="color: #ef4444; font-size: 15px;">${res.totaux.totalCharges.toLocaleString('en-US')} دج (${res.totaux.effectivePressurePercent}%)</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-top: 6px; font-weight: bold;">
+            <span>صافي الدخل السنوي التقديري:</span>
+            <strong style="color: var(--primary); font-size: 16px;">${res.totaux.netEarnings.toLocaleString('en-US')} دج</strong>
+          </div>
+          ${res.ceilingWarning ? `<div style="background: #fee2e2; color: #b91c1c; padding: 6px 10px; border-radius: 4px; font-size: 11.5px; margin-top: 8px;">${res.ceilingWarning}</div>` : ''}
+        </div>
+      `;
+    };
+    aeTurnoverInput?.addEventListener('input', updateAeTaxes);
+    updateAeTaxes();
   }
 
   // IRG Tax Simulator Engine Binding

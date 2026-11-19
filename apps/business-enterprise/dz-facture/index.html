@@ -478,6 +478,7 @@
                     <div>
                       <div style="font-size:7pt; font-weight:700;" id="sheetLegalNoticeLabel">أوقفت الفاتورة عند المبلغ الإجمالي وقدره:</div>
                       <div id="sheetTafqitWords" style="font-size:7.5pt; font-style:italic; font-weight:700; color:#008744; margin-top:2px;">...</div>
+                      <div id="sheetAutoEntrepreneurNotice" style="display:none; font-size:6.8pt; color:#10b981; font-weight:700; margin-top:4px; padding:3px 6px; background:#ecfdf5; border-radius:3px; border:1px dashed #10b981;"></div>
                       <div id="sheetStampContainer" style="border:1px dashed #94a3b8; height:70px; border-radius:4px; margin-top:8px; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:7.5pt; overflow:hidden;">
                         ختم وإمضاء المؤسسة (Cachet & Signature)
                       </div>
@@ -763,6 +764,19 @@
                 <div>
                   <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">الحساب المصرفي أو البريدي (RIB / RIP)</label>
                   <input type="text" id="cfgCompanyRib" class="search-input" style="max-width:none; width:100%;">
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 6px; padding: 10px; margin-top: 4px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.85rem; color: #10b981; cursor: pointer;">
+                    <input type="checkbox" id="cfgAutoEntrepreneurCheck" style="width: 16px; height: 16px;">
+                    <span>نظام المقاول الذاتي (Auto-Entrepreneur — Loi 22-23)</span>
+                  </label>
+                  <div id="cfgAutoEntrepreneurBox" style="display: none; margin-top: 8px;">
+                    <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">رقم بطاقة المقاول الذاتي ANAE (مثال: AE-2024-001234):</label>
+                    <input type="text" id="cfgAutoEntrepreneurCard" class="search-input" placeholder="AE-2024-001234" style="max-width:none; width:100%;">
+                    <div style="font-size: 0.72rem; color: #10b981; margin-top: 4px;">
+                      * إعفاء قانوني تلقائي من الرسم على القيمة المضافة TVA 0%، مع إدراج المرجع القانوني في أسفل الفاتورة.
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" data-i18n="lblStamp">ختم وتوقيع المؤسسة (صورة PNG للختم الدائري)</label>

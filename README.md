@@ -124,6 +124,7 @@
 > *Port: `:3000` • Path: [`apps/business-enterprise/dz-facture/`](apps/business-enterprise/dz-facture/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/business-enterprise/dz-facture/)*
 
 - **📜 Executive Decree 05-468 Compliance**: Strictly generates legally valid invoices with NIF (15 digits), NIS (20 digits), Registre de Commerce (RC), Article d'Imposition, and bank/postal RIB credentials.
+- **🏷️ Auto-Entrepreneur Mode (Loi 22-23 & LF 2024)**: One-click status toggle for registered Auto-entrepreneurs with automatic 0% VAT exemption and statutory disclaimer notice.
 - **💰 Algerian Fiscal Engine**: Automated VAT calculation (19% standard, 9% reduced, 0% exempt) and Fiscal Stamp Duty (*Droit de Timbre Fiscal*) with legal thresholds.
 - **✍️ Arabic Currency Tafqit**: Converts monetary sums into legal written Arabic, French, and English Dinars (*e.g., ثمانمائة وإحدى عشر ألف وسبعمائة دينار جزائري لا غير*).
 - **🏪 Dual Retail POS & B2B Invoicing**: Rapid barcode scanning, thermal ticket printing (58mm / 80mm), held carts (paniers en attente), and official A4 enterprise invoices.
@@ -296,6 +297,9 @@ npm run start:slides
 > *Port: `:3009` • Path: [`apps/developer-tools/dz-devtools/`](apps/developer-tools/dz-devtools/) • [🚀 Try Now Online](https://test-bit-sys.github.io/algerie-open-source/apps/developer-tools/dz-devtools/)*
 
 - **🗺️ Complete 58 Wilayas & Communes Explorer**: Curated dataset of all 58 Algerian wilayas with Arabic/French names, capitals, postal prefixes, vehicle matricules, and telephone area codes with instant export to `JSON`, `CSV`, `SQL DDL/Inserts`, and `ES Modules`.
+- **🇩🇿 National Auto-Entrepreneur System (`Loi 22-23 & LF 2024`)**:
+  - **ANAE Card Validator**: Validates national auto-entrepreneur card numbers (`AE-YYYY-XXXXXX`).
+  - **Fiscal & Social Simulator**: Computes the reduced IFU flat tax (0.5% up to 5,000,000 DZD annual turnover ceiling) and CASNOS annual social security contribution (~34,000 DZD minimum threshold).
 - **💳 Sovereign Banking & Fiscal Validators**:
   - **NIN (18-Digit National ID Inspector)**: Validates and decodes gender, birth year, wilaya, commune, and birth record number.
   - **Algerian Bank Directory & 20-Digit RIB Builder**: 19 national banks (BNA, BEA, BADR, BDL, CNEP, CPA, Algérie Poste, Al Baraka, SGA, BNP, Al Salam...) with SWIFT/BIC codes and exact Modulo-97 check key generation.
@@ -375,6 +379,13 @@ npm run start:boards
 - **📖 General Ledger (Le Grand Livre)**: Account-by-account breakdown showing opening balance, debit/credit movements, and progressive balances.
 - **🏛️ 6-Column General Trial Balance (Balance Générale)**: Generates opening balances, movement totals, and closing debit/credit balances with double balance verification.
 - **🏢 Financial Statements (Bilan & Compte de Résultat TCR)**: Generates official SCF Balance Sheet (Actif Non-Courant/Courant vs Passif Capitaux/Dettes) and Income Statement (TCR) with automated Gross Margin, EBE, Operating Result, and IBS tax (19%).
+- **🏛️ Official Algerian G50 Tax Return Engine (`DGI Série G N° 50`)**: Automatic calculation of monthly/quarterly tax liabilities directly from general journal entries:
+  - **TVA Output vs Input (Accounts 4457 & 4456)**: Net VAT payable at standard 19% and reduced 9% rates with deductible input VAT offset and credit carryforward.
+  - **Droits de Timbre (1%)**: Fiscal stamp duty collected on cash transactions.
+  - **IRG / Salaires (Account 447)**: Wage withholding tax aggregated from monthly payroll.
+  - **IBS Acomptes**: Corporate income tax provisional installments.
+  - **TAP Exemption Compliance (LF 2024)**: Compliant with the general abolition of the Tax on Professional Activity (TAP 0%).
+  - **A4 Printable Tax Return**: Official replica of the *Bordereau-Avis de Versement Série G N° 50* formatted for Algerian Tax Inspection (*Recette des Impôts*) with legal Arabic Tafqit and JSON export.
 - **💾 100% Offline Persistence**: LocalStorage auto-save, preloaded standard Algerian enterprise dataset (SARL Atlas Tech Alger), and CSV export.
 - **⚡ Dual Web & C# .NET 10 Engines**: Run directly via browser/Node server or via native C# engine:
   ```bash
@@ -395,6 +406,10 @@ npm run start:boards
 - **📉 Official Algerian IRG Scale (DGI 2024 / 2025)**: Progressive tax brackets (23%, 27%, 30%, 35%) with legal 40% abattement (1,000 to 1,500 DZD) and total exemption for taxable salaries $\le 30,000\text{ DZD}$.
 - **📄 Official Printable Pay Slips (Bulletins de Paie A4)**: Complete official slip with company credentials, Wilaya, CNAS affiliate number, employee matricule and NSS, breakdown of rubriques (Base 100, IEP 110, PRI 120, Panier 200, Transport 210, CNAS 400, IRG 500), and legal Arabic Tafqit (*أوقف كشف الراتب عند المبلغ الصافي للدفع: ... دينار جزائري*).
 - **📋 Monthly Payroll Book (Livre de Paie Mensuel)**: Enterprise-wide aggregate table summarizing all staff, total gross payroll, social security contributions, IRG tax, and net disbursements.
+- **📑 CNAS Tele-Declaration Engine (`DAC 35%`)**: Generates official CNAS contribution declarations (*Déclaration d'Assiette des Cotisations*):
+  - **Contribution Base Breakdown**: 9% employee contribution (Part Ouvrière) and 26% employer contribution (Part Patronale) totaling 35% of gross contributory base.
+  - **Sectoral Abattements**: Supports legal contribution reductions (e.g., Grand Sud 50% abattement, youth employment schemes).
+  - **A4 Printable CNAS Bordereau**: Official printable A4 replica of the *Bordereau de Versement des Cotisations CNAS* with registration number, agency details, deadline alerts (30th of following month), and legal Arabic Tafqit.
 - **👥 Enterprise Personnel Directory**: Add, edit, and manage company employees with local storage persistence and sample Algerian corporate staff preloaded.
 - **⚡ Dual Web & C# .NET 10 Engines**:
   ```bash

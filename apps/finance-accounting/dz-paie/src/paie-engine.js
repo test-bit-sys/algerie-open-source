@@ -177,6 +177,48 @@ export function computePayrollJournal(employees = []) {
 }
 
 /**
+ * Computes official CNAS teledeclaration (Déclaration d'Assiette de Cotisations - DAC)
+ * Conforming to CNAS teledeclaration standards (35% total = 9% ouvrière + 26% patronale).
+ */
+export function computeCnasDeclaration(employees = [], options = {}) {
+  const journal = computePayrollJournal(employees);
+  const period = options.period || new Date().toISOString().slice(0, 7);
+  const adherentNumber = options.adherentNumber || '16-9876543-21';
+  const agency = options.agency || 'Agence CNAS Bab Ezzouar / Alger';
+
+  const assiette = journal.totals.totalPoste;
+  const partOuvriere9 = round2(assiette * 0.09);
+  const partPatronale26 = round2(assiette * 0.26);
+  const totalCotisations35 = round2(partOuvriere9 + partPatronale26);
+
+  const abattementPct = Number(options.abattementPct) || 0;
+  const montantAbattement = round2(partPatronale26 * (abattementPct / 100));
+  const netAVerser = round2(totalCotisations35 - montantAbattement);
+
+  const parts = period.split('-');
+  const y = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const nextMonth = m === 12 ? 1 : m + 1;
+  const nextYear = m === 12 ? y + 1 : y;
+  const deadlineStr = `30/${String(nextMonth).padStart(2, '0')}/${nextYear}`;
+
+  return {
+    period,
+    deadlineStr,
+    adherentNumber,
+    agency,
+    effectifDeclare: employees.length,
+    assiette,
+    partOuvriere9,
+    partPatronale26,
+    totalCotisations35,
+    abattementPct,
+    montantAbattement,
+    netAVerser
+  };
+}
+
+/**
  * Preloaded Realistic Algerian Enterprise Employees
  */
 export const DEMO_EMPLOYEES = [

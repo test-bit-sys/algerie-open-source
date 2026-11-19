@@ -4,6 +4,7 @@ import {
   calculateIRG,
   computePayslip,
   computePayrollJournal,
+  computeCnasDeclaration,
   DEMO_EMPLOYEES,
   round2
 } from '../src/paie-engine.js';
@@ -80,4 +81,16 @@ test('DZ-Paie: Monthly Payroll Journal summary', () => {
   assert.ok(journal.totals.totalIRG > 0);
   assert.ok(journal.totals.totalNet > 0);
   assert.ok(journal.totals.totalCoutEmployeur > journal.totals.totalBrut);
+});
+
+test('DZ-Paie: Official CNAS Tele-declaration (DAC) computation', () => {
+  const dac = computeCnasDeclaration(DEMO_EMPLOYEES, { period: '2026-01' });
+  assert.equal(dac.effectifDeclare, 5);
+  assert.equal(dac.adherentNumber, '16-9876543-21');
+  assert.ok(dac.assiette > 0);
+  assert.equal(dac.partOuvriere9, round2(dac.assiette * 0.09));
+  assert.equal(dac.partPatronale26, round2(dac.assiette * 0.26));
+  assert.equal(dac.totalCotisations35, round2(dac.partOuvriere9 + dac.partPatronale26));
+  assert.equal(dac.netAVerser, dac.totalCotisations35);
+  assert.equal(dac.deadlineStr, '30/02/2026');
 });

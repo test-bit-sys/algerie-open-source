@@ -550,3 +550,74 @@ export function calculateIRGDetails(imposableAmount) {
   };
 }
 
+// 9. Auto-Entrepreneur Card & ANAE Verification (Loi 22-23 / LF 2024)
+export function validateAutoEntrepreneurCard(cardNumber) {
+  const clean = String(cardNumber || '').trim().toUpperCase();
+  const regex = /^AE-(\d{4})-(\d{6})$/;
+  const match = clean.match(regex);
+  if (!match) {
+    return {
+      isValid: false,
+      error: 'صيغة بطاقة المقاول الذاتي غير صحيحة. الصيغة القياسية لـ ANAE: AE-2024-001234'
+    };
+  }
+
+  const year = parseInt(match[1], 10);
+  const currentYear = new Date().getFullYear();
+  if (year < 2023 || year > currentYear + 1) {
+    return {
+      isValid: false,
+      error: `سنة التسجيل في بطاقة المقاول الذاتي (${year}) غير صالحة.`
+    };
+  }
+
+  return {
+    isValid: true,
+    cardNumber: clean,
+    registrationYear: year,
+    serialNumber: match[2],
+    status: 'مسجل ومصادق عليه من الوكالة الوطنية للمقاول الذاتي (ANAE)',
+    regimeFiscal: 'الضريبة الجزافية الوحيدة (IFU) بنسبة 0.5% (قانون المالية 2024)',
+    tvaExempt: true,
+    legalNotice: `مؤسس وفق أحكام القانون رقم 22-23 المتضمن القانون الأساسي للمقاول الذاتي — معفى من الرسم على القيمة المضافة TVA`
+  };
+}
+
+/**
+ * Computes IFU and CASNOS for Algerian Auto-entrepreneurs (Loi 22-23 & LF 2024)
+ */
+export function calculateAutoEntrepreneurTaxes(chiffreAffairesAnnuel, options = {}) {
+  const ca = Math.max(0, Number(chiffreAffairesAnnuel) || 0);
+  const CA_PLAFOND = 5000000;
+  const isOverCeiling = ca > CA_PLAFOND;
+
+  const ifuRate = 0.005; // 0.5%
+  const ifuTax = Math.round(ca * ifuRate);
+  const casnosAnnual = Number(options.casnosCotisation) || 34000;
+
+  const totalChargesFiscalesSociales = ifuTax + casnosAnnual;
+  const netEarnings = Math.max(0, ca - totalChargesFiscalesSociales);
+  const pressurePercent = ca > 0 ? ((totalChargesFiscalesSociales / ca) * 100).toFixed(2) : '0';
+
+  return {
+    chiffreAffairesAnnuel: ca,
+    plafondLegal: CA_PLAFOND,
+    isOverCeiling,
+    ceilingWarning: isOverCeiling ? 'تحذير: لقد تجاوز رقم الأعمال سقف 5 ملايين دج السنوي المحدد لنظام المقاول الذاتي، مما يلزم بالانتقال للنظام الحقيقي.' : null,
+    ifu: {
+      ratePercent: 0.5,
+      amount: ifuTax
+    },
+    casnos: {
+      annualAmount: casnosAnnual,
+      category: 'اشتراك سنوي جزافي أدنى للضمان الاجتماعي لغير الأجراء CASNOS'
+    },
+    totaux: {
+      totalCharges: totalChargesFiscalesSociales,
+      netEarnings,
+      effectivePressurePercent: Number(pressurePercent)
+    }
+  };
+}
+
+

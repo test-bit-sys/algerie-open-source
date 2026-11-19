@@ -1786,6 +1786,18 @@ function updateA4Calculations() {
   document.getElementById('sheetTimbre').textContent = formatCurrency(totals.timbreFiscal);
   document.getElementById('sheetGrandTotal').textContent = formatCurrency(totals.grandTotalTTC);
   document.getElementById('sheetTafqitWords').textContent = tafqitText;
+
+  const aeNoticeEl = document.getElementById('sheetAutoEntrepreneurNotice');
+  if (aeNoticeEl) {
+    if (company.isAutoEntrepreneur) {
+      aeNoticeEl.textContent = currentLang === 'ar'
+        ? `* نظام المقاول الذاتي (قانون 22-23) — بطاقة رقم: ${company.autoEntrepreneurCard || 'ANAE'} — إعفاء قانوني من الرسم على القيمة المضافة TVA (0%).`
+        : `* Statut d'Auto-Entrepreneur (Loi 22-23) — Carte N°: ${company.autoEntrepreneurCard || 'ANAE'} — Exonéré de TVA (0%).`;
+      aeNoticeEl.style.display = 'block';
+    } else {
+      aeNoticeEl.style.display = 'none';
+    }
+  }
 }
 
 function loadInvoiceIntoA4(inv) {
@@ -2414,6 +2426,18 @@ function initSettings() {
   document.getElementById('cfgCompanyAi').value = company.ai || '';
   document.getElementById('cfgCompanyRib').value = company.rib || '';
 
+  const aeCheck = document.getElementById('cfgAutoEntrepreneurCheck');
+  const aeBox = document.getElementById('cfgAutoEntrepreneurBox');
+  const aeCard = document.getElementById('cfgAutoEntrepreneurCard');
+  if (aeCheck && aeBox && aeCard) {
+    aeCheck.checked = !!company.isAutoEntrepreneur;
+    aeCard.value = company.autoEntrepreneurCard || '';
+    aeBox.style.display = aeCheck.checked ? 'block' : 'none';
+    aeCheck.addEventListener('change', () => {
+      aeBox.style.display = aeCheck.checked ? 'block' : 'none';
+    });
+  }
+
   // Stamp file reader
   let stampDataUrl = company.stampImage || '';
   document.getElementById('cfgCompanyStampInput')?.addEventListener('change', e => {
@@ -2450,6 +2474,8 @@ function initSettings() {
       rc: document.getElementById('cfgCompanyRc').value.trim(),
       ai: document.getElementById('cfgCompanyAi').value.trim(),
       rib: document.getElementById('cfgCompanyRib').value.trim(),
+      isAutoEntrepreneur: document.getElementById('cfgAutoEntrepreneurCheck')?.checked || false,
+      autoEntrepreneurCard: document.getElementById('cfgAutoEntrepreneurCard')?.value.trim() || '',
       stampImage: stampDataUrl
     });
     sound.playBeep();
