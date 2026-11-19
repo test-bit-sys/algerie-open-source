@@ -5,6 +5,8 @@ import {
   computePayslip,
   computePayrollJournal,
   computeCnasDeclaration,
+  computeOrdreDeVirement,
+  generateVirementBatchText,
   DEMO_EMPLOYEES,
   round2
 } from '../src/paie-engine.js';
@@ -93,4 +95,28 @@ test('DZ-Paie: Official CNAS Tele-declaration (DAC) computation', () => {
   assert.equal(dac.totalCotisations35, round2(dac.partOuvriere9 + dac.partPatronale26));
   assert.equal(dac.netAVerser, dac.totalCotisations35);
   assert.equal(dac.deadlineStr, '30/02/2026');
+});
+
+test('DZ-Paie: Official Ordre de Virement de masse (CCP & Banques)', () => {
+  // All beneficiaries (4 out of 5 in DEMO_EMPLOYEES have VIREMENT)
+  const virementAll = computeOrdreDeVirement({ month: '2026-03' });
+  assert.equal(virementAll.count, 4);
+  assert.ok(virementAll.totalMontant > 0);
+  assert.equal(virementAll.channel, 'ALL');
+
+  // Filter CCP only (3 out of 4)
+  const virementCcp = computeOrdreDeVirement({ channel: 'CCP' });
+  assert.equal(virementCcp.count, 3);
+  assert.ok(virementCcp.totalMontant < virementAll.totalMontant);
+
+  // Filter BANQUE only (1 out of 4)
+  const virementBanque = computeOrdreDeVirement({ channel: 'BANQUE' });
+  assert.equal(virementBanque.count, 1);
+  assert.equal(virementBanque.beneficiaries[0].matricule, 'EMP-002');
+
+  // Test batch text generator
+  const batchTxt = generateVirementBatchText(virementAll);
+  assert.ok(batchTxt.includes('# BORDEREAU DE VIREMENT'));
+  assert.ok(batchTxt.includes('EMP-001'));
+  assert.ok(batchTxt.includes('007 99999 0012345678 45'));
 });

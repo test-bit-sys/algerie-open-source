@@ -175,3 +175,145 @@ export function calculateInvoiceTotals({ items = [], paymentMethod = PAYMENT_MET
     grandTotalTTC
   };
 }
+
+/**
+ * Computes the official Algerian annual sales summary by client
+ * (État 104 des Clients - Article 224 du CIDTA).
+ */
+export function computeEtat104(invoices = [], options = {}) {
+  const selectedYear = options.year ? String(options.year) : 'ALL';
+  const minAmountHT = Number(options.minAmountHT) || 0;
+
+  // Filter invoices: only commercial sales (FACTURE or POS)
+  const filteredInvoices = invoices.filter(inv => {
+    if (inv.docType === 'PROFORMA' || inv.docType === 'BL') return false;
+    if (selectedYear !== 'ALL') {
+      const dateStr = inv.docDate || inv.date || inv.createdAt || '';
+      if (!dateStr.startsWith(selectedYear)) return false;
+    }
+    return true;
+  });
+
+  // Group by client
+  const clientMap = new Map();
+
+  for (const inv of filteredInvoices) {
+    const key = (inv.clientNif && inv.clientNif.trim()) || (inv.clientName && inv.clientName.trim()) || 'CLIENT_COMPTOIR';
+    if (!clientMap.has(key)) {
+      clientMap.set(key, {
+        clientKey: key,
+        clientName: inv.clientName || 'زبون عام',
+        clientAddress: inv.clientAddress || '-',
+        clientNif: inv.clientNif || '-',
+        clientNis: inv.clientNis || '-',
+        clientRc: inv.clientRc || '-',
+        clientAi: inv.clientAi || '-',
+        invoicesCount: 0,
+        totalHT: 0,
+        totalTVA: 0,
+        totalTimbre: 0,
+        totalTTC: 0,
+        paymentMethods: {}
+      });
+    }
+
+    const rec = clientMap.get(key);
+    rec.invoicesCount += 1;
+    const ht = round2(inv.totalHT || inv.subtotalHT || 0);
+    const tva = round2(inv.totalTVA || 0);
+    const timbre = round2(inv.timbreFiscal || 0);
+    const ttc = round2(inv.totalTTC || inv.grandTotalTTC || (ht + tva + timbre));
+
+    rec.totalHT = round2(rec.totalHT + ht);
+    rec.totalTVA = round2(rec.totalTVA + tva);
+    rec.totalTimbre = round2(rec.totalTimbre + timbre);
+    rec.totalTTC = round2(rec.totalTTC + ttc);
+
+    const pm = inv.paymentMethod || 'ESPECES';
+    rec.paymentMethods[pm] = (rec.paymentMethods[pm] || 0) + 1;
+  }
+
+  // Filter by minAmountHT
+  const clientsList = Array.from(clientMap.values()).filter(c => c.totalHT >= minAmountHT);
+
+  // Determine predominant payment method
+  clientsList.forEach(c => {
+    let bestMethod = 'VIREMENT';
+    let maxCount = -1;
+    for (const [method, count] of Object.entries(c.paymentMethods)) {
+      if (count > maxCount) {
+        maxCount = count;
+        bestMethod = method;
+      }
+    }
+    c.mainPaymentMethod = bestMethod;
+  });
+
+  const totals = {
+    clientsCount: clientsList.length,
+    invoicesCount: clientsList.reduce((sum, c) => sum + c.invoicesCount, 0),
+    totalHT: round2(clientsList.reduce((sum, c) => sum + c.totalHT, 0)),
+    totalTVA: round2(clientsList.reduce((sum, c) => sum + c.totalTVA, 0)),
+    totalTimbre: round2(clientsList.reduce((sum, c) => sum + c.totalTimbre, 0)),
+    totalTTC: round2(clientsList.reduce((sum, c) => sum + c.totalTTC, 0))
+  };
+
+  return {
+    year: selectedYear,
+    generatedAt: new Date().toISOString(),
+    clients: clientsList,
+    totals
+  };
+}
+
+/**
+ * Exports État 104 data to CSV format conforming to DGI requirements
+ */
+export function exportEtat104ToCSV(etat104Data) {
+  const headers = [
+    'N°',
+    'Raison Sociale / Nom Client',
+    'NIF (15 chiffres)',
+    'Registre Commerce (RC)',
+    'Article Imposition',
+    'Adresse / Wilaya',
+    'Nombre Factures',
+    'Montant Total HT (DZD)',
+    'Montant TVA (DZD)',
+    'Droits de Timbre (DZD)',
+    'Montant Total TTC (DZD)',
+    'Mode de Règlement'
+  ];
+
+  const rows = etat104Data.clients.map((c, idx) => [
+    idx + 1,
+    `"${c.clientName.replace(/"/g, '""')}"`,
+    `"${c.clientNif}"`,
+    `"${c.clientRc}"`,
+    `"${c.clientAi}"`,
+    `"${c.clientAddress.replace(/"/g, '""')}"`,
+    c.invoicesCount,
+    c.totalHT.toFixed(2),
+    c.totalTVA.toFixed(2),
+    c.totalTimbre.toFixed(2),
+    c.totalTTC.toFixed(2),
+    `"${c.mainPaymentMethod}"`
+  ]);
+
+  rows.push([
+    'TOTAL',
+    `"TOTAL GENERAL (${etat104Data.totals.clientsCount} CLIENTS)"`,
+    '""',
+    '""',
+    '""',
+    '""',
+    etat104Data.totals.invoicesCount,
+    etat104Data.totals.totalHT.toFixed(2),
+    etat104Data.totals.totalTVA.toFixed(2),
+    etat104Data.totals.totalTimbre.toFixed(2),
+    etat104Data.totals.totalTTC.toFixed(2),
+    '""'
+  ]);
+
+  return [headers.join(';'), ...rows.map(r => r.join(';'))].join('\r\n');
+}

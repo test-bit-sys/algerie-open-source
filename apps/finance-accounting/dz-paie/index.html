@@ -444,6 +444,10 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span>5. تصريح الضمان الاجتماعي CNAS</span>
     </button>
+    <button class="tab-btn" data-tab="virement-ordre">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 9V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><rect x="9" y="9" width="13" height="12" rx="2"/><circle cx="16" cy="15" r="2"/></svg>
+      <span>6. أمر تحويل الأجور الجماعي (Ordre de Virement)</span>
+    </button>
   </nav>
 
   <!-- Sovereign Suite Navigation Strip -->
@@ -842,6 +846,132 @@
         </div>
       </div>
     </section>
+
+    <!-- Tab 6: Ordre de Virement de Masse (CCP & Banques) -->
+    <section id="tab-virement-ordre" class="tab-pane">
+      <div class="form-panel no-print" style="max-width: 950px; margin: 0 auto 20px auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+          <div>
+            <h3 style="color: #818cf8; margin-bottom: 4px;">أمر تحويل الأجور الجماعي (Ordre de Virement de Masse)</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">إصدار جدول وأمر تحويل الأجور الرسمي الموجه لبريد الجزائر (CCP) أو البنوك التجارية مع التفقيط بالعربية والتصدير الرقمي</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="window.print()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <span>طباعة أمر التحويل (A4)</span>
+            </button>
+            <button class="btn" id="btnExportVirementTxt" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>تصدير ملف التحويل (TXT / Batch)</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; background: rgba(15, 23, 42, 0.4); padding: 14px; border-radius: 8px; border: 1px solid var(--border);">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label>فترة الأجور المعنية:</label>
+            <input type="month" id="virementPeriodInput" class="form-control">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label>قناة التحويل / نوع الحسابات:</label>
+            <select id="virementChannelSelect" class="form-control">
+              <option value="ALL">جميع الحسابات (بريد الجزائر + بنوك)</option>
+              <option value="CCP">بريد الجزائر فقط (Algérie Poste - CCP)</option>
+              <option value="BANQUE">البنوك التجارية فقط (Comptes Bancaires)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label>حساب المؤسسة المخصوم منه (RIP/RIB):</label>
+            <input type="text" id="virementEmittorRib" class="form-control" value="007 99999 0001234567 89" style="font-family: monospace;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label>المؤسسة المالية الموجه إليها:</label>
+            <input type="text" id="virementEmittorBank" class="form-control" value="بريد الجزائر — مركز الصكوك البريدية">
+          </div>
+        </div>
+      </div>
+
+      <!-- Printable A4 Ordre de Virement Sheet -->
+      <div class="payslip-sheet" style="max-width: 900px; margin: 0 auto; background: #ffffff; color: #0f172a; padding: 32px 36px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); font-family: 'Cairo', sans-serif; font-size: 12px; line-height: 1.5;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 16px;">
+          <div>
+            <h2 style="font-size: 17px; font-weight: 800; color: #1e1b4b; margin-bottom: 2px;">شركة أطلس للتكنولوجيا والحلول البرمجية</h2>
+            <div style="font-size: 11px; color: #475569;">SARL ATLAS TECH ALGER • رأس المال: 5,000,000 دج</div>
+            <div style="font-size: 10px; color: #64748b;">العنوان: الحي الدبلوماسي، ص.ب 42، وادي حيدرة، الجزائر العاصمة</div>
+            <div style="font-size: 10px; color: #64748b;">NIF: 001616012345678 • RC: 16/00-0987654B20 • Art. Imp: 16012345678</div>
+          </div>
+          <div style="text-align: left;">
+            <div style="display: inline-block; border: 2px solid #0f172a; padding: 6px 14px; text-align: center; border-radius: 4px;">
+              <div style="font-size: 14px; font-weight: 800; color: #0f172a;">ORDRE DE VIREMENT</div>
+              <div style="font-size: 11px; font-weight: 700; color: #4338ca;">أمر بتحويل أجور جماعي</div>
+            </div>
+            <div style="font-size: 11px; color: #64748b; margin-top: 6px; text-align: left;">
+              المرجع: <span id="virementSheetRef" style="font-family: monospace; font-weight: bold;">OV-2026-01</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recipient & Subject Box -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; font-size: 11.5px;">
+          <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; background: #f8fafc;">
+            <div style="font-weight: 700; color: #1e293b; margin-bottom: 4px;">بيانات الحساب المخصوم منه (Donneur d'Ordre):</div>
+            <div><strong>اسم المؤسسة:</strong> SARL ATLAS TECH ALGER</div>
+            <div><strong>المصرف / الوكالة:</strong> <span id="virementSheetBankName">بريد الجزائر (CCP)</span></div>
+            <div><strong>رقم الحساب (RIP/RIB):</strong> <span id="virementSheetEmittorRib" style="font-family: monospace; font-weight: bold; color: #0f172a;">007 99999 0001234567 89</span></div>
+          </div>
+          <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px 14px; background: #f8fafc;">
+            <div style="font-weight: 700; color: #1e293b; margin-bottom: 4px;">إلى السيد / الجهة المستلمة:</div>
+            <div id="virementSheetRecipient">السيد مدير مركز الصكوك البريدية / رئيس الوكالة البنكية</div>
+            <div style="margin-top: 4px;"><strong>الموضوع:</strong> تحويل أجور المستخدمين عن شهر: <span id="virementSheetPeriodLabel" style="font-weight: bold; color: #4338ca;">2026-01</span></div>
+            <div style="font-size: 10.5px; color: #64748b; margin-top: 2px;">يرجى خصم المبلغ الإجمالي من حسابنا وتحويله للمستفيدين أدناه.</div>
+          </div>
+        </div>
+
+        <!-- Beneficiaries Table -->
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11px;">
+          <thead>
+            <tr style="background: #f1f5f9; border-top: 1px solid #cbd5e1; border-bottom: 2px solid #cbd5e1;">
+              <th style="padding: 6px 8px; text-align: center; width: 30px;">#</th>
+              <th style="padding: 6px 8px; text-align: right; width: 80px;">الرقم (Mat)</th>
+              <th style="padding: 6px 8px; text-align: right;">اسم ولقب المستخدم (Bénéficiaire)</th>
+              <th style="padding: 6px 8px; text-align: right;">الوظيفة</th>
+              <th style="padding: 6px 8px; text-align: center; width: 100px;">الجهة</th>
+              <th style="padding: 6px 8px; text-align: left; width: 190px;">رقم الحساب (RIP / RIB)</th>
+              <th style="padding: 6px 8px; text-align: left; width: 110px;">المبلغ الصافي (DZD)</th>
+            </tr>
+          </thead>
+          <tbody id="virementTableBody">
+            <!-- Rendered dynamically -->
+          </tbody>
+          <tfoot>
+            <tr style="background: #f8fafc; font-weight: 700; border-top: 2px solid #cbd5e1; font-size: 12px;">
+              <td colspan="5" style="padding: 8px 10px;">مجموع المبالغ الصافية المحولة (Total Net à Virer):</td>
+              <td style="padding: 8px 10px; text-align: center;" id="virementTotalCount">0 مستفيدين</td>
+              <td style="padding: 8px 10px; text-align: left; font-family: monospace; color: #1e1b4b;" id="virementTotalAmount">0.00 DZD</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Arabic Tafqit Block -->
+        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 10px 14px; border-radius: 4px; font-weight: 700; margin-bottom: 24px;">
+          <span style="color: #4338ca;">أوقف هذا الأمر بتحويل الأجور عند مبلغ إجمالي قدره:</span>
+          <span id="virementTafqitText" style="color: #0f172a;">-</span>
+        </div>
+
+        <!-- Official Signatures -->
+        <div style="display: flex; justify-content: space-between; margin-top: 24px; padding-top: 14px; border-top: 1px dashed #cbd5e1; font-size: 11px;">
+          <div style="width: 250px; text-align: center;">
+            <div style="font-weight: bold; margin-bottom: 40px;">ختم وتوقيع الآمر بالصرف (L'Ordonnateur)</div>
+            <div style="border-top: 1px solid #cbd5e1; padding-top: 4px; color: #94a3b8;">SARL ATLAS TECH ALGER</div>
+          </div>
+          <div style="width: 250px; text-align: center;">
+            <div style="font-weight: bold; margin-bottom: 40px;">تأشيرة وختم استلام المؤسسة المالية (Banque / CCP)</div>
+            <div style="border-top: 1px solid #cbd5e1; padding-top: 4px; color: #94a3b8;">تأشيرة الوكالة المستقبلة</div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script type="module">
@@ -850,6 +980,8 @@
       computePayslip,
       computePayrollJournal,
       computeCnasDeclaration,
+      computeOrdreDeVirement,
+      generateVirementBatchText,
       DEMO_EMPLOYEES,
       round2
     } from './src/paie-engine.js';
@@ -943,6 +1075,7 @@
       renderPayrollJournal();
       renderEmployeesTable();
       renderCnasDeclaration();
+      renderOrdreDeVirement();
     }
 
     function renderKPIs() {
@@ -1343,6 +1476,97 @@
       const a = document.createElement('a');
       a.href = url;
       a.download = `CNAS-DAC-${period}.json`;
+      a.click();
+    });
+
+    // Ordre de Virement Renderer
+    function renderOrdreDeVirement() {
+      const periodInput = document.getElementById('virementPeriodInput');
+      if (periodInput && !periodInput.value) {
+        periodInput.value = new Date().toISOString().slice(0, 7);
+      }
+      const month = periodInput ? periodInput.value : new Date().toISOString().slice(0, 7);
+      const channel = document.getElementById('virementChannelSelect')?.value || 'ALL';
+      const emittorRib = document.getElementById('virementEmittorRib')?.value || '007 99999 0001234567 89';
+      const emittorBank = document.getElementById('virementEmittorBank')?.value || 'بريد الجزائر — مركز الصكوك البريدية';
+
+      const virement = computeOrdreDeVirement({
+        month,
+        channel,
+        emittorRib,
+        emittorBank,
+        employees
+      });
+
+      const fmt = (n) => Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+      document.getElementById('virementSheetRef').textContent = `OV-${month.replace('-', '')}-01`;
+      document.getElementById('virementSheetPeriodLabel').textContent = month;
+      document.getElementById('virementSheetEmittorRib').textContent = emittorRib;
+      document.getElementById('virementSheetBankName').textContent = emittorBank;
+
+      const recipientEl = document.getElementById('virementSheetRecipient');
+      if (recipientEl) {
+        if (channel === 'CCP') {
+          recipientEl.textContent = 'السيد مدير مركز الصكوك البريدية لبريد الجزائر (Algérie Poste)';
+        } else if (channel === 'BANQUE') {
+          recipientEl.textContent = 'السيد مدير الوكالة البنكية المستقبلة (Direction de l\'Agence Bancaire)';
+        } else {
+          recipientEl.textContent = 'السيد مدير مركز الصكوك البريدية / رئيس الوكالة البنكية';
+        }
+      }
+
+      const tbody = document.getElementById('virementTableBody');
+      if (tbody) {
+        if (virement.beneficiaries.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 16px; color: #64748b;">لا يوجد مستخدمون محددون للدفع عبر التحويل البنكي أو البريدي وفق التصنيف المختار.</td></tr>`;
+        } else {
+          tbody.innerHTML = virement.beneficiaries.map((b, idx) => `
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 6px 8px; text-align: center; color: #64748b;">${idx + 1}</td>
+              <td style="padding: 6px 8px; font-family: monospace; font-weight: 600;">${b.matricule}</td>
+              <td style="padding: 6px 8px; font-weight: 700;">${b.name}</td>
+              <td style="padding: 6px 8px; color: #475569;">${b.post}</td>
+              <td style="padding: 6px 8px; text-align: center;">
+                <span style="display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; ${b.isCcp ? 'background: #fef3c7; color: #92400e;' : 'background: #e0e7ff; color: #3730a3;'}">${b.bankType}</span>
+              </td>
+              <td style="padding: 6px 8px; font-family: monospace; font-weight: 600; text-align: left; color: #0f172a;">${b.accountNumber}</td>
+              <td style="padding: 6px 8px; font-family: monospace; font-weight: 700; text-align: left; color: #166534;">${fmt(b.amount)}</td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      document.getElementById('virementTotalCount').textContent = `${virement.count} مستفيدين`;
+      document.getElementById('virementTotalAmount').textContent = fmt(virement.totalMontant) + ' DZD';
+      document.getElementById('virementTafqitText').textContent = tafqitArabic(virement.totalMontant);
+    }
+
+    document.getElementById('virementPeriodInput')?.addEventListener('change', renderOrdreDeVirement);
+    document.getElementById('virementChannelSelect')?.addEventListener('change', renderOrdreDeVirement);
+    document.getElementById('virementEmittorRib')?.addEventListener('input', renderOrdreDeVirement);
+    document.getElementById('virementEmittorBank')?.addEventListener('input', renderOrdreDeVirement);
+
+    document.getElementById('btnExportVirementTxt')?.addEventListener('click', () => {
+      const month = document.getElementById('virementPeriodInput')?.value || new Date().toISOString().slice(0, 7);
+      const channel = document.getElementById('virementChannelSelect')?.value || 'ALL';
+      const emittorRib = document.getElementById('virementEmittorRib')?.value || '007 99999 0001234567 89';
+      const emittorBank = document.getElementById('virementEmittorBank')?.value || 'بريد الجزائر';
+
+      const virement = computeOrdreDeVirement({
+        month,
+        channel,
+        emittorRib,
+        emittorBank,
+        employees
+      });
+
+      const txt = generateVirementBatchText(virement);
+      const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ORDRE-VIREMENT-${channel}-${month}.txt`;
       a.click();
     });
 

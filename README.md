@@ -125,6 +125,7 @@
 
 - **📜 Executive Decree 05-468 Compliance**: Strictly generates legally valid invoices with NIF (15 digits), NIS (20 digits), Registre de Commerce (RC), Article d'Imposition, and bank/postal RIB credentials.
 - **🏷️ Auto-Entrepreneur Mode (Loi 22-23 & LF 2024)**: One-click status toggle for registered Auto-entrepreneurs with automatic 0% VAT exemption and statutory disclaimer notice.
+- **📑 État 104 des Clients (Art. 224 CIDTA - DGI)**: Official annual client sales summary detailing Client NIF, NIS, RC, Address, Total HT, TVA (19%/9%), Timbre, and Total TTC with filterable dashboard, DGI CSV export, and printable A4 landscape report.
 - **💰 Algerian Fiscal Engine**: Automated VAT calculation (19% standard, 9% reduced, 0% exempt) and Fiscal Stamp Duty (*Droit de Timbre Fiscal*) with legal thresholds.
 - **✍️ Arabic Currency Tafqit**: Converts monetary sums into legal written Arabic, French, and English Dinars (*e.g., ثمانمائة وإحدى عشر ألف وسبعمائة دينار جزائري لا غير*).
 - **🏪 Dual Retail POS & B2B Invoicing**: Rapid barcode scanning, thermal ticket printing (58mm / 80mm), held carts (paniers en attente), and official A4 enterprise invoices.
@@ -410,6 +411,7 @@ npm run start:boards
   - **Contribution Base Breakdown**: 9% employee contribution (Part Ouvrière) and 26% employer contribution (Part Patronale) totaling 35% of gross contributory base.
   - **Sectoral Abattements**: Supports legal contribution reductions (e.g., Grand Sud 50% abattement, youth employment schemes).
   - **A4 Printable CNAS Bordereau**: Official printable A4 replica of the *Bordereau de Versement des Cotisations CNAS* with registration number, agency details, deadline alerts (30th of following month), and legal Arabic Tafqit.
+- **🏦 Official Ordre de Virement de Masse (Collective Salary Transfer Slip)**: Generates official salary transfer order letters and itemized bank/postal tables for Algérie Poste (CCP) and Algerian Commercial Banks (BNA, BEA, BADR, BDL, CPA...). Includes automated Arabic currency Tafqit, bank presentation slip, and electronic batch transfer file (.txt) export.
 - **👥 Enterprise Personnel Directory**: Add, edit, and manage company employees with local storage persistence and sample Algerian corporate staff preloaded.
 - **⚡ Dual Web & C# .NET 10 Engines**:
   ```bash

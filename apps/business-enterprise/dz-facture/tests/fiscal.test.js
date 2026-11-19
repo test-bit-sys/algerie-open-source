@@ -14,6 +14,8 @@ import {
   validateNIS,
   validateRC,
   calculateCCPKey,
+  computeEtat104,
+  exportEtat104ToCSV,
   PAYMENT_METHODS
 } from '../src/modules/fiscal.js';
 
@@ -92,4 +94,77 @@ test('CCP key: mod-97 postal algorithm', () => {
   assert.match(key, /^\d{2}$/);
   assert.equal(Number(key), expected);
   assert.equal(calculateCCPKey('not-a-number'), '');
+});
+
+test('DZ-Facture: Official État 104 des Clients (Art. 224 CIDTA - DGI)', () => {
+  const sampleInvoices = [
+    {
+      docType: 'FACTURE',
+      docDate: '2026-02-10',
+      clientName: 'مؤسسة السلام',
+      clientNif: '003116098765432',
+      clientRc: '31/00-9876543B20',
+      clientAddress: 'وهران',
+      totalHT: 100000,
+      totalTVA: 19000,
+      timbreFiscal: 0,
+      totalTTC: 119000,
+      paymentMethod: 'VIREMENT'
+    },
+    {
+      docType: 'FACTURE',
+      docDate: '2026-03-15',
+      clientName: 'مؤسسة السلام',
+      clientNif: '003116098765432',
+      clientRc: '31/00-9876543B20',
+      clientAddress: 'وهران',
+      totalHT: 50000,
+      totalTVA: 9500,
+      timbreFiscal: 0,
+      totalTTC: 59500,
+      paymentMethod: 'VIREMENT'
+    },
+    {
+      docType: 'FACTURE',
+      docDate: '2026-03-20',
+      clientName: 'شركة التاج',
+      clientNif: '001916055555555',
+      clientRc: '19/00-5555555B21',
+      clientAddress: 'سطيف',
+      totalHT: 20000,
+      totalTVA: 3800,
+      timbreFiscal: 238,
+      totalTTC: 24038,
+      paymentMethod: 'ESPECES'
+    },
+    {
+      // Proforma should be excluded from État 104
+      docType: 'PROFORMA',
+      docDate: '2026-03-22',
+      clientName: 'شركة تجريبية',
+      totalHT: 80000,
+      totalTVA: 15200,
+      totalTTC: 95200
+    }
+  ];
+
+  const etat = computeEtat104(sampleInvoices, { year: '2026' });
+  assert.equal(etat.clients.length, 2);
+  assert.equal(etat.totals.invoicesCount, 3);
+  assert.equal(etat.totals.totalHT, 170000);
+  assert.equal(etat.totals.totalTVA, 32300);
+  assert.equal(etat.totals.totalTimbre, 238);
+  assert.equal(etat.totals.totalTTC, 202538);
+
+  const salam = etat.clients.find(c => c.clientNif === '003116098765432');
+  assert.ok(salam);
+  assert.equal(salam.invoicesCount, 2);
+  assert.equal(salam.totalHT, 150000);
+  assert.equal(salam.mainPaymentMethod, 'VIREMENT');
+
+  // Test CSV export
+  const csv = exportEtat104ToCSV(etat);
+  assert.ok(csv.includes('مؤسسة السلام'));
+  assert.ok(csv.includes('003116098765432'));
+  assert.ok(csv.includes('TOTAL GENERAL'));
 });

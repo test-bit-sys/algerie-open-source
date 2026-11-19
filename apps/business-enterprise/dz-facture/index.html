@@ -69,6 +69,12 @@
             </button>
           </li>
           <li>
+            <button class="nav-btn" data-tab="tab-etat104">
+              <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+              <span data-i18n="navEtat104">الجدول السنوي للعملاء (État 104)</span>
+            </button>
+          </li>
+          <li>
             <button class="nav-btn" data-tab="tab-settings">
               <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
               <span data-i18n="navSettings">بيانات المؤسسة والنسخ الاحتياطي</span>
@@ -814,6 +820,155 @@
               </div>
             </div>
 
+          </div>
+        </section>
+
+        <!-- TAB: ETAT 104 DES CLIENTS (DGI) -->
+        <section id="tab-etat104" class="tab-pane">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+            <div>
+              <h2 style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:0.25rem;">الجدول السنوي للعملاء (État 104 des Clients - DGI)</h2>
+              <p style="font-size:0.85rem; color:var(--text-muted);">الكشف الإجمالي السنوي لمبيعات العملاء الملزم قانوناً بموجب المادة 224 من قانون الضرائب المباشرة والرسوم المماثلة (C.I.D.T.A)</p>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button class="btn btn-primary" id="btnPrintEtat104">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span>طباعة جدول 104 (A4 أفقي)</span>
+              </button>
+              <button class="btn btn-outline" id="btnExportEtat104CSV" style="border-color:#10b981; color:#10b981;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>تصدير DGI (CSV)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:1.5rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <label style="font-size:0.85rem; font-weight:700; color:var(--text-muted);">السنة المالية (Exercice):</label>
+              <select id="etat104YearSelect" class="search-input" style="width:140px; padding:6px 10px;">
+                <option value="ALL">جميع السنوات</option>
+                <option value="2026" selected>2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+              </select>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <label style="font-size:0.85rem; font-weight:700; color:var(--text-muted);">الحد الأدنى لرقم الأعمال HT:</label>
+              <select id="etat104MinSelect" class="search-input" style="width:160px; padding:6px 10px;">
+                <option value="0">الكل (بدون حد أدنى)</option>
+                <option value="50000">أكثر من 50,000 دج</option>
+                <option value="100000">أكثر من 100,000 دج</option>
+                <option value="500000">أكثر من 500,000 دج</option>
+              </select>
+            </div>
+            <div style="margin-inline-start:auto;">
+              <span id="etat104BadgeStatus" style="font-size:0.8rem; background:rgba(16, 185, 129, 0.1); color:#10b981; border:1px solid rgba(16, 185, 129, 0.2); padding:5px 12px; border-radius:20px; font-weight:700;">جاهز للتصريح الجبائي</span>
+            </div>
+          </div>
+
+          <!-- KPI Summary Grid -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1.5rem;">
+            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1rem; border-top:3px solid #3b82f6;">
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">عدد الزبائن المصرح بهم</div>
+              <div id="etat104KpiClients" style="font-size:1.5rem; font-weight:900; color:var(--text-main); margin-top:4px;">0</div>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1rem; border-top:3px solid #10b981;">
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">إجمالي المبيعات الصافية (HT)</div>
+              <div id="etat104KpiHT" style="font-size:1.4rem; font-weight:900; color:#10b981; margin-top:4px; font-family:monospace;">0.00 دج</div>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1rem; border-top:3px solid #f59e0b;">
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">الرسم على القيمة المضافة (TVA)</div>
+              <div id="etat104KpiTVA" style="font-size:1.4rem; font-weight:900; color:#f59e0b; margin-top:4px; font-family:monospace;">0.00 دج</div>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1rem; border-top:3px solid #6366f1;">
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">المبلغ الإجمالي الشامل (TTC)</div>
+              <div id="etat104KpiTTC" style="font-size:1.4rem; font-weight:900; color:var(--text-main); margin-top:4px; font-family:monospace;">0.00 دج</div>
+            </div>
+          </div>
+
+          <!-- Screen Interactive Table -->
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:36px; text-align:center;">#</th>
+                  <th>اسم الزبون / المؤسسة</th>
+                  <th>الرقم الجبائي (NIF)</th>
+                  <th>السجل التجاري (RC)</th>
+                  <th>الولاية / العنوان</th>
+                  <th style="text-align:center;">الفواتير</th>
+                  <th style="text-align:left;">المبلغ الصافي HT</th>
+                  <th style="text-align:left;">الرسم TVA</th>
+                  <th style="text-align:left;">المجموع TTC</th>
+                  <th>طريقة الدفع</th>
+                </tr>
+              </thead>
+              <tbody id="etat104TableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Printable A4 Landscape État 104 Document -->
+          <div id="printableEtat104Wrapper" style="display:none; background:#ffffff; color:#0f172a; padding:24px 30px; font-family:'Cairo', sans-serif; font-size:10.5px; line-height:1.4;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0f172a; padding-bottom:10px; margin-bottom:12px;">
+              <div>
+                <div style="font-size:11px; font-weight:bold;">الجمهورية الجزائرية الديمقراطية الشعبية</div>
+                <div style="font-size:10px; color:#475569;">وزارة المالية — المديرية العامة للضرائب (D.G.I)</div>
+                <div style="font-size:14px; font-weight:900; color:#1e1b4b; margin-top:3px;">كشف الزبائن السنوي الإجمالي — سلسلة ج رقم 104 (SÉRIE G N° 104)</div>
+                <div style="font-size:10px; color:#64748b;">تطبيقاً لأحكام المادة 224 من قانون الضرائب المباشرة والرسوم المماثلة</div>
+              </div>
+              <div style="text-align:left; border:2px solid #0f172a; padding:6px 12px; border-radius:4px;">
+                <div style="font-weight:900; font-size:13px;">EXERCICE FISCAL: <span id="printEtat104Year">2026</span></div>
+                <div style="font-size:9.5px; color:#475569;">TABLEAU RÉCAPITULATIF DES CLIENTS</div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:2fr 1fr; gap:12px; border:1px solid #cbd5e1; border-radius:4px; padding:8px 12px; margin-bottom:12px; background:#f8fafc; font-size:10.5px;">
+              <div>
+                <div><strong>تسمية المؤسسة (Raison Sociale):</strong> <span id="printEtat104Company">-</span></div>
+                <div><strong>العنوان:</strong> <span id="printEtat104Address">-</span></div>
+              </div>
+              <div>
+                <div><strong>NIF:</strong> <span id="printEtat104NIF" style="font-family:monospace; font-weight:bold;">-</span></div>
+                <div><strong>RC:</strong> <span id="printEtat104RC" style="font-family:monospace;">-</span> • <strong>AI:</strong> <span id="printEtat104AI" style="font-family:monospace;">-</span></div>
+              </div>
+            </div>
+
+            <table style="width:100%; border-collapse:collapse; font-size:10px; margin-bottom:14px;">
+              <thead>
+                <tr style="background:#f1f5f9; border-top:1px solid #0f172a; border-bottom:2px solid #0f172a;">
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:center;">#</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:right;">اسم الزبون أو التسمية التجارية</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:left;">رقم NIF (15 رقماً)</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:left;">السجل التجاري</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:right;">العنوان / المقر</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:center;">العدد</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:left;">المبلغ الصافي HT</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:left;">الرسم TVA</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:left;">المجموع TTC</th>
+                  <th style="border:1px solid #cbd5e1; padding:5px 6px; text-align:center;">طريقة الدفع</th>
+                </tr>
+              </thead>
+              <tbody id="printEtat104TableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+              <tfoot id="printEtat104TableFoot">
+                <!-- Dynamic Totals -->
+              </tfoot>
+            </table>
+
+            <div style="display:flex; justify-content:space-between; margin-top:18px; padding-top:10px; border-top:1px dashed #cbd5e1; font-size:10px;">
+              <div style="width:320px;">
+                <div style="font-weight:bold; margin-bottom:30px;">تصريح ومصادقة المكلف بالضريبة (Soussigné):</div>
+                <div style="font-size:9.5px; color:#475569;">أصرح بصحة ومطابقة المبالغ والهويات الواردة في هذا الجدول لدفاتري وفواتيري الصادرة.</div>
+              </div>
+              <div style="width:240px; text-align:center;">
+                <div style="font-weight:bold; margin-bottom:30px;">تأشيرة وختم قباضة الضرائب (Recette des Impôts):</div>
+                <div style="border-top:1px solid #cbd5e1; padding-top:4px; color:#94a3b8;">تأشيرة الاستلام والتسجيل</div>
+              </div>
+            </div>
           </div>
         </section>
 

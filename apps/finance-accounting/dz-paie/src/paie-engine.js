@@ -219,6 +219,77 @@ export function computeCnasDeclaration(employees = [], options = {}) {
 }
 
 /**
+ * Computes an official collective salary transfer order (Ordre de Virement de Masse)
+ * for submission to Algérie Poste (CCP) or Algerian Commercial Banks.
+ */
+export function computeOrdreDeVirement(options = {}) {
+  const month = options.month || new Date().toISOString().slice(0, 7);
+  const emittorName = options.emittorName || 'شركة أطلس للتكنولوجيا (SARL ATLAS TECH)';
+  const emittorRib = options.emittorRib || '007 99999 0001234567 89';
+  const emittorBank = options.emittorBank || 'بريد الجزائر (Algérie Poste - CCP)';
+  const channel = options.channel || 'ALL'; // 'ALL' | 'CCP' | 'BANQUE'
+  const allEmployees = options.employees || DEMO_EMPLOYEES;
+
+  const beneficiaries = [];
+  let totalMontant = 0;
+
+  for (const emp of allEmployees) {
+    const method = String(emp.paymentMethod || 'VIREMENT_CCP').toUpperCase();
+    const isVirement = method.startsWith('VIREMENT');
+    if (!isVirement) continue;
+
+    const isCcp = method === 'VIREMENT_CCP' || String(emp.ccpOrRib || '').replace(/\s/g, '').startsWith('007');
+    if (channel === 'CCP' && !isCcp) continue;
+    if (channel === 'BANQUE' && isCcp) continue;
+
+    const slip = computePayslip(emp);
+    const net = slip.netAPayer;
+    totalMontant += net;
+
+    beneficiaries.push({
+      matricule: emp.matricule,
+      name: emp.name,
+      post: emp.post,
+      bankType: isCcp ? 'بريد الجزائر (CCP)' : 'بنك تجاري (Banque)',
+      isCcp,
+      accountNumber: emp.ccpOrRib,
+      amount: net
+    });
+  }
+
+  totalMontant = round2(totalMontant);
+
+  return {
+    month,
+    emittorName,
+    emittorRib,
+    emittorBank,
+    channel,
+    count: beneficiaries.length,
+    beneficiaries,
+    totalMontant
+  };
+}
+
+/**
+ * Generates an official text file for Algérie Poste or Bank electronic transfer
+ */
+export function generateVirementBatchText(virementData) {
+  const lines = [
+    `# BORDEREAU DE VIREMENT DE MASSE DES SALAIRES - MOIS ${virementData.month}`,
+    `# EMETTEUR: ${virementData.emittorName} | COMPTE: ${virementData.emittorRib}`,
+    `# TOTAL BENEFICIAIRES: ${virementData.count} | MONTANT TOTAL DZD: ${virementData.totalMontant}`,
+    `# MATRICULE;NOM_PRENOM;COMPTE_RIP_RIB;MONTANT_DZD;TYPE_COMPTE`
+  ];
+
+  for (const b of virementData.beneficiaries) {
+    lines.push(`${b.matricule};${b.name.replace(/;/g, ' ')};${b.accountNumber};${b.amount.toFixed(2)};${b.isCcp ? 'CCP' : 'BANQUE'}`);
+  }
+
+  return lines.join('\n');
+}
+
+/**
  * Preloaded Realistic Algerian Enterprise Employees
  */
 export const DEMO_EMPLOYEES = [

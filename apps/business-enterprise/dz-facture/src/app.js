@@ -6,7 +6,7 @@
  */
 
 import { LocalDB } from './modules/db.js';
-import { calculateInvoiceTotals, calculateTimbreFiscal, splitTTCByRates, round2, TVA_RATES, PAYMENT_METHODS } from './modules/fiscal.js';
+import { calculateInvoiceTotals, calculateTimbreFiscal, splitTTCByRates, round2, computeEtat104, exportEtat104ToCSV, TVA_RATES, PAYMENT_METHODS } from './modules/fiscal.js';
 import { todayLocalISO, toLocalDateKey } from './modules/dates.js';
 import { tafqitDZD } from './modules/tafqit.js';
 import { sound } from './modules/audio.js';
@@ -51,6 +51,7 @@ const I18N = {
     navClients: 'العملاء والديون (Crédit)',
     navExpenses: 'المصاريف اليومية (Dépenses)',
     navClosings: 'إغلاق الصندوق (Rapport Z)',
+    navEtat104: 'الجدول السنوي للعملاء (État 104)',
     navSettings: 'بيانات المؤسسة والنسخ الاحتياطي',
     footerSecurityTitle: 'هندسة أوفلاين 100% بدون إنترنت',
     footerSecurityDesc: 'بياناتك محفوظة محلياً بأمان وسرية تامة',
@@ -224,6 +225,7 @@ const I18N = {
     navClients: 'Clients & Créances',
     navExpenses: 'Dépenses & Charges',
     navClosings: 'Clôture de Caisse (Rapport Z)',
+    navEtat104: 'État 104 des Clients (DGI)',
     navSettings: 'Établissement & Sauvegarde',
     footerSecurityTitle: 'Architecture 100% Hors-Ligne',
     footerSecurityDesc: 'Vos données restent 100% locales et confidentielles',
@@ -397,6 +399,7 @@ const I18N = {
     navClients: 'Clients & Receivables',
     navExpenses: 'Expenses & Overhead',
     navClosings: 'Register Closing (Z-Report)',
+    navEtat104: 'Annual Sales by Client (État 104)',
     navSettings: 'Company & USB Backup',
     footerSecurityTitle: '100% Offline-First Architecture',
     footerSecurityDesc: 'Your business data stays local and confidential',
@@ -642,6 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initExpenses();
   initClosings();
   initSettings();
+  initEtat104Events();
 
   applyLanguage(currentLang);
 });
@@ -680,6 +684,8 @@ function initNavigation() {
         refreshExpensesTable();
       } else if (targetTabId === 'tab-closings') {
         refreshClosingsTab();
+      } else if (targetTabId === 'tab-etat104') {
+        refreshEtat104Tab();
       }
     });
   });
@@ -2515,6 +2521,156 @@ function initSettings() {
       }
     };
     reader.readAsText(file);
+  });
+}
+
+// 11. ÉTAT 104 DES CLIENTS (ARTICLE 224 DU C.I.D.T.A - DGI)
+function refreshEtat104Tab() {
+  const yearSelect = document.getElementById('etat104YearSelect');
+  const minSelect = document.getElementById('etat104MinSelect');
+  const year = yearSelect ? yearSelect.value : '2026';
+  const minAmountHT = minSelect ? Number(minSelect.value) : 0;
+
+  const invoices = LocalDB.getInvoices();
+  const etat104 = computeEtat104(invoices, { year, minAmountHT });
+
+  // Update KPIs
+  const clientsKpi = document.getElementById('etat104KpiClients');
+  if (clientsKpi) clientsKpi.textContent = etat104.totals.clientsCount;
+  const htKpi = document.getElementById('etat104KpiHT');
+  if (htKpi) htKpi.textContent = formatCurrency(etat104.totals.totalHT);
+  const tvaKpi = document.getElementById('etat104KpiTVA');
+  if (tvaKpi) tvaKpi.textContent = formatCurrency(etat104.totals.totalTVA);
+  const ttcKpi = document.getElementById('etat104KpiTTC');
+  if (ttcKpi) ttcKpi.textContent = formatCurrency(etat104.totals.totalTTC);
+
+  // Populate Interactive Table
+  const tbody = document.getElementById('etat104TableBody');
+  if (tbody) {
+    if (etat104.clients.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:1.5rem; color:var(--text-muted);">لا توجد مبيعات أو فواتير مسجلة للعملاء في الفترة المحددة.</td></tr>`;
+    } else {
+      tbody.innerHTML = etat104.clients.map((c, idx) => `
+        <tr>
+          <td style="text-align:center; font-weight:700; color:var(--text-muted);">${idx + 1}</td>
+          <td style="font-weight:700;">${escapeHtml(c.clientName)}</td>
+          <td style="font-family:monospace; font-weight:600; color:var(--primary);">${escapeHtml(c.clientNif)}</td>
+          <td style="font-family:monospace; color:var(--text-muted);">${escapeHtml(c.clientRc)}</td>
+          <td style="color:var(--text-muted);">${escapeHtml(c.clientAddress)}</td>
+          <td style="text-align:center; font-weight:700;">${c.invoicesCount}</td>
+          <td style="text-align:left; font-family:monospace; font-weight:700;">${formatCurrency(c.totalHT)}</td>
+          <td style="text-align:left; font-family:monospace; color:#f59e0b;">${formatCurrency(c.totalTVA)}</td>
+          <td style="text-align:left; font-family:monospace; font-weight:800; color:var(--primary);">${formatCurrency(c.totalTTC)}</td>
+          <td><span class="badge" style="background:rgba(59,130,246,0.1); color:#3b82f6;">${escapeHtml(c.mainPaymentMethod)}</span></td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Populate Printable A4 Document
+  const company = LocalDB.getCompany();
+  const printYear = document.getElementById('printEtat104Year');
+  if (printYear) printYear.textContent = year === 'ALL' ? 'TOUTES ANNEES' : year;
+  const printCompany = document.getElementById('printEtat104Company');
+  if (printCompany) printCompany.textContent = company.name || 'SARL ATLAS TECH';
+  const printAddress = document.getElementById('printEtat104Address');
+  if (printAddress) printAddress.textContent = company.address || '-';
+  const printNif = document.getElementById('printEtat104NIF');
+  if (printNif) printNif.textContent = company.nif || '-';
+  const printRc = document.getElementById('printEtat104RC');
+  if (printRc) printRc.textContent = company.rc || '-';
+  const printAi = document.getElementById('printEtat104AI');
+  if (printAi) printAi.textContent = company.ai || '-';
+
+  const printTbody = document.getElementById('printEtat104TableBody');
+  if (printTbody) {
+    if (etat104.clients.length === 0) {
+      printTbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:10px;">AUCUNE OPERATION REPERTORIEE POUR CET EXERCICE</td></tr>`;
+    } else {
+      printTbody.innerHTML = etat104.clients.map((c, idx) => `
+        <tr style="border-bottom:1px solid #e2e8f0;">
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; text-align:center;">${idx + 1}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; font-weight:bold;">${escapeHtml(c.clientName)}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; font-family:monospace;">${escapeHtml(c.clientNif)}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; font-family:monospace;">${escapeHtml(c.clientRc)}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px;">${escapeHtml(c.clientAddress)}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; text-align:center;">${c.invoicesCount}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; font-family:monospace; text-align:left;">${c.totalHT.toFixed(2)}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; font-family:monospace; text-align:left;">${c.totalTVA.toFixed(2)}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; font-family:monospace; font-weight:bold; text-align:left;">${c.totalTTC.toFixed(2)}</td>
+          <td style="border:1px solid #cbd5e1; padding:4px 6px; text-align:center;">${escapeHtml(c.mainPaymentMethod)}</td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  const printTfoot = document.getElementById('printEtat104TableFoot');
+  if (printTfoot) {
+    printTfoot.innerHTML = `
+      <tr style="background:#f8fafc; font-weight:bold; border-top:2px solid #0f172a;">
+        <td colspan="5" style="border:1px solid #cbd5e1; padding:6px;">TOTAL GENERAL DES VENTES (${etat104.totals.clientsCount} CLIENTS)</td>
+        <td style="border:1px solid #cbd5e1; padding:6px; text-align:center;">${etat104.totals.invoicesCount}</td>
+        <td style="border:1px solid #cbd5e1; padding:6px; font-family:monospace; text-align:left;">${etat104.totals.totalHT.toFixed(2)}</td>
+        <td style="border:1px solid #cbd5e1; padding:6px; font-family:monospace; text-align:left;">${etat104.totals.totalTVA.toFixed(2)}</td>
+        <td style="border:1px solid #cbd5e1; padding:6px; font-family:monospace; text-align:left;">${etat104.totals.totalTTC.toFixed(2)}</td>
+        <td style="border:1px solid #cbd5e1; padding:6px; text-align:center;">-</td>
+      </tr>
+    `;
+  }
+}
+
+function initEtat104Events() {
+  document.getElementById('etat104YearSelect')?.addEventListener('change', refreshEtat104Tab);
+  document.getElementById('etat104MinSelect')?.addEventListener('change', refreshEtat104Tab);
+
+  document.getElementById('btnExportEtat104CSV')?.addEventListener('click', () => {
+    const year = document.getElementById('etat104YearSelect')?.value || '2026';
+    const minAmountHT = Number(document.getElementById('etat104MinSelect')?.value) || 0;
+    const invoices = LocalDB.getInvoices();
+    const etat104 = computeEtat104(invoices, { year, minAmountHT });
+
+    const csvContent = exportEtat104ToCSV(etat104);
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ETAT-104-DGI-${year}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(currentLang === 'ar' ? 'تم تصدير جدول 104 بصيغة CSV لمصالح الضرائب' : 'État 104 exporté en CSV');
+  });
+
+  document.getElementById('btnPrintEtat104')?.addEventListener('click', () => {
+    refreshEtat104Tab();
+    const wrapper = document.getElementById('printableEtat104Wrapper');
+    if (!wrapper) return;
+
+    const printWin = window.open('', '_blank');
+    if (!printWin) {
+      alert(currentLang === 'ar' ? 'يرجى السماح بالنوافذ المنبثقة للطباعة' : 'Veuillez autoriser les fenêtres pop-up pour imprimer');
+      return;
+    }
+    printWin.document.write(`<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>État 104 des Clients - DGI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    @page { size: A4 landscape; margin: 8mm; }
+    body { font-family: 'Cairo', sans-serif; background: #fff; color: #000; margin: 0; padding: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #cbd5e1; padding: 4px 6px; }
+  </style>
+</head>
+<body>
+  ${wrapper.innerHTML}
+  <script>
+    window.onload = function() { window.print(); window.close(); }
+  <\/script>
+</body>
+</html>`);
+    printWin.document.close();
   });
 }
 
